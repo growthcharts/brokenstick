@@ -10,53 +10,87 @@
 #' @param x a vector of ages at which the basis function are needed
 #' @param knots a vector of internal knots
 #' @param Boundary.knots vector of external knots
+#' @param degree the degree of the spline. The broken stick model
+#' requires linear splines, so the default is \code{degree = 1}.
 #' @return A matrix with \code{length(x)} rows and \code{length(breaks)}
 #' columns, with some extra attributes described by \code{bs()}.
+#' @author Stef van Buuren, 2015
 #' @export
 make.basis <- function(x, 
                        knots = round(c(0, 28/365.25, 56/365.25, 
                                         1/4, 1/3, 1/2, 7.5/12,
                                         9/12, 11/12, 14/12, 18/12, 2), 4),
-                       Boundary.knots = c(0, 3)) {
+                       Boundary.knots = c(0, 3),
+					   degree = 1) {
     # calculate break points 0-2 years as birth + standard visits 0-12 yr
     X <- bs(x, knots = knots, 
-            Boundary.knots = Boundary.knots, degree = 1)
+            Boundary.knots = Boundary.knots, degree = degree)
     dimnames(X)[[2]] <- paste("x", 0:(ncol(X)-1), sep = "")
     X
 }
 
-#' Fit a broken stick model to data
+#' Fit a broken stick model to irregular data
 #' 
-#' This function fits the 0-3 years broken stick model to 
-#' the Z-score of the outcome. This function can be time consuming.
+#' The broken stick model models an irregularly observed series 
+#' of measurement by scaling them onto a user-specified set of 
+#' 'ideal' ages. The model codes age by a series of linear B-splines.
+#' Differences between persons are expressed by a random effect 
+#' pertaining to each knot. On the individual level, each 
+#' modeled growth curve connect straight lines that join at the 
+#' chosen break ages, and hence look like a 'broken stick'.
+#' 
+#' @details 
+#' Relations over time are modeled by the variance-covariance 
+#' parameters of the random effects. Currently, this matrix is estimated
+#' as unstructured by \code{lme()}. Experience has shown that if 
+#' there are enough children relative to the number of specified 
+#' random effects, the variance-variance matrix will have elements
+#' that diminish as they move away from the diagonal, as one would
+#' expect for data without seasonality, like growth data.
+#' 
+#' This function can be time consuming for data sets with several hundreds
+#' of children.
 #' @aliases fit.brokenstick
-#' @param yvar a string (e.g. \code{"hgt"} or \code{"hgt.z"}) indicating the outcome variable
-#' @param data a data frame with the data, including variables \code{x0} through 
-#' \code{x12}
-#' @return The fitted model of class \code{lmerMod}
+#' @param z a vector containing the measurements in the Z-scale
+#' @param age a vector of \code{length(z)} awith decimal age
+#' @param id a vector 
+#' @param control A function to control fitting of \code{lmer}. The default
+#' is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
+#' fatal errors with respect the number of parameters into warnings.
+#' @param \dots Additional arguments passed down to \code{make.basis()} 
+#' (e.g. to specify other knots) and \code{lmer()} (e.g. to specify additional 
+#' \code{lmer()} options.
+#'  @return The fitted model of class \code{lmerMod}
 #' @examples 
 #' library(mice)
-#' data <- tbc[tbc$id < 200 & tbc$age < 2.5,]
-#' fit <- fit.brokenstick("hgt.z", data)
+#' data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
+#' fit <- fit.brokenstick(z = data$hgt.z, age = data$age, id = data$id)
 #' plot(fit)
 #' @export
-fit.brokenstick <- function(yvar = "hgt.z", data) {
-    X <- make.basis(x = data$age)
-    d <- cbind(data[c("id", "age", yvar)], X)
-    f <- as.formula(paste(yvar, "~", 
-                          "0 + ", paste0("x", 0:12, collapse = " + "),
+fit.brokenstick <- function(z, age, id, 
+							control = lmerControl(check.nobs.vs.nRE = "warning"), 
+							...) {
+    X <- make.basis(x = age, ...)
+    nknots <- ncol(X)
+    data <- na.omit(data.frame(id = id, age = age, z = z, X))
+    f <- as.formula(paste("z", "~", 
+                          "0 + ", paste0("x", 0:(nknots-1), collapse = " + "),
                           "+ (", 
-                          "0 + ", paste0("x", 0:12, collapse = " + "),
+                          "0 + ", paste0("x", 0:(nknots-1), collapse = " + "),
                           "| id)"))
-    fit <- lmer(f, data = d,
-                control = lmerControl(check.nobs.vs.nRE = "warning"))
+    fit <- lmer(f, data = data,
+                control = lmerControl(check.nobs.vs.nRE = "warning"),
+    			...)
     attr(fit, "knots") <- attr(X, "knots")
     attr(fit, "Boundary.knots") <- attr(X, "Boundary.knots")
+    attr(fit, "model") <- "brokenstick"
     return(fit)
 }
 
-#' Obtain broken stick values from a fitted model
+#' Calculated broken stick values from a fitted broken stick model
 #' 
+#' The broken stick values are simply the sum of the fixed and random 
+#' effect. This function return that sum for all levels.
 #' @aliases get.brokenstick.values
 #' @param fit The fitted model of class \code{lmerMod}, presumably fitted
 #'  by \code{fit.brokenstick()}
@@ -77,17 +111,17 @@ get.brokenstick.values <- function(fit) {
 #' 
 #' @aliases export.brokenstick
 #' @param model An object of class \code{lmerMod} or class 
-#' \code{broken.stick.export} (typically generated 
+#' \code{brokenstick.export} (typically generated 
 #' by a previous call to \code{export.brokenstick()}).
-#' @return A \code{list} of class \code{broken.stick.estimate}, with elements corresponding to the estimates parameters of the fitted model.
+#' @return A \code{list} of class \code{brokenstick.export}, with elements corresponding to the estimates parameters of the fitted model.
 #' @export
 export.brokenstick <- function(model) {
     
     # if already a broken.stick.export object, do nothing
-    if (inherits(model, "broken.stick.export")) return(model)
+    if (inherits(model, "brokenstick.export")) return(model)
 
     if (!inherits(model, "lmerMod")) 
-        stop("Argument 'model' expected as class 'lmerMod' or 'broken.stick.export'")
+        stop("Argument 'model' expected as class 'lmerMod' or 'brokenstick.export'")
     
     # extract estimates from merMod object
     beta <- fixef(model)
@@ -98,7 +132,7 @@ export.brokenstick <- function(model) {
     z <- list(beta = beta, omega = omega, sigma2 = sigma2,
               knots = attr(model, "knots"), 
               Boundary.knots = attr(model, "Boundary.knots"))
-    class(z) <- "broken.stick.export"
+    class(z) <- "brokenstick.export"
     return(z)
 }
 
@@ -116,7 +150,7 @@ export.brokenstick <- function(model) {
 #' 
 #' @aliases EB
 #' @param model An object of class \code{lmerMod} (typically created by
-#' \code{fit.brokenstick()}) or class \code{broken.stick.export} 
+#' \code{fit.brokenstick()}) or class \code{brokenstick.export} 
 #' (typically generated by \code{export.brokenstick()}).
 #' @param y A vector of new measurements for unit j, scaled in the same metric as the fitted model.
 #' @param X A \code{nj * p} matrix with fixed effects for unit j, typically produced by \code{make.basis()}.
@@ -132,8 +166,8 @@ export.brokenstick <- function(model) {
 #' J. R. Statist. Soc. A, 172, 3, 659-687.
 #' @examples 
 #' library(mice)
-#' data <- tbc[tbc$id < 200 & tbc$age < 2.5,]
-#' fit <- fit.brokenstick("hgt.z", data)
+#' data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
+#' fit <- fit.brokenstick(z = data$hgt.z, age = data$age, id = data$id)
 #' #
 #' # conventional random effect for child id 8
 #' ranef(fit)$id[1,]

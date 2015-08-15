@@ -8,11 +8,11 @@ export.brokenstick(model)
 }
 \arguments{
 \item{model}{An object of class \code{lmerMod} or class
-\code{broken.stick.export} (typically generated
+\code{brokenstick.export} (typically generated
 by a previous call to \code{export.brokenstick()}).}
 }
 \value{
-A \code{list} of class \code{broken.stick.estimate}, with elements corresponding to the estimates parameters of the fitted model.
+A \code{list} of class \code{brokenstick.export}, with elements corresponding to the estimates parameters of the fitted model.
 }
 \description{
 Exports the crucial estimates of a fitted lmer() model so that the

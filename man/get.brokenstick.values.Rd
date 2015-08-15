@@ -2,7 +2,7 @@
 % Please edit documentation in R/brokenstick.R
 \name{get.brokenstick.values}
 \alias{get.brokenstick.values}
-\title{Obtain broken stick values from a fitted model}
+\title{Calculated broken stick values from a fitted broken stick model}
 \usage{
 get.brokenstick.values(fit)
 }
@@ -14,6 +14,7 @@ by \code{fit.brokenstick()}}
 Matrix with broken stick values
 }
 \description{
-Obtain broken stick values from a fitted model
+The broken stick values are simply the sum of the fixed and random
+effect. This function return that sum for all levels.
 }
 
