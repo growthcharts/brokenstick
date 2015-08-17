@@ -4,16 +4,20 @@
 \alias{convert2y}
 \title{Convert the Z-scores scale of the broken stick model into original scale}
 \usage{
-convert2y(yname = "hgt", z, sex, breaks = round(c(0, 28/365.25, 56/365.25,
-  1/4, 1/3, 1/2, 7.5/12, 9/12, 11/12, 14/12, 18/12, 2), 4),
-  Boundary.knots = c(0, 3))
+convert2y(yname = "hgt", z, sex, ga = NULL, preterm = FALSE,
+  breaks = round(c(0, 28/365.25, 56/365.25, 1/4, 1/3, 1/2, 7.5/12, 9/12,
+  11/12, 14/12, 18/12, 2), 4), Boundary.knots = c(0, 3))
 }
 \arguments{
 \item{yname}{a string (e.g. \code{"hgt"} or \code{"wgt"}) indicating the outcome variable}
 
 \item{z}{The broken stick values in the Z-score scale}
 
-\item{sex}{either \code{"male"} or \code{"female"}}
+\item{sex}{factor of \code{length(z)} elements, either \code{"male"} or \code{"female"}}
+
+\item{ga}{numerical vector giving the gestional age in weeks used to calculate Z-score for preterms (e.g. when \code{preterm = TRUE})}
+
+\item{preterm}{logical indicating whether the preterm references should be used}
 
 \item{breaks}{a vector of internal knots}
 
