@@ -13,7 +13,7 @@ convert2y(yname = "hgt", z, sex, ga = NULL, preterm = FALSE,
 
 \item{z}{The broken stick values in the Z-score scale}
 
-\item{sex}{factor of \code{length(z)} elements, either \code{"male"} or \code{"female"}}
+\item{sex}{factor of \code{n} elements, either \code{"male"} or \code{"female"}}
 
 \item{ga}{numerical vector giving the gestional age in weeks used to calculate Z-score for preterms (e.g. when \code{preterm = TRUE})}
 

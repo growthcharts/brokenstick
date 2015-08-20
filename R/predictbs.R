@@ -39,27 +39,35 @@ predictbs <- function(model, yname, y, age, sex, ga = 40,
 	
 	# turn y into Z-scores using the Dutch 1997 references
 	# or preterm reference for those with ga <= 36
-	z <- y2z(y = y, x = age, ref = "nl1997", yname = yname,
+	z <- y2z(y = y, x = age, 
+			 ref = get("nl1997", pos = "package:clopus"),
+			 yname = yname,
 			 sex = sex, sub = "NL", drop = TRUE)
 	if (!is.na(ga) & ga <= 36)
-		z <- y2z(y = y, x = age, ref = "preterm", yname = yname,
+		z <- y2z(y = y, x = age, 
+				 ref = get("preterm", pos = "package:clopus"), 
+				 yname = yname,
 				 sex = sex, sub = max(floor(ga), 25), drop = TRUE)
 	
 	# code the ages at which the child is observed as
 	# linear splines with given break ages
 	X <- make.basis(age,
-					 knots = model$knots,
-					 Boundary.knots = model$Boundary.knots)
+					 knots = export$knots,
+					 Boundary.knots = export$Boundary.knots)
 	
 	# calculate random effect through empirical Bayes (BLUP) predictor
-	bs.z <- EB(model, y = z, X, BS = TRUE)
+	bs.z <- EB(export, y = z, X, BS = TRUE)
 	if (zscale) return(bs.z)
 	
 	# transform broken stick estimate back into original scale
-	bs.y <- z2y(z = bs.z, x = age, ref = "nl1997", yname = yname,
+	bs.y <- z2y(z = bs.z, x = age, 
+				ref = get("nl1997", pos = "package:clopus"),
+				yname = yname,
 				sex = sex, sub = "NL", drop = TRUE)
 	if (!is.na(ga) & ga <= 36)
-		bs.y <- z2y(z = bs.z, x = age, ref = "preterm", yname = yname,
+		bs.y <- z2y(z = bs.z, x = age, 
+					ref = get("preterm", pos = "package:clopus"), 
+					yname = yname,
 					sex = sex, sub = max(floor(ga), 25), drop = TRUE)
 	
 	return(bs.y)
