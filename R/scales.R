@@ -12,7 +12,7 @@
 #' @param Boundary.knots vector of external knots
 #' @return A \code{matrix} of the same dimensions as \code{bs}
 #' @export
-convert2y <- function(yname = "hgt", 
+convert2y <- function(yname = c("hgt", "wgt", "bmi", "wfl", "wfh"),
 					  z,
 					  sex, 
 					  ga = NULL,
@@ -21,22 +21,32 @@ convert2y <- function(yname = "hgt",
 					  				 1/4, 1/3, 1/2, 7.5/12,
 					  				 9/12, 11/12, 14/12, 18/12, 2), 4),
 					  Boundary.knots = c(0, 3)) {
+	yname <- match.arg(yname)
+	
 	n <- nrow(z)
 	ages <- c(breaks, Boundary.knots[2])
-
+	
 	z <- as.vector(z)
 	x <- rep(ages, each = n)
 	sex <- rep(sex, length(ages))
 	
-	y <- z2y(z = z, x = x, 
-			 ref = get("nl1997", pos = "package:clopus"),
-			 yname = yname,
-			 sex = sex, sub = 'NL', drop = TRUE)
-	if (preterm)
-		y <- z2y(z = z, x = x, 
-				 ref = get("preterm", pos = "package:clopus"),
-				 yname = yname,
-				 sex = sex, sub = max(floor(ga), 25), drop = TRUE)
+	# THIS PART IS SPECIFIC FOR groeivoorspeller
+	# 	y <- z2y(z = z, x = x, 
+	# 			 ref = get("nl1997", pos = "package:clopus"),
+	# 			 yname = yname,
+	# 			 sex = sex, sub = 'NL', drop = TRUE)
+	# 	if (preterm)
+	# 		y <- z2y(z = z, x = x, 
+	# 				 ref = get("preterm", pos = "package:clopus"),
+	# 				 yname = yname,
+	# 				 sex = sex, sub = max(floor(ga), 25), drop = TRUE)
+	# END PART
+	
+	# Use WHO references from pkg AGD to convert to Z-scores
+	theref <- paste("who", yname, sep = ".")
+	thesex <- ifelse(sex == "female", "F", "M")
+	y <- z2y(z = z, x = x, sex = thesex, 
+			 ref = get(theref, pos = "package:AGD"))
 	
 	y <- matrix(y, nrow = n)
 	colnames(y) <- paste(yname, 0:(length(ages)-1), sep = "")

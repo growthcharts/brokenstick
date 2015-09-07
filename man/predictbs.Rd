@@ -4,7 +4,8 @@
 \alias{predictbs}
 \title{Predict growth curve according to the broken stick model}
 \usage{
-predictbs(model, yname, y, age, sex, ga = 40, zscale = FALSE)
+predictbs(model, yname = c("hgt", "wgt", "bmi", "wfl", "wfh"), y, age, sex,
+  ga = 40, zscale = FALSE)
 }
 \arguments{
 \item{model}{An object of either class \code{lmerMod} or
@@ -26,7 +27,8 @@ The default is 40 weeks, term birth.}
 
 \item{zscale}{A logical indicating whether the result should be in
 the Z-scale (\code{zscale = TRUE}) or Y-scale (\code{zscale = FALSE}).
-The default is \code{FALSE}.}
+The default is \code{FALSE}. Note: This flag only influences the
+scale of the return value. Fitting is always done in the Z-scale.}
 }
 \value{
 A \code{vector} with a length equal to the number of break

@@ -41,7 +41,7 @@ data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
 fit <- fit.brokenstick(z = data$hgt.z, age = data$age, id = data$id)
 #
 # conventional random effect for child id 8
-ranef(fit)$id[1,]
+lme4::ranef(fit)$id[1,]
 #
 # EB estimate random effect for child id 8
 est <- export.brokenstick(fit)

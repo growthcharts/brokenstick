@@ -98,7 +98,7 @@ fit.brokenstick <- function(z, age, id,
 #' @export
 get.brokenstick.values <- function(fit) {
     if (!inherits(fit, "lmerMod")) stop("Argument 'fit' not of class lmerMod")
-    return(t(t(ranef(fit)$id) + fixef(fit)))
+    return(t(t(lme4::ranef(fit)$id) + lme4::fixef(fit)))
 }
 
 
@@ -170,7 +170,7 @@ export.brokenstick <- function(model) {
 #' fit <- fit.brokenstick(z = data$hgt.z, age = data$age, id = data$id)
 #' #
 #' # conventional random effect for child id 8
-#' ranef(fit)$id[1,]
+#' lme4::ranef(fit)$id[1,]
 #' #
 #' # EB estimate random effect for child id 8
 #' est <- export.brokenstick(fit)
@@ -187,7 +187,10 @@ EB <- function (model, y, X, Z = X, BS = FALSE) {
 
     # eliminate missing outcomes 
     select <- !is.na(y)
-    if (!any(select)) return(NULL)
+    
+    # if there are no valid values left, return the fixed effect
+    # as broken stick estimates
+    if (!any(select)) return(export$beta)
 
     # get into shape for matrix multiplication
     y <- matrix(y[select], ncol = 1) # nj * 1
