@@ -19,6 +19,23 @@ xyplot(hgt.z ~ age | as.factor(id), data = data,
 	   }
 )
 
+## ---- echo = FALSE-------------------------------------------------------
+fit1 <- fit.brokenstick(z = data$hgt.z, 
+							 age = data$age,
+							 id = data$id,
+							 knots = 0:2)
+est <- get.brokenstick.values(fit1)
+data2 <- rbind(data)
+xyplot(hgt.z ~ age | as.factor(id), data = data, 
+	   subset = id %in% c(10001, 10005), 
+	   type = "b", pch = 19, as.table = TRUE,
+	   panel = function(...) {
+	   	panel.refline(h = c(-2, 0, 2))
+	   	panel.refline(v = 0:3, col = "firebrick1", lty = 2)
+	   	panel.xyplot(...)
+	   }
+)
+
 ## ------------------------------------------------------------------------
 X <- make.basis(x = data$age, knots = 0:2)
 head(data.frame(age = data$age, X))

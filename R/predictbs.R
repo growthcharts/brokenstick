@@ -25,42 +25,47 @@
 #' the Z-scale (\code{zscale = TRUE}) or Y-scale (\code{zscale = FALSE}).
 #' The default is \code{FALSE}. Note: This flag only influences the 
 #' scale of the return value. Fitting is always done in the Z-scale.
+#' @param package Should the references be taken from \pkg{AGD} (default)
+#' or \pkg{clopus} (for \pkg{groeivoorspeller})
 #' @return A \code{vector} with a length equal to the number of break
 #' points (i.e. number of unique knots)
 #' @author Stef van Buuren, 2015
 #' @export
 predictbs <- function(model, 
-					  yname = c("hgt", "wgt", "bmi", "wfl", "wfh"), 
+					  yname = c("hgt", "wgt", "bmi", "wfl", "wfh", "hdc"), 
 					  y, age, sex, ga = 40,
-					  zscale = FALSE) {
+					  zscale = FALSE, 
+					  package = "AGD") {
 	
 	yname <- match.arg(yname)
-
+	
 	# requires medMod object fitted by lmer()
 	export <- NULL
 	if (inherits(model, "lmerMod")) export <- export.brokenstick(model)
 	if (inherits(model, "brokenstick.export")) export <- model
 	if (is.null(export)) stop("Argument 'model' should be either of class 'lmerMod' or 'brokenstick.export'")
 	
-	# THIS PART IS SPECIFIC FOR groeivoorspeller
-	# turn y into Z-scores using the Dutch 1997 references
-	# or preterm reference for those with ga <= 36
-	# 	z <- y2z(y = y, x = age,
-	# 			 ref = get("nl1997", pos = "package:clopus"),
-	# 			 yname = yname,
-	# 			 sex = sex, sub = "NL", drop = TRUE)
-	# 	if (!is.na(ga) & ga <= 36)
-	# 		z <- y2z(y = y, x = age,
-	# 				 ref = get("preterm", pos = "package:clopus"),
-	# 				 yname = yname,
-	# 				 sex = sex, sub = max(floor(ga), 25), drop = TRUE)
-	# END PART
-	
-	# Use WHO references from pkg AGD to convert to Z-scores
-	theref <- paste("who", yname, sep = ".")
-	thesex <- ifelse(sex == "female", "F", "M")
-	z <- y2z(y = y, x = age, sex = thesex, 
-			 ref = get(theref, pos = "package:AGD"))
+	if (package == "clopus") {
+		# THIS PART IS SPECIFIC FOR groeivoorspeller
+		# turn y into Z-scores using the Dutch 1997 references
+		# or preterm reference for those with ga <= 36
+		z <- clopus::y2z(y = y, x = age,
+						 ref = get("nl1997", pos = "package:clopus"),
+						 yname = yname,
+						 sex = sex, sub = "NL", drop = TRUE)
+		if (!is.na(ga) & ga <= 36)
+			z <- clopus::y2z(y = y, x = age,
+							 ref = get("preterm", pos = "package:clopus"),
+							 yname = yname,
+							 sex = sex, sub = max(floor(ga), 25), drop = TRUE)
+		# END PART
+	} else {
+		# Use WHO references from pkg AGD to convert to Z-scores
+		theref <- paste("who", yname, sep = ".")
+		thesex <- ifelse(sex == "female", "F", "M")
+		z <- y2z(y = y, x = age, sex = thesex, 
+				 ref = get(theref, pos = "package:AGD"))
+	}
 	
 	# code the ages at which the child is observed as
 	# linear splines with given break ages
@@ -72,22 +77,25 @@ predictbs <- function(model,
 	bs.z <- EB(export, y = z, X, BS = TRUE)
 	if (zscale) return(bs.z)
 	
-	# THIS PART IS SPECIFIC FOR groeivoorspeller
-	# transform broken stick estimate back into original scale
-	# 	bs.y <- z2y(z = bs.z, x = age,
-	# 				ref = get("nl1997", pos = "package:clopus"),
-	# 				yname = yname,
-	# 				sex = sex, sub = "NL", drop = TRUE)
-	# 	if (!is.na(ga) & ga <= 36)
-	# 		bs.y <- z2y(z = bs.z, x = age,
-	# 					ref = get("preterm", pos = "package:clopus"),
-	# 					yname = yname,
-	# 					sex = sex, sub = max(floor(ga), 25), drop = TRUE)
-	# END PART
-	
-	# Use WHO references from pkg AGD to convert to Z-scores
-	bs.y <- z2y(z = bs.z, x = age, sex = thesex, 
-				ref = get(theref, pos = "package:AGD"))
-	
+	# convert back to y-scale
+	age <- c(Boundary.knots[1], knots, Boundary.knots[2])
+	if (package == "clopus") {
+		# THIS PART IS SPECIFIC FOR groeivoorspeller
+		# transform broken stick estimate back into original scale
+		bs.y <- clopus::z2y(z = bs.z, x = age,
+					ref = get("nl1997", pos = "package:clopus"),
+					yname = yname,
+					sex = sex, sub = "NL", drop = TRUE)
+		if (!is.na(ga) & ga <= 36)
+			bs.y <- clopus::z2y(z = bs.z, x = age,
+						ref = get("preterm", pos = "package:clopus"),
+						yname = yname,
+						sex = sex, sub = max(floor(ga), 25), drop = TRUE)
+		# END PART
+	} else {
+		# Use WHO references from pkg AGD to convert to Z-scores
+		bs.y <- z2y(z = bs.z, x = age, sex = thesex, 
+					ref = get(theref, pos = "package:AGD"))
+	}
 	return(bs.y)
 }

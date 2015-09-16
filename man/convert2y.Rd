@@ -4,9 +4,10 @@
 \alias{convert2y}
 \title{Convert the Z-scores scale of the broken stick model into original scale}
 \usage{
-convert2y(yname = c("hgt", "wgt", "bmi", "wfl", "wfh"), z, sex, ga = NULL,
-  preterm = FALSE, breaks = round(c(0, 28/365.25, 56/365.25, 1/4, 1/3, 1/2,
-  7.5/12, 9/12, 11/12, 14/12, 18/12, 2), 4), Boundary.knots = c(0, 3))
+convert2y(yname = c("hgt", "wgt", "bmi", "wfl", "wfh", "hdc"), z, sex,
+  ga = NULL, preterm = FALSE, breaks = round(c(0, 28/365.25, 56/365.25,
+  1/4, 1/3, 1/2, 7.5/12, 9/12, 11/12, 14/12, 18/12, 2), 4),
+  Boundary.knots = c(0, 3), package = "AGD")
 }
 \arguments{
 \item{yname}{a string (e.g. \code{"hgt"} or \code{"wgt"}) indicating the outcome variable}
@@ -22,6 +23,9 @@ convert2y(yname = c("hgt", "wgt", "bmi", "wfl", "wfh"), z, sex, ga = NULL,
 \item{breaks}{a vector of internal knots}
 
 \item{Boundary.knots}{vector of external knots}
+
+\item{package}{Should the references be taken from \pkg{AGD} (default)
+or \pkg{clopus} (for \pkg{groeivoorspeller})}
 }
 \value{
 A \code{matrix} of the same dimensions as \code{bs}
