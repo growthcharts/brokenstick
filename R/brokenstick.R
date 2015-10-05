@@ -70,7 +70,7 @@ print.brokenstick <- function ( x, ... ) {
 #' library(mice)
 #' data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
 #' fit <- brokenstick(y = data$hgt.z, x = data$age, subject = data$id, 
-#' knots = c(0.5, 1))
+#'                    knots = c(0.5, 1))
 #' plot(fit)
 #' @export
 brokenstick <- function(y, x, subject, 
