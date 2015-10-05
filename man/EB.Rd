@@ -26,13 +26,12 @@ A vector of length q containing the random effect or broken stick  estimates for
 }
 \description{
 This function can estimate random effect for a given set of
-model estimates and new user data. Contrary to many current
-implementations for random effect prediction, the unit may be
+model estimates and new user data. The unit may be
 new to the model. The methods implements the
 EB estimate (also known as BLUP)
 as described in Skrondral and Rabe-Hasketh, 2009, p. 683.
 This function can also provide the broken stick estimate for a given level,
-which is simply the sum of (global) fixed and (level) random effects
+the sum of the global (fixed) and individual (random) effects.
 The current implementation does not provide prediction errors.
 }
 \examples{

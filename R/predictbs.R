@@ -16,7 +16,7 @@
 #' for the type of measurement in \code{yname}
 #' @param yname A string (\code{"hgt"}, \code{"wgt"} or \code{"hdc"})
 #' identifying the type of measurement
-#' @param y     A vector with measurements belonging to one person
+#' @param y     A vector with measurements in the original scale that belong to one person
 #' @param age   A vector with decimal ages of length \code{length(y)}
 #' @param sex   Either \code{"male"} or \code{"female"}
 #' @param ga    Numeric, gestational age in weeks.
@@ -78,7 +78,7 @@ predictbs <- function(model,
 	if (zscale) return(bs.z)
 	
 	# convert back to y-scale
-	age <- c(Boundary.knots[1], knots, Boundary.knots[2])
+	age <- c(export$Boundary.knots[1], export$knots, export$Boundary.knots[2])
 	if (package == "clopus") {
 		# THIS PART IS SPECIFIC FOR groeivoorspeller
 		# transform broken stick estimate back into original scale

@@ -4,7 +4,41 @@
 \name{brokenstick}
 \alias{brokenstick}
 \alias{brokenstick-package}
+\alias{brokensticks}
 \title{\pkg{brokenstick}: A package for irregular longitudinal data.}
+\usage{
+brokenstick(y, x, subject, knots, Boundary.knots = range(x), degree = 1,
+  control = lmerControl(check.nobs.vs.nRE = "warning"), ...)
+}
+\arguments{
+\item{y}{a vector containing the measurements to be analyzed}
+
+\item{x}{a vector of \code{length(y)} with the predictor on which
+the break points should be defined. In longitudinal data, this is usually decimal age.}
+
+\item{subject}{a vector containing the subject identification}
+
+\item{knots}{a numerical vector with the locations of the breaks to be
+placed on the values of \code{x}. This setting is passed to \code{bs()}.}
+
+\item{Boundary.knots}{a numerical vector with the locations of the
+outer break point for \code{x}. This setting is passed to \code{bs()}. The default is \code{range(x)}.}
+
+\item{degree}{the degree of the B-spline. For the broken stick model this
+should be to 1 (the default), which specifies that values between the break
+points are located on a straight line.}
+
+\item{control}{A function to control fitting of \code{lmer()}. The default
+is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
+fatal errors with respect the number of parameters into warnings.}
+
+\item{\dots}{Additional arguments passed down to \code{lmer()}
+(e.g. to specify additional \code{lmer()} options.}
+}
+\value{
+A fitted model of class \code{brokenstick}, which extends the
+ class \code{lmerMod}
+}
 \description{
 The broken stick model describes a set of individual curves
 by a linear mixed model using first order linear B-splines. The
@@ -17,6 +51,27 @@ fitting a broken stick
 model to data, for exporting the parameters of the model for
 independent use outside this package, and for predicting broken
 stick curves for new data.
+
+The broken stick model models an irregularly observed series
+of measurement by scaling them onto a user-specified set of
+'ideal' ages. The model codes age by a series of linear B-splines.
+Differences between persons are expressed by a random effect
+pertaining to each knot. On the individual level, each
+modeled growth curve connect straight lines that join at the
+chosen break ages, and hence look like a 'broken stick'.
+}
+\details{
+Relations over time are modeled by the variance-covariance
+parameters of the random effects. Currently, this matrix is estimated
+as unstructured by \code{lmer()} from the \code{lme4} package.
+Experience has shown that if
+there are enough children relative to the number of specified
+random effects, the variance-variance matrix will have elements
+that diminish as they move away from the diagonal, as one would
+expect for data without seasonality, like growth data.
+
+This function can be time consuming for data sets with several hundreds
+of children.
 }
 \section{brokenstick functions}{
 
@@ -28,6 +83,13 @@ The main functions are:
   \code{predictbs()} \tab Predict growth curve according to the broken stick model\cr
   \code{export.brokenstick()} \tab Export the estimates of a fitted \code{lmer()} model object
   }
+}
+\examples{
+library(mice)
+data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
+fit <- brokenstick(y = data$hgt.z, x = data$age, subject = data$id,
+knots = c(0.5, 1))
+plot(fit)
 }
 \references{
 van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hall/CRC, 2012. Chapter 9.

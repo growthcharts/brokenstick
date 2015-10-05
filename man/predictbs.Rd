@@ -16,7 +16,7 @@ for the type of measurement in \code{yname}}
 \item{yname}{A string (\code{"hgt"}, \code{"wgt"} or \code{"hdc"})
 identifying the type of measurement}
 
-\item{y}{A vector with measurements belonging to one person}
+\item{y}{A vector with measurements in the original scale that belong to one person}
 
 \item{age}{A vector with decimal ages of length \code{length(y)}}
 
