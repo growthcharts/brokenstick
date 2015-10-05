@@ -15,7 +15,7 @@ The *broken stick model* describes a set of individual curves by a linear mixed 
 
 - to smooth growth curves by a series of connected straight lines;
 - to align irregularly observed curves to a common age grid;
-- to create synthetic curves at a set of break ages;
+- to create synthetic curves at a user-specified set of break ages;
 - to estimate the time-to-time correlation matrix;
 - to predict future observations.
 
@@ -24,9 +24,9 @@ The user specifies a set of break ages at which the straight lines connect. Each
 The main assumptions of the broken stick model are: 
 
 - The development between the break ages follows a straight line, and is generally not of particular interest;
-- The set of individual estimates follow a common multivariate normal distribution;
+- Broken stick estimates follow a common multivariate normal distribution;
 
-In order to conform to the assumption of multivariate normality, the broken stick model is fitted on suitably transformed data in the standard normal ($Z$) scale. Unique feature of the broken stick model are:
+In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal ($Z$) scale. Unique feature of the broken stick model are:
 
 - *Modular*: Issues related to nonlinearities of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;
 - *Local*: A given data point will contribute only to the estimates corresponding to the closest break ages;
@@ -44,16 +44,15 @@ The main functions in the `brokenstick` package are:
 
 Function name        | Description
 ---------------------|---------------------------------
-`make.basis()`         | Create linear splines basis
-`fit.brokenstick()`    | Fit a broken stick model to irregular data
-`get.brokenstick.values()` | Obtain the broken stick estimates from a fitted object
+`brokenstick()`      | Fit a broken stick model to irregular data
+`conditional.means()` | Obtain the broken stick estimates from a fitted object
 `predictbs()`          | Predict growth curve by the broken stick model
 `export.brokenstick()` | Export the estimates of a fitted `lmer()` model object
 
 ## Exporatory analysis
 
 ```{R}
-library(brokenstick)
+library(brokensticks)
 data <- smocc.hgtwgt
 head(data)
 ```
@@ -86,11 +85,11 @@ xyplot(hgt.z ~ age | as.factor(id), data = data,
 The *broken stick model* attempts to describe each trajectory by a series of straight, connected lines. Let us first do a rough approximation in the above figure. We specify that we may only use two lines: One line should start at borth to the age of exactly 1 years, and another spans the period from 1 to 2 years. Moreover, we require that the lines connect at the age of 1 year. 
 
 ```{R, echo = FALSE}
-fit1 <- fit.brokenstick(z = data$hgt.z, 
-							 age = data$age,
-							 id = data$id,
-							 knots = 0:2)
-est <- get.brokenstick.values(fit1)
+fit1 <- brokenstick(y = data$hgt.z, 
+					x = data$age,
+					subject = data$id,
+					knots = 1)
+est <- conditional.means(fit1)
 data2 <- rbind(data)
 xyplot(hgt.z ~ age | as.factor(id), data = data, 
 	   subset = id %in% c(10001, 10005), 
@@ -105,20 +104,13 @@ xyplot(hgt.z ~ age | as.factor(id), data = data,
 
 ## Estimating the broken stick model 
 
-```{R}
-X <- make.basis(x = data$age, knots = 0:2)
-head(data.frame(age = data$age, X))
-```
-
-The `make.basis()` function takes a vector of *break ages*, here chosen as 0, 1 and 2 years. Each age is coded into two columns as a function of how close it is to the break age. This type of coding is known as the linear B-spline basis of degree 1. Internally, the function `make.basis()` calculates it by the built-in function `bs()` from the `splines` package.
-
 The broken stick model is fitted to the data of all children as follows:
 
 ```{R}
-fit2lines <- fit.brokenstick(z = data$hgt.z, 
-							 age = data$age,
-							 id = data$id,
-							 knots = 0:2)
+fit2lines <- brokenstick(y = data$hgt.z, 
+					     x = data$age,
+						subject = data$id,
+						knots = 0:2)
 class(fit2lines)
 attr(fit2lines, "knots")
 ```

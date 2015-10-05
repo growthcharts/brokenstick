@@ -4,14 +4,12 @@
 \name{fit.hgt}
 \alias{fit.hgt}
 \title{Broken stick model, fitted object}
-\format{An object of class \code{lmerMod}, fitted by the
-\code{lmer()} function in the \pkg{lme4} package. If fitted by
-\code{fit.brokenstick()}, the object contains three additional
-attributes. These are:
+\format{An object of class \code{brokenstick}, fitted by the
+\code{brokenstick()}. This is an \code{lmerMod} object with two additional
+slots:
 \describe{
 	\item{knots}{A vector of internal knots used by \code{make.basis()}}
 	\item{Boundary.knots}{The boundary knots of the linear spline}
-	\item{model}{A string with value \code{"brokenstick"}}
 	}}
 \description{
 The object \code{fit.hgt} is an object of class \code{lmerMod}, with three additional attributes.
@@ -22,7 +20,7 @@ Inquiries at \email{stef.vanbuuren@tno.nl}.
 }
 \seealso{
 \code{\link[lme4]{lmer}}, \code{\link[lme4]{merMod-class}},
-\code{\link{fit.brokenstick}}
+\code{\link{brokenstick}}
 }
 \keyword{datasets}
 

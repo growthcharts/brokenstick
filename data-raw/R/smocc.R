@@ -27,10 +27,14 @@ data <- data[select, ]
 # with(data, lines(lowess(x = age, y = hgt.z), col = "red", lwd = 3))
 
 # fit the brokenstick model
+knots <- round(c(0, 28/365.25, 56/365.25, 
+				 1/4, 1/3, 1/2, 7.5/12,
+				 9/12, 11/12, 14/12, 18/12, 2), 4)
 fit.hgt <- with(data, 
-				fit.brokenstick(z = hgt.z, 
-								age = age, 
-								id = id))
+				brokenstick(y = hgt.z, 
+							x = age, 
+							subject = id,
+							knots = knots))
 
 # store 'smocc.hgtwgt' for lazy loading
 smocc.hgtwgt <- data

@@ -32,18 +32,16 @@ NULL
 #'
 #'@name fit.hgt
 #'@docType data
-#'@format An object of class \code{lmerMod}, fitted by the 
-#'\code{lmer()} function in the \pkg{lme4} package. If fitted by 
-#'\code{fit.brokenstick()}, the object contains three additional 
-#'attributes. These are:
+#'@format An object of class \code{brokenstick}, fitted by the 
+#'\code{brokenstick()}. This is an \code{lmerMod} object with two additional
+#'slots: 
 #'\describe{
 #'	\item{knots}{A vector of internal knots used by \code{make.basis()}}
 #'	\item{Boundary.knots}{The boundary knots of the linear spline}
-#'	\item{model}{A string with value \code{"brokenstick"}}
 #'	}
 #'	
 #' @seealso \code{\link[lme4]{lmer}}, \code{\link[lme4]{merMod-class}},
-#' \code{\link{fit.brokenstick}}
+#' \code{\link{brokenstick}}
 #'@note This dataset is property of the Netherlands Organisation for Applied Scientific Research TNO. Distribution is not permitted. 
 #'Inquiries at \email{stef.vanbuuren@@tno.nl}.
 #'@keywords datasets

@@ -1,5 +1,5 @@
 ## ------------------------------------------------------------------------
-library(brokenstick)
+library(brokensticks)
 data <- smocc.hgtwgt
 head(data)
 
@@ -20,11 +20,11 @@ xyplot(hgt.z ~ age | as.factor(id), data = data,
 )
 
 ## ---- echo = FALSE-------------------------------------------------------
-fit1 <- fit.brokenstick(z = data$hgt.z, 
-							 age = data$age,
-							 id = data$id,
-							 knots = 0:2)
-est <- get.brokenstick.values(fit1)
+fit1 <- brokenstick(y = data$hgt.z, 
+					x = data$age,
+					subject = data$id,
+					knots = 1)
+est <- conditional.means(fit1)
 data2 <- rbind(data)
 xyplot(hgt.z ~ age | as.factor(id), data = data, 
 	   subset = id %in% c(10001, 10005), 
@@ -37,14 +37,10 @@ xyplot(hgt.z ~ age | as.factor(id), data = data,
 )
 
 ## ------------------------------------------------------------------------
-X <- make.basis(x = data$age, knots = 0:2)
-head(data.frame(age = data$age, X))
-
-## ------------------------------------------------------------------------
-fit2lines <- fit.brokenstick(z = data$hgt.z, 
-							 age = data$age,
-							 id = data$id,
-							 knots = 0:2)
+fit2lines <- brokenstick(y = data$hgt.z, 
+					     x = data$age,
+						subject = data$id,
+						knots = 0:2)
 class(fit2lines)
 attr(fit2lines, "knots")
 
