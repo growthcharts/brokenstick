@@ -4,8 +4,9 @@
 \alias{brokenstick}
 \title{Fit a broken stick model to irregular data}
 \usage{
-brokenstick(y, x, subject, knots, Boundary.knots = range(x), degree = 1,
-  control = lmerControl(check.nobs.vs.nRE = "warning"), ...)
+brokenstick(y, x, subject, knots = pretty(x), Boundary.knots = c(min(knots),
+  max(max(x, na.rm = TRUE, max(knots)))), degree = 1,
+  control = lmerControl(check.nobs.vs.nRE = "warning"), storeX = FALSE, ...)
 }
 \arguments{
 \item{y}{a vector containing the measurements to be analyzed}
@@ -16,10 +17,11 @@ the break points should be defined. In longitudinal data, this is usually decima
 \item{subject}{a vector containing the subject identification}
 
 \item{knots}{a numerical vector with the locations of the breaks to be
-placed on the values of \code{x}. This setting is passed to \code{bs()}.}
+placed on the values of \code{x}. This setting is passed to \code{bs()}. Specify \code{knots} to include the range of \code{x}. This will evade the warning
+\code{some 'x' values beyond boundary knots may cause ill-conditioned bases}, a situation that may lead to nonsensical results. If in doubt, set argument \code{storeX = TRUE} and inspect the \code{X} slot of the result. The \code{X} matrix should have values between 0 and 1, and each row should add up to 1.}
 
 \item{Boundary.knots}{a numerical vector with the locations of the
-outer break point for \code{x}. This setting is passed to \code{bs()}. The default is \code{range(x)}.}
+outer break point for \code{x}. This setting is passed to \code{bs()}. The default is to set the left boundary knot equal to the \code{min(knots)}. The right boundary knots is taken as the larger of \code{max(knots)} and the maximum of \code{x}.}
 
 \item{degree}{the degree of the B-spline. For the broken stick model this
 should be to 1 (the default), which specifies that values between the break
@@ -28,6 +30,8 @@ points are located on a straight line.}
 \item{control}{A function to control fitting of \code{lmer()}. The default
 is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 fatal errors with respect the number of parameters into warnings.}
+
+\item{storeX}{A logical indicating whether the spline model matrix should be returned as slot \code{X} in the result. The default is \code{FALSE}}
 
 \item{\dots}{Additional arguments passed down to \code{lmer()}
 (e.g. to specify additional \code{lmer()} options.}
@@ -62,7 +66,7 @@ of children.
 library(mice)
 data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
 fit <- brokenstick(y = data$hgt.z, x = data$age, subject = data$id,
-                   knots = c(0.5, 1))
+                   knots = c(0, 1, 2))
 plot(fit)
 }
 

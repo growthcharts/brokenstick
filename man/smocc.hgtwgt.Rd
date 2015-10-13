@@ -7,7 +7,7 @@
 \format{A data frame with 17056 rows and 12 columns:
 \describe{
 \item{src}{Source, here \code{"smocc"} (factor)}
-\item{id}{ID, unique \code{id} of each child (numeric)}
+\item{id}{ID, unique \code{id} of each child (factor)}
 \item{rec}{Record number, consecutive 1-11 (numeric)}
 \item{nrec}{Number of child records, 6-11 (numeric)}
 \item{age}{Decimal age, 0-2.99 (numeric)}

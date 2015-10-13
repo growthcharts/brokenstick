@@ -2,27 +2,29 @@
 # 
 
 setClass("brokenstick",
-		 representation(knots = "numeric",
-		 			   Boundary.knots = "numeric"),
-		 contains = "lmerMod")
+         representation(knots = "numeric",
+                        Boundary.knots = "numeric",
+                        degree = "numeric",
+                        X = "ANY"),
+         contains = "lmerMod")
 
 # ==============================================================================
 # S4 print function for brokenstick object
 # ==============================================================================
 setGeneric("print")
 setMethod("print", signature( x = "brokenstick" ),
-		  function ( x, ... ) {
-		  	print.brokenstick( x, ...)
-		  }
+          function ( x, ... ) {
+            print.brokenstick( x, ...)
+          }
 )
 
 print.brokenstick <- function ( x, ... ) {
-	cat ("knots: ", x@knots,"\n")
-	cat ("Boundary.knots: ", x@Boundary.knots,"\n")
-	print(summary(x))
-	invisible(x)
+  cat ("knots: ", x@knots,"\n")
+  cat ("Boundary.knots: ", x@Boundary.knots,"\n")
+  cat ("degree: ", x@degree,"\n")
+  print(summary(x))
+  invisible(x)
 }
-
 
 
 #' Fit a broken stick model to irregular data
@@ -53,15 +55,17 @@ print.brokenstick <- function ( x, ... ) {
 #' the break points should be defined. In longitudinal data, this is usually decimal age.
 #' @param subject a vector containing the subject identification
 #' @param knots a numerical vector with the locations of the breaks to be 
-#' placed on the values of \code{x}. This setting is passed to \code{bs()}.
+#' placed on the values of \code{x}. This setting is passed to \code{bs()}. Specify \code{knots} to include the range of \code{x}. This will evade the warning 
+#' \code{some 'x' values beyond boundary knots may cause ill-conditioned bases}, a situation that may lead to nonsensical results. If in doubt, set argument \code{storeX = TRUE} and inspect the \code{X} slot of the result. The \code{X} matrix should have values between 0 and 1, and each row should add up to 1.
 #' @param Boundary.knots a numerical vector with the locations of the 
-#' outer break point for \code{x}. This setting is passed to \code{bs()}. The default is \code{range(x)}.
+#' outer break point for \code{x}. This setting is passed to \code{bs()}. The default is to set the left boundary knot equal to the \code{min(knots)}. The right boundary knots is taken as the larger of \code{max(knots)} and the maximum of \code{x}.
 #' @param degree the degree of the B-spline. For the broken stick model this 
 #' should be to 1 (the default), which specifies that values between the break
 #' points are located on a straight line.
 #' @param control A function to control fitting of \code{lmer()}. The default
 #' is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 #' fatal errors with respect the number of parameters into warnings.
+#' @param storeX A logical indicating whether the spline model matrix should be returned as slot \code{X} in the result. The default is \code{FALSE}
 #' @param \dots Additional arguments passed down to \code{lmer()} 
 #' (e.g. to specify additional \code{lmer()} options.
 #'  @return A fitted model of class \code{brokenstick}, which extends the 
@@ -70,29 +74,34 @@ print.brokenstick <- function ( x, ... ) {
 #' library(mice)
 #' data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
 #' fit <- brokenstick(y = data$hgt.z, x = data$age, subject = data$id, 
-#'                    knots = c(0.5, 1))
+#'                    knots = c(0, 1, 2))
 #' plot(fit)
 #' @export
 brokenstick <- function(y, x, subject, 
-						knots,
-						Boundary.knots = range(x),
-						degree = 1,
-						control = lmerControl(check.nobs.vs.nRE = "warning"), 
-						...) {
-	X <- bs(x = x, knots = knots, Boundary.knots = Boundary.knots, 
-			degree = degree)
-	colnames(X) <- paste("x", 1:ncol(X), sep = "")
-	pred <- paste("0 +", paste(colnames(X), collapse = " + "))
-	data <- na.omit(data.frame(subject = subject, x = x, y = y, X))
-	f <- as.formula(paste("y", "~", pred, 
-						  "+ (", pred, "| subject)"))
-	fit <- lmer(f, data = data,
-				control = control,
-				...)
-	# attr(fit, "model") <- "brokenstick"
-	class(fit) <- c("brokenstick")
-	fit@knots <- knots
-	fit@Boundary.knots <- Boundary.knots
-	return(fit)
+                        knots = pretty(x),
+                        Boundary.knots = 
+                          c(min(knots),
+                            max(max(x, na.rm = TRUE, max(knots)))),
+                        degree = 1,
+                        control = lmerControl(check.nobs.vs.nRE = "warning"), 
+                        storeX = FALSE,
+                        ...) {
+  X <- bs(x = x, knots = knots, Boundary.knots = Boundary.knots, 
+          degree = degree)
+  colnames(X) <- paste("x", 1:ncol(X), sep = "")
+  pred <- paste("0 +", paste(colnames(X), collapse = " + "))
+  data <- na.omit(data.frame(subject = subject, x = x, y = y, X))
+  f <- as.formula(paste("y", "~", pred, 
+                        "+ (", pred, "| subject)"))
+  fit <- lmer(f, data = data,
+              control = control,
+              ...)
+  # attr(fit, "model") <- "brokenstick"
+  class(fit) <- c("brokenstick")
+  fit@knots <- knots
+  fit@Boundary.knots <- Boundary.knots
+  fit@degree <- degree
+  if (storeX) fit@X <- X
+  return(fit)
 }
 

@@ -1,4 +1,4 @@
-# brokensticks.R
+# brokenstick-package.R
 # 
 
 #'@importFrom AGD y2z z2y
@@ -7,20 +7,20 @@
 #'@importFrom methods setGeneric setMethod
 NULL
 
-#' \pkg{brokensticks}: A package for irregular longitudinal data.
+#' \pkg{brokenstick}: A package for irregular longitudinal data.
 #' 
 #' The broken stick model describes a set of individual curves 
 #' by a linear mixed model using first order linear B-splines. The 
 #' main use of the model is to align irregularly observed data to a 
 #' user-specified grid of break ages. 
 #' 
-#' The \pkg{brokensticks} package contains functions for 
+#' The \pkg{brokenstick} package contains functions for 
 #' fitting a broken stick 
 #' model to data, for exporting the parameters of the model for 
 #' independent use outside this package, and for predicting broken 
 #' stick curves for new data.
 #' 
-#' @section brokensticks functions:
+#' @section brokenstick functions:
 #' The main functions are:
 #' \tabular{ll}{
 #'   \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr

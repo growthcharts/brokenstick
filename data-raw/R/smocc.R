@@ -11,6 +11,9 @@ data <- smocc[[3]][, c("src", "id", "rec", "nrec", "age", "sex",
 					   "etn", "ga", "bw", "hgt", "wgt")]
 rownames(data) <- NULL
 
+# make a factor of id
+data$id <- as.factor(data$id)
+
 # calculate Z-scores
 data$hgt.z <- y2z(y = data$hgt, 
 				  x = data$age, 

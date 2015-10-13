@@ -421,18 +421,8 @@ est &lt;-<span class="st"> </span><span class="kw">conditional.means</span>(fit1
 ## [1913] &quot;72031&quot; &quot;72033&quot; &quot;72034&quot; &quot;72035&quot; &quot;72036&quot; &quot;72037&quot; &quot;72038&quot; &quot;72039&quot;
 ## [1921] &quot;72040&quot; &quot;72041&quot; &quot;72042&quot; &quot;72044&quot; &quot;72045&quot; &quot;72046&quot; &quot;72047&quot; &quot;72048&quot;
 ## [1929] &quot;72049&quot; &quot;72050&quot; &quot;72051&quot; &quot;72052&quot; &quot;72053&quot;</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</code></pre>
-<pre><code>## 
-## Attaching package: 'dplyr'
-## 
-## The following object is masked from 'package:stats':
-## 
-##     filter
-## 
-## The following objects are masked from 'package:base':
-## 
-##     intersect, setdiff, setequal, union</code></pre>
-<pre class="sourceCode r"><code class="sourceCode r">data2 &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(data, est)
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)
+data2 &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(data, est)
 <span class="kw">head</span>(data2, <span class="dv">10</span>)</code></pre>
 <pre><code>## Source: local data frame [10 x 12]
 ## 

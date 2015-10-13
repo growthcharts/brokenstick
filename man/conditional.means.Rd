@@ -4,15 +4,22 @@
 \alias{conditional.means}
 \title{Calculated broken stick estimates from a fitted model}
 \usage{
-conditional.means(fit)
+conditional.means(fit, long = TRUE)
 }
 \arguments{
 \item{fit}{The fitted model of class \code{brokenstick},
 as produced by \code{brokenstick()}}
+
+\item{long}{A logical indicating whether the result should be in the
+long form (the default), or in the broad form.}
 }
 \value{
-Matrix with conditional means. Each row corresponds to
-a subject, each column corresponds to an (internal) knot.
+If \code{long} is \code{TRUE}, a matrix with three columns, representing the
+ subject level, breakpoint value and the conditional mean of the
+ distribution of broken stick values.
+If \code{long} is \code{FALSE}, a matrix with
+\code{length(knots) + degree} columns. Each row corresponds to
+a subject, each column corresponds to a knot.
 }
 \description{
 The broken stick estimates are the conditional means of the
