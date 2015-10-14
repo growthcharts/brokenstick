@@ -2,21 +2,20 @@
 % Please edit documentation in R/export.brokenstick.R
 \name{export.brokenstick}
 \alias{export.brokenstick}
-\title{Export the estimates of a fitted lmer() model}
+\title{Export the estimates of a fitted brokenstick model}
 \usage{
 export.brokenstick(model)
 }
 \arguments{
-\item{model}{An object of class \code{lmerMod} or class
-\code{brokenstick.export} (typically generated
-by a previous call to \code{export.brokenstick()}).}
+\item{model}{An object of class \code{brokenstick} or class
+\code{brokenstick.export}}
 }
 \value{
 A \code{list} of class \code{brokenstick.export}, with elements corresponding to the estimates parameters of the fitted model.
 }
 \description{
-Exports the crucial estimates of a fitted lmer() model so that the
+Exports the crucial estimates of a fitted brokenstick model so that the
 stored estimates can be used by the EB() function
-to calculate random effect estimates for new user data.
+to calculate random effect estimates for new data.
 }
 

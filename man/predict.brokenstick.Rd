@@ -4,20 +4,22 @@
 \alias{predict.brokenstick}
 \title{Predict growth curve according to the broken stick model}
 \usage{
-\method{predict}{brokenstick}(model, y, age)
+\method{predict}{brokenstick}(object, y, age, ...)
 }
 \arguments{
-\item{model}{An object of either class \code{brokenstick} or
+\item{object}{An object of either class \code{brokenstick} or
 of \code{brokenstick.export}
 containing the estimated parameters of the broken stick model}
 
 \item{y}{A vector with measurements}
 
 \item{age}{A vector with decimal ages of length \code{length(y)}}
+
+\item{\dots}{Additional arguments (not used)}
 }
 \value{
-A data frame with \code{length(slot(model, "knots"))
-+ slot(model, "degree")} elements with
+A data frame with \code{length(slot(object, "knots"))
++ slot(object, "degree")} elements with
 predicted values
 }
 \description{
