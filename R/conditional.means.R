@@ -22,14 +22,18 @@
 conditional.means <- function(fit, long = TRUE) {
 	if (!inherits(fit, "brokenstick")) 
 	  stop("Argument 'fit' not of class 'brokenstick'")
-  z <- t(lme4::ranef(fit)$subject) + lme4::fixef(fit)
+  zz <- t(lme4::ranef(fit)$subject) + lme4::fixef(fit)
   
   # return broad form (n, (length(knots) + degree))
-  if (!long) return(t(z))
+  if (!long) return(t(zz))
   
-  # return long form (n * (length(knots) + degree), 4)
+  # return long form (n * (length(knots) + degree), 5)
   brk <- c(fit@knots, fit@Boundary.knots[2])
   grd <- expand.grid(age = brk, id = as.factor(rownames(lme4::ranef(fit)$subject)))
-  data.frame(grd, hgt.z = as.vector(z))
+  rec <- rep(1:length(brk), nrow(zz))
+  data.frame(grd, 
+             nrec = length(brk), 
+             rec  = 1:length(brk),
+             yhat = as.vector(zz))
 }
 

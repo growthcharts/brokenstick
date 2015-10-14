@@ -27,6 +27,14 @@ print.brokenstick <- function ( x, ... ) {
 }
 
 
+# setGeneric("predict")
+# setMethod("predict", signature( x = "brokenstick" ),
+#           function ( x, ... ) {
+#             predict.brokenstick( x, ...)
+#           }
+# )
+
+
 #' Fit a broken stick model to irregular data
 #' 
 #' The broken stick model models an irregularly observed series 

@@ -20,7 +20,7 @@ export.brokenstick <- function(model) {
 	
 	# extract estimates from merMod object
 	beta <- fixef(model)
-	omega <- as.matrix(as.data.frame(VarCorr(model)$id))  # variance of RE, Q*Q
+	omega <- as.matrix(as.data.frame(VarCorr(model)$subject))  # variance of RE, Q*Q
 	df <- as.data.frame(VarCorr(model))
 	sigma2 <- df[df$grp == "Residual", "vcov"]
 	
