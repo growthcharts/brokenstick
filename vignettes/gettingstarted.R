@@ -87,7 +87,18 @@ export.hgt <- export.brokenstick(fit1)
 export.hgt
 
 ## ------------------------------------------------------------------------
-# repredict first observation
+# repredict first observation using three-line model
 d <- data[data$id == "10001", c("age","hgt.z")]
-# predict(fit1, y = d$hgt.z, age = d$age)
+predict(fit2, y = d$hgt.z, age = d$age)
+
+## ------------------------------------------------------------------------
+# trajectory at +1 and at -1
+predict(fit2, y = rep(1, 4), age = c(0, 1/2, 1, 2))
+predict(fit2, y = rep(0, 4), age = c(0, 1/2, 1, 2))
+predict(fit2, y = rep(-1, 4), age = c(0, 1/2, 1, 2))
+
+## ------------------------------------------------------------------------
+# trajectory at +1 and at -1, but only at birth
+predict(fit2, y = 1, age = 0)
+predict(fit2, y = -1, age = 0)
 

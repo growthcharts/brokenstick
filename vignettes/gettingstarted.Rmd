@@ -203,8 +203,39 @@ export.hgt
 
 ## Predictions on new data
 
+Prediction on new data can be obtained by the `predict()` function. The function requires a vector of measurements `y`, a vector measurement ages `age`, and the fitted model. 
+
+The following lines repredict the broken stick estimates for subject 10001 using the three-lines model.
+
 ```{r}
-# repredict first observation
+# repredict first observation using three-line model
 d <- data[data$id == "10001", c("age","hgt.z")]
-# predict(fit1, y = d$hgt.z, age = d$age)
+predict(fit2, y = d$hgt.z, age = d$age)
 ```
+
+As expected, the predicted values are identical to the estimates given before. 
+
+We may now experiment with new data. For example, 
+what is the prediction if our 
+subject has a measurement of "+1", "0", "-1" at each break age?
+
+```{r}
+# trajectory at +1 and at -1
+predict(fit2, y = rep(1, 4), age = c(0, 1/2, 1, 2))
+predict(fit2, y = rep(0, 4), age = c(0, 1/2, 1, 2))
+predict(fit2, y = rep(-1, 4), age = c(0, 1/2, 1, 2))
+```
+
+The estimates hoover around the measured value. As before, ignore that last predicted value that is on the boundary of the data range. Observe that the results are not symmetric because the fixed effect are non-zero. The predicted values shrink show the tendency to shrink towards the mean, i.e., towards the fixed effect estimates `r round(lme4::fixef(fit2), 2)`.
+
+What will be predicted if we have only the first measurement taken at birth?
+
+```{r}
+# trajectory at +1 and at -1, but only at birth
+predict(fit2, y = 1, age = 0)
+predict(fit2, y = -1, age = 0)
+```
+
+As expected, the predicted values again shrink towards the mean, but now considerably more so. 
+
+
