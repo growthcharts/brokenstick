@@ -82,13 +82,12 @@ var(fitted(fit1)) / var(data$hgt.z)
 var(fitted(fit2)) / var(data$hgt.z)
 
 ## ------------------------------------------------------------------------
-fit2lines <- fit1
-
-## ------------------------------------------------------------------------
-var(fitted(fit2lines)) / var(data$hgt.z)
-
-## ------------------------------------------------------------------------
 # export the broken stick models
 export.hgt <- export.brokenstick(fit1)
 export.hgt
+
+## ------------------------------------------------------------------------
+# repredict first observation
+d <- data[data$id == "10001", c("age","hgt.z")]
+# predict(fit1, y = d$hgt.z, age = d$age)
 

@@ -259,16 +259,6 @@ fit2 &lt;-<span class="st"> </span><span class="kw">brokenstick</span>(<span cla
 </div>
 <div id="export-the-model" class="section level2">
 <h2>Export the model</h2>
-<pre class="sourceCode r"><code class="sourceCode r">fit2lines &lt;-<span class="st"> </span>fit1</code></pre>
-<p>The proportion of explained variance of outcome by the model is:</p>
-<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">var</span>(<span class="kw">fitted</span>(fit2lines)) /<span class="st"> </span><span class="kw">var</span>(data$hgt.z)</code></pre>
-<pre><code>## [1] 0.7630321</code></pre>
-</div>
-<div id="predictions-on-new-data" class="section level2">
-<h2>Predictions on new data</h2>
-</div>
-<div id="exporting-the-broken-stick-model" class="section level2">
-<h2>Exporting the broken stick model</h2>
 <p>The <code>fit1</code> object can be stored by <code>save()</code> for future use in R. However, a more parsimonious and convenient way to reuse the model is to export its parameter estimates, and store only these. As a matter of fact, prediction using the broken stick model requires only the knot locations, the fixed effect estimates, the variance/covariance matrix of the random effects, and the size of the residual variance. The <code>export.brokenstick()</code> function will collect this information from the fitted model.</p>
 <pre class="sourceCode r"><code class="sourceCode r"><span class="co"># export the broken stick models</span>
 export.hgt &lt;-<span class="st"> </span><span class="kw">export.brokenstick</span>(fit1)
@@ -295,6 +285,12 @@ export.hgt</code></pre>
 ## 
 ## attr(,&quot;class&quot;)
 ## [1] &quot;brokenstick.export&quot;</code></pre>
+</div>
+<div id="predictions-on-new-data" class="section level2">
+<h2>Predictions on new data</h2>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># repredict first observation</span>
+d &lt;-<span class="st"> </span>data[data$id ==<span class="st"> &quot;10001&quot;</span>, <span class="kw">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;hgt.z&quot;</span>)]
+<span class="co"># predict(fit1, y = d$hgt.z, age = d$age)</span></code></pre>
 </div>
 
 

@@ -31,9 +31,9 @@ predict.brokenstick <- function(object, y, age, ...) {
 	
 	# code the ages at which the child is observed as
 	# linear splines with given break ages
-	X <- bs(x = age, knots = object$knots, 
-	        Boundary.knots = object$Boundary.knots, 
-	        degree = object$degree)
+	X <- bs(x = age, knots = export$knots, 
+	        Boundary.knots = export$Boundary.knots, 
+	        degree = export$degree)
 	colnames(X) <- paste("x", 1:ncol(X), sep = "")
 
 	# calculate random effect through empirical Bayes (BLUP) predictor

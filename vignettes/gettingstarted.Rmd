@@ -192,23 +192,6 @@ var(fitted(fit2)) / var(data$hgt.z)
 
 ## Export the model
 
-```{R}
-fit2lines <- fit1
-```
-
-
-The proportion of explained variance of outcome by the model is:
-
-```{R}
-var(fitted(fit2lines)) / var(data$hgt.z)
-```
-
-## Predictions on new data
-
-
-
-## Exporting the broken stick model
-
 The `fit1` object can be stored by `save()` for future use in R. However, a more parsimonious and convenient way to reuse the model is to export its parameter estimates, and store only these. As a matter of fact, prediction using the broken stick model requires only the knot locations, the fixed effect estimates, the variance/covariance matrix of the random effects, and the size of the residual variance. The `export.brokenstick()` function will collect this information from the fitted model.
 
 ```{R}
@@ -218,8 +201,10 @@ export.hgt
 ```
 
 
+## Predictions on new data
 
-
-
-
-
+```{r}
+# repredict first observation
+d <- data[data$id == "10001", c("age","hgt.z")]
+# predict(fit1, y = d$hgt.z, age = d$age)
+```

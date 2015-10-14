@@ -25,7 +25,8 @@ export.brokenstick <- function(model) {
 	
 	z <- list(beta = beta, omega = omega, sigma2 = sigma2,
 			  knots = attr(model, "knots"), 
-			  Boundary.knots = attr(model, "Boundary.knots"))
+			  Boundary.knots = attr(model, "Boundary.knots"),
+			  degree = attr(model, "degree"))
 	class(z) <- "brokenstick.export"
 	return(z)
 }
