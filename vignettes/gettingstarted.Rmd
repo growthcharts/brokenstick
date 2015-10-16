@@ -45,9 +45,10 @@ The main functions in the `brokenstick` package are:
 Function name        | Description
 ---------------------|---------------------------------
 `brokenstick()`      | Fit a broken stick model to irregular data
-`conditional.means()`| Obtain the broken stick estimates from a fitted object
-`predict()`          | Predict the growth curve by the broken stick model
-`export.brokenstick()` | Export the estimates of a fitted `lmer()` model object
+`conditional.means()`| Obtain broken stick estimates from a fitted object
+`EB()`               | Empirical Bayes predictor for random effects
+`predict()`          | Predict broken stick estimates for new growth data
+`export.brokenstick()` | Export broken stick model parameters 
 
 ## Exporatory analysis
 
