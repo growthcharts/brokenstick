@@ -1,7 +1,6 @@
 # brokenstick-package.R
 # 
 
-#'@importFrom AGD y2z z2y
 #'@importFrom lme4 lmer fixef ranef VarCorr lmerControl
 #'@importFrom splines bs
 #'@importFrom methods setGeneric setMethod
@@ -24,11 +23,9 @@ NULL
 #' The main functions are:
 #' \tabular{ll}{
 #'   \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
-#'   \code{conditional.means()} \tab Obtain the broken stick estimates from a fitted object
-#'   \code{predict()} \tab Predict growth curve according to the broken stick model\cr
-#'   \code{export.brokenstick()} \tab Export the estimates of a fitted brokenstick
-#'    model object
-#'   }
+#'   \code{conditional.means()} \tab Obtain the broken stick estimates\cr
+#'   \code{predict()} \tab Predict new growth curve\cr
+#'   \code{export.brokenstick()} \tab Export estimates of the model}
 #' @docType package
 #' @name brokenstick-pkg
 #' @seealso \code{\link{brokenstick}}, 

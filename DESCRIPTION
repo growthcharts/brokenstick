@@ -6,7 +6,7 @@ Date: 2015-10-16
 Authors@R: person("Stef", "van Buuren", email = "stef.vanbuuren@tno.nl", role = c("aut","cre"))
 Description: The broken stick model describes a set of individual curves by a linear mixed model using first order linear B-splines. The main use of the model is to align irregularly observed data to a user-specified grid of break ages. All fitting can done in the Z-score scale, so nonlinearities and irregular data can be treated as separate problems. This package contains functions for fitting a broken stick model to data, for exporting the parameters of the model for independent use outside this package, and for predicting broken stick curves for new data.
 Depends: R (>= 2.10)
-Imports: lme4, AGD, splines, methods
+Imports: lme4, splines, methods
 Suggests: mice, knitr, lattice, dplyr
 License: file LICENSE
 LazyData: TRUE

@@ -23,11 +23,9 @@ stick curves for new data.
 The main functions are:
 \tabular{ll}{
   \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
-  \code{conditional.means()} \tab Obtain the broken stick estimates from a fitted object
-  \code{predict()} \tab Predict growth curve according to the broken stick model\cr
-  \code{export.brokenstick()} \tab Export the estimates of a fitted brokenstick
-   model object
-  }
+  \code{conditional.means()} \tab Obtain the broken stick estimates\cr
+  \code{predict()} \tab Predict new growth curve\cr
+  \code{export.brokenstick()} \tab Export estimates of the model}
 }
 \references{
 van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hall/CRC, 2012. Chapter 9.
