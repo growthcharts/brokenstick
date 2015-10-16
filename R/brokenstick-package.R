@@ -24,14 +24,15 @@ NULL
 #' The main functions are:
 #' \tabular{ll}{
 #'   \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
-#'   \code{predictbs()} \tab Predict growth curve according to the broken stick model\cr
+#'   \code{conditional.means()} \tab Obtain the broken stick estimates from a fitted object
+#'   \code{predict()} \tab Predict growth curve according to the broken stick model\cr
 #'   \code{export.brokenstick()} \tab Export the estimates of a fitted brokenstick
 #'    model object
 #'   }
 #' @docType package
 #' @name brokenstick-pkg
 #' @seealso \code{\link{brokenstick}}, 
-#' \code{\link{EB}}, \code{\link{predictbs}}, 
+#' \code{\link{EB}}, 
 #' \code{\link{export.brokenstick}}, \code{\link{predict.brokenstick}}
 #' @references 
 #' van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hall/CRC, 2012. Chapter 9.
