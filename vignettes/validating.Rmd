@@ -2,7 +2,11 @@
 title: "Validating broken stick model"
 author: "Stef van Buuren (for Craig Anderson)"
 date: "7 februari 2016"
-output: html_document
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
@@ -46,7 +50,7 @@ library("brokenstick")
 head(smocc.hgtwgt)
 ```
 
-let's source the definition of the `holdout` function
+Here is Craig's definition of the `holdout` function:
 
 ```{r}
 holdout <- function(data, random=TRUE){
@@ -91,7 +95,7 @@ holdout <- function(data, random=TRUE){
 We take height of the first 2000 observations of the `smocc.hgtwgt` data, where the height - according to advice - is modeled in the Z-score scale:
 
 ```{r}
-data <- smocc.hgtwgt[1:2000, c("id", "age", "hgt.z")]
+data <- smocc.hgtwgt[1:2000, c("id", "age", "hgt.z", "hgt", "sex")]
 
 # generate random holdout sample
 set.seed(63621)
@@ -100,19 +104,19 @@ head(data)
 summary(data)
 ```
 
-## Analyses with broken stick model
+## Prediction with broken stick model
 
-Here's the first part code of Craig's `brokenstickhold.R` function:
+Here's the first part code of Craig's `brokenstickhold.R` function (slightly adapted):
 
 ```{r}
   #Rename columns of data matrix
-  colnames(data) <- c("id", "age", "y", "hold")
+  colnames(data) <- c("id", "age", "y", "hgt", "sex", "hold")
   
   UID <- unique(data$id)
 
   # instead of uniform knots: knots=c(0.2, 0.4, 0.6, 0.8)
   # take four internal knots at 20th, 40th, 60th and 80th age quantile
-  knots <- quantile(data$age, seq(0.2,0.8,0.2))
+  knots <- quantile(data$age, seq(0, 0.8, 0.2))
   knots
   
   #Separate retained and removed data
@@ -130,18 +134,35 @@ Here's the first part code of Craig's `brokenstickhold.R` function:
   mod
 ```
 
+## Validation plots
 
+Let's take the first child. Predicting the broken stick at the break ages is done as:
 
 ```{r}
   a <- data[data$id==UID[1],]
-  
-  # b <- predict.brokenstick(mod, a$y, a$age)
   b <- predict(mod, a$y, a$age)
 
-  b
+  plot(x = a$age, y = a$y, type = "b")
+  brk <- c(mod@knots, mod@Boundary.knots[2])
+  brk
+  lines(x = brk, y = b, col = "red", lwd = 2, lty = 2, type = "b")
+  abline(v = brk, lty = 5, col = "grey80")
 ```
 
+Now let's find the predicted value at each observation. Note: This requires *brokenstick 0.16*, which incorporates the new `type = "response"` argument. 
+
 ```{r}
+  a <- data[data$id==UID[1],]
+  b <- predict(mod, a$y, a$age, type = "response")
+
+  plot(x = a$age, y = a$y, type = "b")
+  points(x = a$age, y = b, col = "red", lwd = 2, lty = 2, type = "b")
+  abline(v = a$age, lty = 5, col = "grey80")
+```
+
+Let's now obtain the predicted values of all children (there should be more elegant ways of doing this, but `lapply()` does not not properly dispatch to `predict()`).
+
+```{r fig.height=7, fig.width=7}
   ## predict for all data
   ds <- split(data, f = data$id)
   result <- vector("list", length(ds))
@@ -151,15 +172,47 @@ Here's the first part code of Craig's `brokenstickhold.R` function:
     if (nrow(d) > 0) result[[i]] <- predict(mod, d$y, d$age, type = "response")
   }
 
-  summary(b)
+  data$zhat <- unlist(result)
+  
+  library("MASS")
+  eqscplot(x = data$zhat, y = data$y, xlab = "Predicted Z-score", ylab = "Observed Z-score", main = "All children") 
+  abline(0, 1, col = "blue")
 ```
 
+## Convert to original scale
 
-```{r eval=FALSE}
-  data$fit <- fit
-  
-  plot <- sample.plot.pred(data, child.sample)
-  
-  MSE <- mean((data.pred$y - fit[data$hold==TRUE])^2)
+We have done all modeling in the Z-score scale, so our models can remain simple. If we want the result in the cm scale, we must convert the estimates using the WHO reference, as follows:
+
+```{r fig.height=7, fig.width=7}
+# convert Z-score to CM
+library("AGD")   # get AGD 0.35 from CRAN 
+
+data$yhat <- z2y(z = data$zhat, 
+                 x = data$age,
+                 sex = ifelse(data$sex == "female", "F", "M"),
+                 ref = get("who.hgt", pos = "package:AGD"))
+
+eqscplot(x = data$yhat, y = data$hgt, xlab = "Predicted (cm)", 
+     ylab = "Observed (cm)", main = "All children")
+abline(0, 1, col = "blue")
 ```
 
+Are the test and validation samples different?
+
+```{r}
+library(lattice)
+xyplot(hgt ~ yhat | hold, data = data, xlab = "Predicted (cm)", 
+     ylab = "Observed (cm)", main = "All children", aspect = "iso")
+```
+
+## Some advice
+
+Please adapt for your own purposes, but take the following into account:
+
+1. Keep the number of knots low (for speed). If you want to predict at specific time points, then specify those time points as knot locations;
+2. The practically interesting scenario is predicting into the future using the historic information. The broken stick model can do this, and is - I believe - particularly useful for doing just that;
+3. Specify the first break point `knot[1]` equal to `Boundary.knots[1]` and equal to the minumum age, otherwise unpredictable things occur. I hope to remove this limitation in the future;
+4. Although the broken stick model can also fit observations in the cm-scale, it is **much better** to fit to the measurements in the **Z-score scale**, and convert back to cm-scale afterwards when needed. Use the `AGD` package (from CRAN) or the `hbgd` package to convert back and forth;
+5. Predictions should ideally be evaluated with respect to the width and coverage of the prediction interval. The current version does not provide prediction intervals. The theory can probably be taken from the Skondral paper, and the package will need to do be extended with additional functions.
+
+Hope this helps.

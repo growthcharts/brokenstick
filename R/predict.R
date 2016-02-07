@@ -12,7 +12,7 @@
 #' @param type  If \code{type = "curve"} (the default) 
 #' the function returns the broken stick estimates. 
 #' If \code{type = "response"}, the function returns a predicted value 
-#' for each element of \code{y}.
+#' for each element of \code{y} determined by linear interpolation.
 #' @param \dots Additional arguments (not used)
 #' @return A data frame with \code{length(slot(object, "knots"))
 #' + slot(object, "degree")} elements with 
@@ -64,7 +64,9 @@ predict.brokenstick.export <- function(object, y, age, type = "curve", ...) {
   if (type == "curve") return(bs.z)
   
   # individual (response) prediction
-  return(X %*% matrix(bs.z, ncol = 1))
+  if (object$degree > 1) stop("Prediction uses linear interpolation for degree > 1")
+  brk <- c(object$knots, object$Boundary.knots[2])
+  approx(x = brk, y = bs.z, xout = age)$y
 }
 
 

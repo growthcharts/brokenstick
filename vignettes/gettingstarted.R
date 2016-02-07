@@ -66,7 +66,7 @@ data2 <- bind_rows(data.frame(data, bse = FALSE), est)
 
 xyplot(hgt.z ~ age | id, data = data2,
        groups = bse, 
-	     subset = id %in% c(10001, 10005) & age <= 2.3, 
+	     subset = id %in% c(10001, 10005) & age <= 3, 
 	   type = "b", pch = 19, as.table = TRUE,
 	   panel = function(...) {
 	   	panel.refline(h = c(-2, 0, 2))

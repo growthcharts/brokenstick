@@ -16,7 +16,7 @@
 \item{type}{If \code{type = "curve"} (the default) 
 the function returns the broken stick estimates. 
 If \code{type = "response"}, the function returns a predicted value 
-for each element of \code{y}.}
+for each element of \code{y} determined by linear interpolation.}
 
 \item{\dots}{Additional arguments (not used)}
 }
