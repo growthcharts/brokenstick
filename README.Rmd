@@ -1,0 +1,73 @@
+---
+output:
+  md_document:
+    variant: markdown_github
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+```
+
+# brokenstick
+
+The broken stick model describes a set of individual curves by a linear mixed model using first order linear B-splines. The main use of the model is to align irregularly observed data to a user-specified grid of break ages.
+
+All fitting can done in the Z-score scale, so nonlinearities and irregular data can be treated as separate problems. This package contains functions for fitting a broken stick model to data, for exporting the parameters of the model for independent use outside this package, and for predicting broken stick curves for new data.
+
+## Installation
+
+If you have been marked as a collaborator on GitHub, generated a personal access token (PAT) on <https://github.com/settings/tokens>, and stored your PAT by `Sys.setenv(GITHUB_PAT = "51he..")`, then install the `brokenstick` package from GitHub as follows: 
+
+```{r eval = FALSE}
+install.packages("devtools")
+devtools::install_github(repo = "stefvanbuuren/brokenstick", oath = Sys.getenv("GITHUB_PAT"))
+```
+
+
+## Overview
+
+The *broken stick model* describes a set of individual curves by a linear mixed model using first order linear B-splines. The model can be used
+
+- to smooth growth curves by a series of connected straight lines;
+- to align irregularly observed curves to a common age grid;
+- to create synthetic curves at a user-specified set of break ages;
+- to estimate the time-to-time correlation matrix;
+- to predict future observations.
+
+The user specifies a set of break ages at which the straight lines connect. Each individual obtains an estimate at each break age, so the set of estimates of the individual form a smoothed version of the observed trajectory. 
+
+The main assumptions of the broken stick model are: 
+
+- The development between the break ages follows a straight line, and is generally not of particular interest;
+- Broken stick estimates follow a common multivariate normal distribution;
+
+In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal ($Z$) scale. Unique feature of the broken stick model are:
+
+- *Modular*: Issues related to nonlinearities of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;
+- *Local*: A given data point will contribute only to the estimates corresponding to the closest break ages;
+- *Exportable*: The broken stick model can be exported and reused for prediction for new data in alternative computing environments.
+
+The `brokenstick` package contains functions for
+
+- Fitting the broken stick model to data, 
+- Exporting the parameters of the model for independent use outside this package,
+- Predicting broken stick estimates for new data.
+
+## Main functions
+
+The main functions in the `brokenstick` package are:
+
+Function name        | Description
+---------------------|---------------------------------
+`brokenstick()`      | Fit a broken stick model to irregular data
+`conditional.means()`| Obtain broken stick estimates from a fitted object
+`EB()`               | Empirical Bayes predictor for random effects
+`predict()`          | Predict broken stick estimates for new growth data
+`export.brokenstick()` | Export broken stick model parameters 
+

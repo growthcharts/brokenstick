@@ -92,8 +92,8 @@ fit1 <- brokenstick(y = data$hgt.z,
 					knots = 0:2)
 ```
 
-The `knots` argument to `brokenstick()` specifies that the break ages are birth, 1 year and 2 years, respectively. The broken stick model effectively replaces the intercept by the random effects \code{x1}, \code{x2}, \code{x3} and \code{x4}. The
-specified random effects correspond to break ages of 0, 1 and 2 and 3 years, respectively. The break age of 3 years is specified implicitely as a \code{Boundary.knot[2]}. This is done for technical reasons since the B-splines must encompass the entire age range in the data for it to have a useful interpretation. No intercept is needed since every row in the predictors adds up to one.
+The `knots` argument to `brokenstick()` specifies that the break ages are birth, 1 year and 2 years, respectively. The broken stick model effectively replaces the intercept by the random effects `x1`, `x2`, `x3` and `x4`. The
+specified random effects correspond to break ages of 0, 1 and 2 and 3 years, respectively. The break age of 3 years is specified implicitely as a `Boundary.knot[2]`. This is done for technical reasons since the B-splines must encompass the entire age range in the data for it to have a useful interpretation. No intercept is needed since every row in the predictors adds up to one.
 
 ```{r}
 class(fit1)

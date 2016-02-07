@@ -105,7 +105,7 @@ brokenstick <- function(y, x, subject,
               control = control,
               ...)
   # attr(fit, "model") <- "brokenstick"
-  class(fit) <- c("brokenstick")
+  class(fit) <- "brokenstick"
   fit@knots <- knots
   fit@Boundary.knots <- Boundary.knots
   fit@degree <- degree

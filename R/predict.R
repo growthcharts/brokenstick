@@ -9,15 +9,19 @@
 #' @param object   An object of class \code{brokenstick}
 #' @param y     A vector with measurements 
 #' @param age   A vector with decimal ages of length \code{length(y)}
+#' @param type  If \code{type = "curve"} (the default) 
+#' the function returns the broken stick estimates. 
+#' If \code{type = "response"}, the function returns a predicted value 
+#' for each element of \code{y}.
 #' @param \dots Additional arguments (not used)
 #' @return A data frame with \code{length(slot(object, "knots"))
 #' + slot(object, "degree")} elements with 
 #' predicted values
 #' @author Stef van Buuren, 2015
 #' @export
-predict.brokenstick <- function(object, y, age, ...) {
+predict.brokenstick <- function(object, y, age, type = "curve", ...) {
 	export <- export.brokenstick(object)
-	predict(export, y, age, ...)
+	predict(export, y, age, type = type, ...)
 }
 
 
@@ -31,13 +35,19 @@ predict.brokenstick <- function(object, y, age, ...) {
 #' containing the estimated parameters of the broken stick model
 #' @param y     A vector with measurements 
 #' @param age   A vector with decimal ages of length \code{length(y)}
+#' @param type  If \code{type = "curve"} (the default) 
+#' the function returns the broken stick estimates. 
+#' If \code{type = "response"}, the function returns a predicted value 
+#' for each element of \code{y}.
 #' @param \dots Additional arguments (not used)
 #' @return A data frame with \code{length(slot(object, "knots"))
 #' + slot(object, "degree")} elements with 
 #' predicted values
 #' @author Stef van Buuren, 2015
 #' @export
-predict.brokenstick.export <- function(object, y, age, ...) {
+predict.brokenstick.export <- function(object, y, age, type = "curve", ...) {
+  
+  type <- match.arg(type, c("curve", "response"))
   
   if (missing(y)) return(NULL)
   if (missing(age)) return(NULL)
@@ -51,7 +61,10 @@ predict.brokenstick.export <- function(object, y, age, ...) {
   
   # calculate random effect through empirical Bayes (BLUP) predictor
   bs.z <- EB(object, y = y, X, BS = TRUE)
-  return(bs.z)
+  if (type == "curve") return(bs.z)
+  
+  # individual (response) prediction
+  return(X %*% matrix(bs.z, ncol = 1))
 }
 
 

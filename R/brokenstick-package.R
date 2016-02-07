@@ -32,6 +32,10 @@ NULL
 #' @seealso \code{\link{brokenstick}}, 
 #' \code{\link{EB}}, 
 #' \code{\link{export.brokenstick}}, \code{\link{predict.brokenstick}}
+#' @note 
+#' Development of this package was kindly supported under the Healthy
+#' Birth, Growth and Development knowledge integration (HBGDki)
+#' program of the Bill & Melinda Gates Foundation.
 #' @references 
 #' van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hall/CRC, 2012. Chapter 9.
 NULL

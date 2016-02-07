@@ -18,6 +18,11 @@ model to data, for exporting the parameters of the model for
 independent use outside this package, and for predicting broken 
 stick curves for new data.
 }
+\note{
+Development of this package was kindly supported under the Healthy
+Birth, Growth and Development knowledge integration (HBGDki)
+program of the Bill & Melinda Gates Foundation.
+}
 \section{brokenstick functions}{
 
 The main functions are:

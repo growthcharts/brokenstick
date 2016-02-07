@@ -1,0 +1,165 @@
+---
+title: "Validating broken stick model"
+author: "Stef van Buuren (for Craig Anderson)"
+date: "7 februari 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Objective
+
+This vignette shows how to predict observations by the broken stick model, and validate it against a holdout sample.
+
+## Preliminaries
+
+The `brokenstick` package contains functions to fit and predict the broken stick model. If you have been marked as a collaborator on GitHub, generated a personal access token (PAT) on <https://github.com/settings/tokens>, and stored your PAT by `Sys.setenv(GITHUB_PAT = "51he..")`, then install the `brokenstick` package from GitHub as follows: 
+
+```{r eval = FALSE}
+install.packages("devtools")
+devtools::install_github(repo = "stefvanbuuren/brokenstick", oath = Sys.getenv("GITHUB_PAT"))
+```
+
+Alternatively, install from the package source by
+
+```{r eval = FALSE}
+install.packages(pkgs, repos = NULL, type = "source")
+```
+
+where `pkgs` is the name of the package sources, e.g., `pkgs = "myproject\brokenstick_0.16.tar.gz"`.
+
+We will use the `cpp` demo data taken from the `hbgd` package. For installing this package use:
+
+```{r eval = FALSE}
+options(repos = c(tessera = "http://packages.tessera.io", getOption("repos")))
+install.packages("hbgd")
+```
+
+## Demo data
+
+We will use the `smocc.hgtwgt` demo data taken from the `brokenstick` package. 
+
+```{r}
+library("brokenstick")
+head(smocc.hgtwgt)
+```
+
+let's source the definition of the `holdout` function
+
+```{r}
+holdout <- function(data, random=TRUE){
+  
+  colnames(data)[1:3] <- c("ID", "age", "y")
+  
+  ID <- data$ID
+  row <- 1:nrow(data)
+  
+  
+  samplerandom <- function(x){
+    if(length(x)==1){
+      0
+    }else{
+      sample(x,1) 
+    }
+  }
+  
+  samplemax <- function(x){
+    if(length(x)==1){
+      0
+    }else{
+      max(x)
+    }
+  }
+  
+  
+  if(random==TRUE){
+    validation.set <- tapply(X=row,INDEX=ID,FUN=samplerandom)
+  }else{
+    if(random==FALSE){
+      validation.set <- tapply(X=row,INDEX=ID,FUN=samplemax)
+    }
+  }
+  
+  hold <- row %in% validation.set
+  
+  return(hold)
+}
+```
+
+We take height of the first 2000 observations of the `smocc.hgtwgt` data, where the height - according to advice - is modeled in the Z-score scale:
+
+```{r}
+data <- smocc.hgtwgt[1:2000, c("id", "age", "hgt.z")]
+
+# generate random holdout sample
+set.seed(63621)
+data <- data.frame(data, hold = holdout(data))
+head(data)
+summary(data)
+```
+
+## Analyses with broken stick model
+
+Here's the first part code of Craig's `brokenstickhold.R` function:
+
+```{r}
+  #Rename columns of data matrix
+  colnames(data) <- c("id", "age", "y", "hold")
+  
+  UID <- unique(data$id)
+
+  # instead of uniform knots: knots=c(0.2, 0.4, 0.6, 0.8)
+  # take four internal knots at 20th, 40th, 60th and 80th age quantile
+  knots <- quantile(data$age, seq(0.2,0.8,0.2))
+  knots
+  
+  #Separate retained and removed data
+  data.fit <- data[data$hold==FALSE,]
+  data.pred <- data[data$hold==TRUE,]
+  
+  mod <- brokenstick(y=data.fit$y,
+                     x=data.fit$age,
+                     subject=data.fit$id,
+                     storeX=T,
+                     knots=knots,
+                     Boundary.knots = c(
+                       min(data.fit$age, na.rm = TRUE),
+                       max(data.fit$age, na.rm = TRUE)))
+  mod
+```
+
+
+
+```{r}
+  a <- data[data$id==UID[1],]
+  
+  # b <- predict.brokenstick(mod, a$y, a$age)
+  b <- predict(mod, a$y, a$age)
+
+  b
+```
+
+```{r}
+  ## predict for all data
+  ds <- split(data, f = data$id)
+  result <- vector("list", length(ds))
+
+  for (i in 1:length(ds)) {
+    d <- ds[[i]]
+    if (nrow(d) > 0) result[[i]] <- predict(mod, d$y, d$age, type = "response")
+  }
+
+  summary(b)
+```
+
+
+```{r eval=FALSE}
+  data$fit <- fit
+  
+  plot <- sample.plot.pred(data, child.sample)
+  
+  MSE <- mean((data.pred$y - fit[data$hold==TRUE])^2)
+```
+
