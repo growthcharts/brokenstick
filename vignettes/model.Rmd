@@ -1,0 +1,38 @@
+---
+title: "Model formulation"
+author: "Stef van Buuren"
+date: "23 februari 2016"
+bibliography: refs.bibtex
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Broken stick model
+
+In a sample of $n$ persons $i=1,\dots,n$, let there be $n_i$ measurement occasions for person $i$. Let $y_i$ represent the $n_i\times 1$ vector with outcome measurements obtained for person $i$, and let $t_i$ denote the $n_i \times 1$ vector of ages at which $y_i$ were measured.
+
+The model does not enter the time variable in the model directly, but represents $t_i$ as the $n_i \times k$ matrix $X_i$ through a linear $B$-spline transformation with knots 
+$$
+\kappa_1 < \kappa_2 < \dots < \kappa_k
+$$
+placed at $k$ break ages.  We assume that the knots span the range of the observed ages, i.e., $\kappa_1 \leq \min(t_i)$ and $\kappa_k \geq \max(t_i)$ over all $i$.
+
+The broken stick model is a two-stage random-effects model [@laird1982]
+
+$$
+y_i = X_i\beta + X_ib_i + e_i
+$$
+
+where the $k \times 1$ column vector $\beta$ contains $k$ fixed effect coefficients common to all persons, where the $k \times 1$ vector $b_i$ accomodates for $k$ subject-specific random parameters, and where the $n_i \times 1$ vector $e_i$ holds subject-specific residuals. We assume that the residuals are identically and independently distributed as $e_i \sim N(0,\sigma^2 I(n_i))$, where $\sigma^2$ is a common variance parameter and $I(n_i)$ is the identity matrix. Thus, the equation represents population parameters (fixed effects), individual effects (random effects), and an amount of within-person dispersion that is the same for all persons.
+
+At the next level, we assume $b_i \sim N(0, \Omega)$, i.e., the random coefficients of the subjects have a multivariate normal distribution with zero mean and a $k \times k$ covariance matrix $\Omega$. In addition, we assume that the covariance between $b_i$ and $e_i$ is zero.
+
+Interpretation of the model is straightforward. The model describes $k-1$ lines that connect at the $n_i$ coordinates $(\kappa, \beta + b_i)$. The model effectively represents $n_i$ measurements of person $i$ by $k$ points. The analysis of the $k$ data points at ages $\kappa$ is generally easier than the analysis of $n_i$ values at ages $t_i$ with $n_i$ and $t_i$ differing across persons. If $n_i >> k$ then the model may be used to provide a more parsimonious representation of possibly intensive measurements. Reversely, if $n_i << k$ then the model produces values by building strength from the data across persons, which can be useful for prediction. A major advantage of the broken stick model is that replaces irregularly observed measurements by a new set $k$ measurements $\beta + b_i$ at common times $\kappa$. 
+
+Suppose we are interested on knowing the time-to-time correlation matrix of the measurements. Marginally, the distribution of $y_i$ is multivariate normal with mean $X_i\beta$ and covariance $X_i\Omega X_i' + \sigma^2 I(n_i)$. In the perfect model where $\sigma^2 = 0$ and all observations times are at the break ages (so that $X_i$ are identity matrices), then $\Omega$ estimates covariance between raw measurements. If $\sigma^2 > 0$, then $\Omega$ overestimates the correlations between $y$'s, but correctly estimates the covariance among the random effects. In that case, $\Omega + \hat\sigma^2 I(n_i)$ correctly estimates the covariances between $y$'s. Since the covariance matrix can be transformed into a correlation matrix, the broken stick model can be used as a tool to estimate the time-to-time correlation matrix of the measurements had these been done at the break ages.
+
+The broken stick model does not need an intercept since each row in $X_i$ sums to 1. We may conceptualize the model to have $k$ *partial intercepts*, one at each break age. The partial intercept summarizes the information available in the adjacent left and right age intervals, and ignores any information beyond the adjacent knots. The broken stick estimates are thus primarily local estimates. Data beyond the adjacent age intervals influence broken stick estimates only through the subject-level part of the model.
+
