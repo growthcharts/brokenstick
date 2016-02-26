@@ -29,7 +29,7 @@
 #' model <- export.brokenstick(fit.hgt)
 #' data <- slot(fit.hgt, "frame")
 #' y <- data[data$subject == 10001, "y"]
-#' X <- as.matrix(data[data$subject == 10001, paste0("x", 1:13)])
+#' X <- as.matrix(data[data$subject == 10001, paste0("x", 1:11)])
 #' EB(model, y, X)
 #' @export
 EB <- function (model, y, X, Z = X, BS = TRUE) {

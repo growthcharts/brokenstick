@@ -1,6 +1,5 @@
 ---
 title: "Getting started"
-author: "Stef van Buuren"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -114,8 +113,7 @@ Finally, the residual (0.49) is the standard deviation of the residual of the mo
 
 ## Conditional means
 
-A next step is to calculate the conditional means of the posterior distribution 
-of the sum of fixed and random effects.
+A next step is to calculate the conditional means of the posterior distribution of the sum of fixed and random effects.
 
 ```{r}
 est <- conditional.means(fit1)
@@ -239,4 +237,5 @@ predict(fit2, y = -1, age = 0)
 
 As expected, the predicted values again shrink towards the mean, but now considerably more so. 
 
+See the "Fit and Predict" vignette for additional options.
 

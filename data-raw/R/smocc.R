@@ -15,29 +15,29 @@ rownames(data) <- NULL
 data$id <- as.factor(data$id)
 
 # calculate Z-scores
-data$hgt.z <- y2z(y = data$hgt, 
+data$HAZ <- y2z(y = data$hgt, 
 				  x = data$age, 
 				  sex = ifelse(data$sex == "female", "F", "M"),
 				  ref = get("who.hgt", pos = "package:AGD"))
 
-# perform broken stick analyses for height
-select <- with(data, !is.na(age) & !is.na(hgt) 
-			   & (hgt.z >= (-4)) & hgt.z <= 4)
-data <- data[select, ]
+# distribution of Z-score by ahe
+with(data, plot(age, HAZ, main = "Dutch 1989-1990, height relative to WHO"))
+abline(h = c(-2,0,2), col = "grey")
+with(data, lines(loess.smooth(x = age, y = HAZ, span = 0.2), col = "red", lwd = 2))
 
-# with(data, plot(age, hgt.z, main = "Dutch 1989-1990, height relative to WHO"))
-# abline(h = c(-2,0,2), col = "grey")
-# with(data, lines(lowess(x = age, y = hgt.z), col = "red", lwd = 3))
+# perform broken stick analyses for height
+trim <- with(data, !is.na(age) & !is.na(hgt) & HAZ > (-5) & HAZ < 5)
+d <- data[trim, ]
 
 # fit the brokenstick model
-knots <- round(c(0, 28/365.25, 56/365.25, 
-				 1/4, 1/3, 1/2, 7.5/12,
-				 9/12, 11/12, 14/12, 18/12, 2), 4)
-fit.hgt <- with(data, 
-				brokenstick(y = hgt.z, 
+knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
+Boundary.knots <- c(0, 3)
+fit.hgt <- with(d,
+				brokenstick(y = HAZ, 
 							x = age, 
 							subject = id,
-							knots = knots))
+							knots = knots, 
+							Boundary.knots = Boundary.knots))
 
 # store 'smocc.hgtwgt' for lazy loading
 smocc.hgtwgt <- data
