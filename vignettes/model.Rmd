@@ -2,8 +2,8 @@
 title: "Model formulation"
 author: "Stef van Buuren"
 date: "23 februari 2016"
+output: pdf_document
 bibliography: refs.bibtex
-output: html_document
 ---
 
 ```{r setup, include=FALSE}

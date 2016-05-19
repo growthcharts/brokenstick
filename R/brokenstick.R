@@ -76,7 +76,7 @@ print.brokenstick <- function ( x, ... ) {
 #' @param storeX A logical indicating whether the spline model matrix should be returned as slot \code{X} in the result. The default is \code{FALSE}
 #' @param \dots Additional arguments passed down to \code{lmer()} 
 #' (e.g. to specify additional \code{lmer()} options.
-#'  @return A fitted model of class \code{brokenstick}, which extends the 
+#' @return A fitted model of class \code{brokenstick}, which extends the 
 #'  class \code{lmerMod}
 #' @examples 
 #' library(mice)

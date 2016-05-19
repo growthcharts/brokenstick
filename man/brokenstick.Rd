@@ -34,9 +34,11 @@ fatal errors with respect the number of parameters into warnings.}
 \item{storeX}{A logical indicating whether the spline model matrix should be returned as slot \code{X} in the result. The default is \code{FALSE}}
 
 \item{\dots}{Additional arguments passed down to \code{lmer()} 
-(e.g. to specify additional \code{lmer()} options.
- @return A fitted model of class \code{brokenstick}, which extends the 
- class \code{lmerMod}}
+(e.g. to specify additional \code{lmer()} options.}
+}
+\value{
+A fitted model of class \code{brokenstick}, which extends the 
+ class \code{lmerMod}
 }
 \description{
 The broken stick model models an irregularly observed series 

@@ -239,3 +239,5 @@ As expected, the predicted values again shrink towards the mean, but now conside
 
 See the "Fit and Predict" vignette for additional options.
 
+### Curve matching
+

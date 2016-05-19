@@ -4,6 +4,7 @@
 #'@importFrom lme4 lmer fixef ranef VarCorr lmerControl
 #'@importFrom splines bs
 #'@importFrom methods setGeneric setMethod
+#'@importFrom stats approx as.formula na.omit predict
 NULL
 
 #' \pkg{brokenstick}: A package for irregular longitudinal data.
