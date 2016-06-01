@@ -52,6 +52,8 @@ predict.brokenstick.export <- function(object, y, age, type = "curve", ...) {
   if (missing(y)) return(NULL)
   if (missing(age)) return(NULL)
   
+  if (length(y) == 0 | length(age) == 0) return(numeric(0))
+  
   # code the ages at which the child is observed as
   # linear splines with given break ages
   X <- bs(x = age, knots = object$knots, 
