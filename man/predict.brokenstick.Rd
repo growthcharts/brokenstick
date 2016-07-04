@@ -2,35 +2,59 @@
 % Please edit documentation in R/predict.R
 \name{predict.brokenstick}
 \alias{predict.brokenstick}
-\title{Predict growth curve according to the broken stick model}
+\title{Predict all growth curves by broken stick model}
 \usage{
-\method{predict}{brokenstick}(object, y, age, type = "curve", ...)
+\method{predict}{brokenstick}(object, y, age, type = "atknots",
+  output = "long", include.boundaries = FALSE, ...)
 }
 \arguments{
-\item{object}{An object of class \code{brokenstick}}
+\item{object}{An object of class \code{brokenstick}.}
 
-\item{y}{A vector with measurements}
+\item{y}{A vector with measurements using the same response scale as the fitted model.}
 
-\item{age}{A vector with decimal ages of length \code{length(y)}}
+\item{age}{A vector with decimal ages of length \code{length(y)}. Age must be sorted in increasing order, and within the age range defined by \code{range(object@knots)}. If both \code{y} and \code{age} not specified, the function calculates the predicted values for all persons on which \code{object} was fitted. If \code{y} is not specified, but \code{age} is, then \code{age} broken stick estimates are obtained at these ages for all persons in \code{object}.}
 
-\item{type}{If \code{type = "curve"} (the default) 
-the function returns the broken stick estimates. 
-If \code{type = "response"}, the function returns a predicted value 
-for each element of \code{y} determined by linear interpolation.}
+\item{type}{If \code{type = "atknots"} (the default), the function returns the conditional means at the break ages. If \code{type = "atage"} the function returns the conditional means at the measurement ages. This argument is relevant only if both \code{y} and \code{age} are left unspecified.}
 
-\item{\dots}{Additional arguments (not used)}
+\item{output}{A string specifying the desired type of output. If  \code{output = "long"} (the default), the result is cast into a data frame of the long format that represents each row represented as an observation. If \code{output = "broad"}, the result is formed into a broad matrix where each row represents a person. This format is useful as input to a secondary data analysis that analyzes the smoothed data as repeated measured. The format can be used if \code{type = "atknots"}, and returns \code{NULL} otherwise. If \code{output = "vector"}, the result is returned as a vector. This is the fastest method, and should preferably be used in programming and simulation.}
+
+\item{include.boundaries}{Logical indicating whether the broken stick estimates on the right-hand side boundary should be included. The default is \code{FALSE}.}
+
+\item{\dots}{Additional arguments passed down to \code{fitted()}, \code{predict.brokenstick.export()} and \code{predict.atage()}. Set the flag \code{onlynew = FALSE} to obtain predictions for both old and new ages.}
 }
 \value{
-A data frame with \code{length(slot(object, "knots"))
-+ slot(object, "degree")} elements with 
-predicted values
+If \code{output == "long"}, a data frame with four columns named \code{id} (the person identification), \code{age}, \code{y} (the response variable, set to \code{NA} for \code{type == "atknots"}) and \code{yhat} (predicted values). If \code{output == "broad"}, a numeric matrix of predicted values with \code{length(slot(object, "knots"))} columns. If \code{output == "vector"}, a numeric vector of predicted values.
 }
 \description{
-For a given child, extract the conditional modes of the
-random effects as specified by the broken stick (=linear
-piecewise spline) model.
+Calculation predictions (conditional means of the random effects) from the broken stick model. This function takes an object of class \code{brokenstick}, and returns predictions in one of several formats. One may calculate predictions for new persons, i.e., for persons who are not part of the fitted model, by specifying the \code{age} and \code{y} arguments.
+}
+\examples{
+# Obtain broken stick estimates at break ages for all persons in fitted model
+p <- predict(fit.hgt)
+head(p)
+
+# Same, but now stored into the broad matrix
+p <- predict(fit.hgt, output = "broad")
+round(head(p), 2)
+
+# Get estimates as a vector, useful for programming
+p <- predict(fit.hgt, output = "vector")
+round(head(p), 2)
+
+# Obtain broken stick estimates at the measured ages
+p <- predict(fit.hgt, type = "atage")
+head(p)
+
+# Obtain estimates at weeks 1-4 for all children, include old points
+p <- predict(fit.hgt, age = round((1:4)*7/365.25, 4), onlynew = FALSE)
+head(p)
+
+# Same, but as broad matrix of new points
+p <- predict(fit.hgt, age = round((1:4)*7/365.25, 4), output = "broad")
+head(p)
+
 }
 \author{
-Stef van Buuren, 2015
+Stef van Buuren 2016
 }
 

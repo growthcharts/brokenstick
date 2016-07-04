@@ -4,10 +4,11 @@
 \alias{predict.brokenstick.export}
 \title{Predict growth curve according to the broken stick model}
 \usage{
-\method{predict}{brokenstick.export}(object, y, age, type = "curve", ...)
+\method{predict}{brokenstick.export}(object, y, age, type = "atknots",
+  output = "long", include.boundaries = FALSE, onlynew = TRUE, ...)
 }
 \arguments{
-\item{object}{An object of class \code{brokenstick.export}
+\item{object}{An object of 
 containing the estimated parameters of the broken stick model}
 
 \item{y}{A vector with measurements}
@@ -22,8 +23,8 @@ for each element of \code{y}.}
 \item{\dots}{Additional arguments (not used)}
 }
 \value{
-A data frame with \code{length(slot(object, "knots"))
-+ slot(object, "degree")} elements with 
+A numeric vector of length \code{length(slot(object, "knots"))
++ slot(object, "degree")} with 
 predicted values
 }
 \description{
@@ -32,6 +33,6 @@ random effects as specified by the broken stick (=linear
 piecewise spline) model.
 }
 \author{
-Stef van Buuren, 2015
+Stef van Buuren
 }
 
