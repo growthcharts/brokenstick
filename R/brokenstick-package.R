@@ -4,7 +4,7 @@
 #'@importFrom lme4 lmer fixef ranef VarCorr lmerControl
 #'@importFrom splines bs
 #'@importFrom methods setGeneric setMethod
-#'@importFrom stats approx as.formula na.omit predict
+#'@importFrom stats approx as.formula na.omit predict fitted model.frame model.matrix
 NULL
 
 #' \pkg{brokenstick}: A package for irregular longitudinal data.
@@ -24,9 +24,7 @@ NULL
 #' The main functions are:
 #' \tabular{ll}{
 #'   \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
-#'   \code{conditional.means()} \tab Obtain the broken stick estimates\cr
-#'   \code{EB()} \tab Empirical Bayes predictor for random effects\cr
-#'   \code{predict()} \tab Predict new growth curve\cr
+#'   \code{predict()} \tab Obtain predictions from fitted model\cr
 #'   \code{export.brokenstick()} \tab Export estimates of the model}
 #' @docType package
 #' @name brokenstick-pkg

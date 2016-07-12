@@ -4,35 +4,83 @@
 \alias{predict.brokenstick.export}
 \title{Predict growth curve according to the broken stick model}
 \usage{
-\method{predict}{brokenstick.export}(object, y, age, type = "atknots",
-  output = "long", include.boundaries = FALSE, onlynew = TRUE, ...)
+\method{predict}{brokenstick.export}(object, y, x, type = "atx",
+  output = "long", include.boundaries = FALSE, onlynew = FALSE, ...)
 }
 \arguments{
-\item{object}{An object of 
-containing the estimated parameters of the broken stick model}
+\item{object}{An object of class \code{brokenstick} or of class 
+\code{brokenstick.export}.}
 
-\item{y}{A vector with measurements}
+\item{y}{A vector with measurements using the same response scale as the
+fitted model.}
 
-\item{age}{A vector with decimal ages of length \code{length(y)}}
+\item{x}{A vector with decimal ages of length \code{length(y)}. x must be 
+sorted in increasing order, and within the range defined by 
+\code{range(object@knots)}. If both \code{y} and \code{x} not specified, 
+the function calculates the predicted values for all persons on which 
+\code{object} was fitted. If \code{y} is not specified, but \code{x} is, 
+then broken stick estimates are obtained at \code{x} for all persons in 
+\code{object}. Note that the \code{type = "atx"} argument is needed to make
+predictions at the \code{x} values.}
 
-\item{type}{If \code{type = "curve"} (the default) 
-the function returns the broken stick estimates. 
-If \code{type = "response"}, the function returns a predicted value 
-for each element of \code{y}.}
+\item{type}{If \code{type = "atx"} (the default) the function returns
+predictions at the \code{x} values in the data. Specify \code{type =
+"atknots"} to obtain predictions at the knots of the model.}
 
-\item{\dots}{Additional arguments (not used)}
-}
-\value{
-A numeric vector of length \code{length(slot(object, "knots"))
-+ slot(object, "degree")} with 
-predicted values
+\item{output}{A string specifying the desired type of output. If \code{output
+= "long"} (the default), the result is cast into a data frame of the long 
+format that represents each row represented as an observation. If 
+\code{output = "broad"}, the result is formed into a broad matrix where 
+each row represents a person. This format is useful as input to a secondary
+data analysis that analyzes the smoothed data as repeated measured. The 
+format can be used if \code{type = "atknots"}, and returns \code{NULL} 
+otherwise. If \code{output = "vector"}, the result is returned as a vector.
+This is the fastest method, and should preferably be used in programming 
+and simulation.}
+
+\item{include.boundaries}{Logical indicating whether the broken stick 
+estimates on the right-hand side boundary should be included. The default 
+is \code{FALSE}.}
+
+\item{onlynew}{Logical indicating whether to return estimates for new values 
+of \code{y} only. The default is \code{FALSE}, so all predictions are 
+returned. Prediction at a given \code{x} values may be forced by setting 
+the corresponding entries of \code{y} equal to \code{NA}. Prediction at the
+knots is also considered new, even if there are observed values at \code{x}
+and \code{y}.}
+
+\item{...}{Additional arguments passed down to \code{fitted()}, 
+\code{predict.brokenstick.export()} and \code{predict.atx()}. Set the flag 
+\code{onlynew = FALSE} to obtain predictions for both old and new \code{x}.}
 }
 \description{
-For a given child, extract the conditional modes of the
-random effects as specified by the broken stick (=linear
-piecewise spline) model.
+Predict growth curve according to the broken stick model
 }
-\author{
-Stef van Buuren
+\examples{
+exp <- export.brokenstick(fit.hgt)
+
+# no data predicts mean trajectory
+p <- predict(exp)
+head(p)
+
+# predict mean trajectory at weeks 1-4
+predict(exp, x = round((1:4)*7/365.25, 4))
+
+# add data at each week
+predict(exp, x = round((1:4)*7/365.25, 4), y = c(1, 0.8, 0.9, 0.7))
+
+# no data at weeks 2 and 3
+predict(exp, x = round((1:4)*7/365.25, 4), y = c(1, NA, NA, 0.7))
+
+# estimates at standard knots 
+predict(exp, x = round((1:4)*7/365.25, 4), y = c(1, NA, NA, 0.7), 
+  type = "atknots")
+  
+# leaving out the missing data produces the same result
+predict(exp, x = round(c(1,4)*7/365.25, 4), y = c(1, 0.7), 
+  type = "atknots")
+}
+\seealso{
+Other brokenstick: \code{\link{predict.brokenstick}}
 }
 

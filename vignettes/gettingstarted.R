@@ -82,23 +82,26 @@ var(fitted(fit1)) / var(data$hgt.z)
 var(fitted(fit2)) / var(data$hgt.z)
 
 ## ------------------------------------------------------------------------
+# repredict first observation using three-line model
+d <- data[data$id == "10001", c("age","hgt.z")]
+predict(fit2, y = d$hgt.z, x = d$age, type = "atx")
+
+## ------------------------------------------------------------------------
+# trajectories around +1 and at -1
+predict(fit2, y = rep(1, 5), x = (0:4)/2)
+predict(fit2, y = c(-1, NA, -1, NA, -1), x = (0:4)/2)
+predict(fit2, y = rep(NA, 5), x = (0:4)/2)
+
+## ------------------------------------------------------------------------
+# one observation at birth, prediction at age 1
+predict(fit2, y = c(1, NA), x = c(0, 1))
+
+## ------------------------------------------------------------------------
 # export the broken stick models
-export.hgt <- export.brokenstick(fit1)
+export.hgt <- export.brokenstick(fit2)
 export.hgt
 
 ## ------------------------------------------------------------------------
-# repredict first observation using three-line model
-d <- data[data$id == "10001", c("age","hgt.z")]
-predict(fit2, y = d$hgt.z, age = d$age)
-
-## ------------------------------------------------------------------------
-# trajectory at +1 and at -1
-predict(fit2, y = rep(1, 4), age = c(0, 1/2, 1, 2))
-predict(fit2, y = rep(0, 4), age = c(0, 1/2, 1, 2))
-predict(fit2, y = rep(-1, 4), age = c(0, 1/2, 1, 2))
-
-## ------------------------------------------------------------------------
-# trajectory at +1 and at -1, but only at birth
-predict(fit2, y = 1, age = 0)
-predict(fit2, y = -1, age = 0)
+# one observation at birth, prediction at age 1
+predict(export.hgt, y = c(1, NA), x = c(0, 1))
 
