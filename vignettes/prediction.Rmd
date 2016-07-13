@@ -15,7 +15,7 @@ knitr::opts_chunk$set(echo = TRUE, fig.width = 7, fig.height = 5)
 
 This vignette shows how to fit the broken stick model to data, predict observations by the fitted model, and validate the predictions against a holdout sample.
 
-## Define data
+## Data
 
 ### Data source
 
@@ -23,7 +23,6 @@ We will use the `smocc.hgtwgt` demo data that is built-in into the `brokenstick`
 
 ```{r data}
 library("brokenstick")
-head(smocc.hgtwgt)
 data <- smocc.hgtwgt[1:2000,]
 head(data)
 ```
@@ -69,7 +68,7 @@ knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 Boundary.knots <- c(0, 3)
 ```
 
-### Model fitting
+## Model fitting
 
 The `brokenstick` function performs the actual model fitting. The fitting algorithm may complain that the number of random effect is too high, but my experience is that this will not affect the quality of the predictions. 
 

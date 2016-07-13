@@ -1,6 +1,3 @@
----
-output: html_document
----
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 brokenstick
 ===========
@@ -37,7 +34,7 @@ The main assumptions of the broken stick model are:
 -   The development between the break ages follows a straight line, and is generally not of particular interest;
 -   Broken stick estimates follow a common multivariate normal distribution;
 
-In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (\(Z\)) scale. Unique feature of the broken stick model are:
+In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (*Z*) scale. Unique feature of the broken stick model are:
 
 -   *Modular*: Issues related to nonlinearities of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;
 -   *Local*: A given data point will contribute only to the estimates corresponding to the closest break ages;
@@ -54,37 +51,8 @@ Main functions
 
 The main functions in the `brokenstick` package are:
 
-<table style="width:78%;">
-<colgroup>
-<col width="30%" />
-<col width="47%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th align="left">Function name</th>
-<th align="left">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left"><code>brokenstick()</code></td>
-<td align="left">Fit a broken stick model to irregular data</td>
-</tr>
-<tr class="even">
-<td align="left"><code>conditional.means()</code></td>
-<td align="left">Obtain broken stick estimates from a fitted object</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>EB()</code></td>
-<td align="left">Empirical Bayes predictor for random effects</td>
-</tr>
-<tr class="even">
-<td align="left"><code>predict()</code></td>
-<td align="left">Predict broken stick estimates for new growth data</td>
-</tr>
-<tr class="odd">
-<td align="left"><code>export.brokenstick()</code></td>
-<td align="left">Export broken stick model parameters</td>
-</tr>
-</tbody>
-</table>
+| Function name          | Description                                       |
+|------------------------|---------------------------------------------------|
+| `brokenstick()`        | Fit a broken stick model to irregular data        |
+| `predict()`            | Predict broken stick estimates                    |
+| `export.brokenstick()` | Export minimal broken stick model for publication |

@@ -37,6 +37,11 @@ The `brokenstick` package contains functions for
 - Exporting the parameters of the model for independent use outside this package,
 - Predicting broken stick estimates for new data.
 
+  
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
+```
+
 ## Main functions
 
 The main functions in the `brokenstick` package are:
@@ -44,8 +49,6 @@ The main functions in the `brokenstick` package are:
 Function name        | Description
 ---------------------|---------------------------------
 `brokenstick()`      | Fit a broken stick model to irregular data
-`conditional.means()`| Obtain broken stick estimates from a fitted object
-`EB()`               | Empirical Bayes predictor for random effects
 `predict()`          | Predict broken stick estimates for new growth data
 `export.brokenstick()` | Export broken stick model parameters 
 
@@ -53,199 +56,214 @@ Function name        | Description
 
 ```{R}
 library("brokenstick")
-data <- smocc.hgtwgt
+data <- smocc.hgtwgt[1:2000,]
 head(data)
 ```
 
+The `smocc.hgtwgt` data in the `brokenstick` package contain the heights and weights of 1933 Dutch children measured on 10 visits at ages 0-2 years. Here we take the first 2000 records from the data, corresponding to 211 different children.
+
 Plots of the first the height trajectories of two children can be made with the `lattice` function `xyplot()`, as follows:
 
-```{R fig.width = 6}
+```{r}
+ids <- c(10001, 10005, 10022)
 library(lattice)
 xyplot(hgt ~ age | id, data = data, 
-	   subset = id %in% c(10001, 10005), 
-	   type = "b", pch = 19, as.table = TRUE)
+	   subset = id %in% ids,  
+	   type = "b", pch = 19, as.table = TRUE,
+	   xlab = "Age (in years)", ylab = "Length (cm)")
 ```
 
 The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-values) are plotted. The column `hgt.z` contains the $Z$-scores of height relative to the WHO standard.
 
-```{R fig.width = 6}
+```{r}
 xyplot(hgt.z ~ age | id, data = data, 
-	   subset = id %in% c(10001, 10005), 
+	   subset = id %in% ids, 
 	   type = "b", pch = 19, as.table = TRUE,
 	   panel = function(...) {
 	   	panel.refline(h = c(-2, 0, 2))
 	   	panel.xyplot(...)
-	   }
-)
+	   },
+	   xlab = "Age (in years)", ylab = "Length (SDS)")
 ```
 
 
-## Model with two lines
+## Model fitting
+
+### Broken stick model with two lines
 
 The *broken stick model* attempts to describe each trajectory by a series of straight but connected lines. Let us first do a rough approximation in the above figure. We specify that we may only use two lines: One line should start at birth to the age of exactly 1 years, and another spans the period from 1 to 2 years. Moreover, we require that the lines connect at the age of 1 year. 
 
-```{r}
+```{r fit1}
+knots <- 0:2
 fit1 <- brokenstick(y = data$hgt.z, 
-					x = data$age,
-					subject = data$id,
-					knots = 0:2)
-```
-
-The `knots` argument to `brokenstick()` specifies that the break ages are birth, 1 year and 2 years, respectively. The broken stick model effectively replaces the intercept by the random effects `x1`, `x2`, `x3` and `x4`. The
-specified random effects correspond to break ages of 0, 1 and 2 and 3 years, respectively. The break age of 3 years is specified implicitely as a `Boundary.knot[2]`. This is done for technical reasons since the B-splines must encompass the entire age range in the data for it to have a useful interpretation. No intercept is needed since every row in the predictors adds up to one.
-
-```{r}
-class(fit1)
-fit1@knots
-summary(fit1)
-```
-
-The `fit1` object has S4 class `brokenstick`. The knots used in the model 
-are stored in the slot called `fit1@knots`. The `summary()` function 
-return the model estimates.
-
-The fixed effects correspond to the mean of population of children in the data. At birth, the children are on average 0.1 SD taller than the WHO standard. At the ages of 1 and 2 years, these estimates rise to 0.38 SD and 0.52 SD, respectively. The fact that these are positive and rising is not surpring for this population. It is known that the Dutch are the tallest in the world. Evidently, already at the age of 2 years, the Dutch are about 0.5 SD taller than the WHO standard. Note that the estimate for `x4` (0.96), corresponding to the maximum age in the data, is just there for technical reasons. It is based on extreme extrapolation beyond the data, and should be disregarded.
-
-The column labeled `Std.Dev.` contains the standard deviations of the random effects. These numbers are expected to be around 1, since - under the assumption that the WHO standard appropriately describes this population - the dependent variable follow a standard normal distribution with zero mean and standard deviation equal to one. The `cor` component of the output lists the correlations between the time point. Thus, the correlation between birth length and length at 2 years is about 0.58. 
-
-Finally, the residual (0.49) is the standard deviation of the residual of the model. 
-
-
-## Conditional means
-
-A next step is to calculate the conditional means of the posterior distribution of the sum of fixed and random effects.
-
-```{r}
-est <- conditional.means(fit1)
-head(est)
-```
-
-The broken stick estimates produced by `conditional.means()` can be found in the column called `yhat`. 
-
-We concatenate the estimates to the data, and plot the original data and the broken stick estimates jointly by `xyplot()` as
-
-```{r fig.width = 6}
-library("dplyr")
-colnames(est)[length(colnames(est))] <- "hgt.z"
-est <- data.frame(est, src = "smocc", bse = TRUE)
-data2 <- bind_rows(data.frame(data, bse = FALSE), est)
-
-xyplot(hgt.z ~ age | id, data = data2,
-       groups = bse, 
-	     subset = id %in% c(10001, 10005) & age <= 2.3, 
-	   type = "b", pch = 19, as.table = TRUE,
-	   panel = function(...) {
-	   	panel.refline(h = c(-2, 0, 2))
-	   	panel.refline(v = 0:2, col = "firebrick1", lwd = 0.5, lty = 2)
-	   	panel.xyplot(...)
-	   }
-)
-```
-
-## Extension to three lines
-
-Suppose we are interest in refining the fit to the growth pattern during the first year. We may add an extra knots, say at 5 months. The three-line model can be run as    
-
-```{r}
-knots <- c(0, 5/12, 1, 2)
-fit2 <- brokenstick(y = data$hgt.z, 
 					x = data$age,
 					subject = data$id,
 					knots = knots)
 ```
 
+The `knots` argument to `brokenstick()` specifies that the break ages are birth, 1 year and 2 years, respectively. The broken stick model effectively replaces the intercept by the random effects `x1`, `x2`, `x3` and `x4`, where  `x1`, `x2`, `x3` and `x4` correspond to break ages 0, 1 and 2 years, and where `x4` corresponds to a break age 2.68, a knot that is added automatically as the maximum age. This is done for technical reasons since the B-splines must encompass the entire age range in the data. The boundary knots may also be specified manually.
 
-```{r echo=FALSE, fig.width = 6}
-est <- conditional.means(fit2)
-colnames(est)[length(colnames(est))] <- "hgt.z"
-est <- data.frame(est, src = "smocc", bse = TRUE)
-data2 <- bind_rows(data.frame(data, bse = FALSE), est)
-
-xyplot(hgt.z ~ age | id, data = data2,
-       groups = bse, 
-	     subset = id %in% c(10001, 10005) & age <= 3, 
-	   type = "b", pch = 19, as.table = TRUE,
-	   panel = function(...) {
-	   	panel.refline(h = c(-2, 0, 2))
-	   	panel.refline(v = knots, col = "firebrick1", lwd = 0.5, lty = 2)
-	   	panel.xyplot(...)
-	   }
-)
+```{r}
+class(fit1)
+fit1
 ```
 
-Evidently, more knots can be added to improve the fit to the data. However, adding many knots to sparse data will substantially increase calculation time, and result in instable solutions. In general, one should not add more knots than the (average) number of data points per person.
+The `fit1` object has S4 class `brokenstick`. The broken stick model contains no intercept, whereas the four predictors (`x1`-`x4`) are entered both as fixed and random effects, conditional on subject (child). The ages to which they correspond can be obtained by `get.knots(fit, include.boundaries = TRUE)`.
 
-## Explained variance
+The fixed effects correspond to the mean of population of children in the data. At birth, the children are on average 0.13 SD taller than the WHO standard. At the ages of 1 and 2 years, these estimates rise to 0.34 SD and 0.52 SD, respectively. The fact that these are positive and rising is not surprising. The Dutch are the tallest in the world, so at the age of 2 years, the Dutch are already about 0.5 SD taller than the WHO standard. Note that the estimate for `x4` (0.72), corresponding to the maximum age in the data, is just there for technical reasons. It is based on extreme extrapolation beyond the data, and should be disregarded.
+
+The column labeled `Std.Dev.` contains the standard deviations of the random effects. These numbers are expected to be around 1, since - under the assumption that the WHO standard appropriately describes this population - the dependent variable follow a standard normal distribution with zero mean and standard deviation equal to one. The `Corr` component of the random effects lists the correlations between the broken stick estimates between the time point. Thus, the correlation between the estimates at birth (`x1`) and at 2 years (`x3`) is 0.51. The standard deviation of the residuals (within-person error) for this model is of 0.51. 
+
+### Predicted values
+
+The broken stick model defines predicted values as a compromise between the person's data values and the global mean. This compromise is called the *conditional mean* of the posterior distribution, it is calculated as the sum of fixed and random effects. The `predict()` function obtains predictions from the broken stick model.
+
+In order to obtain the predicted values for each measured data point for all children in the fitted model use
+
+```{r}
+p1 <- predict(fit1)
+dim(p1)
+head(p1, 4)
+```
+
+The broken stick estimates can be found in the column called `yhat`. The column `new` is set to `FALSE` if `y` is actually observed. For plotting the broken stick model, we may also obtain predictions at the break ages as
+
+```{r}
+p2 <- predict(fit1, type = "atknots")
+head(p2, 4)
+```
+
+Since there are no observations at the break ages, the column `new` is `TRUE`. We may obtain both types of estimates for all children by 
+
+```{r}
+p <- predict(fit1, x = get.knots(fit1), include.boundaries = TRUE)
+head(p, 15)
+```
+
+We may plot the original data and the broken stick estimates jointly by `xyplot()` from the `lattice` package by
+
+```{r}
+p$yhat[!p$knot] <- NA
+xyplot(y + yhat ~ x | id, data = p, 
+       subset = id %in% ids & x <= 2.3, 
+       as.table = TRUE,
+       panel = function(...) {
+         panel.refline(h = c(-2, 0, 2))
+         panel.refline(v = 0:2, col = "grey", lwd = 0.5, lty = 2)
+         panel.superpose(...)}, 
+       panel.groups = function(x, y, subscripts, groups, ..., group.number) 
+         with(na.omit(data.frame(x, y)), 
+              panel.lines(x, y, type = "b", pch = 20, col = group.number)),
+       xlab = "Age (in years)", ylab = "Length (SDS)")
+```
+
+### Extension to nine lines
+
+Suppose we are interest in refining the fit to the growth pattern during the first year. We add a knot for each age scheduled for a visit. This model can be run as
+
+```{r fit2, cache = TRUE}
+# 10 scheduled visits
+knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
+Boundary.knots <- c(0, 3)
+fit2 <- brokenstick(y = data$hgt.z, 
+					x = data$age,
+					subject = data$id,
+					knots = knots,
+					Boundary.knots = Boundary.knots)
+```
+
+The `brokenstick()` function calls the `lmer()` function for model fitting. The optimization routine issues a number of warnings related to the number of random effects relative to the number of observations, and the complexity of the optimization problem. These indicate that we are asking a lot from `lmer()`, so we should be alert on any degeneracies in the estimates. 
+
+
+As before, predicted values can be obtained by
+
+```{r}
+p <- predict(fit2, x = get.knots(fit.hgt), include.boundaries = TRUE)
+head(p, 4)
+```
+
+```{r echo=FALSE}
+p$yhat[!p$knot] <- NA
+xyplot(y + yhat ~ x | id, data = p, 
+       subset = id %in% ids & x <= 2.3, 
+       as.table = TRUE,
+       panel = function(...) {
+         panel.refline(h = c(-2, 0, 2))
+         panel.refline(v = knots, col = "grey", lwd = 0.5, lty = 2)
+         panel.superpose(...)}, 
+       panel.groups = function(x, y, subscripts, groups, ..., group.number) 
+         with(na.omit(data.frame(x, y)), 
+              panel.lines(x, y, type = "b", pch = 20, col = group.number)),
+       xlab = "Age (in years)", ylab = "Length (SDS)")
+```
+
+The figures indicate that the model with nine lines seems to fit the data very well. More formal model assessment can be done with standard `lmer` diagnostic plots. See the vignette on *Model diagnostics* for more detail [NOTE: vignette still has to be written]. 
+
+Some advice about knot placement: Evidently, using more knots can improve the fit to the data. However, adding an excessive number of knots will substantially increase calculation time, and create solutions that are less stable. Knot placement requires some care. Here, the knots are added at the scheduled visits, which is a reasonable strategy for obtaining good predictions. Placing knots at ages where the data are very sparse (e.g. exactly in-between visits) may result in bad predictions and should be avoided when possible. Be careful if using more knots than the (average) number of data points per person.
+
+### Explained variance
 
 The proportion of the variance of the outcome explained by the two-line model is
 
-```{R}
+```{r}
 var(fitted(fit1)) / var(data$hgt.z)
 ```
 
-For the three-line model, we get
+For the second model we get
 
-```{R}
+```{r}
 var(fitted(fit2)) / var(data$hgt.z)
 ```
 
+so the nine-line broken stick model explains about `r round(100 * var(fitted(fit2)) / var(data$hgt.z))` percent of the variance of the height SDS.
 
 
-## Predictions on new data
+## Publishing your model
 
-Prediction on new data can be obtained by the `predict()` function. The function requires a vector of measurements `y`, a vector measurement ages `x`, and the fitted model. 
+### Export broken stick model
 
-The following lines repredict the broken stick estimates for subject 10001 using the three-lines model.
-
-```{r}
-# repredict first observation using three-line model
-d <- data[data$id == "10001", c("age","hgt.z")]
-predict(fit2, y = d$hgt.z, x = d$age, type = "atx")
-```
-
-As expected, the predicted values are identical to the estimates given before. There is no estimate for the last observation since `x` is beyond the highest internal knot at two years. We may force calculation by setting `include.boundaries = TRUE`. 
-
-We may now experiment with new data. For example, 
-what is the prediction if our 
-subject has a measurement of "+1", "-1" at each half year after birth?
-
-```{r}
-# trajectories around +1 and at -1
-predict(fit2, y = rep(1, 5), x = (0:4)/2)
-predict(fit2, y = c(-1, NA, -1, NA, -1), x = (0:4)/2)
-predict(fit2, y = rep(NA, 5), x = (0:4)/2)
-```
-
-The estimates hoover around the measured value. Entries with `NA` are predicted at the requested `x` values. Observe that the results are not symmetric because the fixed effect are non-zero. The predicted values shrink show the tendency to shrink towards the mean, i.e., towards the fixed effect estimates `r round(lme4::fixef(fit2), 2)`. If all entries are missing, then the estimates will be taken from the global mean trajectory.
-
-What will be predicted at the age of 1 year if we have only the first measurement taken at birth?
-
-```{r}
-# one observation at birth, prediction at age 1
-predict(fit2, y = c(1, NA), x = c(0, 1))
-```
-
-As expected, the predicted values again shrink towards the mean, depending on the working covariance matrix. 
-
-
-## Export the model
-
-The `fit2` object can be stored by `save()` for future use in R. However, a more parsimonious and convenient way to reuse the model is to export its parameter estimates, and store only these. As a matter of fact, prediction using the broken stick model requires only the knot locations, the fixed effect estimates, the variance/covariance matrix of the random effects, and the size of the residual variance. The `export.brokenstick()` function will collect this information from the fitted model.
+The `fit2` object can be stored by `save()` for future use in R. However, a more parsimonious and convenient way to reuse the model is to export its parameter estimates, and store only these. As a matter of fact, prediction using the broken stick model requires only the knot locations, the fixed effect estimates, the variance/covariance matrix of the random effects, and the size of the residual variance. The `export.brokenstick()` function will collect this information from the fitted model, and store it as a list.
 
 ```{R}
 # export the broken stick models
 export.hgt <- export.brokenstick(fit2)
-export.hgt
+attributes(export.hgt)
 ```
 
-## Predicting from the exported model
+### Prediction using the exported model
 
+Suppose we have four measured a new child and want to obtain predictions according to the published model stored in `export.hgt`. The following code calculates the predictions.
 
 ```{r}
-# one observation at birth, prediction at age 1
-predict(export.hgt, y = c(1, NA), x = c(0, 1))
+# four height measurement on new child
+x <- c(0, 0.32, 0.62, 1.1)
+y <- c(-1.2, -1.7, -1.9, -2.1)
+
+# prediction at ages x
+atx <- predict(export.hgt, y = y, x = x)
+atx
+# prediction at the knots
+atknots <- predict(export.hgt, y = y, x = x, type = "atknots")
+head(atknots)
 ```
 
+The predicted values adapt to the age and height values. The figure below plots the observed data and the predicted data at the break ages.
+
+```{r fig.width = 3, fig.align = "center", echo = FALSE}
+p <- rbind(atx, atknots)
+p$yhat[!p$knot] <- NA
+xyplot(y + yhat ~ x, data = p, ylim = c(-3, 1),
+       as.table = TRUE,
+       panel = function(...) {
+         panel.refline(h = c(-2, 0, 2))
+         panel.refline(v = knots, col = "grey", lwd = 0.5, lty = 2)
+         panel.superpose(...)}, 
+       panel.groups = function(x, y, subscripts, groups, ..., group.number) 
+         with(na.omit(data.frame(x, y)), 
+              panel.lines(x, y, type = "b", pch = 20, col = group.number)),
+       xlab = "Age (in years)", ylab = "Length (SDS)",
+       main = "New person, published model")
+```
 
 See the "Fit and Predict" vignette for additional options.
 

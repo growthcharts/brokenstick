@@ -23,8 +23,8 @@ then broken stick estimates are obtained at \code{x} for all persons in
 \code{object}. Note that the \code{type = "atx"} argument is needed to make
 predictions at the \code{x} values.}
 
-\item{type}{If \code{type = "atx"} (the default) the function returns
-predictions at the \code{x} values in the data. Specify \code{type =
+\item{type}{If \code{type = "atx"} (the default) the function returns 
+predictions at the \code{x} values in the data. Specify \code{type = 
 "atknots"} to obtain predictions at the knots of the model.}
 
 \item{output}{A string specifying the desired type of output. If \code{output
@@ -35,7 +35,7 @@ each row represents a person. This format is useful as input to a secondary
 data analysis that analyzes the smoothed data as repeated measured. The 
 format can be used if \code{type = "atknots"}, and returns \code{NULL} 
 otherwise. If \code{output = "vector"}, the result is returned as a vector.
-This is the fastest method, and should preferably be used in programming 
+This is the fastest method, and should be used in programming 
 and simulation.}
 
 \item{include.boundaries}{Logical indicating whether the broken stick 
@@ -54,20 +54,19 @@ and \code{y}.}
 \code{onlynew = FALSE} to obtain predictions for both old and new \code{x}.}
 }
 \value{
-If \code{output == "long"}, a data frame with five columns named:
-\describe{ 
-  \item{\code{id}}{Person identification}
-  \item{\code{x}}{The \code{x} values of the model, usually age}
-  \item{\code{y}}{Response values (in scale defined by the model)}
-  \item{\code{yhat}}{Predicted values}
-  \item{\code{new}}{Logical indicating whether the prediction refers to a 
-  data point without a value for \code{y}. These are often knots location or
-  ages at which the response is \code{NA}.}
+If \code{output == "long"}, a data frame with five columns named: 
+  \describe{ 
+  \item{\code{id}}{Person identification} 
+  \item{\code{x}}{The \code{x} values of the model, usually age} 
+  \item{\code{y}}{Response values (in scale defined by the model)} 
+  \item{\code{yhat}}{Predicted values} 
+  \item{\code{knot}}{Logical indicating whether the prediction is 
+  done at the location of the knot.}
   }
-  If \code{output == "broad"}, a numeric matrix of 
-  predicted values with \code{length(slot(object, "knots"))} columns. If 
-  \code{output == "vector"}, a numeric vector of predicted values corresponding to the 
-  column \code{yhat}.
+  If \code{output == "broad"}, a
+  numeric matrix of predicted values with \code{length(slot(object,
+  "knots"))} columns. If \code{output == "vector"}, a numeric vector of
+  predicted values corresponding to the column \code{yhat}.
 }
 \description{
 Calculation predictions (conditional means of the random effects) from the 

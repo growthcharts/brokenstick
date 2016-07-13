@@ -1,79 +1,86 @@
+## ----echo = FALSE--------------------------------------------------------
+library("knitr")
+opts_chunk$set(fig.width = 7, fig.height = 3.5)
+
 ## ------------------------------------------------------------------------
 library("brokenstick")
-data <- smocc.hgtwgt
+data <- smocc.hgtwgt[1:2000,]
 head(data)
 
-## ----fig.width = 6-------------------------------------------------------
+## ------------------------------------------------------------------------
+ids <- c(10001, 10005, 10022)
 library(lattice)
 xyplot(hgt ~ age | id, data = data, 
-	   subset = id %in% c(10001, 10005), 
-	   type = "b", pch = 19, as.table = TRUE)
+	   subset = id %in% ids,  
+	   type = "b", pch = 19, as.table = TRUE,
+	   xlab = "Age (in years)", ylab = "Length (cm)")
 
-## ----fig.width = 6-------------------------------------------------------
+## ------------------------------------------------------------------------
 xyplot(hgt.z ~ age | id, data = data, 
-	   subset = id %in% c(10001, 10005), 
+	   subset = id %in% ids, 
 	   type = "b", pch = 19, as.table = TRUE,
 	   panel = function(...) {
 	   	panel.refline(h = c(-2, 0, 2))
 	   	panel.xyplot(...)
-	   }
-)
+	   },
+	   xlab = "Age (in years)", ylab = "Length (SDS)")
 
-## ------------------------------------------------------------------------
+## ----fit1----------------------------------------------------------------
+knots <- 0:2
 fit1 <- brokenstick(y = data$hgt.z, 
-					x = data$age,
-					subject = data$id,
-					knots = 0:2)
-
-## ------------------------------------------------------------------------
-class(fit1)
-fit1@knots
-summary(fit1)
-
-## ------------------------------------------------------------------------
-est <- conditional.means(fit1)
-head(est)
-
-## ----fig.width = 6-------------------------------------------------------
-library("dplyr")
-colnames(est)[length(colnames(est))] <- "hgt.z"
-est <- data.frame(est, src = "smocc", bse = TRUE)
-data2 <- bind_rows(data.frame(data, bse = FALSE), est)
-
-xyplot(hgt.z ~ age | id, data = data2,
-       groups = bse, 
-	     subset = id %in% c(10001, 10005) & age <= 2.3, 
-	   type = "b", pch = 19, as.table = TRUE,
-	   panel = function(...) {
-	   	panel.refline(h = c(-2, 0, 2))
-	   	panel.refline(v = 0:2, col = "firebrick1", lwd = 0.5, lty = 2)
-	   	panel.xyplot(...)
-	   }
-)
-
-## ------------------------------------------------------------------------
-knots <- c(0, 5/12, 1, 2)
-fit2 <- brokenstick(y = data$hgt.z, 
 					x = data$age,
 					subject = data$id,
 					knots = knots)
 
-## ----echo=FALSE, fig.width = 6-------------------------------------------
-est <- conditional.means(fit2)
-colnames(est)[length(colnames(est))] <- "hgt.z"
-est <- data.frame(est, src = "smocc", bse = TRUE)
-data2 <- bind_rows(data.frame(data, bse = FALSE), est)
+## ------------------------------------------------------------------------
+class(fit1)
+summary(fit1)
+get.knots(fit1, include.boundaries = TRUE)
 
-xyplot(hgt.z ~ age | id, data = data2,
-       groups = bse, 
-	     subset = id %in% c(10001, 10005) & age <= 3, 
-	   type = "b", pch = 19, as.table = TRUE,
-	   panel = function(...) {
-	   	panel.refline(h = c(-2, 0, 2))
-	   	panel.refline(v = knots, col = "firebrick1", lwd = 0.5, lty = 2)
-	   	panel.xyplot(...)
-	   }
-)
+## ------------------------------------------------------------------------
+p1 <- predict(fit1)
+dim(p1)
+head(p1, 4)
+
+## ------------------------------------------------------------------------
+p2 <- predict(fit1, type = "atknots")
+head(p2, 4)
+
+## ------------------------------------------------------------------------
+p <- predict(fit1, x = get.knots(fit1), include.boundaries = TRUE)
+head(p, 15)
+
+## ------------------------------------------------------------------------
+p$yhat[p$knot] <- NA
+xyplot(y + yhat ~ x | id, data = p, 
+       subset = id %in% ids & x <= 2.3, 
+       as.table = TRUE,
+       panel = function(...) {
+         panel.refline(h = c(-2, 0, 2))
+         panel.refline(v = 0:2, col = "grey", lwd = 0.5, lty = 2)
+         panel.superpose(...)}, 
+       panel.groups = function(x, y, subscripts, groups, ..., group.number) 
+         with(na.omit(data.frame(x, y)), 
+              panel.lines(x, y, type = "b", pch = 20, col = group.number)),
+       xlab = "Age (in years)", ylab = "Length (SDS)")
+
+## ------------------------------------------------------------------------
+p <- predict(fit2, x = get.knots(fit.hgt), include.boundaries = TRUE)
+head(p, 4)
+
+## ----echo=FALSE----------------------------------------------------------
+p$yhat[!p$knot] <- NA
+xyplot(y + yhat ~ x | id, data = p, 
+       subset = id %in% ids & x <= 2.3, 
+       as.table = TRUE,
+       panel = function(...) {
+         panel.refline(h = c(-2, 0, 2))
+         panel.refline(v = knots, col = "grey", lwd = 0.5, lty = 2)
+         panel.superpose(...)}, 
+       panel.groups = function(x, y, subscripts, groups, ..., group.number) 
+         with(na.omit(data.frame(x, y)), 
+              panel.lines(x, y, type = "b", pch = 20, col = group.number)),
+       xlab = "Age (in years)", ylab = "Length (SDS)")
 
 ## ------------------------------------------------------------------------
 var(fitted(fit1)) / var(data$hgt.z)
@@ -82,26 +89,23 @@ var(fitted(fit1)) / var(data$hgt.z)
 var(fitted(fit2)) / var(data$hgt.z)
 
 ## ------------------------------------------------------------------------
-# repredict first observation using three-line model
-d <- data[data$id == "10001", c("age","hgt.z")]
-predict(fit2, y = d$hgt.z, x = d$age, type = "atx")
-
-## ------------------------------------------------------------------------
-# trajectories around +1 and at -1
-predict(fit2, y = rep(1, 5), x = (0:4)/2)
-predict(fit2, y = c(-1, NA, -1, NA, -1), x = (0:4)/2)
-predict(fit2, y = rep(NA, 5), x = (0:4)/2)
-
-## ------------------------------------------------------------------------
-# one observation at birth, prediction at age 1
-predict(fit2, y = c(1, NA), x = c(0, 1))
-
-## ------------------------------------------------------------------------
 # export the broken stick models
 export.hgt <- export.brokenstick(fit2)
 export.hgt
 
 ## ------------------------------------------------------------------------
-# one observation at birth, prediction at age 1
-predict(export.hgt, y = c(1, NA), x = c(0, 1))
+# four height measurement on new child
+x <- c(0, 0.15, 0.23, 0.45)
+y <- c(-1.2, -1.7, -2.2, -2.3)
+
+# prediction at ages x
+atx <- predict(export.hgt, y = y, x = x)
+atx
+# prediction at the knots
+atknots <- predict(export.hgt, y = y, x = x, type = "atknots")
+head(atknots)
+
+## ------------------------------------------------------------------------
+at <- rbind(atx, atknots)
+
 

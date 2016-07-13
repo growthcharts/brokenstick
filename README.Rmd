@@ -66,8 +66,6 @@ The main functions in the `brokenstick` package are:
 Function name        | Description
 ---------------------|---------------------------------
 `brokenstick()`      | Fit a broken stick model to irregular data
-`conditional.means()`| Obtain broken stick estimates from a fitted object
-`EB()`               | Empirical Bayes predictor for random effects
-`predict()`          | Predict broken stick estimates for new growth data
-`export.brokenstick()` | Export broken stick model parameters 
+`predict()`          | Predict broken stick estimates
+`export.brokenstick()` | Export minimal broken stick model for publication
 

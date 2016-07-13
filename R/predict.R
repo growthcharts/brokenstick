@@ -20,8 +20,8 @@
 #'   then broken stick estimates are obtained at \code{x} for all persons in 
 #'   \code{object}. Note that the \code{type = "atx"} argument is needed to make
 #'   predictions at the \code{x} values.
-#' @param type   If \code{type = "atx"} (the default) the function returns
-#'   predictions at the \code{x} values in the data. Specify \code{type =
+#' @param type   If \code{type = "atx"} (the default) the function returns 
+#'   predictions at the \code{x} values in the data. Specify \code{type = 
 #'   "atknots"} to obtain predictions at the knots of the model.
 #' @param output A string specifying the desired type of output. If \code{output
 #'   = "long"} (the default), the result is cast into a data frame of the long 
@@ -31,7 +31,7 @@
 #'   data analysis that analyzes the smoothed data as repeated measured. The 
 #'   format can be used if \code{type = "atknots"}, and returns \code{NULL} 
 #'   otherwise. If \code{output = "vector"}, the result is returned as a vector.
-#'   This is the fastest method, and should preferably be used in programming 
+#'   This is the fastest method, and should be used in programming 
 #'   and simulation.
 #' @param include.boundaries Logical indicating whether the broken stick 
 #'   estimates on the right-hand side boundary should be included. The default 
@@ -45,20 +45,19 @@
 #' @param \dots Additional arguments passed down to \code{fitted()}, 
 #'   \code{predict.brokenstick.export()} and \code{predict.atx()}. Set the flag 
 #'   \code{onlynew = FALSE} to obtain predictions for both old and new \code{x}.
-#' @return If \code{output == "long"}, a data frame with five columns named:
-#' \describe{ 
-#'   \item{\code{id}}{Person identification}
-#'   \item{\code{x}}{The \code{x} values of the model, usually age}
-#'   \item{\code{y}}{Response values (in scale defined by the model)}
-#'   \item{\code{yhat}}{Predicted values}
-#'   \item{\code{new}}{Logical indicating whether the prediction refers to a 
-#'   data point without a value for \code{y}. These are often knots location or
-#'   ages at which the response is \code{NA}.}
+#' @return If \code{output == "long"}, a data frame with five columns named: 
+#'   \describe{ 
+#'   \item{\code{id}}{Person identification} 
+#'   \item{\code{x}}{The \code{x} values of the model, usually age} 
+#'   \item{\code{y}}{Response values (in scale defined by the model)} 
+#'   \item{\code{yhat}}{Predicted values} 
+#'   \item{\code{knot}}{Logical indicating whether the prediction is 
+#'   done at the location of the knot.}
 #'   }
-#'   If \code{output == "broad"}, a numeric matrix of 
-#'   predicted values with \code{length(slot(object, "knots"))} columns. If 
-#'   \code{output == "vector"}, a numeric vector of predicted values corresponding to the 
-#'   column \code{yhat}.
+#'   If \code{output == "broad"}, a
+#'   numeric matrix of predicted values with \code{length(slot(object,
+#'   "knots"))} columns. If \code{output == "vector"}, a numeric vector of
+#'   predicted values corresponding to the column \code{yhat}.
 #' @author Stef van Buuren 2016
 #' @note The original data are only present in the \code{object} of class 
 #'   \code{brokenstick}. Hence, any calculations involving observations of the 
@@ -110,7 +109,8 @@ predict.brokenstick <- function(object, y, x, type = "atx",
     result <- switch(output,
                      vector = yhat,
                      long = yhat2long(object, yhat, 
-                                      type = type),
+                                      type = type, 
+                                      include.boundaries = include.boundaries),
                      broad = NULL)  # not possible
     return(result)
   }
@@ -123,7 +123,8 @@ predict.brokenstick <- function(object, y, x, type = "atx",
     result <- switch(output,
                      vector = as.vector(yhat),
                      long = yhat2long(object, yhat, 
-                                      include.boundaries = include.boundaries),
+                                      include.boundaries = include.boundaries,
+                                      type = "atknots"),
                      broad = t(yhat))
     return(result)
   }
@@ -133,7 +134,8 @@ predict.brokenstick <- function(object, y, x, type = "atx",
   newbreak  <- missing(y) && !missing(x)
   if (newbreak) {
     if (length(x) == 0) return(numeric(0))
-    return(predict.atx(object, x, output = output, ...))
+    return(predict.atx(object, x, output = output, 
+                       include.boundaries = include.boundaries, ...))
   }
   
   # handle predictions for individuals
@@ -213,13 +215,13 @@ predict.brokenstick.export <- function(object, y, x,
     return(switch(output,
                   vector = bs.z,
                   long = data.frame(id = NA, x = knots, y = NA, yhat = bs.z, 
-                                    new = TRUE)))
+                                    knot = TRUE)))
   
   # individual (response) prediction at x
   if (object$degree > 1) stop("Cannot predict for degree > 1")
   yhat <- approx(x = knots, y = bs.z, xout = x)$y
-  data <- data.frame(id = NA, x = x, y = y, yhat = yhat, new = is.na(y))
-  if (onlynew) data <- data[data$new, ]
+  data <- data.frame(id = NA, x = x, y = y, yhat = yhat, knot = FALSE)
+  if (onlynew) data <- data[is.na(y), ]
   
   # convert to proper output format
   result <- switch(output,
@@ -241,7 +243,7 @@ yhat2long <- function(object, yhat, type = "atx",
                          x = model.matrix(object) %*% brk,
                          y = y,
                          yhat = as.vector(yhat),
-                         new = is.na(y))
+                         knot = FALSE)
     return(result)
   }
   
@@ -253,7 +255,7 @@ yhat2long <- function(object, yhat, type = "atx",
                          x = grd$x,
                          y = NA,
                          yhat = as.vector(yhat),
-                         new = TRUE)
+                         knot = TRUE)
     return(result)
   }
 }
@@ -276,7 +278,7 @@ predict.atx <- function(object, x,
   data1 <- data.frame(id = model.frame(object)$subject,
                       x = model.matrix(object) %*% brk,
                       y = model.frame(object)$y,
-                      new = FALSE)
+                      knot = FALSE)
   
   # construct supplemental data
   grd <- expand.grid(x = x, # x: new break ages
@@ -284,7 +286,7 @@ predict.atx <- function(object, x,
   data2 <- data.frame(id = grd$id, 
                       x = grd$x,
                       y = NA,
-                      new = TRUE)
+                      knot = TRUE)
   
   # concatenate, sort and split over ID
   data <- rbind(data1, data2)
@@ -297,13 +299,14 @@ predict.atx <- function(object, x,
     d <- ds[[i]]
     if (nrow(d) > 0) result[[i]] <- predict(export, y = d$y, 
                                             x = d$x, type = "atx",
-                                            output = "vector")
+                                            output = "vector", 
+                                            ...)
   }
   
   # save
   data$yhat <- unlist(result)
-  data <- data[, c("id", "x", "y", "yhat", "new")]
-  if (onlynew || output == "broad") data <- data[data$new, ]
+  data <- data[, c("id", "x", "y", "yhat", "knot")]
+  if (onlynew || output == "broad") data <- data[is.na(data$y), ]
   
   # convert to proper output format
   result <- switch(output,
