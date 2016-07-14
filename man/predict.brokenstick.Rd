@@ -5,7 +5,7 @@
 \title{Predict growth curve according to the broken stick model}
 \usage{
 \method{predict}{brokenstick}(object, y, x, type = "atx", output = "long",
-  include.boundaries = TRUE, onlynew = FALSE, ...)
+  include.boundaries = TRUE, filterNA = FALSE, ...)
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick} or of class
@@ -42,7 +42,7 @@ and simulation.}
 estimates on the right-hand side boundary should be included. The default
 is \code{TRUE}.}
 
-\item{onlynew}{Logical indicating whether to return estimates for new values
+\item{filterNA}{Logical indicating whether to return estimates for new values
 of \code{y} only. The default is \code{FALSE}, so all predictions are
 returned. Prediction at a given \code{x} values may be forced by setting
 the corresponding entries of \code{y} equal to \code{NA}. Prediction at the
@@ -51,7 +51,7 @@ and \code{y}.}
 
 \item{\dots}{Additional arguments passed down to \code{predict.merMod()},
 \code{predict.brokenstick.export()} and \code{predict.atx()}. Set the flag
-\code{onlynew = FALSE} to obtain predictions for both old and new \code{x}.}
+\code{filterNA = FALSE} to obtain predictions for both old and new \code{x}.}
 }
 \value{
 If \code{output == "long"}, a data frame with five columns named:
@@ -60,8 +60,9 @@ If \code{output == "long"}, a data frame with five columns named:
   \item{\code{x}}{The \code{x} values of the model, usually age}
   \item{\code{y}}{Response values (in scale defined by the model)}
   \item{\code{yhat}}{Predicted values}
-  \item{\code{knot}}{Logical indicating whether the prediction is
-  done at the location of the knot.}
+  \item{\code{knot}}{Logical, TRUE indicates that the prediction is
+  done at the location of the knot, or at a location specified by an 
+  isolated \code{x} argument, i.e., without a corresponding \code{y} argument.}
   }
   If \code{output == "broad"}, a
   numeric matrix of predicted values with \code{length(slot(object,
@@ -106,7 +107,7 @@ head(p)
 
 # Same, but now organised as broad matrix of new points only
 p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4), output = "broad",
-onlynew = TRUE)
+filterNA = TRUE)
 head(p)
 
 }

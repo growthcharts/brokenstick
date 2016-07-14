@@ -45,7 +45,7 @@ p2 <- predict(fit1, type = "atknots")
 head(p2, 4)
 
 ## ------------------------------------------------------------------------
-p <- predict(fit1, x = get.knots(fit1), include.boundaries = TRUE)
+p <- predict(fit1, x = get.knots(fit1))
 head(p, 15)
 
 ## ------------------------------------------------------------------------
@@ -73,7 +73,7 @@ fit2 <- brokenstick(y = data$hgt.z,
 					Boundary.knots = Boundary.knots)
 
 ## ------------------------------------------------------------------------
-p <- predict(fit2, x = get.knots(fit.hgt), include.boundaries = TRUE)
+p <- predict(fit2, x = get.knots(fit.hgt))
 head(p, 4)
 
 ## ----echo=FALSE----------------------------------------------------------

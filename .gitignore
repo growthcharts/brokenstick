@@ -1,3 +1,27 @@
-.Rproj.user
+# History files
 .Rhistory
+.Rapp.history
+
+# Session Data files
 .RData
+
+# RStudio files
+.Rproj.user/
+
+# Output files from R CMD build
+/*.tar.gz
+
+# OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
+.httr-oauth
+
+# knitr cache directories
+vignettes/gettingstarted_cache/
+vignettes/gettingstarted_files/
+
+# produced vignettes
+vignettes/*.html
+vignettes/*.pdf
+
+# knitr and R markdown default cache directories
+/*_cache/
+/cache/

@@ -4,7 +4,7 @@
 \alias{get.knots}
 \title{Obtain the knots from a broken stick model}
 \usage{
-get.knots(object, include.boundaries = FALSE)
+get.knots(object, include.boundaries = TRUE)
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick} or \code{brokenstick.export}}

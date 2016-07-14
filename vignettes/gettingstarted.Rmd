@@ -108,7 +108,7 @@ class(fit1)
 fit1
 ```
 
-The `fit1` object has S4 class `brokenstick`. The broken stick model contains no intercept, whereas the four predictors (`x1`-`x4`) are entered both as fixed and random effects, conditional on subject (child). The ages to which they correspond can be obtained by `get_knots(fit, include.boundaries = TRUE)`.
+The `fit1` object has S4 class `brokenstick`. The broken stick model contains no intercept, whereas the four predictors (`x1`-`x4`) are entered both as fixed and random effects, conditional on subject (child). The ages to which they correspond can be obtained by `get.knots(fit)`.
 
 The fixed effects correspond to the mean of population of children in the data. At birth, the children are on average 0.13 SD taller than the WHO standard. At the ages of 1 and 2 years, these estimates rise to 0.34 SD and 0.52 SD, respectively. The fact that these are positive and rising is not surprising. The Dutch are the tallest in the world, so at the age of 2 years, the Dutch are already about 0.5 SD taller than the WHO standard. Note that the estimate for `x4` (0.72), corresponding to the maximum age in the data, is just there for technical reasons. It is based on extreme extrapolation beyond the data, and should be disregarded.
 
@@ -136,7 +136,7 @@ head(p2, 4)
 Since there are no observations at the break ages, the column `new` is `TRUE`. We may obtain both types of estimates for all children by 
 
 ```{r}
-p <- predict(fit1, x = get_knots(fit1), include.boundaries = TRUE)
+p <- predict(fit1, x = get.knots(fit1))
 head(p, 15)
 ```
 
@@ -178,7 +178,7 @@ The `brokenstick()` function calls the `lmer()` function for model fitting. The 
 As before, predicted values can be obtained by
 
 ```{r}
-p <- predict(fit2, x = get_knots(fit.hgt), include.boundaries = TRUE)
+p <- predict(fit2, x = get.knots(fit.hgt))
 head(p, 4)
 ```
 
