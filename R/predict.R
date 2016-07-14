@@ -1,57 +1,57 @@
 # predict.R
 
 #' Predict growth curve according to the broken stick model
-#' 
-#' Calculation predictions (conditional means of the random effects) from the 
-#' broken stick model. This function takes an object of class 
+#'
+#' Calculation predictions (conditional means of the random effects) from the
+#' broken stick model. This function takes an object of class
 #' \code{brokenstick}, and returns predictions in one of several formats. We may
-#' calculate predictions for new persons, i.e., for persons who are not part of 
+#' calculate predictions for new persons, i.e., for persons who are not part of
 #' the fitted model, by specifying the \code{x} and \code{y} arguments.
 #' @aliases predict.brokenstick
-#' @param object An object of class \code{brokenstick} or of class 
+#' @param object An object of class \code{brokenstick} or of class
 #'   \code{brokenstick.export}.
 #' @param y      A vector with measurements using the same response scale as the
 #'   fitted model.
-#' @param x    A vector with decimal ages of length \code{length(y)}. x must be 
-#'   sorted in increasing order, and within the range defined by 
-#'   \code{range(object@knots)}. If both \code{y} and \code{x} not specified, 
-#'   the function calculates the predicted values for all persons on which 
-#'   \code{object} was fitted. If \code{y} is not specified, but \code{x} is, 
-#'   then broken stick estimates are obtained at \code{x} for all persons in 
+#' @param x    A vector with decimal ages of length \code{length(y)}. x must be
+#'   sorted in increasing order, and within the range defined by
+#'   \code{range(object@knots)}. If both \code{y} and \code{x} not specified,
+#'   the function calculates the predicted values for all persons on which
+#'   \code{object} was fitted. If \code{y} is not specified, but \code{x} is,
+#'   then broken stick estimates are obtained at \code{x} for all persons in
 #'   \code{object}. Note that the \code{type = "atx"} argument is needed to make
 #'   predictions at the \code{x} values.
-#' @param type   If \code{type = "atx"} (the default) the function returns 
-#'   predictions at the \code{x} values in the data. Specify \code{type = 
+#' @param type   If \code{type = "atx"} (the default) the function returns
+#'   predictions at the \code{x} values in the data. Specify \code{type =
 #'   "atknots"} to obtain predictions at the knots of the model.
 #' @param output A string specifying the desired type of output. If \code{output
-#'   = "long"} (the default), the result is cast into a data frame of the long 
-#'   format that represents each row represented as an observation. If 
-#'   \code{output = "broad"}, the result is formed into a broad matrix where 
+#'   = "long"} (the default), the result is cast into a data frame of the long
+#'   format that represents each row represented as an observation. If
+#'   \code{output = "broad"}, the result is formed into a broad matrix where
 #'   each row represents a person. This format is useful as input to a secondary
-#'   data analysis that analyzes the smoothed data as repeated measured. The 
-#'   format can be used if \code{type = "atknots"}, and returns \code{NULL} 
+#'   data analysis that analyzes the smoothed data as repeated measured. The
+#'   format can be used if \code{type = "atknots"}, and returns \code{NULL}
 #'   otherwise. If \code{output = "vector"}, the result is returned as a vector.
-#'   This is the fastest method, and should be used in programming 
+#'   This is the fastest method, and should be used in programming
 #'   and simulation.
-#' @param include.boundaries Logical indicating whether the broken stick 
-#'   estimates on the right-hand side boundary should be included. The default 
-#'   is \code{FALSE}.
-#' @param onlynew Logical indicating whether to return estimates for new values 
-#'   of \code{y} only. The default is \code{FALSE}, so all predictions are 
-#'   returned. Prediction at a given \code{x} values may be forced by setting 
+#' @param include.boundaries Logical indicating whether the broken stick
+#'   estimates on the right-hand side boundary should be included. The default
+#'   is \code{TRUE}.
+#' @param onlynew Logical indicating whether to return estimates for new values
+#'   of \code{y} only. The default is \code{FALSE}, so all predictions are
+#'   returned. Prediction at a given \code{x} values may be forced by setting
 #'   the corresponding entries of \code{y} equal to \code{NA}. Prediction at the
 #'   knots is also considered new, even if there are observed values at \code{x}
 #'   and \code{y}.
-#' @param \dots Additional arguments passed down to \code{fitted()}, 
-#'   \code{predict.brokenstick.export()} and \code{predict.atx()}. Set the flag 
+#' @param \dots Additional arguments passed down to \code{predict.merMod()},
+#'   \code{predict.brokenstick.export()} and \code{predict.atx()}. Set the flag
 #'   \code{onlynew = FALSE} to obtain predictions for both old and new \code{x}.
-#' @return If \code{output == "long"}, a data frame with five columns named: 
-#'   \describe{ 
-#'   \item{\code{id}}{Person identification} 
-#'   \item{\code{x}}{The \code{x} values of the model, usually age} 
-#'   \item{\code{y}}{Response values (in scale defined by the model)} 
-#'   \item{\code{yhat}}{Predicted values} 
-#'   \item{\code{knot}}{Logical indicating whether the prediction is 
+#' @return If \code{output == "long"}, a data frame with five columns named:
+#'   \describe{
+#'   \item{\code{id}}{Person identification}
+#'   \item{\code{x}}{The \code{x} values of the model, usually age}
+#'   \item{\code{y}}{Response values (in scale defined by the model)}
+#'   \item{\code{yhat}}{Predicted values}
+#'   \item{\code{knot}}{Logical indicating whether the prediction is
 #'   done at the location of the knot.}
 #'   }
 #'   If \code{output == "broad"}, a
@@ -59,10 +59,10 @@
 #'   "knots"))} columns. If \code{output == "vector"}, a numeric vector of
 #'   predicted values corresponding to the column \code{yhat}.
 #' @author Stef van Buuren 2016
-#' @note The original data are only present in the \code{object} of class 
-#'   \code{brokenstick}. Hence, any calculations involving observations of the 
+#' @note The original data are only present in the \code{object} of class
+#'   \code{brokenstick}. Hence, any calculations involving observations of the
 #'   fitted model require an object of class \code{brokenstick}. Predictions for
-#'   new units can be done both with class \code{brokenstick} and 
+#'   new units can be done both with class \code{brokenstick} and
 #'   \code{brokenstick.export}.
 #' @family brokenstick
 #' @examples
@@ -70,51 +70,51 @@
 #' class(fit.hgt)
 #' p <- predict(fit.hgt)
 #' head(p)
-#' 
+#'
 #' # Estimates at knots, stored into the broad matrix
 #' p <- predict(fit.hgt, output = "broad", type = "atknots")
 #' round(head(p), 2)
-#' 
+#'
 #' # Get these estimates as a vector, useful for programming
 #' p <- predict(fit.hgt, output = "vector", type = "atknots")
 #' round(head(p), 2)
-#' 
+#'
 #' # Obtain broken stick estimates at the measured ages
 #' p <- predict(fit.hgt)
 #' head(p)
-#' 
+#'
 #' # Obtain estimates at weeks 1-4 for all children, include old points
 #' p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4))
 #' head(p)
-#' 
+#'
 #' # Same, but now organised as broad matrix of new points only
-#' p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4), output = "broad", 
+#' p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4), output = "broad",
 #' onlynew = TRUE)
 #' head(p)
-#' 
+#'
 #' @export
-predict.brokenstick <- function(object, y, x, type = "atx", 
-                                output = "long", include.boundaries = FALSE, 
+predict.brokenstick <- function(object, y, x, type = "atx",
+                                output = "long", include.boundaries = TRUE,
                                 onlynew = FALSE,
                                 ...) {
   type <- match.arg(type, c("atknots", "atx"))
   output <- match.arg(output, c("vector", "long", "broad"))
-  
+
   # If user did not specify y and x, do everybody in the object
   everybody <- missing(y) && missing(x)
-  
+
   # For everybody, prediction at the measured x
   if (type == "atx" &&  everybody) {
     yhat <- fitted(object, ...)
     result <- switch(output,
                      vector = yhat,
-                     long = yhat2long(object, yhat, 
-                                      type = type, 
+                     long = yhat2long(object, yhat,
+                                      type = type,
                                       include.boundaries = include.boundaries),
                      broad = NULL)  # not possible
     return(result)
   }
-  
+
   # For everybody, prediction at the knots
   if (type == "atknots" && everybody) {
     yhat <- t(lme4::ranef(object)$subject) + lme4::fixef(object)
@@ -122,32 +122,32 @@ predict.brokenstick <- function(object, y, x, type = "atx",
     if (!include.boundaries) yhat <- yhat[-nrow(yhat), ]
     result <- switch(output,
                      vector = as.vector(yhat),
-                     long = yhat2long(object, yhat, 
+                     long = yhat2long(object, yhat,
                                       include.boundaries = include.boundaries,
                                       type = "atknots"),
                      broad = t(yhat))
     return(result)
   }
-  
+
   # For everybody, prediction at new break ages (but do NOT change the model)
   # If x is specified, but y not, then predict as `x` for everybody
   newbreak  <- missing(y) && !missing(x)
   if (newbreak) {
     if (length(x) == 0) return(numeric(0))
-    return(predict.atx(object, x, output = output, 
-                       include.boundaries = include.boundaries, ...))
+    return(predict.atx(object, x, output = output,
+                       onlynew = onlynew, ...))
   }
-  
+
   # handle predictions for individuals
   # by calling predict.brokenstick.export()
-  
+
   if (length(y) == 0) return(numeric(0))
   if (length(y) != length(x)) stop("Incompatible length of `y` and `x`.")
-  
+
   export <- export.brokenstick(object)
-  predict(export, y, x, type = type, 
+  predict(export, y, x, type = type,
           output = output,
-          include.boundaries = include.boundaries, 
+          include.boundaries = include.boundaries,
           onlynew = onlynew, ...)
 }
 
@@ -157,72 +157,72 @@ predict.brokenstick <- function(object, y, x, type = "atx",
 #' @inheritParams predict.brokenstick
 #' @aliases predict.brokenstick.export
 #' @family brokenstick
-#' @examples 
+#' @examples
 #' exp <- export.brokenstick(fit.hgt)
-#' 
+#'
 #' # no data predicts mean trajectory
 #' p <- predict(exp)
 #' head(p)
-#' 
+#'
 #' # predict mean trajectory at weeks 1-4
 #' predict(exp, x = round((1:4)*7/365.25, 4))
-#' 
+#'
 #' # add data at each week
 #' predict(exp, x = round((1:4)*7/365.25, 4), y = c(1, 0.8, 0.9, 0.7))
-#' 
+#'
 #' # no data at weeks 2 and 3
 #' predict(exp, x = round((1:4)*7/365.25, 4), y = c(1, NA, NA, 0.7))
-#' 
-#' # estimates at standard knots 
-#' predict(exp, x = round((1:4)*7/365.25, 4), y = c(1, NA, NA, 0.7), 
+#'
+#' # estimates at standard knots
+#' predict(exp, x = round((1:4)*7/365.25, 4), y = c(1, NA, NA, 0.7),
 #'   type = "atknots")
-#'   
+#'
 #' # leaving out the missing data produces the same result
-#'predict(exp, x = round(c(1,4)*7/365.25, 4), y = c(1, 0.7), 
+#'predict(exp, x = round(c(1,4)*7/365.25, 4), y = c(1, 0.7),
 #'   type = "atknots")
 #' @export
-predict.brokenstick.export <- function(object, y, x, 
-                                       type = "atx", 
-                                       output = "long", 
-                                       include.boundaries = FALSE, 
+predict.brokenstick.export <- function(object, y, x,
+                                       type = "atx",
+                                       output = "long",
+                                       include.boundaries = TRUE,
                                        onlynew = FALSE,
                                        ...) {
   type <- match.arg(type, c("atknots", "atx"))
   output <- match.arg(output, c("vector", "long", "broad"))
-  
+
   # case: if no `x` is given, just use the knots
   if (missing(x)) x <- get.knots(object, include.boundaries)
   if (missing(y)) y <- rep(NA, length(x))
   if (length(y) == 0 | length(x) == 0) return(numeric(0))
   if (length(y) != length(x)) stop("Incompatible length of `y` and `x`.")
-  
+
   # code the x at which the child is observed as
   # linear splines with given knots
-  X <- bs(x = x, knots = object$knots, 
-          Boundary.knots = object$Boundary.knots, 
+  X <- bs(x = x, knots = object$knots,
+          Boundary.knots = object$Boundary.knots,
           degree = object$degree)
   colnames(X) <- paste("x", 1:ncol(X), sep = "")
-  
+
   # calculate random effect through empirical Bayes (BLUP) predictor
   bs.z <- EB(object, y = y, X, BS = TRUE)
-  
+
   # knots to use for prediction
   knots <- get.knots(object, include.boundaries)
   if (!include.boundaries) bs.z <- bs.z[-length(bs.z)]
-  
+
   # prediction at knots
   if (type == "atknots")
     return(switch(output,
                   vector = bs.z,
-                  long = data.frame(id = NA, x = knots, y = NA, yhat = bs.z, 
+                  long = data.frame(id = NA, x = knots, y = NA, yhat = bs.z,
                                     knot = TRUE)))
-  
+
   # individual (response) prediction at x
   if (object$degree > 1) stop("Cannot predict for degree > 1")
   yhat <- approx(x = knots, y = bs.z, xout = x)$y
   data <- data.frame(id = NA, x = x, y = y, yhat = yhat, knot = FALSE)
   if (onlynew) data <- data[is.na(y), ]
-  
+
   # convert to proper output format
   result <- switch(output,
                    vector = data$yhat,
@@ -231,9 +231,9 @@ predict.brokenstick.export <- function(object, y, x,
 }
 
 
-yhat2long <- function(object, yhat, type = "atx", 
-                      include.boundaries = FALSE) {
-  
+yhat2long <- function(object, yhat, type = "atx",
+                      include.boundaries = TRUE) {
+
   if (type == "atx") {
     # we need to recalculate x from model.matrix since the lmerMod object
     # does not seem to store the original data
@@ -246,12 +246,12 @@ yhat2long <- function(object, yhat, type = "atx",
                          knot = FALSE)
     return(result)
   }
-  
+
   if (type == "atknots") {
     brk <- get.knots(object, include.boundaries)
-    grd <- expand.grid(x = brk, 
+    grd <- expand.grid(x = brk,
                        id = as.factor(rownames(lme4::ranef(object)$subject)))
-    result <- data.frame(id = grd$id, 
+    result <- data.frame(id = grd$id,
                          x = grd$x,
                          y = NA,
                          yhat = as.vector(yhat),
@@ -263,66 +263,66 @@ yhat2long <- function(object, yhat, type = "atx",
 
 
 
-predict.atx <- function(object, x, 
-                          output = "long", 
+predict.atx <- function(object, x,
+                          output = "long",
                           onlynew = FALSE, ...) {
-  # auxiliary function to calculate predictions at a common set 
+  # auxiliary function to calculate predictions at a common set
   # of x values for all individuals
   # called by predict.brokenstick()
   if (length(x) == 0) return(numeric(0))
-  
+
   export <- export.brokenstick(object)
-  
+
   # recreate the original data
   brk <- get.knots(object, TRUE)
   data1 <- data.frame(id = model.frame(object)$subject,
                       x = model.matrix(object) %*% brk,
                       y = model.frame(object)$y,
                       knot = FALSE)
-  
+
   # construct supplemental data
   grd <- expand.grid(x = x, # x: new break ages
                      id = as.factor(rownames(lme4::ranef(object)$subject)))
-  data2 <- data.frame(id = grd$id, 
+  data2 <- data.frame(id = grd$id,
                       x = grd$x,
                       y = NA,
-                      knot = TRUE)
-  
+                      knot = FALSE)
+
   # concatenate, sort and split over ID
   data <- rbind(data1, data2)
   data <- data[order(data$id, data$x), ]
   ds <- split(data, f = data$id)
-  
+
   # simple loop over id
   result <- vector("list", length(ds))
   for (i in seq_along(ds)) {
     d <- ds[[i]]
-    if (nrow(d) > 0) result[[i]] <- predict(export, y = d$y, 
+    if (nrow(d) > 0) result[[i]] <- predict(export, y = d$y,
                                             x = d$x, type = "atx",
-                                            output = "vector", 
+                                            output = "vector",
                                             ...)
   }
-  
+
   # save
   data$yhat <- unlist(result)
   data <- data[, c("id", "x", "y", "yhat", "knot")]
   if (onlynew || output == "broad") data <- data[is.na(data$y), ]
-  
+
   # convert to proper output format
   result <- switch(output,
                    vector = data$yhat,
                    long = data,
-                   broad = matrix(data$yhat, ncol = length(x), byrow = TRUE, 
+                   broad = matrix(data$yhat, ncol = length(x), byrow = TRUE,
                                   dimnames = list(NULL, x)))
   return(result)
 }
 
 #' Obtain the knots from a broken stick model
-#' 
+#'
 #' @param object An object of class \code{brokenstick} or \code{brokenstick.export}
 #' @param include.boundaries A logical specifying whether the right-most (boundary) knots should be included. The default is \code{FALSE}, which return only the internal knots.
 #' @return A vector with knot locations
-#' @examples 
+#' @examples
 #' get.knots(fit.hgt)
 #' @export
 get.knots <- function(object, include.boundaries = FALSE) {
@@ -331,7 +331,7 @@ get.knots <- function(object, include.boundaries = FALSE) {
     if (!include.boundaries) knots <- knots[-length(knots)]
     return(knots)
   }
-  
+
   if(inherits(object, "brokenstick.export")) {
     knots <- c(object$knots, object$Boundary.knots[2])
     if (!include.boundaries) knots <- knots[-length(knots)]

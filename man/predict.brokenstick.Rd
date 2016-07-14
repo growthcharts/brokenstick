@@ -5,62 +5,62 @@
 \title{Predict growth curve according to the broken stick model}
 \usage{
 \method{predict}{brokenstick}(object, y, x, type = "atx", output = "long",
-  include.boundaries = FALSE, onlynew = FALSE, ...)
+  include.boundaries = TRUE, onlynew = FALSE, ...)
 }
 \arguments{
-\item{object}{An object of class \code{brokenstick} or of class 
+\item{object}{An object of class \code{brokenstick} or of class
 \code{brokenstick.export}.}
 
 \item{y}{A vector with measurements using the same response scale as the
 fitted model.}
 
-\item{x}{A vector with decimal ages of length \code{length(y)}. x must be 
-sorted in increasing order, and within the range defined by 
-\code{range(object@knots)}. If both \code{y} and \code{x} not specified, 
-the function calculates the predicted values for all persons on which 
-\code{object} was fitted. If \code{y} is not specified, but \code{x} is, 
-then broken stick estimates are obtained at \code{x} for all persons in 
+\item{x}{A vector with decimal ages of length \code{length(y)}. x must be
+sorted in increasing order, and within the range defined by
+\code{range(object@knots)}. If both \code{y} and \code{x} not specified,
+the function calculates the predicted values for all persons on which
+\code{object} was fitted. If \code{y} is not specified, but \code{x} is,
+then broken stick estimates are obtained at \code{x} for all persons in
 \code{object}. Note that the \code{type = "atx"} argument is needed to make
 predictions at the \code{x} values.}
 
-\item{type}{If \code{type = "atx"} (the default) the function returns 
-predictions at the \code{x} values in the data. Specify \code{type = 
+\item{type}{If \code{type = "atx"} (the default) the function returns
+predictions at the \code{x} values in the data. Specify \code{type =
 "atknots"} to obtain predictions at the knots of the model.}
 
 \item{output}{A string specifying the desired type of output. If \code{output
-= "long"} (the default), the result is cast into a data frame of the long 
-format that represents each row represented as an observation. If 
-\code{output = "broad"}, the result is formed into a broad matrix where 
+= "long"} (the default), the result is cast into a data frame of the long
+format that represents each row represented as an observation. If
+\code{output = "broad"}, the result is formed into a broad matrix where
 each row represents a person. This format is useful as input to a secondary
-data analysis that analyzes the smoothed data as repeated measured. The 
-format can be used if \code{type = "atknots"}, and returns \code{NULL} 
+data analysis that analyzes the smoothed data as repeated measured. The
+format can be used if \code{type = "atknots"}, and returns \code{NULL}
 otherwise. If \code{output = "vector"}, the result is returned as a vector.
-This is the fastest method, and should be used in programming 
+This is the fastest method, and should be used in programming
 and simulation.}
 
-\item{include.boundaries}{Logical indicating whether the broken stick 
-estimates on the right-hand side boundary should be included. The default 
-is \code{FALSE}.}
+\item{include.boundaries}{Logical indicating whether the broken stick
+estimates on the right-hand side boundary should be included. The default
+is \code{TRUE}.}
 
-\item{onlynew}{Logical indicating whether to return estimates for new values 
-of \code{y} only. The default is \code{FALSE}, so all predictions are 
-returned. Prediction at a given \code{x} values may be forced by setting 
+\item{onlynew}{Logical indicating whether to return estimates for new values
+of \code{y} only. The default is \code{FALSE}, so all predictions are
+returned. Prediction at a given \code{x} values may be forced by setting
 the corresponding entries of \code{y} equal to \code{NA}. Prediction at the
 knots is also considered new, even if there are observed values at \code{x}
 and \code{y}.}
 
-\item{\dots}{Additional arguments passed down to \code{fitted()}, 
-\code{predict.brokenstick.export()} and \code{predict.atx()}. Set the flag 
+\item{\dots}{Additional arguments passed down to \code{predict.merMod()},
+\code{predict.brokenstick.export()} and \code{predict.atx()}. Set the flag
 \code{onlynew = FALSE} to obtain predictions for both old and new \code{x}.}
 }
 \value{
-If \code{output == "long"}, a data frame with five columns named: 
-  \describe{ 
-  \item{\code{id}}{Person identification} 
-  \item{\code{x}}{The \code{x} values of the model, usually age} 
-  \item{\code{y}}{Response values (in scale defined by the model)} 
-  \item{\code{yhat}}{Predicted values} 
-  \item{\code{knot}}{Logical indicating whether the prediction is 
+If \code{output == "long"}, a data frame with five columns named:
+  \describe{
+  \item{\code{id}}{Person identification}
+  \item{\code{x}}{The \code{x} values of the model, usually age}
+  \item{\code{y}}{Response values (in scale defined by the model)}
+  \item{\code{yhat}}{Predicted values}
+  \item{\code{knot}}{Logical indicating whether the prediction is
   done at the location of the knot.}
   }
   If \code{output == "broad"}, a
@@ -69,17 +69,17 @@ If \code{output == "long"}, a data frame with five columns named:
   predicted values corresponding to the column \code{yhat}.
 }
 \description{
-Calculation predictions (conditional means of the random effects) from the 
-broken stick model. This function takes an object of class 
+Calculation predictions (conditional means of the random effects) from the
+broken stick model. This function takes an object of class
 \code{brokenstick}, and returns predictions in one of several formats. We may
-calculate predictions for new persons, i.e., for persons who are not part of 
+calculate predictions for new persons, i.e., for persons who are not part of
 the fitted model, by specifying the \code{x} and \code{y} arguments.
 }
 \note{
-The original data are only present in the \code{object} of class 
-  \code{brokenstick}. Hence, any calculations involving observations of the 
+The original data are only present in the \code{object} of class
+  \code{brokenstick}. Hence, any calculations involving observations of the
   fitted model require an object of class \code{brokenstick}. Predictions for
-  new units can be done both with class \code{brokenstick} and 
+  new units can be done both with class \code{brokenstick} and
   \code{brokenstick.export}.
 }
 \examples{
@@ -105,7 +105,7 @@ p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4))
 head(p)
 
 # Same, but now organised as broad matrix of new points only
-p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4), output = "broad", 
+p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4), output = "broad",
 onlynew = TRUE)
 head(p)
 

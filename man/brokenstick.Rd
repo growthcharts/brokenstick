@@ -6,7 +6,8 @@
 \usage{
 brokenstick(y, x, subject, knots = pretty(x), Boundary.knots = c(min(knots),
   max(max(x, na.rm = TRUE, max(knots)))), degree = 1,
-  control = lmerControl(check.nobs.vs.nRE = "warning"), storeX = FALSE, ...)
+  control = lmerControl(check.nobs.vs.nRE = "warning"),
+  na.action = na.exclude, storeX = FALSE, ...)
 }
 \arguments{
 \item{y}{a vector containing the measurements to be analyzed}
@@ -30,6 +31,8 @@ points are located on a straight line.}
 \item{control}{A function to control fitting of \code{lmer()}. The default
 is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 fatal errors with respect the number of parameters into warnings.}
+
+\item{na.action}{The function to call for the \code{na.action} argument in \code{lmer()}. The default is \code{na.exclude}.}
 
 \item{storeX}{A logical indicating whether the spline model matrix should be returned as slot \code{X} in the result. The default is \code{FALSE}}
 
