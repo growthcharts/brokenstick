@@ -118,7 +118,7 @@ predict.brokenstick <- function(object, y, x, type = "atx",
   # For everybody, prediction at the knots
   if (type == "atknots" && everybody) {
     yhat <- t(lme4::ranef(object)$subject) + lme4::fixef(object)
-    rownames(yhat) <- get.knots(object, TRUE)
+    rownames(yhat) <- get_knots(object, TRUE)
     if (!include.boundaries) yhat <- yhat[-nrow(yhat), ]
     result <- switch(output,
                      vector = as.vector(yhat),
@@ -191,7 +191,7 @@ predict.brokenstick.export <- function(object, y, x,
   output <- match.arg(output, c("vector", "long", "broad"))
 
   # case: if no `x` is given, just use the knots
-  if (missing(x)) x <- get.knots(object, include.boundaries)
+  if (missing(x)) x <- get_knots(object, include.boundaries)
   if (missing(y)) y <- rep(NA, length(x))
   if (length(y) == 0 | length(x) == 0) return(numeric(0))
   if (length(y) != length(x)) stop("Incompatible length of `y` and `x`.")
@@ -207,7 +207,7 @@ predict.brokenstick.export <- function(object, y, x,
   bs.z <- EB(object, y = y, X, BS = TRUE)
 
   # knots to use for prediction
-  knots <- get.knots(object, include.boundaries)
+  knots <- get_knots(object, include.boundaries)
   if (!include.boundaries) bs.z <- bs.z[-length(bs.z)]
 
   # prediction at knots
@@ -237,7 +237,7 @@ yhat2long <- function(object, yhat, type = "atx",
   if (type == "atx") {
     # we need to recalculate x from model.matrix since the lmerMod object
     # does not seem to store the original data
-    brk <- get.knots(object, include.boundaries = TRUE)
+    brk <- get_knots(object, include.boundaries = TRUE)
     y <- model.frame(object)$y
     result <- data.frame(id = model.frame(object)$subject,
                          x = model.matrix(object) %*% brk,
@@ -248,7 +248,7 @@ yhat2long <- function(object, yhat, type = "atx",
   }
 
   if (type == "atknots") {
-    brk <- get.knots(object, include.boundaries)
+    brk <- get_knots(object, include.boundaries)
     grd <- expand.grid(x = brk,
                        id = as.factor(rownames(lme4::ranef(object)$subject)))
     result <- data.frame(id = grd$id,
@@ -274,7 +274,7 @@ predict.atx <- function(object, x,
   export <- export.brokenstick(object)
 
   # recreate the original data
-  brk <- get.knots(object, TRUE)
+  brk <- get_knots(object, TRUE)
   data1 <- data.frame(id = model.frame(object)$subject,
                       x = model.matrix(object) %*% brk,
                       y = model.frame(object)$y,
@@ -323,9 +323,9 @@ predict.atx <- function(object, x,
 #' @param include.boundaries A logical specifying whether the right-most (boundary) knots should be included. The default is \code{FALSE}, which return only the internal knots.
 #' @return A vector with knot locations
 #' @examples
-#' get.knots(fit.hgt)
+#' get_knots(fit.hgt)
 #' @export
-get.knots <- function(object, include.boundaries = FALSE) {
+get_knots <- function(object, include.boundaries = TRUE) {
   if (inherits(object, "brokenstick")) {
     knots <- c(object@knots, object@Boundary.knots[2])
     if (!include.boundaries) knots <- knots[-length(knots)]
