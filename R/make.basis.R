@@ -13,16 +13,16 @@
 #' columns, with some extra attributes described by \code{bs()}.
 #' @author Stef van Buuren, 2015
 #' @export
-make.basis <- function(x, 
-                       knots = round(c(0, 28/365.25, 56/365.25, 
-                                        1/4, 1/3, 1/2, 7.5/12,
-                                        9/12, 11/12, 14/12, 18/12, 2), 4),
+make.basis <- function(x,
+                       knots = round(c(0, 28 / 365.25, 56 / 365.25,
+                                       1 / 4, 1 / 3, 1 / 2, 7.5 / 12,
+                                       9 / 12, 11 / 12, 14 / 12, 18 / 12, 2),
+                                     4),
                        Boundary.knots = c(0, 3),
-					   degree = 1) {
-    # calculate break points 0-2 years as birth + standard visits 0-12 yr
-    X <- bs(x, knots = knots, 
-            Boundary.knots = Boundary.knots, degree = degree)
-    dimnames(X)[[2]] <- paste("x", 0:(ncol(X)-1), sep = "")
-    X
+                       degree = 1) {
+  # calculate break points 0-2 years as birth + standard visits 0-12 yr
+  X <- bs(x, knots = knots,
+          Boundary.knots = Boundary.knots, degree = degree)
+  dimnames(X)[[2]] <- paste("x", 0:(ncol(X) - 1), sep = "")
+  X
 }
-

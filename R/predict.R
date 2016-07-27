@@ -36,7 +36,7 @@
 #' @param include.boundaries Logical indicating whether the broken stick
 #'   estimates on the right-hand side boundary should be included. The default
 #'   is \code{TRUE}.
-#' @param filterNA Logical indicating whether to return estimates for new values
+#' @param filter_na Logical indicating whether to return estimates for new values
 #'   of \code{y} only. The default is \code{FALSE}, so all predictions are
 #'   returned. Prediction at a given \code{x} values may be forced by setting
 #'   the corresponding entries of \code{y} equal to \code{NA}. Prediction at the
@@ -44,7 +44,7 @@
 #'   and \code{y}.
 #' @param \dots Additional arguments passed down to \code{predict.merMod()},
 #'   \code{predict.brokenstick.export()} and \code{predict.atx()}. Set the flag
-#'   \code{filterNA = FALSE} to obtain predictions for both old and new \code{x}.
+#'   \code{filter_na = FALSE} to obtain predictions for both old and new \code{x}.
 #' @return If \code{output == "long"}, a data frame with five columns named:
 #'   \describe{
 #'   \item{\code{id}}{Person identification}
@@ -90,13 +90,13 @@
 #'
 #' # Same, but now organised as broad matrix of new points only
 #' p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4), output = "broad",
-#' filterNA = TRUE)
+#' filter_na = TRUE)
 #' head(p)
 #'
 #' @export
 predict.brokenstick <- function(object, y, x, type = "atx",
                                 output = "long", include.boundaries = TRUE,
-                                filterNA = FALSE,
+                                filter_na = FALSE,
                                 ...) {
   type <- match.arg(type, c("atknots", "atx"))
   output <- match.arg(output, c("vector", "long", "broad"))
@@ -136,7 +136,7 @@ predict.brokenstick <- function(object, y, x, type = "atx",
   if (newbreak) {
     if (length(x) == 0) return(numeric(0))
     return(predict.atx(object, x, output = output,
-                       filterNA = filterNA, ...))
+                       filter_na = filter_na, ...))
   }
 
   # handle predictions for individuals
@@ -149,7 +149,7 @@ predict.brokenstick <- function(object, y, x, type = "atx",
   predict(export, y, x, type = type,
           output = output,
           include.boundaries = include.boundaries,
-          filterNA = filterNA, ...)
+          filter_na = filter_na, ...)
 }
 
 
@@ -186,7 +186,7 @@ predict.brokenstick.export <- function(object, y, x,
                                        type = "atx",
                                        output = "long",
                                        include.boundaries = TRUE,
-                                       filterNA = FALSE,
+                                       filter_na = FALSE,
                                        ...) {
   type <- match.arg(type, c("atknots", "atx"))
   output <- match.arg(output, c("vector", "long", "broad"))
@@ -195,8 +195,8 @@ predict.brokenstick.export <- function(object, y, x,
   if (missing(x)) {
     x <- get.knots(object, include.boundaries)
     implicit.knots <- TRUE
-  } else 
-    implicit.knots <- FALSE 
+  } else
+    implicit.knots <- FALSE
   if (missing(y)) y <- rep(NA, length(x))
   if (length(y) == 0 | length(x) == 0) return(numeric(0))
   if (length(y) != length(x)) stop("Incompatible length of `y` and `x`.")
@@ -225,9 +225,9 @@ predict.brokenstick.export <- function(object, y, x,
   # individual (response) prediction at x
   if (object$degree > 1) stop("Cannot predict for degree > 1")
   yhat <- approx(x = knots, y = bs.z, xout = x)$y
-  data <- data.frame(id = NA, x = x, y = y, yhat = yhat, 
+  data <- data.frame(id = NA, x = x, y = y, yhat = yhat,
                      knot = implicit.knots)
-  if (filterNA) data <- data[is.na(y), ]
+  if (filter_na) data <- data[is.na(y), ]
 
   # convert to proper output format
   result <- switch(output,
@@ -271,7 +271,7 @@ yhat2long <- function(object, yhat, type = "atx",
 
 predict.atx <- function(object, x,
                           output = "long",
-                          filterNA = FALSE, ...) {
+                          filter_na = FALSE, ...) {
   # auxiliary function to calculate predictions at a common set
   # of x values for all individuals
   # called by predict.brokenstick()
@@ -312,7 +312,7 @@ predict.atx <- function(object, x,
   # save
   data$yhat <- unlist(result)
   data <- data[, c("id", "x", "y", "yhat", "knot")]
-  if (filterNA || output == "broad") data <- data[is.na(data$y), ]
+  if (filter_na || output == "broad") data <- data[is.na(data$y), ]
 
   # convert to proper output format
   result <- switch(output,
@@ -338,7 +338,7 @@ get.knots <- function(object, include.boundaries = TRUE) {
     return(knots)
   }
 
-  if(inherits(object, "brokenstick.export")) {
+  if (inherits(object, "brokenstick.export")) {
     knots <- c(object$knots, object$Boundary.knots[2])
     if (!include.boundaries) knots <- knots[-length(knots)]
     return(knots)

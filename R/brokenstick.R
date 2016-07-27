@@ -19,20 +19,12 @@ setMethod("print", signature( x = "brokenstick" ),
 )
 
 print.brokenstick <- function ( x, ... ) {
-  cat ("knots: ", x@knots,"\n")
-  cat ("Boundary.knots: ", x@Boundary.knots,"\n")
-  cat ("degree: ", x@degree,"\n")
+  cat ("knots: ", x@knots, "\n")
+  cat ("Boundary.knots: ", x@Boundary.knots, "\n")
+  cat ("degree: ", x@degree, "\n")
   print(summary(x))
   invisible(x)
 }
-
-
-# setGeneric("predict")
-# setMethod("predict", signature( x = "brokenstick" ),
-#           function ( x, ... ) {
-#             predict.brokenstick( x, ...)
-#           }
-# )
 
 
 #' Fit a broken stick model to irregular data
@@ -74,7 +66,7 @@ print.brokenstick <- function ( x, ... ) {
 #' is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 #' fatal errors with respect the number of parameters into warnings.
 #' @param na.action The function to call for the \code{na.action} argument in \code{lmer()}. The default is \code{na.exclude}.
-#' @param storeX A logical indicating whether the spline model matrix should be returned as slot \code{X} in the result. The default is \code{FALSE}
+#' @param store_x A logical indicating whether the spline model matrix should be returned as slot \code{x} in the result. The default is \code{FALSE}
 #' @param \dots Additional arguments passed down to \code{lmer()} 
 #' (e.g. to specify additional \code{lmer()} options.
 #' @return A fitted model of class \code{brokenstick}, which extends the 
@@ -86,22 +78,22 @@ print.brokenstick <- function ( x, ... ) {
 #'                    knots = c(0, 1, 2))
 #' plot(fit)
 #' @export
-brokenstick <- function(y, x, subject, 
+brokenstick <- function(y, x, subject,
                         knots = pretty(x),
-                        Boundary.knots = 
+                        Boundary.knots =
                           c(min(knots),
                             max(max(x, na.rm = TRUE, max(knots)))),
                         degree = 1,
-                        control = lmerControl(check.nobs.vs.nRE = "warning"), 
+                        control = lmerControl(check.nobs.vs.nRE = "warning"),
                         na.action = na.exclude,
-                        storeX = FALSE,
+                        store_x = FALSE,
                         ...) {
-  X <- bs(x = x, knots = knots, Boundary.knots = Boundary.knots, 
+  X <- bs(x = x, knots = knots, Boundary.knots = Boundary.knots,
           degree = degree)
   colnames(X) <- paste("x", 1:ncol(X), sep = "")
   pred <- paste("0 +", paste(colnames(X), collapse = " + "))
   data <- data.frame(subject = subject, x = x, y = y, X)
-  f <- as.formula(paste("y", "~", pred, 
+  f <- as.formula(paste("y", "~", pred,
                         "+ (", pred, "| subject)"))
   fit <- lmer(f, data = data,
               control = control,
@@ -112,7 +104,6 @@ brokenstick <- function(y, x, subject,
   fit@knots <- knots
   fit@Boundary.knots <- Boundary.knots
   fit@degree <- degree
-  if (storeX) fit@X <- X
+  if (store_x) fit@x <- X
   return(fit)
 }
-

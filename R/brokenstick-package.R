@@ -1,6 +1,3 @@
-# brokenstick-package.R
-# 
-
 #'@importFrom lme4 lmer fixef ranef VarCorr lmerControl
 #'@importFrom splines bs
 #'@importFrom methods setGeneric setMethod
@@ -38,4 +35,3 @@ NULL
 #' @references 
 #' van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hall/CRC, 2012. Chapter 9.
 NULL
-

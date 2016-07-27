@@ -36,32 +36,33 @@ EB <- function (model, y, X, Z = X, BS = TRUE) {
 
   # X should be a matrix
   if (!is.matrix(X)) stop("Argument 'X' is not a matrix.")
-  
-	# make sure we get the exported model
-	export <- export.brokenstick(model)
 
-	# eliminate missing outcomes
-	select <- !is.na(y)
+  # make sure we get the exported model
+  export <- export.brokenstick(model)
 
-	# if there are no valid values left, return the fixed effect
-	# as broken stick estimates
-	if (!any(select)) return(export$beta)
+  # eliminate missing outcomes
+  select <- !is.na(y)
 
-	# get into shape for matrix multiplication
-	y <- matrix(y[select], ncol = 1) # nj * 1
-	Z <- matrix(Z[select, ], ncol = dim(Z)[2])  # nj * q
-	X <- matrix(X[select, ], ncol = dim(X)[2])  # nj * p
-	beta <- matrix(export$beta, ncol = 1)
+  # if there are no valid values left, return the fixed effect
+  # as broken stick estimates
+  if (!any(select)) return(export$beta)
 
-	# construct appropriate matrices
-	sigma.inv <- solve(Z %*% export$omega %*% t(Z) +
-					   	diag(export$sigma2, nrow(Z)))
+  # get into shape for matrix multiplication
+  # dimensions: y nj * 1; Z nj * q; X nj * p
+  y <- matrix(y[select], ncol = 1)
+  Z <- matrix(Z[select, ], ncol = dim(Z)[2])
+  X <- matrix(X[select, ], ncol = dim(X)[2])
+  beta <- matrix(export$beta, ncol = 1)
 
-	# calculate random effect by EB estimate
-	re <- export$omega %*% t(Z) %*% sigma.inv %*% (y - X %*% beta)
+  # construct appropriate matrices
+  sigma.inv <- solve(Z %*% export$omega %*% t(Z) +
+                       diag(export$sigma2, nrow(Z)))
 
-	# calculate broken stick estimate by summing fixed and random parts
-	if (BS) re <- export$beta + re
+  # calculate random effect by EB estimate
+  re <- export$omega %*% t(Z) %*% sigma.inv %*% (y - X %*% beta)
 
-	return(as.vector(re))
+  # calculate broken stick estimate by summing fixed and random parts
+  if (BS) re <- export$beta + re
+
+  return(as.vector(re))
 }
