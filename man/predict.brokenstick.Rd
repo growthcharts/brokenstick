@@ -5,7 +5,7 @@
 \title{Predict growth curve according to the broken stick model}
 \usage{
 \method{predict}{brokenstick}(object, y, x, type = "atx", output = "long",
-  include.boundaries = TRUE, filterNA = FALSE, ...)
+  include.boundaries = TRUE, filter_na = FALSE, ...)
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick} or of class
@@ -42,7 +42,7 @@ and simulation.}
 estimates on the right-hand side boundary should be included. The default
 is \code{TRUE}.}
 
-\item{filterNA}{Logical indicating whether to return estimates for new values
+\item{filter_na}{Logical indicating whether to return estimates for new values
 of \code{y} only. The default is \code{FALSE}, so all predictions are
 returned. Prediction at a given \code{x} values may be forced by setting
 the corresponding entries of \code{y} equal to \code{NA}. Prediction at the
@@ -51,7 +51,7 @@ and \code{y}.}
 
 \item{\dots}{Additional arguments passed down to \code{predict.merMod()},
 \code{predict.brokenstick.export()} and \code{predict.atx()}. Set the flag
-\code{filterNA = FALSE} to obtain predictions for both old and new \code{x}.}
+\code{filter_na = FALSE} to obtain predictions for both old and new \code{x}.}
 }
 \value{
 If \code{output == "long"}, a data frame with five columns named:
@@ -107,7 +107,7 @@ head(p)
 
 # Same, but now organised as broad matrix of new points only
 p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4), output = "broad",
-filterNA = TRUE)
+filter_na = TRUE)
 head(p)
 
 }
