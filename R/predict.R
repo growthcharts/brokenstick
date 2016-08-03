@@ -192,12 +192,15 @@ predict.brokenstick.export <- function(object, y, x,
   output <- match.arg(output, c("vector", "long", "broad"))
 
   # case: if no `x` is given, just use the knots
-  if (missing(x)) {
+  if (missing(x) || all(is.na(x))) {
     x <- get.knots(object, include.boundaries)
     implicit.knots <- TRUE
-  } else
+  } else {
     implicit.knots <- FALSE
-  if (missing(y)) y <- rep(NA, length(x))
+  }
+  
+  # case: if no 'y' is given
+  if (missing(y) || implicit.knots) y <- rep(NA, length(x))
   if (length(y) == 0 | length(x) == 0) return(numeric(0))
   if (length(y) != length(x)) stop("Incompatible length of `y` and `x`.")
 
