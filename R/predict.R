@@ -227,7 +227,14 @@ predict.brokenstick.export <- function(object, y, x,
 
   # individual (response) prediction at x
   if (object$degree > 1) stop("Cannot predict for degree > 1")
-  yhat <- approx(x = knots, y = bs.z, xout = x)$y
+  
+  # work around for the error message from approx():
+  # "need at least two non-NA values to interpolate"
+  rv <- stats:::regularize.values(x, y, ties = mean)
+  nx <- as.integer(length(rv$x))
+  if (nx <= 1) yhat <- rep(NA, nx)
+  else yhat <- approx(x = knots, y = bs.z, xout = x)$y
+  
   data <- data.frame(id = NA, x = x, y = y, yhat = yhat,
                      knot = implicit.knots)
   if (filter_na) data <- data[is.na(y), ]
