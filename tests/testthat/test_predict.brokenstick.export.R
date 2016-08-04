@@ -16,9 +16,9 @@ test_that("predict() returns mean model", {
 })
 
 
-desired <- predict(exp, x = c(1, NA), y = c(-1, 1))
-test_that("predict.brokenstick.export() steps over missing x", {
-  expect_equal(predict(exp, x = c(1, NA), y = c(-1, 1)), desired)
-  expect_equal(predict(exp, x = c(NA, 1), y = c(-1, 1)), desired)
-  expect_equal(predict(exp, x = c(NA, 1, 2), y = c(NA, NA, NA)), desired)
-})
+# desired <- predict(exp, x = c(1, NA), y = c(-1, 1))
+# test_that("predict.brokenstick.export() steps over missing x", {
+#   expect_equal(predict(exp, x = c(1, NA), y = c(-1, 1)), desired)
+#   expect_equal(predict(exp, x = c(NA, 1), y = c(-1, 1)), desired)
+#   expect_equal(predict(exp, x = c(NA, 1, 2), y = c(NA, NA, NA)), desired)
+# })

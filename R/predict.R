@@ -223,14 +223,16 @@ predict.brokenstick.export <- function(object, y, x,
     return(switch(output,
                   vector = bs.z,
                   long = data.frame(id = NA, x = knots, y = NA, yhat = bs.z,
-                                    knot = TRUE)))
+                                    knot = TRUE,
+                                    row.names = as.character(1:length(knots)))))
   
   # individual (response) prediction at x
   if (object$degree > 1) stop("Cannot predict for degree > 1")
   yhat <- approx(x = knots, y = bs.z, xout = x)$y
   
   data <- data.frame(id = NA, x = x, y = y, yhat = yhat,
-                     knot = implicit.knots)
+                     knot = implicit.knots,
+                     row.names = as.character(1:length(x)))
   if (filter_na) data <- data[is.na(y), ]
   
   # convert to proper output format
@@ -267,7 +269,8 @@ yhat2long <- function(object, yhat, type = "atx",
                          x = model.matrix(object) %*% brk,
                          y = y,
                          yhat = as.vector(yhat),
-                         knot = FALSE)
+                         knot = FALSE,
+                         row.names = as.character(1:length(y)))
     return(result)
   }
   
@@ -279,7 +282,8 @@ yhat2long <- function(object, yhat, type = "atx",
                          x = grd$x,
                          y = NA,
                          yhat = as.vector(yhat),
-                         knot = TRUE)
+                         knot = TRUE,
+                         row.names = as.character(1:length(grd$x)))
     return(result)
   }
 }
@@ -302,7 +306,8 @@ predict.atx <- function(object, x,
   data1 <- data.frame(id = model.frame(object)$subject,
                       x = model.matrix(object) %*% brk,
                       y = model.frame(object)$y,
-                      knot = FALSE)
+                      knot = FALSE,
+                      row.names = as.character(1:nrow(model.matrix(object))))
   
   # construct supplemental data
   grd <- expand.grid(x = x, # x: new break ages
@@ -310,7 +315,8 @@ predict.atx <- function(object, x,
   data2 <- data.frame(id = grd$id,
                       x = grd$x,
                       y = NA,
-                      knot = TRUE)
+                      knot = TRUE,
+                      row.names = as.character(1:length(grd$x)))
   
   # concatenate, sort and split over ID
   data <- rbind(data1, data2)
