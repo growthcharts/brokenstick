@@ -41,7 +41,7 @@ names(fit.exp)
 UID <- unique(data$id)
 cid <- UID[1]
 d <- data[data$id == cid, ]
-p <- predict(fit.exp, y = d$HAZ, x = d$age, type = "atknots")
+p <- predict(fit.exp, y = d$HAZ, x = d$age, at = "knots")
 
 plot(x = d$age, y = d$HAZ, type = "b", col = "blue", 
      xlab = "Age (yrs)", ylab = "HAZ", main = paste("Break ages, child", cid))
@@ -71,7 +71,7 @@ abline(v = p$x[p$new], lty = 5, col = "grey80")
 ## ------------------------------------------------------------------------
 age <- d$age[1:5]
 y <- d$HAZ[1:5]
-p <- predict(fit.exp, y = y, x = age, type = "atknots")
+p <- predict(fit.exp, y = y, x = age, at = "knots")
 
 ## ----echo = FALSE--------------------------------------------------------
 plot(age, y, type = "b", col = "blue", 

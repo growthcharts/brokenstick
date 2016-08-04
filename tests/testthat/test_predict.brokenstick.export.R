@@ -7,13 +7,13 @@ test_that("returns proper number of rows", {
   expect_equal(nrow(predict(exp, x = NA)), 1)
   expect_equal(nrow(predict(exp, x = NA, y = 10)), 1)
   expect_equal(nrow(predict(exp, x = c(NA, NA), y = c(-1, 10))), 2)
-  expect_equal(nrow(predict(exp, x = NA, type = "atknots")) , 11)
+  expect_equal(nrow(predict(exp, x = NA, at = "knots")) , 11)
 })
 
 meanmodel <- predict(exp)
 test_that("returns mean model", {
-  expect_equal(predict(exp, x = NA, type = "atknots"), meanmodel)
-  expect_equal(predict(exp, x = c(NA, NA), type = "atknots"), meanmodel)
+  expect_equal(predict(exp, x = NA, at = "knots"), meanmodel)
+  expect_equal(predict(exp, x = c(NA, NA), at = "knots"), meanmodel)
 })
 
  test_that("accepts intermediate NA in x", {

@@ -41,7 +41,7 @@ dim(p1)
 head(p1, 4)
 
 ## ------------------------------------------------------------------------
-p2 <- predict(fit1, type = "atknots")
+p2 <- predict(fit1, at = "knots")
 head(p2, 4)
 
 ## ------------------------------------------------------------------------
@@ -110,7 +110,7 @@ y <- c(-1.2, -1.7, -1.9, -2.1)
 atx <- predict(export.hgt, y = y, x = x)
 atx
 # prediction at the knots
-atknots <- predict(export.hgt, y = y, x = x, type = "atknots")
+atknots <- predict(export.hgt, y = y, x = x, at = "knots")
 head(atknots)
 
 ## ----fig.width = 3, fig.align = "center", echo = FALSE-------------------
