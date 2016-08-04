@@ -41,9 +41,9 @@ EB <- function (model, y, X, Z = X, BS = TRUE) {
   export <- export.brokenstick(model)
 
   # eliminate missing outcomes
-  select <- !is.na(y)
+  select <- !(is.na(y) | is.na(X[, 1]))
 
-  # if there are no valid values left, return the fixed effect
+    # if there are no valid values left, return the fixed effect
   # as broken stick estimates
   if (!any(select)) return(export$beta)
 
