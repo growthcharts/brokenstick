@@ -55,4 +55,4 @@ The main functions in the `brokenstick` package are:
 |------------------------|---------------------------------------------------|
 | `brokenstick()`        | Fit a broken stick model to irregular data        |
 | `predict()`            | Predict broken stick estimates                    |
-| `export.brokenstick()` | Export minimal broken stick model for publication |
+| `export_brokenstick()` | Export minimal broken stick model for publication |

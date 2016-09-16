@@ -22,26 +22,26 @@ plot(x = data$age, y = data$HAZ, xlab = "Age (in years)", ylab = "Height SDS", m
 
 ## ------------------------------------------------------------------------
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-Boundary.knots <- c(0, 3)
+Boundary_knots <- c(0, 3)
 
 ## ------------------------------------------------------------------------
 fit <- brokenstick(y = data$HAZ,
                    x = data$age,
                    subject = data$id,
                    knots = knots,
-                   Boundary.knots = Boundary.knots)
+                   Boundary.knots = Boundary_knots)
 
 ## ------------------------------------------------------------------------
 class(fit)
 slotNames(fit)
-fit.exp <- export.brokenstick(fit)
-names(fit.exp)
+fit_exp <- export_brokenstick(fit)
+names(fit_exp)
 
 ## ------------------------------------------------------------------------
 UID <- unique(data$id)
 cid <- UID[1]
 d <- data[data$id == cid, ]
-p <- predict(fit.exp, y = d$HAZ, x = d$age, at = "knots")
+p <- predict(fit_exp, y = d$HAZ, x = d$age, at = "knots")
 
 plot(x = d$age, y = d$HAZ, type = "b", col = "blue", 
      xlab = "Age (yrs)", ylab = "HAZ", main = paste("Break ages, child", cid))
@@ -49,7 +49,7 @@ lines(x = p$x, y = p$yhat, col = "red", lwd = 1.5, lty = 2, type = "b")
 abline(v = p$x, lty = 5, col = "grey80")
 
 ## ------------------------------------------------------------------------
-p <- predict(fit.exp, y = d$HAZ, x = d$age)
+p <- predict(fit_exp, y = d$HAZ, x = d$age)
 
 ## ----echo = FALSE--------------------------------------------------------
 plot(x = d$age, y = d$HAZ, type = "b", col = "blue", 
@@ -60,7 +60,7 @@ abline(v = d$age, lty = 5, col = "grey80")
 ## ------------------------------------------------------------------------
 age <- c(d$age, c(0.5, 14, 17)/12)
 y <- c(d$HAZ, c(NA, NA, NA))
-p <- predict(fit.exp, y = y, x = age)
+p <- predict(fit_exp, y = y, x = age)
 
 ## ----echo = FALSE--------------------------------------------------------
 plot(x = d$age, y = d$HAZ, type = "b", col = "blue", 
@@ -71,7 +71,7 @@ abline(v = p$x[p$new], lty = 5, col = "grey80")
 ## ------------------------------------------------------------------------
 age <- d$age[1:5]
 y <- d$HAZ[1:5]
-p <- predict(fit.exp, y = y, x = age, at = "knots")
+p <- predict(fit_exp, y = y, x = age, at = "knots")
 
 ## ----echo = FALSE--------------------------------------------------------
 plot(age, y, type = "b", col = "blue", 
@@ -91,9 +91,9 @@ result <- vector("list", length(ds))
 
 for (i in seq_along(ds)) {
   d <- ds[[i]]
-  if (nrow(d) > 0) result[[i]] <- predict(fit.exp, y = d$HAZ, x = d$age, 
+  if (nrow(d) > 0) result[[i]] <- predict(fit_exp, y = d$HAZ, x = d$age, 
                                           output = "vector", 
-                                          include.boundaries = TRUE)
+                                          include_boundaries = TRUE)
 }
 data$yhat <- unlist(result)
 head(data)
@@ -130,9 +130,9 @@ result <- vector("list", length(ds))
 
 for (i in seq_along(ds)) {
   d <- ds[[i]]
-  if (nrow(d) > 0) result[[i]] <- predict(fit.exp, y = d$HAZ, x = d$age, 
+  if (nrow(d) > 0) result[[i]] <- predict(fit_exp, y = d$HAZ, x = d$age, 
                                           output = "vector", 
-                                          include.boundaries = TRUE)
+                                          include_boundaries = TRUE)
 }
 data$yhat <- unlist(result)
 

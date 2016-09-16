@@ -4,15 +4,15 @@
 #' stored estimates can be used by the EB() function 
 #' to calculate random effect estimates for new data.
 #' 
-#' @aliases export.brokenstick
+#' @aliases export_brokenstick
 #' @param model An object of class \code{brokenstick} or class 
-#' \code{brokenstick.export}
-#' @return A \code{list} of class \code{brokenstick.export}, with elements corresponding to the estimates parameters of the fitted model.
+#' \code{brokenstick_export}
+#' @return A \code{list} of class \code{brokenstick_export}, with elements corresponding to the estimates parameters of the fitted model.
 #' @export
-export.brokenstick <- function(model) {
+export_brokenstick <- function(model) {
 
   # if already a broken.stick.export object, do nothing
-  if (inherits(model, "brokenstick.export")) return(model)
+  if (inherits(model, "brokenstick_export")) return(model)
 
   if (!inherits(model, "brokenstick"))
     stop("Argument 'model' expected as class 'brokenstick'")
@@ -26,9 +26,9 @@ export.brokenstick <- function(model) {
 
   z <- list(beta = beta, omega = omega, sigma2 = sigma2,
             knots = attr(model, "knots"),
-            Boundary.knots = attr(model, "Boundary.knots"),
+            boundary = attr(model, "boundary"),
             degree = attr(model, "degree"))
 
-  class(z) <- "brokenstick.export"
+  class(z) <- "brokenstick_export"
   return(z)
 }

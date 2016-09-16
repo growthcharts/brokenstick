@@ -5,11 +5,11 @@
 \title{Predict growth curve according to the broken stick model}
 \usage{
 \method{predict}{brokenstick}(object, y, x, at = "x", output = "long",
-  include.boundaries = TRUE, filter_na = FALSE, ...)
+  include_boundaries = TRUE, filter_na = FALSE, ...)
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick} or of class
-\code{brokenstick.export}.}
+\code{brokenstick_export}.}
 
 \item{y}{A vector with measurements using the same response scale as the
 fitted model.}
@@ -37,7 +37,7 @@ otherwise. If \code{output = "vector"}, the result is returned as a vector.
 This is the fastest method, and should be used in programming
 and simulation.}
 
-\item{include.boundaries}{Logical indicating whether the broken stick
+\item{include_boundaries}{Logical indicating whether the broken stick
 estimates on the right-hand side boundary should be included. The default
 is \code{TRUE}.}
 
@@ -49,13 +49,13 @@ knots is also considered new, even if there are observed values at \code{x}
 and \code{y}.}
 
 \item{\dots}{Additional arguments passed down to \code{predict.merMod()},
-\code{predict.brokenstick.export()} and \code{predict.atx()}. Set the flag
+\code{predict.brokenstick_export()} and \code{predict.atx()}. Set the flag
 \code{filter_na = FALSE} to obtain predictions for both old and new \code{x}.}
 }
 \value{
 If \code{output == "long"}, a data frame with five columns named:
   \describe{
-  \item{\code{id}}{Person identification}
+  \item{\code{subjid}}{Person identification}
   \item{\code{x}}{The \code{x} values of the model, usually age}
   \item{\code{y}}{Response values (in scale defined by the model)}
   \item{\code{yhat}}{Predicted values}
@@ -80,32 +80,32 @@ The original data are only present in the \code{object} of class
   \code{brokenstick}. Hence, any calculations involving observations of the
   fitted model require an object of class \code{brokenstick}. Predictions for
   new units can be done both with class \code{brokenstick} and
-  \code{brokenstick.export}.
+  \code{brokenstick_export}.
 }
 \examples{
 # Estimates at each measured age for all persons in fitted model
-class(fit.hgt)
-p <- predict(fit.hgt)
+class(fit_hgt)
+p <- predict(fit_hgt)
 head(p)
 
 # Estimates at knots, stored into the broad matrix
-p <- predict(fit.hgt, output = "broad", at = "knots")
+p <- predict(fit_hgt, output = "broad", at = "knots")
 round(head(p), 2)
 
 # Get these estimates as a vector, useful for programming
-p <- predict(fit.hgt, output = "vector", at = "knots")
+p <- predict(fit_hgt, output = "vector", at = "knots")
 round(head(p), 2)
 
 # Obtain broken stick estimates at the measured ages
-p <- predict(fit.hgt)
+p <- predict(fit_hgt)
 head(p)
 
 # Obtain estimates at weeks 1-4 for all children, include old points
-p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4))
+p <- predict(fit_hgt, x = round((1:4)*7/365.25, 4))
 head(p)
 
 # Same, but now organised as broad matrix of new points only
-p <- predict(fit.hgt, x = round((1:4)*7/365.25, 4), output = "broad",
+p <- predict(fit_hgt, x = round((1:4)*7/365.25, 4), output = "broad",
 filter_na = TRUE)
 head(p)
 
@@ -114,6 +114,6 @@ head(p)
 Stef van Buuren 2016
 }
 \seealso{
-Other brokenstick: \code{\link{predict.brokenstick.export}}
+Other brokenstick: \code{\link{predict.brokenstick_export}}
 }
 

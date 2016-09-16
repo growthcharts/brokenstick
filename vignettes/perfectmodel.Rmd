@@ -20,26 +20,26 @@ We adapt code from http://www.davekleinschmidt.com/sst-mixed-effects-simulation/
 ```{r}
 library("plyr")
 library("mvtnorm")
-make.data.generator <- function(resid.var = 1,
-                                ranef.covar = diag(c(1, 1)), n = 100
+make_data_generator <- function(resid_var = 1,
+                                ranef_covar = diag(c(1, 1)), n = 100
                                 ) {
-  ni <- nrow(ranef.covar)
-  generate.data <- function() {
+  ni <- nrow(ranef_covar)
+  generate_data <- function() {
     # sample data set under mixed effects model with random slope/intercepts 
-    simulated.data <- rdply(n, {
-      b <- t(rmvnorm(n = 1, sigma = ranef.covar))
-      epsilon <- rnorm(n = length(b), mean = 0, sd = sqrt(resid.var))
+    simulated_data <- rdply(n, {
+      b <- t(rmvnorm(n = 1, sigma = ranef_covar))
+      epsilon <- rnorm(n = length(b), mean = 0, sd = sqrt(resid_var))
       b + epsilon
     })
   data.frame(
     subject = rep(1:n, each = ni),
     age = rep(1:ni, n),
-    simulated.data)
+    simulated_data)
   }
 }
 ```
 
-Let us first model the perfect situation where $\sigma^2 = 0$ (so we set `resid.var` to zero) and where the ages align perfectly.
+Let us first model the perfect situation where $\sigma^2 = 0$ (so we set `resid_var` to zero) and where the ages align perfectly.
 
 ```{r}
 set.seed(77711)
@@ -47,10 +47,10 @@ covar <- matrix(c(1, 0.7, 0.5, 0.3,
                   0.7, 1, 0.8, 0.5,
                   0.5, 0.8, 1, 0.6,
                   0.3, 0.5, 0.6, 1), nrow = 4)
-gen.dat <- make.data.generator(n = 10000, 
-                               ranef.covar = covar,
-                               resid.var = 1)
-data <- gen.dat()
+gen_dat <- make_data_generator(n = 10000, 
+                               ranef_covar = covar,
+                               resid_var = 1)
+data <- gen_dat()
 head(data)
 ```
 
@@ -71,14 +71,14 @@ Fit broken stick model, with knots specified at ages `1:4`.
 ```{r}
 library("brokenstick")
 knots <- 1:3
-Boundary.knots <- c(1, 4)
+boundary <- c(1, 4)
 fit <- with(data, 
             brokenstick(y = X1, x = age, subject = subject, 
-                        knots = knots, Boundary.knots = Boundary.knots,
+                        knots = knots, boundary = boundary,
                         storeX = TRUE))
-omega <- export.brokenstick(fit)$omega
-beta <- export.brokenstick(fit)$beta
-sigma2 <- export.brokenstick(fit)$sigma2
+omega <- export_brokenstick(fit)$omega
+beta <- export_brokenstick(fit)$beta
+sigma2 <- export_brokenstick(fit)$sigma2
 round(beta, 2)
 round(sigma2, 4)
 

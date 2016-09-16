@@ -26,8 +26,8 @@
 #' @examples
 #' #
 #' # EB estimate random effect for child id 8
-#' model <- export.brokenstick(fit.hgt)
-#' data <- slot(fit.hgt, "frame")
+#' model <- export_brokenstick(fit_hgt)
+#' data <- slot(fit_hgt, "frame")
 #' y <- data[data$subject == 10001, "y"]
 #' X <- as.matrix(data[data$subject == 10001, paste0("x", 1:11)])
 #' EB(model, y, X)
@@ -38,7 +38,7 @@ EB <- function (model, y, X, Z = X, BS = TRUE) {
   if (!is.matrix(X)) stop("Argument 'X' is not a matrix.")
 
   # make sure we get the exported model
-  export <- export.brokenstick(model)
+  export <- export_brokenstick(model)
 
   # eliminate missing outcomes
   select <- !(is.na(y) | is.na(X[, 1]))

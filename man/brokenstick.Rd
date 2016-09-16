@@ -4,7 +4,7 @@
 \alias{brokenstick}
 \title{Fit a broken stick model to irregular data}
 \usage{
-brokenstick(y, x, subject, knots = pretty(x), Boundary.knots = c(min(knots),
+brokenstick(y, x, subject, knots = pretty(x), boundary = c(min(knots),
   max(max(x, na.rm = TRUE, max(knots)))), degree = 1,
   control = lmerControl(check.nobs.vs.nRE = "warning"),
   na.action = na.exclude, store_x = FALSE, ...)
@@ -21,8 +21,8 @@ the break points should be defined. In longitudinal data, this is usually decima
 placed on the values of \code{x}. This setting is passed to \code{bs()}. Specify \code{knots} to include the range of \code{x}. This will evade the warning 
 \code{some 'x' values beyond boundary knots may cause ill-conditioned bases}, a situation that may lead to nonsensical results. If in doubt, set argument \code{storeX = TRUE} and inspect the \code{X} slot of the result. The \code{X} matrix should have values between 0 and 1, and each row should add up to 1.}
 
-\item{Boundary.knots}{a numerical vector with the locations of the 
-outer break point for \code{x}. This setting is passed to \code{bs()}. The default is to set the left boundary knot equal to the \code{min(knots)}. The right boundary knots is taken as the larger of \code{max(knots)} and the maximum of \code{x}.}
+\item{boundary}{a numerical vector of length 2 with the minimum and maximum 
+break point for \code{x}. This setting is passed to \code{bs()}. The default is to set the left boundary knot equal to the \code{min(knots)}. The right boundary knots is taken as the larger of \code{max(knots)} and the maximum of \code{x}.}
 
 \item{degree}{the degree of the B-spline. For the broken stick model this 
 should be to 1 (the default), which specifies that values between the break

@@ -1,8 +1,8 @@
 Package: brokenstick
 Type: Package
 Title: Broken Stick Model for Irregular Longitudinal Data
-Version: 0.33
-Date: 2016-08-04
+Version: 0.34
+Date: 2016-09-16
 Authors@R: person("Stef", "van Buuren", email = "stef.vanbuuren@tno.nl", role = c("aut","cre"))
 Description: The broken stick model describes a set of individual curves by a linear mixed model using first order linear B-splines. The main use of the model is to align irregularly observed data to a user-specified grid of break ages. All fitting can done in the Z-score scale, so nonlinearities and irregular data can be treated as separate problems. This package contains functions for fitting a broken stick model to data, for exporting the parameters of the model for independent use outside this package, and for predicting broken stick curves for new data.
 Depends:
@@ -22,6 +22,6 @@ Suggests:
 License: file LICENSE
 LazyData: TRUE
 VignetteBuilder: knitr
-Acknowledgement: Development of this package was kindly suported by the HBGDki
+Acknowledgement: Development of this package was kindly supported by the HBGDki
     program of the Bill & Melinda Gates Foundation
 RoxygenNote: 5.0.1

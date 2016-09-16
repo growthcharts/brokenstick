@@ -283,7 +283,7 @@ export.hgt
 
 # Prediction
 
-Prediction on new data can be obtained by the `predict()` function. There are two types of prediction, which is controlled by the `type` argument. Calling `brokenstick(..., type = "curve", ...)` (the default) yields a prediction at every break age, including those in the future. Calling `brokenstick(..., age, type = "response", ...)` is more flexible, and yields a prediction at each age specified by `age`. 
+Prediction on new data can be obtained by the `predict()` function. There are two types of prediction, which is controlled by the `at` argument. Calling `brokenstick(..., at = "knots", ...)` yields a prediction at every break age, including those in the future. Calling `brokenstick(..., age, at = "x", ...)` is more flexible, and yields a prediction at each age specified by `x`. 
 
 ## Prediction at break ages, single child
 
@@ -291,7 +291,7 @@ Let us take the first child in the data. Predicting the broken stick values at t
 
 ```{r firstsix}
 # export built-in length model
-fit.exp <- export.brokenstick(fit.hgt)
+fit_exp <- export_brokenstick(fit_hgt)
 
 # child 10001, first six measures only
 UID <- unique(data$id)
@@ -302,7 +302,7 @@ b <- predict(fit.exp, d$hgt.z, d$age)
 plot(x = d$age, y = d$hgt.z, type = "b", col = "blue", 
      xlab = "Age (yrs)", ylab = "hgt.z", main = paste("Break ages, child", cid),
      xlim = c(0, 2))
-brk <- c(fit.exp$knots, fit.exp$Boundary.knots[2])
+brk <- c(fit_exp$knots, fit.exp$Boundary.knots[2])
 lines(x = brk, y = b, col = "red", lwd = 1.5, lty = 2, type = "b")
 abline(v = brk, lty = 5, col = "grey80")
 ```
@@ -313,7 +313,7 @@ abline(v = brk, lty = 5, col = "grey80")
 Suppose we want a predicted value at each age at which the child was measured. We need to include the `type = "response"` argument.
 
 ```{r}
-b <- predict(fit.exp, d$hgt.z, d$age, type = "response")
+b <- predict(fit.exp, d$hgt.z, d$age, at = "x")
 
 plot(x = d$age, y = d$hgt.z, type = "b", col = "blue", 
      xlab = "Age (yrs)", ylab = "hgt.z", 

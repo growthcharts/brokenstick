@@ -3,7 +3,7 @@
 
 setClass("brokenstick",
          representation(knots = "numeric",
-                        Boundary.knots = "numeric",
+                        boundary = "numeric",
                         degree = "numeric",
                         X = "ANY"),
          contains = "lmerMod")
@@ -20,7 +20,7 @@ setMethod("print", signature( x = "brokenstick" ),
 
 print.brokenstick <- function ( x, ... ) {
   cat ("knots: ", x@knots, "\n")
-  cat ("Boundary.knots: ", x@Boundary.knots, "\n")
+  cat ("boundary: ", x@boundary, "\n")
   cat ("degree: ", x@degree, "\n")
   print(summary(x))
   invisible(x)
@@ -57,8 +57,8 @@ print.brokenstick <- function ( x, ... ) {
 #' @param knots a numerical vector with the locations of the breaks to be 
 #' placed on the values of \code{x}. This setting is passed to \code{bs()}. Specify \code{knots} to include the range of \code{x}. This will evade the warning 
 #' \code{some 'x' values beyond boundary knots may cause ill-conditioned bases}, a situation that may lead to nonsensical results. If in doubt, set argument \code{storeX = TRUE} and inspect the \code{X} slot of the result. The \code{X} matrix should have values between 0 and 1, and each row should add up to 1.
-#' @param Boundary.knots a numerical vector with the locations of the 
-#' outer break point for \code{x}. This setting is passed to \code{bs()}. The default is to set the left boundary knot equal to the \code{min(knots)}. The right boundary knots is taken as the larger of \code{max(knots)} and the maximum of \code{x}.
+#' @param boundary a numerical vector of length 2 with the minimum and maximum 
+#' break point for \code{x}. This setting is passed to \code{bs()}. The default is to set the left boundary knot equal to the \code{min(knots)}. The right boundary knots is taken as the larger of \code{max(knots)} and the maximum of \code{x}.
 #' @param degree the degree of the B-spline. For the broken stick model this 
 #' should be to 1 (the default), which specifies that values between the break
 #' points are located on a straight line.
@@ -80,7 +80,7 @@ print.brokenstick <- function ( x, ... ) {
 #' @export
 brokenstick <- function(y, x, subject,
                         knots = pretty(x),
-                        Boundary.knots =
+                        boundary =
                           c(min(knots),
                             max(max(x, na.rm = TRUE, max(knots)))),
                         degree = 1,
@@ -88,7 +88,7 @@ brokenstick <- function(y, x, subject,
                         na.action = na.exclude,
                         store_x = FALSE,
                         ...) {
-  X <- bs(x = x, knots = knots, Boundary.knots = Boundary.knots,
+  X <- bs(x = x, knots = knots, Boundary.knots = boundary,
           degree = degree)
   colnames(X) <- paste("x", 1:ncol(X), sep = "")
   pred <- paste("0 +", paste(colnames(X), collapse = " + "))
@@ -102,7 +102,7 @@ brokenstick <- function(y, x, subject,
 
   class(fit) <- "brokenstick"
   fit@knots <- knots
-  fit@Boundary.knots <- Boundary.knots
+  fit@boundary <- boundary
   fit@degree <- degree
   if (store_x) fit@x <- X
   return(fit)

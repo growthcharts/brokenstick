@@ -84,26 +84,26 @@ The fitted object `fit` is of S4 class `brokenstick`, and extends class `lmerMod
 
 ### Export estimates
 
-For easy handling and storage accross sessions, the `export.brokenstick()` function selects from `fit` the minimal set of estimates  needed to make predictions, and stores the results in an S3 class `brokenstick.export`. 
+For easy handling and storage accross sessions, the `export_brokenstick()` function selects from `fit` the minimal set of estimates  needed to make predictions, and stores the results in an S3 class `brokenstick.export`. 
 
 ```{r}
 class(fit)
 slotNames(fit)
-fit.exp <- export.brokenstick(fit)
-names(fit.exp)
+exp <- export_brokenstick(fit)
+names(exp)
 ```
 
 ## Predict values, single child
 
 ### Prediction at break ages, single child
 
-Let's take the first child in the data. Predicting the broken stick values at the break ages for this child can be done from the `fit` or `fit.exp` object. Here we use `fit.exp`:
+Let's take the first child in the data. Predicting the broken stick values at the break ages for this child can be done from the `fit` or `exp` object. Here we use `exp`:
 
 ```{r}
 UID <- unique(data$id)
 cid <- UID[1]
 d <- data[data$id == cid, ]
-p <- predict(fit.exp, y = d$HAZ, x = d$age, type = "atknots")
+p <- predict(exp, y = d$HAZ, x = d$age, type = "atknots")
 
 plot(x = d$age, y = d$HAZ, type = "b", col = "blue", 
      xlab = "Age (yrs)", ylab = "HAZ", main = paste("Break ages, child", cid))
@@ -116,7 +116,7 @@ abline(v = p$x, lty = 5, col = "grey80")
 Suppose we want a predicted value at each age at which the child was measured. 
 
 ```{r}
-p <- predict(fit.exp, y = d$HAZ, x = d$age)
+p <- predict(exp, y = d$HAZ, x = d$age)
 ```
 
 ```{r echo = FALSE}
@@ -134,7 +134,7 @@ Suppose we want the predicted value at the ages of 0.5, 14 and 17 months exactly
 ```{r}
 age <- c(d$age, c(0.5, 14, 17)/12)
 y <- c(d$HAZ, c(NA, NA, NA))
-p <- predict(fit.exp, y = y, x = age)
+p <- predict(exp, y = y, x = age)
 ```
 
 ```{r echo = FALSE}
@@ -152,7 +152,7 @@ Suppose that the child is six month old, and that we want to predict its future 
 ```{r}
 age <- d$age[1:5]
 y <- d$HAZ[1:5]
-p <- predict(fit.exp, y = y, x = age, type = "atknots")
+p <- predict(exp, y = y, x = age, type = "atknots")
 ```
 
 ```{r echo = FALSE}
@@ -178,7 +178,7 @@ result <- vector("list", length(ds))
 
 for (i in seq_along(ds)) {
   d <- ds[[i]]
-  if (nrow(d) > 0) result[[i]] <- predict(fit.exp, y = d$HAZ, x = d$age, 
+  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$HAZ, x = d$age, 
                                           output = "vector", 
                                           include.boundaries = TRUE)
 }
@@ -220,7 +220,7 @@ abline(0, 1, col = "grey")
 
 ## Application to holdout sample
 
-The `smocc.hgtwgt` data has `r nrow(smocc.hgtwgt)` rows, but until now we've used only the first 2000 rows. Is prediction equally good if we apply our fitted model and exported model in `fit.exp` to the remaining rows, that is, to observations that were not part of the model fitting?
+The `smocc.hgtwgt` data has `r nrow(smocc.hgtwgt)` rows, but until now we've used only the first 2000 rows. Is prediction equally good if we apply our fitted model and exported model in `exp` to the remaining rows, that is, to observations that were not part of the model fitting?
 
 ```{r echo = FALSE}
 data <- smocc.hgtwgt[-(1:2000), ]
@@ -234,7 +234,7 @@ result <- vector("list", length(ds))
 
 for (i in seq_along(ds)) {
   d <- ds[[i]]
-  if (nrow(d) > 0) result[[i]] <- predict(fit.exp, y = d$HAZ, x = d$age, 
+  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$HAZ, x = d$age, 
                                           output = "vector", 
                                           include.boundaries = TRUE)
 }
