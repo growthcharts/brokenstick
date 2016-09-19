@@ -32,6 +32,9 @@ fit1 <- brokenstick(y = data$haz,
 					knots = knots)
 
 ## ------------------------------------------------------------------------
+get_knots(fit1)
+
+## ------------------------------------------------------------------------
 class(fit1)
 fit1
 
@@ -90,11 +93,12 @@ var(fitted(fit2), na.rm = TRUE) / var(data$haz, na.rm = TRUE)
 # export the broken stick models
 export_hgt <- export(fit2)
 attributes(export_hgt)
+lapply(export_hgt, round, 2)
 
 ## ------------------------------------------------------------------------
 # four height measurement on new child
-x <- c(0, 0.32, 0.62, 1.1)
-y <- c(-1.2, -1.7, -1.9, -2.1)
+x <- c(0, 0.12, 0.32, 0.62, 1.1)
+y <- c(-1.2, -1.8, -1.7, -1.9, -2.1)
 
 # prediction at ages x
 atx <- predict(export_hgt, y = y, x = x)
@@ -106,7 +110,7 @@ head(atknots)
 ## ----fig.width = 3, fig.align = "center", echo = FALSE-------------------
 p <- rbind(atx, atknots)
 p$yhat[!p$knot] <- NA
-xyplot(y + yhat ~ x, data = p, ylim = c(-3, 1),
+xyplot(y + yhat ~ x, data = p, ylim = c(-3, 1), xlim = c(-0.1, 2.1),
        as.table = TRUE,
        panel = function(...) {
          panel.refline(h = c(-2, 0, 2))
