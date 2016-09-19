@@ -144,8 +144,8 @@ predict.brokenstick <- function(object, y, x, at = "x",
   if (length(y) == 0) return(numeric(0))
   if (length(y) != length(x)) stop("Incompatible length of `y` and `x`.")
   
-  export <- export_brokenstick(object)
-  predict(export, y, x, at = at,
+  exp <- export(object)
+  predict(exp, y, x, at = at,
           output = output,
           include_boundaries = include_boundaries,
           filter_na = filter_na, ...)
@@ -158,7 +158,7 @@ predict.brokenstick <- function(object, y, x, at = "x",
 #' @aliases predict.brokenstick_export
 #' @family brokenstick
 #' @examples
-#' exp <- export_brokenstick(fit_hgt)
+#' exp <- export(fit_hgt)
 #'
 #' # no data predicts mean trajectory
 #' p <- predict(exp)
@@ -298,7 +298,7 @@ predict.atx <- function(object, x,
   # called by predict.brokenstick()
   if (length(x) == 0) return(numeric(0))
   
-  export <- export_brokenstick(object)
+  export <- export(object)
   
   # recreate the original data
   brk <- get_knots(object)

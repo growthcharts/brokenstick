@@ -2,7 +2,7 @@
 library(brokenstick)
 context("predict()")
 
-exp <- export_brokenstick(fit_hgt)
+exp <- export(fit_hgt)
 test_that("returns proper number of rows", {
   expect_equal(nrow(predict(exp, x = NA)), 1)
   expect_equal(nrow(predict(exp, x = NA, y = 10)), 1)

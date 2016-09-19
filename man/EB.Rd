@@ -35,7 +35,7 @@ The current implementation does not provide prediction errors.
 \examples{
 #
 # EB estimate random effect for child id 8
-model <- export_brokenstick(fit_hgt)
+model <- export(fit_hgt)
 data <- slot(fit_hgt, "frame")
 y <- data[data$subject == 10001, "y"]
 X <- as.matrix(data[data$subject == 10001, paste0("x", 1:11)])

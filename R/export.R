@@ -4,12 +4,11 @@
 #' stored estimates can be used by the EB() function 
 #' to calculate random effect estimates for new data.
 #' 
-#' @aliases export_brokenstick
 #' @param model An object of class \code{brokenstick} or class 
 #' \code{brokenstick_export}
 #' @return A \code{list} of class \code{brokenstick_export}, with elements corresponding to the estimates parameters of the fitted model.
 #' @export
-export_brokenstick <- function(model) {
+export <- function(model) {
 
   # if already a broken.stick.export object, do nothing
   if (inherits(model, "brokenstick_export")) return(model)

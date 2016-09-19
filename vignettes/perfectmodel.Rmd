@@ -76,9 +76,9 @@ fit <- with(data,
             brokenstick(y = X1, x = age, subject = subject, 
                         knots = knots, boundary = boundary,
                         storeX = TRUE))
-omega <- export_brokenstick(fit)$omega
-beta <- export_brokenstick(fit)$beta
-sigma2 <- export_brokenstick(fit)$sigma2
+omega <- export(fit)$omega
+beta <- export(fit)$beta
+sigma2 <- export(fit)$sigma2
 round(beta, 2)
 round(sigma2, 4)
 

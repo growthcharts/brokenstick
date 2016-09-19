@@ -51,8 +51,8 @@ Main functions
 
 The main functions in the `brokenstick` package are:
 
-| Function name          | Description                                       |
-|------------------------|---------------------------------------------------|
-| `brokenstick()`        | Fit a broken stick model to irregular data        |
-| `predict()`            | Predict broken stick estimates                    |
-| `export_brokenstick()` | Export minimal broken stick model for publication |
+| Function name   | Description                                       |
+|-----------------|---------------------------------------------------|
+| `brokenstick()` | Fit a broken stick model to irregular data        |
+| `predict()`     | Predict broken stick estimates                    |
+| `export()`      | Export minimal broken stick model for publication |

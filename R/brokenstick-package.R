@@ -22,12 +22,12 @@ NULL
 #' \tabular{ll}{
 #'   \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
 #'   \code{predict()} \tab Obtain predictions from fitted model\cr
-#'   \code{export_brokenstick()} \tab Export estimates of the model}
+#'   \code{export()} \tab Export estimates of the model}
 #' @docType package
 #' @name brokenstick-pkg
 #' @seealso \code{\link{brokenstick}}, 
 #' \code{\link{EB}}, 
-#' \code{\link{export_brokenstick}}, \code{\link{predict.brokenstick}}
+#' \code{\link{export}}, \code{\link{predict.brokenstick}}
 #' @note 
 #' Development of this package was kindly supported under the Healthy
 #' Birth, Growth and Development knowledge integration (HBGDki)

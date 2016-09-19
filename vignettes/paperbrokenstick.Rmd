@@ -291,7 +291,7 @@ Let us take the first child in the data. Predicting the broken stick values at t
 
 ```{r firstsix}
 # export built-in length model
-fit_exp <- export_brokenstick(fit_hgt)
+fit_exp <- export(fit_hgt)
 
 # child 10001, first six measures only
 UID <- unique(data$id)

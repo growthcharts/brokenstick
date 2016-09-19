@@ -56,7 +56,7 @@ and \code{y}.}
 Predict growth curve according to the broken stick model
 }
 \examples{
-exp <- export_brokenstick(fit_hgt)
+exp <- export(fit_hgt)
 
 # no data predicts mean trajectory
 p <- predict(exp)

@@ -13,7 +13,7 @@
 
 <meta name="date" content="2016-09-19" />
 
-<title>Getting started</title>
+<title>Example</title>
 
 
 
@@ -67,65 +67,14 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 
-<h1 class="title toc-ignore">Getting started</h1>
+<h1 class="title toc-ignore">Example</h1>
 <h4 class="date"><em>2016-09-19</em></h4>
 
 
 
-<div id="overview" class="section level2">
-<h2>Overview</h2>
-<p>The <em>broken stick model</em> describes a set of individual curves by a linear mixed model using first order linear B-splines. The model can be used to</p>
-<ul>
-<li>smooth growth curves by a series of connected straight lines;</li>
-<li>align irregularly observed curves to a common age grid;</li>
-<li>create synthetic curves at a user-specified set of break ages;</li>
-<li>estimate the time-to-time correlation matrix;</li>
-<li>predict future observations.</li>
-</ul>
-<p>The user specifies a set of break ages at which the straight lines connect. Each individual obtains an estimate at each break age, so the set of estimates of the individual form a smoothed version of the observed trajectory.</p>
-<p>The main assumptions of the broken stick model are:</p>
-<ul>
-<li>The development between the break ages follows a straight line;</li>
-<li>Broken stick estimates follow a common multivariate normal distribution;</li>
-</ul>
-<p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (Z) scale. Unique feature of the broken stick model are:</p>
-<ul>
-<li><em>Modular</em>: Issues related to nonlinearities of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;</li>
-<li><em>Local</em>: A given data point will contribute only to the estimates corresponding to the closest break ages;</li>
-<li><em>Exportable</em>: The broken stick model can be exported and reused for prediction for new data in alternative computing environments.</li>
-</ul>
-<p>The <code>brokenstick</code> package contains functions for</p>
-<ul>
-<li>Fitting the broken stick model to data,</li>
-<li>Predicting broken stick estimates for new data.</li>
-<li>Exporting the parameters of the model for independent use outside this package.</li>
-</ul>
-</div>
-<div id="main-functions" class="section level2">
-<h2>Main functions</h2>
-<p>The main functions in the <code>brokenstick</code> package are:</p>
-<table>
-<thead>
-<tr class="header">
-<th>Function name</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td><code>brokenstick()</code></td>
-<td>Fit a broken stick model to irregular data</td>
-</tr>
-<tr class="even">
-<td><code>predict()</code></td>
-<td>Predict broken stick estimates for new growth data</td>
-</tr>
-<tr class="odd">
-<td><code>export()</code></td>
-<td>Export broken stick model parameters</td>
-</tr>
-</tbody>
-</table>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<p>The vignette demonstrates the main functions in the <code>brokenstick</code> package: <code>brokenstick()</code>, <code>predict()</code> and <code>export</code>.</p>
 </div>
 <div id="exporatory-analysis" class="section level2">
 <h2>Exporatory analysis</h2>

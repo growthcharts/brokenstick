@@ -34,7 +34,7 @@ fit <- brokenstick(y = data$HAZ,
 ## ------------------------------------------------------------------------
 class(fit)
 slotNames(fit)
-fit_exp <- export_brokenstick(fit)
+fit_exp <- export(fit)
 names(fit_exp)
 
 ## ------------------------------------------------------------------------

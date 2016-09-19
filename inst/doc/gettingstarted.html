@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2016-09-16" />
+<meta name="date" content="2016-09-19" />
 
 <title>Getting started</title>
 
@@ -68,27 +68,27 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 
 <h1 class="title toc-ignore">Getting started</h1>
-<h4 class="date"><em>2016-09-16</em></h4>
+<h4 class="date"><em>2016-09-19</em></h4>
 
 
 
 <div id="overview" class="section level2">
 <h2>Overview</h2>
-<p>The <em>broken stick model</em> describes a set of individual curves by a linear mixed model using first order linear B-splines. The model can be used</p>
+<p>The <em>broken stick model</em> describes a set of individual curves by a linear mixed model using first order linear B-splines. The model can be used to</p>
 <ul>
-<li>to smooth growth curves by a series of connected straight lines;</li>
-<li>to align irregularly observed curves to a common age grid;</li>
-<li>to create synthetic curves at a user-specified set of break ages;</li>
-<li>to estimate the time-to-time correlation matrix;</li>
-<li>to predict future observations.</li>
+<li>smooth growth curves by a series of connected straight lines;</li>
+<li>align irregularly observed curves to a common age grid;</li>
+<li>create synthetic curves at a user-specified set of break ages;</li>
+<li>estimate the time-to-time correlation matrix;</li>
+<li>predict future observations.</li>
 </ul>
 <p>The user specifies a set of break ages at which the straight lines connect. Each individual obtains an estimate at each break age, so the set of estimates of the individual form a smoothed version of the observed trajectory.</p>
 <p>The main assumptions of the broken stick model are:</p>
 <ul>
-<li>The development between the break ages follows a straight line, and is generally not of particular interest;</li>
+<li>The development between the break ages follows a straight line;</li>
 <li>Broken stick estimates follow a common multivariate normal distribution;</li>
 </ul>
-<p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (<span class="math inline">\(Z\)</span>) scale. Unique feature of the broken stick model are:</p>
+<p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (Z) scale. Unique feature of the broken stick model are:</p>
 <ul>
 <li><em>Modular</em>: Issues related to nonlinearities of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;</li>
 <li><em>Local</em>: A given data point will contribute only to the estimates corresponding to the closest break ages;</li>
@@ -97,8 +97,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The <code>brokenstick</code> package contains functions for</p>
 <ul>
 <li>Fitting the broken stick model to data,</li>
-<li>Exporting the parameters of the model for independent use outside this package,</li>
 <li>Predicting broken stick estimates for new data.</li>
+<li>Exporting the parameters of the model for independent use outside this package.</li>
 </ul>
 </div>
 <div id="main-functions" class="section level2">
@@ -121,7 +121,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <td>Predict broken stick estimates for new growth data</td>
 </tr>
 <tr class="odd">
-<td><code>export_brokenstick()</code></td>
+<td><code>export()</code></td>
 <td>Export broken stick model parameters</td>
 </tr>
 </tbody>
@@ -305,9 +305,9 @@ fit2 &lt;-<span class="st"> </span><span class="kw">brokenstick</span>(<span cla
 <h2>Publishing your model</h2>
 <div id="export-broken-stick-model" class="section level3">
 <h3>Export broken stick model</h3>
-<p>The <code>fit2</code> object can be stored by <code>save()</code> for future use in R. However, a more parsimonious and convenient way to reuse the model is to export its parameter estimates, and store only these. As a matter of fact, prediction using the broken stick model requires only the knot locations, the fixed effect estimates, the variance/covariance matrix of the random effects, and the size of the residual variance. The <code>export_brokenstick()</code> function will collect this information from the fitted model, and store it as a list.</p>
+<p>The <code>fit2</code> object can be stored by <code>save()</code> for future use in R. However, a more parsimonious and convenient way to reuse the model is to export its parameter estimates, and store only these. As a matter of fact, prediction using the broken stick model requires only the knot locations, the fixed effect estimates, the variance/covariance matrix of the random effects, and the size of the residual variance. The <code>export()</code> function will collect this information from the fitted model, and store it as a list.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># export the broken stick models</span>
-export_hgt &lt;-<span class="st"> </span><span class="kw">export_brokenstick</span>(fit2)
+export_hgt &lt;-<span class="st"> </span><span class="kw">export</span>(fit2)
 <span class="kw">attributes</span>(export_hgt)</code></pre></div>
 <pre><code>## $names
 ## [1] &quot;beta&quot;     &quot;omega&quot;    &quot;sigma2&quot;   &quot;knots&quot;    &quot;boundary&quot; &quot;degree&quot;  

@@ -88,7 +88,7 @@ var(fitted(fit2), na.rm = TRUE) / var(data$haz, na.rm = TRUE)
 
 ## ------------------------------------------------------------------------
 # export the broken stick models
-export_hgt <- export_brokenstick(fit2)
+export_hgt <- export(fit2)
 attributes(export_hgt)
 
 ## ------------------------------------------------------------------------
