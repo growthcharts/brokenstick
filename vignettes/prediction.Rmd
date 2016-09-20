@@ -19,11 +19,11 @@ This vignette shows how to fit the broken stick model to data, predict observati
 
 ### Data source
 
-We will use the `smocc.hgtwgt` demo data that is built-in into the `brokenstick` package. For computational efficiency in this vignette, we take the first 2000 observations of the `smocc.hgtwgt` data. 
+We will use the `smocc_hgtwgt` demo data that is built-in into the `brokenstick` package. For computational efficiency in this vignette, we take the first 2000 observations of the `smocc_hgtwgt` data. 
 
 ```{r data}
 library("brokenstick")
-data <- smocc.hgtwgt[1:2000,]
+data <- smocc_hgtwgt[1:2000,]
 head(data)
 ```
 
@@ -33,16 +33,16 @@ The broken stick model can fit observations in either the raw scale (cm, kg, and
 
 ```{r zscores}
 library("AGD")
-data$HAZ <- y2z(y = data$hgt, 
+data$haz <- y2z(y = data$lencm, 
                 x = data$age, 
-                sex = ifelse(data$sex == "female", "F", "M"),
+                sex = ifelse(data$sex == "Female", "F", "M"),
                 ref = get("who.hgt", pos = "package:AGD"))
 ```
 
-The main outcome measure will be `data$HAZ`, the age and sex-adjusted Z-score relative to the WHO growth standard.
+The main outcome measure will be `data$haz`, the age and sex-adjusted Z-score relative to the WHO growth standard.
 
 ```{r echo=FALSE}
-hist(data$HAZ, main = "SMOCC data, first 2000 records", 
+hist(data$haz, main = "SMOCC data, first 2000 records", 
      xlab = "Height (Z-score)")
 ```
 
@@ -51,7 +51,7 @@ The mean Z-score is around 0.3, indicating that Dutch children are taller than t
 The age range is 0-2 years. The scatterplot of Height SDS by age clearly shows the pattern in the visits.
 
 ```{r echo = FALSE}
-plot(x = data$age, y = data$HAZ, xlab = "Age (in years)", ylab = "Height SDS", main = "SMOCC data, first 2000 records", pch = 20, cex = 0.5) 
+plot(x = data$age, y = data$haz, xlab = "Age (in years)", ylab = "Height SDS", main = "SMOCC data, first 2000 records", pch = 20, cex = 0.5) 
 ```
 
 
@@ -61,11 +61,11 @@ plot(x = data$age, y = data$HAZ, xlab = "Age (in years)", ylab = "Height SDS", m
 
 The SMOCC data has 10 scheduled visits: at birth, and at ages of 1, 2, 3, 6, 9, 12, 15, 18 and 24 months. Here, we place the knots at the scheduled ages. Depending on the scientific question at hand, we could place knots at other locations. If we want to predict at specific ages, then specify knots at those ages. For example, if we are interested in predictions at 0.5, 1.0 and 2.0 years, define knots at those ages. In general, keep the number of knots low, for speed and simplicity. 
 
-The `Boundary.knots` should be specified with some care. Specify the first break point `knot[1]` equal to `Boundary.knots[1]` and equal to the minumum age (otherwise unpredictable things occur). For technical reasons, `Boundary.knots[2]` should be equal to or larger than the maximum age in the data. The broken stick estimate at this knot has no useful interpretation.
+The `boundary` argument should be specified with some care. Specify the first break point `knot[1]` equal to `Boundary.knots[1]` and equal to the minumum age (otherwise unpredictable things occur). For technical reasons, `Boundary.knots[2]` should be equal to or larger than the maximum age in the data. The broken stick estimate at this knot has no useful interpretation.
 
 ```{r}
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-Boundary.knots <- c(0, 3)
+boundary <- c(0, 3)
 ```
 
 ## Model fitting
@@ -73,23 +73,23 @@ Boundary.knots <- c(0, 3)
 The `brokenstick` function performs the actual model fitting. The fitting algorithm may complain that the number of random effect is too high, but my experience is that this will not affect the quality of the predictions. 
 
 ```{r}
-fit <- brokenstick(y = data$HAZ,
+fit <- brokenstick(y = data$haz,
                    x = data$age,
-                   subject = data$id,
+                   subject = data$subjid,
                    knots = knots,
-                   Boundary.knots = Boundary.knots)
+                   boundary = boundary)
 ```
 
 The fitted object `fit` is of S4 class `brokenstick`, and extends class `lmerMod` with additional attributes `knots`, `Boundary.knots`, `degree` and if `storeX = TRUE`, a slot called `fit@X`. 
 
 ### Export estimates
 
-For easy handling and storage accross sessions, the `export_brokenstick()` function selects from `fit` the minimal set of estimates  needed to make predictions, and stores the results in an S3 class `brokenstick.export`. 
+For easy handling and storage accross sessions, the `export()` function selects from `fit` the minimal set of estimates  needed to make predictions, and stores the results in an S3 class `brokenstick.export`. 
 
 ```{r}
 class(fit)
 slotNames(fit)
-exp <- export_brokenstick(fit)
+exp <- export(fit)
 names(exp)
 ```
 
@@ -100,12 +100,12 @@ names(exp)
 Let's take the first child in the data. Predicting the broken stick values at the break ages for this child can be done from the `fit` or `exp` object. Here we use `exp`:
 
 ```{r}
-UID <- unique(data$id)
+UID <- unique(data$subjid)
 cid <- UID[1]
-d <- data[data$id == cid, ]
-p <- predict(exp, y = d$HAZ, x = d$age, type = "atknots")
+d <- data[data$subjid == cid, ]
+p <- predict(exp, y = d$haz, x = d$age, at = "knots")
 
-plot(x = d$age, y = d$HAZ, type = "b", col = "blue", 
+plot(x = d$age, y = d$haz, type = "b", col = "blue", 
      xlab = "Age (yrs)", ylab = "HAZ", main = paste("Break ages, child", cid))
 lines(x = p$x, y = p$yhat, col = "red", lwd = 1.5, lty = 2, type = "b")
 abline(v = p$x, lty = 5, col = "grey80")
@@ -116,11 +116,11 @@ abline(v = p$x, lty = 5, col = "grey80")
 Suppose we want a predicted value at each age at which the child was measured. 
 
 ```{r}
-p <- predict(exp, y = d$HAZ, x = d$age)
+p <- predict(exp, y = d$haz, x = d$age)
 ```
 
 ```{r echo = FALSE}
-plot(x = d$age, y = d$HAZ, type = "b", col = "blue", 
+plot(x = d$age, y = d$haz, type = "b", col = "blue", 
      xlab = "Age (yrs)", ylab = "HAZ", main = paste("Measurement ages, child", cid))
 points(x = p$x, y = p$yhat, col = "red", lwd = 1.5, lty = 2, type = "b")
 abline(v = d$age, lty = 5, col = "grey80")
@@ -133,12 +133,12 @@ Suppose we want the predicted value at the ages of 0.5, 14 and 17 months exactly
 
 ```{r}
 age <- c(d$age, c(0.5, 14, 17)/12)
-y <- c(d$HAZ, c(NA, NA, NA))
+y <- c(d$haz, c(NA, NA, NA))
 p <- predict(exp, y = y, x = age)
 ```
 
 ```{r echo = FALSE}
-plot(x = d$age, y = d$HAZ, type = "b", col = "blue", 
+plot(x = d$age, y = d$haz, type = "b", col = "blue", 
      xlab = "Age (yrs)", ylab = "HAZ", main = paste("Arbitrary ages, child", cid))
 points(x = p$x[p$new], y = p$yhat[p$new], col = "red", lwd = 1.5, lty = 2, type = "b")
 abline(v = p$x[p$new], lty = 5, col = "grey80")
@@ -151,8 +151,8 @@ Suppose that the child is six month old, and that we want to predict its future 
 
 ```{r}
 age <- d$age[1:5]
-y <- d$HAZ[1:5]
-p <- predict(exp, y = y, x = age, type = "atknots")
+y <- d$haz[1:5]
+p <- predict(exp, y = y, x = age, at = "knots")
 ```
 
 ```{r echo = FALSE}
@@ -173,12 +173,12 @@ dim(p)
 head(p)
 
 # case-by-case prediction on external data, 
-ds <- split(data, f = data$id, drop = TRUE)
+ds <- split(data, f = data$subjid, drop = TRUE)
 result <- vector("list", length(ds))
 
 for (i in seq_along(ds)) {
   d <- ds[[i]]
-  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$HAZ, x = d$age, 
+  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$haz, x = d$age, 
                                           output = "vector", 
                                           include.boundaries = TRUE)
 }
@@ -189,11 +189,11 @@ head(data)
 all.equal(data$yhat, p$yhat)
 ```
 
-The scatterplot of the observed versus predicted values indicates an extremely accurate prediction. The correlation is to `r round(cor(data$yhat, data$HAZ, use = "all.obs"), 4)`. The standard deviation of the residuals is equal to `r round(sd(data$yhat - data$HAZ, na.rm = TRUE), 3)`. 
+The scatterplot of the observed versus predicted values indicates an extremely accurate prediction. The correlation is to `r round(cor(data$yhat, data$haz, use = "complete.obs"), 4)`. The standard deviation of the residuals is equal to `r round(sd(data$yhat - data$haz, na.rm = TRUE), 3)`. 
 
 ```{r}
 library("MASS")
-eqscplot(y = data$yhat, x = data$HAZ, ylab = "Predicted Z-score", xlab = "Observed Z-score", pch = ".", main = "Children in the model")
+eqscplot(y = data$yhat, x = data$haz, ylab = "Predicted Z-score", xlab = "Observed Z-score", pch = ".", main = "Children in the model")
 abline(0, 1, col = "grey")
 ```
 
@@ -206,45 +206,45 @@ All modeling has been done in the Z-score scale. If we want the result in the or
 # convert Z-score to CM
 data$yhatcm <- z2y(z = data$yhat, 
                    x = data$age,
-                   sex = ifelse(data$sex == "female", "F", "M"),
+                   sex = ifelse(data$sex == "Female", "F", "M"),
                    ref = get("who.hgt", pos = "package:AGD"))
 ```
 
-The plot of the observed versus predicted is now considerably tighter, and the overall fit appears to be quite high. The correlation between the observed and predicted scores using the raw scale is equal to `r round(cor(data$yhatcm, data$hgt, use = "pairwise"), 4)`. The standard deviation of the residuals in the cm scale is equal to `r round(sd(data$yhatcm - data$hgt, na.rm = TRUE), 3)`, which is very small. 
+The plot of the observed versus predicted is now considerably tighter, and the overall fit appears to be quite high. The correlation between the observed and predicted scores using the raw scale is equal to `r round(cor(data$yhatcm, data$lencm, use = "pairwise"), 4)`. The standard deviation of the residuals in the cm scale is equal to `r round(sd(data$yhatcm - data$lencm, na.rm = TRUE), 3)`, which is very small. 
 
 ```{r echo = FALSE}
-eqscplot(y = data$yhatcm, x = data$hgt, pch = ".", ylab = "Predicted (cm)", 
+eqscplot(y = data$yhatcm, x = data$lencm, pch = ".", ylab = "Predicted (cm)", 
          xlab = "Observed (cm)", main = "Children in the model")
 abline(0, 1, col = "grey")
 ```
 
 ## Application to holdout sample
 
-The `smocc.hgtwgt` data has `r nrow(smocc.hgtwgt)` rows, but until now we've used only the first 2000 rows. Is prediction equally good if we apply our fitted model and exported model in `exp` to the remaining rows, that is, to observations that were not part of the model fitting?
+The `smocc_hgtwgt` data has `r nrow(smocc_hgtwgt)` rows, but until now we've used only the first 2000 rows. Is prediction equally good if we apply our fitted model and exported model in `exp` to the remaining rows, that is, to observations that were not part of the model fitting?
 
 ```{r echo = FALSE}
-data <- smocc.hgtwgt[-(1:2000), ]
-data$HAZ <- y2z(y = data$hgt, 
+data <- smocc_hgtwgt[-(1:2000), ]
+data$haz <- y2z(y = data$lencm, 
                 x = data$age, 
-                sex = ifelse(data$sex == "female", "F", "M"),
+                sex = ifelse(data$sex == "Female", "F", "M"),
                 ref = get("who.hgt", pos = "package:AGD"))
 
-ds <- split(data, f = data$id, drop = TRUE)
+ds <- split(data, f = data$subjid, drop = TRUE)
 result <- vector("list", length(ds))
 
 for (i in seq_along(ds)) {
   d <- ds[[i]]
-  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$HAZ, x = d$age, 
+  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$haz, x = d$age, 
                                           output = "vector", 
                                           include.boundaries = TRUE)
 }
 data$yhat <- unlist(result)
 ```
 
-The figure below is the scatterplot of the observed versus predicted values for the holdout sample in the Z-score scale. The correlation is to `r round(cor(data$yhat, data$HAZ, use = "all.obs"), 4)`. The standard deviation of the residuals is equal to `r round(sd(data$yhat - data$HAZ, na.rm = TRUE), 3)`.
+The figure below is the scatterplot of the observed versus predicted values for the holdout sample in the Z-score scale. The correlation is to `r round(cor(data$yhat, data$haz, use = "complete.obs"), 4)`. The standard deviation of the residuals is equal to `r round(sd(data$yhat - data$haz, na.rm = TRUE), 3)`.
 
 ```{r echo=FALSE}
-eqscplot(y = data$yhat, x = data$HAZ, pch = ".", ylab = "Predicted Z-score", xlab = "Observed Z-score", main = "Holdout sample")
+eqscplot(y = data$yhat, x = data$haz, pch = ".", ylab = "Predicted Z-score", xlab = "Observed Z-score", main = "Holdout sample")
 abline(0, 1, col = "grey")
 ```
 
@@ -253,16 +253,16 @@ abline(0, 1, col = "grey")
 # convert Z-score to CM
 data$yhatcm <- z2y(z = data$yhat, 
                  x = data$age,
-                 sex = ifelse(data$sex == "female", "F", "M"),
+                 sex = ifelse(data$sex == "Female", "F", "M"),
                  ref = get("who.hgt", pos = "package:AGD"))
 ```
 
-In terms of the raw meassurement scale we find a correlation between the observed and predicted scores equal to `r round(cor(data$yhatcm, data$hgt, use = "pairwise"), 4)`. The standard deviation of the residuals in the cm scale is equal to `r round(sd(data$yhatcm - data$hgt, na.rm = TRUE), 4)`, about the size of the measurement error for height.
+In terms of the raw meassurement scale we find a correlation between the observed and predicted scores equal to `r round(cor(data$yhatcm, data$lencm, use = "pairwise"), 4)`. The standard deviation of the residuals in the cm scale is equal to `r round(sd(data$yhatcm - data$lencm, na.rm = TRUE), 4)`, about the size of the measurement error for height.
 
 The plot for the holdout sample is given below.
 
 ```{r echo = FALSE}
-eqscplot(y = data$yhatcm, x = data$hgt, pch = ".", ylab = "Predicted (cm)", 
+eqscplot(y = data$yhatcm, x = data$lencm, pch = ".", ylab = "Predicted (cm)", 
          xlab = "Observed (cm)", main = "Holdout sample")
 abline(0, 1, col = "grey")
 ```

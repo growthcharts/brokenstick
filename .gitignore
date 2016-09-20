@@ -17,6 +17,9 @@
 # knitr cache directories
 vignettes/gettingstarted_cache/
 vignettes/gettingstarted_files/
+vignettes/example_cache/
+vignettes/example_cache/html/
+vignettes/example_files/
 
 # produced vignettes
 vignettes/*.html
