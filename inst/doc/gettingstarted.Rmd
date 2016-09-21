@@ -51,3 +51,6 @@ Function name        | Description
 `predict()`          | Predict broken stick estimates for new growth data
 `export()`           | Export broken stick model parameters 
 
+## Further reading
+
+A [vignette with a simple example](example.html) is available as well. Additional details on model fitting and prediction are given in the [vignette for prediction](prediction.html).

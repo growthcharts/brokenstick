@@ -5,8 +5,14 @@
 # Session Data files
 .RData
 
+# Example code in package build process
+*-Ex.R
+
 # RStudio files
 .Rproj.user/
+
+# Output files from R CMD check
+/*.Rcheck/
 
 # Output files from R CMD build
 /*.tar.gz
@@ -14,18 +20,18 @@
 # OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
 .httr-oauth
 
-# knitr cache directories
-vignettes/gettingstarted_cache/
-vignettes/gettingstarted_files/
-vignettes/example_cache/
-vignettes/example_cache/html/
-vignettes/example_files/
-
 # produced vignettes
 vignettes/*.html
 vignettes/*.pdf
+vignettes/*.R
+vignettes/*_files
+vignettes/*_cache
 
 # knitr and R markdown default cache directories
 /*_cache/
 /cache/
+
+# Temporary files created by R markdown
+*.utf8.md
+*.knit.md
 .Rproj.user
