@@ -1,4 +1,4 @@
-# smocc.R
+# smocc2.R
 #
 
 library(donordata)
@@ -50,14 +50,14 @@ with(data, plot(age, haz, main = "Dutch 1989-1990, height relative to WHO"))
 abline(h = c(-2,0,2), col = "grey")
 with(data, lines(loess.smooth(x = age, y = haz, span = 0.2), col = "red", lwd = 2))
 
-# perform broken stick analyses for height
-trim <- with(data, !is.na(agedays) & !is.na(lencm) & haz > (-5) & haz < 5)
+# remove outliers and records with missing ages and/or heights
+trim <- with(data, !is.na(agedays) & !is.na(haz) & haz > (-5) & haz < 5)
 d <- data[trim, ]
-d$subjid <- as.factor(d$subjid)
 
 # fit the brokenstick model (takes substantial time)
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 boundary <- c(0, 3)
+d$subjid <- as.factor(d$subjid)
 fit_hgt <- with(d,
 				brokenstick(y = haz,
 							x = age,
