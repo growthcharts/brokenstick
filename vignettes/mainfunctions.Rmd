@@ -1,9 +1,9 @@
 ---
-title: "Main steps"
+title: "Main functions"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Main steps}
+  %\VignetteIndexEntry{Main functions}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -50,39 +50,52 @@ smc2 <- smc2[, keep]
 identical(smc, smc2)
 ```
 
-Variable names and types conform to the definition in `hbgd::view_variables()`. 
+Variable names and types conform to the HBGD definitions as implemented in `view_variables()`. 
 
-## Exporatory analysis
+## Exploratory analysis
 
 Plots of the first the height trajectories of two children can be made with the `lattice` function `xyplot()`, as follows:
 
-```{r}
+```{r fig1}
+library(rbokeh)
 ids <- c(10001, 10005, 10022)
-require("lattice")
-xyplot(htcm ~ age | subjid, data = smc, 
-	   subset = subjid %in% ids,  
-	   type = "b", pch = 19, as.table = TRUE,
-	   xlab = "Age (in years)", ylab = "Length (cm)")
+d <- subset(smc, subjid %in% ids)
+idx <- split(d, d$subjid)
+figs <- lapply(idx, function(x) {
+  figure(xlab = "Age (years)", ylab = "Length (cm)") %>%
+  ly_who(x = seq(0, 750, by = 30), y_var = "htcm",
+    x_trans = days2years, sex = x$sex[1], color = "green",
+    p = 100 * pnorm(-c(2.5,2,1,0))) %>%
+  ly_lines(days2years(x$agedays), x$htcm,
+    col = "grey", hover = c(x$age, x$htcm)) %>%
+  ly_points(days2years(x$agedays), x$htcm,
+    col = "blue", hover = c(x$age, x$htcm), size = 6)
+})
+grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, width = 680, height = 300)
 ```
+
+---
 
 The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-values) are plotted. The column `haz` contains the $Z$-scores of height relative to the WHO standard.
 
-```{r}
-xyplot(haz ~ age | subjid, data = smc, 
-	   subset = subjid %in% ids, 
-	   type = "b", pch = 19, as.table = TRUE,
-	   panel = function(...) {
-	   	panel.refline(h = c(-2, 0, 2))
-	   	panel.xyplot(...)
-	   },
-	   xlab = "Age (in years)", ylab = "Length (SDS)")
+```{r fig2}
+figs <- lapply(idx, function(x) {
+  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
+  ly_zband(x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
+  ly_lines(x$age, x$haz, col = "grey", hover = c(x$age, x$haz)) %>%
+  ly_points(x$age, x$haz,
+    col = "blue", hover = c(x$age, x$haz), size = 6)
+})
+grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, width = 680, height = 300)
 ```
 
-### Broken stick model with two lines
+---
 
-The *broken stick model* describes a trajectory by a series of connected straight lines. We first calculate a rough approximation in the above trajectory using only use two lines. The first line should start at birth and end at the age of exactly 1 years, while the second spans the period from 1 to 2 years. In addition, the lines connect at the age of 1 year. 
+## Broken stick model with two lines
 
-```{r fit1}
+The *broken stick model* describes a trajectory by a series of connected straight lines. We first calculate a rough approximation in the above trajectories using just two lines. The first line should start at birth and end at the age of exactly 1 years. The second line should span the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate this model as follows:
+
+```{r fit1, cache = TRUE}
 knots <- 0:2
 fit1 <- brokenstick(y = smc$haz, 
 					x = smc$age,
@@ -129,26 +142,28 @@ head(p2, 4)
 Break ages are distinguihsed from observed ages by the `knot` column, which is now `TRUE`. We may obtain both types of estimates simultaneously for all children by 
 
 ```{r}
-p <- predict(fit1, x = get_knots(fit1))
-head(p, 15)
+pr <- predict(fit1, x = get_knots(fit1))
+head(pr, 15)
 ```
 
 We plot the original data and the broken stick estimates jointly by `xyplot()` from the `lattice` package by
 
-```{r}
-p$yhat[!p$knot] <- NA
-xyplot(y + yhat ~ x | subjid, data = p, 
-       subset = subjid %in% ids & x <= 2.3, 
-       as.table = TRUE,
-       panel = function(...) {
-         panel.refline(h = c(-2, 0, 2))
-         panel.refline(v = 0:2, col = "grey", lwd = 0.5, lty = 2)
-         panel.superpose(...)}, 
-       panel.groups = function(x, y, subscripts, groups, ..., group.number) 
-         with(na.omit(data.frame(x, y)), 
-              panel.lines(x, y, type = "b", pch = 20, col = group.number)),
-       xlab = "Age (in years)", ylab = "Length (SDS)")
+```{r fig3}
+d <- subset(pr, subjid %in% ids & x <= 2.2)
+idx <- split(d, d$subjid)
+figs <- lapply(idx, function(x) {
+  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
+  ly_zband( x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
+  ly_lines( x = x$x[!x$knot], y = x$y[!x$knot], color = "grey") %>%
+  ly_points(x = x$x[!x$knot], x$y[!x$knot], color = "blue", size = 6) %>%
+  ly_lines( x = x$x[x$knot], y = x$yhat[x$knot], col = "darkred") %>%
+  ly_points(x = x$x[x$knot], x$yhat[x$knot], col = "red", size = 6) 
+  })
+grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, 
+          width = 680, height = 300)
 ```
+
+---
 
 ## Extension to nine lines
 
@@ -165,29 +180,31 @@ fit2 <- brokenstick(y = smc$haz,
 					boundary = boundary)
 ```
 
-The model contains 11 random effect, which represents a somewhat difficult estimation problem. The optimization routine issues a number of warnings related to the number of random effects relative to the number of observations, and the complexity of the optimization problem. These warnings may indicate degeneracies in the numerical solution, but are generally be less frequent for large samples. 
+The model contains 11 random effects. This optimization problem is more difficult. The optimization routine issues a number of warnings related to the number of random effects relative to the number of observations, and the complexity of the optimization problem. These warnings may indicate degeneracies in the numerical solution, and are generally be less frequent for large samples. 
 
 As before, predicted values can be obtained by
 
 ```{r}
-p <- predict(fit2, x = get_knots(fit_hgt))
-head(p, 4)
+pr <- predict(fit2, x = get_knots(fit_hgt))
+head(pr, 4)
 ```
 
 ```{r echo=FALSE}
-p$yhat[!p$knot] <- NA
-xyplot(y + yhat ~ x | subjid, data = p, 
-       subset = subjid %in% ids & x <= 2.3, 
-       as.table = TRUE,
-       panel = function(...) {
-         panel.refline(h = c(-2, 0, 2))
-         panel.refline(v = knots, col = "grey", lwd = 0.5, lty = 2)
-         panel.superpose(...)}, 
-       panel.groups = function(x, y, subscripts, groups, ..., group.number) 
-         with(na.omit(data.frame(x, y)), 
-              panel.lines(x, y, type = "b", pch = 20, col = group.number)),
-       xlab = "Age (in years)", ylab = "Length (SDS)")
+d <- subset(pr, subjid %in% ids & x <= 2.2)
+idx <- split(d, d$subjid)
+figs <- lapply(idx, function(x) {
+  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
+  ly_zband( x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
+  ly_lines( x = x$x[!x$knot], y = x$y[!x$knot], color = "grey") %>%
+  ly_points(x = x$x[!x$knot], x$y[!x$knot], color = "blue", size = 6) %>%
+  ly_lines( x = x$x[x$knot], y = x$yhat[x$knot], col = "darkred") %>%
+  ly_points(x = x$x[x$knot], x$yhat[x$knot], col = "red", size = 6) 
+  })
+grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, 
+          width = 680, height = 300)
 ```
+
+---
 
 The figure plots the nine line model, with break points at the scheduled ages (indicated by the grey dashed lines). The model now fits the data very well. Formal model assessment can be done with standard `lmer` diagnostic plots. See the vignette on *Model diagnostics* for more detail [NOTE: vignette still has to be written]. 
 
@@ -216,9 +233,9 @@ The `fit2` object can be stored by `save()` for future use in R. However, a more
 
 ```{r}
 # export the broken stick models
-export_hgt <- export(fit2)
-attributes(export_hgt)
-lapply(export_hgt, round, 2)
+exp <- export(fit2)
+attributes(exp)
+lapply(exp, round, 2)
 ```
 
 Such estimates can be published as a longitudinal growth reference.
@@ -233,28 +250,29 @@ x <- c(0, 0.12, 0.32, 0.62, 1.1)
 y <- c(-1.2, -1.8, -1.7, -1.9, -2.1)
 
 # prediction at ages x
-atx <- predict(export_hgt, y = y, x = x)
+atx <- predict(exp, y = y, x = x)
 atx
 # prediction at the knots
-atknots <- predict(export_hgt, y = y, x = x, at = "knots")
+atknots <- predict(exp, y = y, x = x, at = "knots")
 head(atknots)
 ```
 
 The predicted values are found such that the published model fits best to the given age and height values. The figure below plots the observed data and the predicted data at the break ages for the new child.
 
-```{r fig.width = 3, fig.align = "center", echo = FALSE}
-p <- rbind(atx, atknots)
-p$yhat[!p$knot] <- NA
-xyplot(y + yhat ~ x, data = p, ylim = c(-3, 1), xlim = c(-0.1, 2.1),
-       as.table = TRUE,
-       panel = function(...) {
-         panel.refline(h = c(-2, 0, 2))
-         panel.refline(v = knots, col = "grey", lwd = 0.5, lty = 2)
-         panel.superpose(...)}, 
-       panel.groups = function(x, y, subscripts, groups, ..., group.number) 
-         with(na.omit(data.frame(x, y)), 
-              panel.lines(x, y, type = "b", pch = 20, col = group.number)),
-       xlab = "Age (in years)", ylab = "Length (SDS)",
-       main = "New person, published model")
+```{r echo = FALSE, fig.align = "center"}
+pr <- rbind(atx, atknots)
+d <- subset(pr, x <= 2.2)
+idx <- list(d)
+figs <- lapply(idx, function(x) {
+  if (is.null(x)) return(NULL)
+  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
+  ly_zband( x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
+  ly_lines( x = x$x[!x$knot], y = x$y[!x$knot], color = "grey") %>%
+  ly_points(x = x$x[!x$knot], x$y[!x$knot], color = "blue", size = 10) %>%
+  ly_lines( x = x$x[x$knot], y = x$yhat[x$knot], col = "red") %>%
+  ly_points(x = x$x[x$knot], x$yhat[x$knot], col = "red", size = 10) 
+  })
+
+grid_plot(figs)
 ```
 
