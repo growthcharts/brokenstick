@@ -34,7 +34,7 @@ The broken stick model can fit observations in either the raw scale (cm, kg, and
 
 ```{r zscores}
 if (!require(hbgd)) devtools::install_github("hafen/hbgd")
-smc$haz <- round(who_htcm2zscore(smc$agedays, smc$lencm, smc$sex), 3)
+smc$haz <- round(who_htcm2zscore(smc$agedays, smc$htcm, smc$sex), 3)
 ```
 
 The main outcome measure will be `smc$haz`, the age and sex-adjusted Z-score relative to the WHO growth standard.
@@ -205,10 +205,10 @@ All modeling has been done in the Z-score scale. If we want the result in the or
 smc$yhatcm <- who_zscore2htcm(smc$agedays, smc$yhat, smc$sex)
 ```
 
-The plot of the observed versus predicted is now considerably tighter, and the overall fit appears to be quite high. The correlation between the observed and predicted scores using the raw scale is equal to `r round(cor(smc$yhatcm, smc$lencm, use = "pairwise"), 4)`. The standard deviation of the residuals in the cm scale is equal to `r round(sd(smc$yhatcm - smc$lencm, na.rm = TRUE), 3)`, which is very small. 
+The plot of the observed versus predicted is now considerably tighter, and the overall fit appears to be quite high. The correlation between the observed and predicted scores using the raw scale is equal to `r round(cor(smc$yhatcm, smc$htcm, use = "pairwise"), 4)`. The standard deviation of the residuals in the cm scale is equal to `r round(sd(smc$yhatcm - smc$htcm, na.rm = TRUE), 3)`, which is very small. 
 
 ```{r echo = FALSE}
-eqscplot(y = smc$yhatcm, x = smc$lencm, pch = ".", ylab = "Predicted (cm)", 
+eqscplot(y = smc$yhatcm, x = smc$htcm, pch = ".", ylab = "Predicted (cm)", 
          xlab = "Observed (cm)", main = "Children in the model")
 abline(0, 1, col = "grey")
 ```
@@ -219,7 +219,7 @@ The `smocc_hgtwgt` data has `r nrow(smocc_hgtwgt)` rows, but until now we've use
 
 ```{r echo = FALSE}
 smc <- smocc_hgtwgt[-(1:2000), ]
-smc$haz <- round(who_htcm2zscore(smc$agedays, smc$lencm, smc$sex), 3)
+smc$haz <- round(who_htcm2zscore(smc$agedays, smc$htcm, smc$sex), 3)
 
 ds <- split(smc, f = smc$subjid, drop = TRUE)
 result <- vector("list", length(ds))
@@ -246,12 +246,12 @@ abline(0, 1, col = "grey")
 smc$yhatcm <- who_zscore2htcm(smc$agedays, smc$yhat, smc$sex)
 ```
 
-In terms of the raw meassurement scale we find a correlation between the observed and predicted scores equal to `r round(cor(smc$yhatcm, smc$lencm, use = "pairwise"), 4)`. The standard deviation of the residuals in the cm scale is equal to `r round(sd(smc$yhatcm - smc$lencm, na.rm = TRUE), 4)`, about the size of the measurement error for height.
+In terms of the raw meassurement scale we find a correlation between the observed and predicted scores equal to `r round(cor(smc$yhatcm, smc$htcm, use = "pairwise"), 4)`. The standard deviation of the residuals in the cm scale is equal to `r round(sd(smc$yhatcm - smc$htcm, na.rm = TRUE), 4)`, about the size of the measurement error for height.
 
 The plot for the holdout sample is given below.
 
 ```{r echo = FALSE}
-eqscplot(y = smc$yhatcm, x = smc$lencm, pch = ".", ylab = "Predicted (cm)", 
+eqscplot(y = smc$yhatcm, x = smc$htcm, pch = ".", ylab = "Predicted (cm)", 
          xlab = "Observed (cm)", main = "Holdout sample")
 abline(0, 1, col = "grey")
 ```

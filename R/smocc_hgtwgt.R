@@ -45,7 +45,7 @@ NULL
 #'\item{etn}{Etnicity, \code{"MA"}, \code{"NL"}, or \code{"TU"} (factor)}
 #'\item{gagebrth}{Gestational age at birth (days) (numeric)}
 #'\item{birthwt}{Birth weight in grammes (810-5100) (numeric)}
-#'\item{lencm}{Recumbent length in cm (34-102) (numeric)}
+#'\item{htcm}{Length/height in cm (34-102) (numeric)}
 #'\item{wtkg}{Weight measurement in kg (0.8-20.5) (numeric)}
 #'\item{haz}{Height in SDS relative to WHO standard) (numeric)}
 #'\item{waz}{Weight in SDS relative to WHO standard) (numeric)}

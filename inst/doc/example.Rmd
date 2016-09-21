@@ -1,9 +1,9 @@
 ---
-title: "Example"
+title: "Main steps"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Example}
+  %\VignetteIndexEntry{Main steps}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -13,27 +13,53 @@ vignette: >
 knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 ```
 
-## Example
+## Objective
 
 The vignette demonstrates the main functions in the `brokenstick` package: `brokenstick()`, `predict()` and `export`.
 
+## Data set
 
-## Exporatory analysis
 
-```{R}
-library("brokenstick")
-data <- smocc_hgtwgt[1:2000,]
-head(data)
+The `smocc_hgtwgt` data in the `brokenstick` package contain the heights and weights of 1933 Dutch children measured on 10 visits at ages 0-2 years. Here we take the first 2000 records from the data.
+
+```{r}
+require("brokenstick")
+smc <- smocc_hgtwgt[1:2000, ]
+head(smc)
 ```
 
-The `smocc_hgtwgt` data in the `brokenstick` package contain the heights and weights of 1933 Dutch children measured on 10 visits at ages 0-2 years. Here we take the first 2000 records from the data, corresponding to 206 different children.
+Another way to obtain the same data is to use the `get_smocc_data()` function from the `github::HBGDki/hbgd` package, followed by a little post-processing:
+
+```{r}
+if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
+smc2 <- hbgd::get_smocc_data()[1:2000, ]
+smc2$subjid <- as.numeric(as.character(smc2$subjid))
+smc2$src <- as.character(smc2$src)
+smc2$agedays <- round(smc2$agedays)
+smc2$age <- round(smc2$agedays / 365.25, 4)
+smc2$gagebrth <- smc2$ga * 7 + 3
+smc2$etn <- as.character(smc2$etn)
+smc2$birthwt <- smc2$bw
+smc2$haz <- round(who_htcm2zscore(smc2$agedays, smc2$htcm, smc2$sex), 3)
+smc2$waz <- round(who_wtkg2zscore(smc2$agedays, smc2$wtkg, smc2$sex), 3)
+keep <- c("src", "subjid", "rec", "nrec",
+          "age", "agedays", "sex", "etn",
+          "gagebrth", "birthwt",
+          "htcm", "haz", "wtkg", "waz")
+smc2 <- smc2[, keep]
+identical(smc, smc2)
+```
+
+Variable names and types conform to the definition in `hbgd::view_variables()`. 
+
+## Exporatory analysis
 
 Plots of the first the height trajectories of two children can be made with the `lattice` function `xyplot()`, as follows:
 
 ```{r}
 ids <- c(10001, 10005, 10022)
-library(lattice)
-xyplot(lencm ~ age | subjid, data = data, 
+require("lattice")
+xyplot(htcm ~ age | subjid, data = smc, 
 	   subset = subjid %in% ids,  
 	   type = "b", pch = 19, as.table = TRUE,
 	   xlab = "Age (in years)", ylab = "Length (cm)")
@@ -42,7 +68,7 @@ xyplot(lencm ~ age | subjid, data = data,
 The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-values) are plotted. The column `haz` contains the $Z$-scores of height relative to the WHO standard.
 
 ```{r}
-xyplot(haz ~ age | subjid, data = data, 
+xyplot(haz ~ age | subjid, data = smc, 
 	   subset = subjid %in% ids, 
 	   type = "b", pch = 19, as.table = TRUE,
 	   panel = function(...) {
@@ -58,9 +84,9 @@ The *broken stick model* describes a trajectory by a series of connected straigh
 
 ```{r fit1}
 knots <- 0:2
-fit1 <- brokenstick(y = data$haz, 
-					x = data$age,
-					subject = data$subjid,
+fit1 <- brokenstick(y = smc$haz, 
+					x = smc$age,
+					subject = smc$subjid,
 					knots = knots)
 ```
 
@@ -132,9 +158,9 @@ We now refine the model in the first two years by adding a knot for each age at 
 # 10 scheduled visits
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 boundary <- c(0, 3)
-fit2 <- brokenstick(y = data$haz, 
-					x = data$age,
-					subject = data$subjid,
+fit2 <- brokenstick(y = smc$haz, 
+					x = smc$age,
+					subject = smc$subjid,
 					knots = knots,
 					boundary = boundary)
 ```
@@ -172,16 +198,16 @@ The broken stick model is sensitive to the location of the knots. Some advice ab
 The proportion of the variance of the outcome explained by the two-line model is
 
 ```{r}
-var(fitted(fit1), na.rm = TRUE) / var(data$haz, na.rm = TRUE)
+var(fitted(fit1), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
 ```
 
 For the second model we get
 
 ```{r}
-var(fitted(fit2), na.rm = TRUE) / var(data$haz, na.rm = TRUE)
+var(fitted(fit2), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
 ```
 
-so the nine-line broken stick model explains about `r round(100 * var(fitted(fit2), na.rm = TRUE) / var(data$haz, na.rm = TRUE))` percent of the variance of the height SDS.
+so the nine-line broken stick model explains about `r round(100 * var(fitted(fit2), na.rm = TRUE) / var(smc$haz, na.rm = TRUE))` percent of the variance of the height SDS.
 
 
 ## Publishing your model

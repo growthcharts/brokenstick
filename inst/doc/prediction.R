@@ -8,7 +8,7 @@ head(smc)
 
 ## ----zscores-------------------------------------------------------------
 if (!require(hbgd)) devtools::install_github("hafen/hbgd")
-smc$haz <- round(who_htcm2zscore(smc$agedays, smc$lencm, smc$sex), 3)
+smc$haz <- round(who_htcm2zscore(smc$agedays, smc$htcm, smc$sex), 3)
 
 ## ----echo=FALSE----------------------------------------------------------
 hist(smc$haz, main = "SMOCC data, first 2000 records", 
@@ -108,13 +108,13 @@ abline(0, 1, col = "grey")
 smc$yhatcm <- who_zscore2htcm(smc$agedays, smc$yhat, smc$sex)
 
 ## ----echo = FALSE--------------------------------------------------------
-eqscplot(y = smc$yhatcm, x = smc$lencm, pch = ".", ylab = "Predicted (cm)", 
+eqscplot(y = smc$yhatcm, x = smc$htcm, pch = ".", ylab = "Predicted (cm)", 
          xlab = "Observed (cm)", main = "Children in the model")
 abline(0, 1, col = "grey")
 
 ## ----echo = FALSE--------------------------------------------------------
 smc <- smocc_hgtwgt[-(1:2000), ]
-smc$haz <- round(who_htcm2zscore(smc$agedays, smc$lencm, smc$sex), 3)
+smc$haz <- round(who_htcm2zscore(smc$agedays, smc$htcm, smc$sex), 3)
 
 ds <- split(smc, f = smc$subjid, drop = TRUE)
 result <- vector("list", length(ds))
@@ -136,7 +136,7 @@ abline(0, 1, col = "grey")
 smc$yhatcm <- who_zscore2htcm(smc$agedays, smc$yhat, smc$sex)
 
 ## ----echo = FALSE--------------------------------------------------------
-eqscplot(y = smc$yhatcm, x = smc$lencm, pch = ".", ylab = "Predicted (cm)", 
+eqscplot(y = smc$yhatcm, x = smc$htcm, pch = ".", ylab = "Predicted (cm)", 
          xlab = "Observed (cm)", main = "Holdout sample")
 abline(0, 1, col = "grey")
 

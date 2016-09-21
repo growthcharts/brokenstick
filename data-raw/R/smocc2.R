@@ -2,7 +2,6 @@
 #
 
 library(donordata)
-# library(AGD)
 if (!require(hbgd)) devtools::install_github("hafen/hbgd")
 library(brokenstick)
 project <-  path.expand("~/Package/brokenstick/brokenstick")
@@ -13,7 +12,8 @@ get_smocc_data <- function() {
             "etn", "ga", "bw", "hgt", "wgt")
   data <- donordata::smocc[[3]][, from]
   to <- c("src", "subjid", "rec", "nrec", "age", "sex",
-          "etn", "ga", "birthwt", "lencm", "wtkg")
+          "etn", "ga", "birthwt", "htcm", "wtkg")
+  rownames(data) <- 1:nrow(data)
   names(data) <- to
   data$src <- as.character(data$src)
   data$agedays <- round(data$age * 365.25)
@@ -24,11 +24,11 @@ get_smocc_data <- function() {
   data$etn <- as.character(data$etn)
 
   # using the hbgd package
-  data$haz <- round(who_htcm2zscore(data$agedays, data$lencm, data$sex), 3)
+  data$haz <- round(who_htcm2zscore(data$agedays, data$htcm, data$sex), 3)
   data$waz <- round(who_wtkg2zscore(data$agedays, data$wtkg, data$sex), 3)
 
   # using the AGD package
-  # data$haz <- y2z(y = data$lencm,
+  # data$haz <- y2z(y = data$htcm,
   #                 x = data$age,
   #                 sex = ifelse(data$sex == "Female", "F", "M"),
   #                 ref = get("who.hgt", pos = "package:AGD"))
@@ -39,7 +39,7 @@ get_smocc_data <- function() {
   keep <- c("src", "subjid", "rec", "nrec",
             "age", "agedays", "sex", "etn",
             "gagebrth", "birthwt",
-            "lencm", "haz", "wtkg", "waz")
+            "htcm", "haz", "wtkg", "waz")
   return(data[, keep])
   }
 
@@ -73,5 +73,4 @@ save(smocc_hgtwgt, file = fn1, compress = "xz")
 # store 'fit_hgt' for lazy loading
 fn2 <- path.expand("~/Package/brokenstick/brokenstick/data/fit_hgt.rda")
 save(fit_hgt, file = fn2, compress = "xz")
-
 

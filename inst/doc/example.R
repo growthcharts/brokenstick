@@ -2,20 +2,39 @@
 knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 
 ## ------------------------------------------------------------------------
-library("brokenstick")
-data <- smocc_hgtwgt[1:2000,]
-head(data)
+require("brokenstick")
+smc <- smocc_hgtwgt[1:2000, ]
+head(smc)
+
+## ------------------------------------------------------------------------
+if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
+smc2 <- hbgd::get_smocc_data()[1:2000, ]
+smc2$subjid <- as.numeric(as.character(smc2$subjid))
+smc2$src <- as.character(smc2$src)
+smc2$agedays <- round(smc2$agedays)
+smc2$age <- round(smc2$agedays / 365.25, 4)
+smc2$gagebrth <- smc2$ga * 7 + 3
+smc2$etn <- as.character(smc2$etn)
+smc2$birthwt <- smc2$bw
+smc2$haz <- round(who_htcm2zscore(smc2$agedays, smc2$htcm, smc2$sex), 3)
+smc2$waz <- round(who_wtkg2zscore(smc2$agedays, smc2$wtkg, smc2$sex), 3)
+keep <- c("src", "subjid", "rec", "nrec",
+          "age", "agedays", "sex", "etn",
+          "gagebrth", "birthwt",
+          "htcm", "haz", "wtkg", "waz")
+smc2 <- smc2[, keep]
+identical(smc, smc2)
 
 ## ------------------------------------------------------------------------
 ids <- c(10001, 10005, 10022)
-library(lattice)
-xyplot(lencm ~ age | subjid, data = data, 
+require("lattice")
+xyplot(htcm ~ age | subjid, data = smc, 
 	   subset = subjid %in% ids,  
 	   type = "b", pch = 19, as.table = TRUE,
 	   xlab = "Age (in years)", ylab = "Length (cm)")
 
 ## ------------------------------------------------------------------------
-xyplot(haz ~ age | subjid, data = data, 
+xyplot(haz ~ age | subjid, data = smc, 
 	   subset = subjid %in% ids, 
 	   type = "b", pch = 19, as.table = TRUE,
 	   panel = function(...) {
@@ -26,9 +45,9 @@ xyplot(haz ~ age | subjid, data = data,
 
 ## ----fit1----------------------------------------------------------------
 knots <- 0:2
-fit1 <- brokenstick(y = data$haz, 
-					x = data$age,
-					subject = data$subjid,
+fit1 <- brokenstick(y = smc$haz, 
+					x = smc$age,
+					subject = smc$subjid,
 					knots = knots)
 
 ## ------------------------------------------------------------------------
@@ -65,16 +84,6 @@ xyplot(y + yhat ~ x | subjid, data = p,
               panel.lines(x, y, type = "b", pch = 20, col = group.number)),
        xlab = "Age (in years)", ylab = "Length (SDS)")
 
-## ----fit2, cache = TRUE--------------------------------------------------
-# 10 scheduled visits
-knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-boundary <- c(0, 3)
-fit2 <- brokenstick(y = data$haz, 
-					x = data$age,
-					subject = data$subjid,
-					knots = knots,
-					boundary = boundary)
-
 ## ------------------------------------------------------------------------
 p <- predict(fit2, x = get_knots(fit_hgt))
 head(p, 4)
@@ -94,10 +103,10 @@ xyplot(y + yhat ~ x | subjid, data = p,
        xlab = "Age (in years)", ylab = "Length (SDS)")
 
 ## ------------------------------------------------------------------------
-var(fitted(fit1), na.rm = TRUE) / var(data$haz, na.rm = TRUE)
+var(fitted(fit1), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
 
 ## ------------------------------------------------------------------------
-var(fitted(fit2), na.rm = TRUE) / var(data$haz, na.rm = TRUE)
+var(fitted(fit2), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
 
 ## ------------------------------------------------------------------------
 # export the broken stick models
