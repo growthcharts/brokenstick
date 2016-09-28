@@ -11,6 +11,8 @@
 #'@param ids A vector with one or more subject identification codes.
 #'@param x_trim A range to select the x-axis
 #'@param max_ids A scalar indicating the maximum number of individual plots. The default is 6, which select the first six figures. Setting \code{max_ids} to a high number increses the maximum. The parameter implements a safety measure to avoid unintended plots of the entire data set. 
+#'@param show_measurements A logical indicating whether the measurement should be plotted. The default is \code{TRUE}.
+#'@param show_estimates A logical indicating whether the estimates should be plotted. The default is \code{TRUE}.
 #'@param ... Extra arguments passed down to \code{\link[rbokeh]{figure}} and 
 #' \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}, 
 #' '\code{\link[hbgd]{ly_zband}} and '\code{\link[rbokeh]{grid_plot}} functions.
@@ -19,10 +21,15 @@
 #'@method plot brokenstick
 #'@examples 
 #'smc <- smocc_hgtwgt[1:2000,]
-#'fit <- brokenstick(y=smc$haz, x=smc$age, subj = smc$subjid, knots = 0:2, boundary = c(0, 3))
+#'fit <- brokenstick(y=smc$haz, x=smc$age, subj = smc$subjid, 
+#'  knots = 0:2, boundary = c(0, 3))
 #'plot(fit, ids = c(10001, 10004, 10005))
-#'plot(fit, ids = c(10001, 10004, 10005), px = get_knots(fit), x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, height = 300, width = 600)
-#'plot(fit, size.y = 12, color.y = c("navy", "darkgreen" ), x_trim = c(0, 2.2), x_range = c(0,2), nrow = 3, ids = c(10001, 10004, 10005))
+#'plot(fit, ids = c(10001, 10004, 10005), 
+#'  px = get_knots(fit), x_trim = c(0, 2.2), size.y = 6, 
+#'  size.yhat = 6, height = 300, width = 600)
+#'plot(fit, size.y = 12, color.y = c("navy", "darkgreen" ), 
+#'  x_trim = c(0, 2.2), x_range = c(0,2), nrow = 3, 
+#'  ids = c(10001, 10004, 10005))
 #'@export
 plot.brokenstick <- function(x, py, px, ids = NULL, 
                              x_trim = c(-Inf, Inf), max_ids = 3, 

@@ -5,7 +5,7 @@
 \title{Predict growth curve according to the broken stick model}
 \usage{
 \method{predict}{brokenstick_export}(object, y, x, at = "x",
-  output = "long", ...)
+  output = "long", subjid = NA, ...)
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick} or of class
@@ -37,6 +37,8 @@ format can be used if \code{at = "knots"}, and returns \code{NULL}
 otherwise. If \code{output = "vector"}, the result is returned as a vector.
 This is the fastest method, and should be used in programming
 and simulation.}
+
+\item{subjid}{A subject identification}
 
 \item{...}{Additional arguments passed down to \code{predict.merMod()},
 \code{predict.brokenstick_export()} and \code{predict_all()}.}

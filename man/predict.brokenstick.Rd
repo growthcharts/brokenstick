@@ -95,6 +95,8 @@ head(p)
 p <- predict(fit_hgt, x = round((1:4)*7/365.25, 4), output = "broad")
 head(p)
 
+head(predict(fit_hgt, at = "knots", output = "broad"), 3)
+predict(fit_hgt, id = c(10001, 10003), at = "knots", output = "broad")
 }
 \author{
 Stef van Buuren 2016

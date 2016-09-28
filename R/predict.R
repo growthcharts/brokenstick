@@ -79,6 +79,8 @@
 #' p <- predict(fit_hgt, x = round((1:4)*7/365.25, 4), output = "broad")
 #' head(p)
 #'
+#' head(predict(fit_hgt, at = "knots", output = "broad"), 3)
+#' predict(fit_hgt, id = c(10001, 10003), at = "knots", output = "broad")
 #' @export
 predict.brokenstick <- function(object, y, x, ids = NULL,
                                 at = "x", output = "long",
@@ -86,48 +88,55 @@ predict.brokenstick <- function(object, y, x, ids = NULL,
   at <- match.arg(at, c("knots", "x", "both"))
   output <- match.arg(output, c("vector", "long", "broad"))
   
-  # If user did not specify y and x, do everybody in the object
-  everybody <- missing(y) && missing(x) && is.null(ids)
-  if (everybody) return(predict_all(object, at = at, output = output))
+  # If user did not specify y, x and ids, return predictions 
+  # for everybody in the object
+  if (missing(y) && missing(x) && is.null(ids)) {
+    return(predict_all(object, at = at, output = output))
+  }
   
   # If user specified x, but no y and ids, calculate prediction
   # at the specified x values for all individuals
   if (missing(y) && !missing(x) && is.null(ids)) {
     if (length(x) == 0) return(numeric(0))
-    return(predict_atx(object, x = x, output = output, ...))
+    return(predict_all_atx(object, x = x, output = output))
   }
   
-  if (!missing(y)) {
-    if (length(y) == 0) return(numeric(0))
+  # If user specified x and y but no ids, treat x and y values as
+  # coming from a single individual (so fit and predict)
+  # y values with observed data are fitted, y values with NA are predicted
+  if (!missing(y) && !missing(x) && is.null(ids)) {
+    if (length(y) == 0 || length(x) == 0) return(numeric(0))
     if (length(y) != length(x)) stop("Incompatible length of `y` and `x`.")
+    exp <- export(object)
+    return(predict(exp, y, x, at = at, output = output))
   }
   
-  # handle predictions for individuals
-  # by calling predict.brokenstick_export()
-  # with selection on subjid
-  exp <- export(object)
-  if (is.null(ids)) 
-    return(predict(exp, y, x, at = at, output = output, ...))
-  
-  # handle multi-ids case
-  knots <- get_knots(object)
-  # browser()
-  data <- get_xy(object, ids = ids)
-  data <- split(data, data$subjid, drop = TRUE)
-  result <- vector("list", length(data))
-  for (i in 1:length(data)) {
-    d <- data[[i]]
-    x <- c(d$x, knots)
-    y <- c(d$y, rep(NA, length(knots)))
-    result[[i]] <- predict_atx(object, x = x,
-                               output = output, ...)
+  # If user specified ids, but no x or y, return model predictions for 
+  # those ids at the measured and/or knot locations
+  if (missing(x) && missing(y) && !is.null(ids)) {
+    return(predict_ids_atx(object, ids = ids, at = at, output = output))
   }
-  return(result)
+  
+  # If user specified ids and x, but no y, return model prediction for 
+  # those ids at the x locations
+  if (!missing(x) && missing(y) && !is.null(ids)) {
+    return(predict_ids_atx(object, x = x, ids = ids, at = at, output = output))
+  }
+  
+  # ELSE
+  # If user specified ids, x and y, then treat these as length(ids) new
+  # persons
+  if (length(y) == 0 || length(x) == 0) return(numeric(0))
+  if (length(y) != length(x)) stop("Incompatible length of `y` and `x`.")
+  if (!missing(x) && !missing(y) && !is.null(ids)) 
+    exp <- export(object)
+  return(predict(exp, y, x, ids = ids, at = at, output = output))
 }
 
 
 #' Predict growth curve according to the broken stick model
 #' @inheritParams predict.brokenstick
+#' @param subjid A subject identification
 #' @aliases predict.brokenstick_export
 #' @family brokenstick
 #' @examples
@@ -157,18 +166,21 @@ predict.brokenstick <- function(object, y, x, ids = NULL,
 predict.brokenstick_export <- function(object, y, x,
                                        at = "x",
                                        output = "long",
+                                       subjid = NA,
                                        ...) {
   at <- match.arg(at, c("knots", "x", "both"))
   output <- match.arg(output, c("vector", "long", "broad"))
+  knots <- get_knots(object)
   
   # case: if no `x` is given, just use the knots
-  if (missing(x)) {
+  mx <- missing(x)
+  if (mx) {
     x <- get_knots(object)
     implicit.knots <- TRUE
   } else {
     implicit.knots <- FALSE
   }
-  # browser()
+  
   # case: if no 'y' is given
   if (missing(y)) y <- rep(NA, length(x))
   if (length(y) == 0 | length(x) == 0) return(numeric(0))
@@ -182,33 +194,50 @@ predict.brokenstick_export <- function(object, y, x,
   colnames(X) <- paste("x", 1:ncol(X), sep = "")
   
   # calculate random effect through empirical Bayes (BLUP) predictor
-  bs.z <- EB(object, y = y, X, BS = TRUE)
+  bs.z <- EB(object, y = y, X)
   
-  # knots to use for prediction
-  knots <- get_knots(object)
-  
-  # prediction at knots
-  if (at == "knots")
-    return(switch(output,
-                  vector = bs.z,
-                  long = data.frame(subjid = NA, x = knots, y = NA, yhat = bs.z,
-                                    knot = TRUE,
-                                    row.names = as.character(1:length(knots)))))
-  
-  # individual (response) prediction at x
+  # collect all estimates 
+  # predict at model knots
+  long_knots <- data.frame(subjid = subjid, 
+                           x = knots, 
+                           y = NA, 
+                           yhat = bs.z, 
+                           knot = TRUE,
+                           row.names = as.character(1:length(knots)))
+  if (at == "knots") return(
+    switch(output,
+           vector = bs.z,
+           long = long_knots,
+           broad = matrix(bs.z, ncol = length(knots), byrow = TRUE,
+                          dimnames = list(as.character(subjid),
+                                          as.character(knots)))))
+
+  # predict at user-specified x values
   if (object$degree > 1) stop("Cannot predict for degree > 1")
   yhat <- approx(x = knots, y = bs.z, xout = x)$y
+  long_x <- data.frame(subjid = subjid,
+                       x = x, 
+                       y = y, 
+                       yhat = yhat,
+                       knot = implicit.knots,
+                       row.names = as.character(1:length(x)))
+  # long_x <- long_x[order(long_x$x), ]
+  if (at == "x") return(
+    switch(output,
+           vector = long_x$yhat,
+           long = long_x,
+           broad = NULL))
   
-  data <- data.frame(subjid = NA, x = x, y = y, yhat = yhat,
-                     knot = implicit.knots,
-                     row.names = as.character(1:length(x)))
-  # if (filter_na) data <- data[is.na(y), ]
+  # combine prediction at knots and x values
+  long_both <- rbind(long_x, long_knots)
+  # long_both <- long_both[order(long_both$x), ]
+  if (at == "both") return(
+    switch(output,
+           vector = long_both$yhat,
+           long = long_both,
+           broad = NULL))
   
-  # convert to proper output format
-  result <- switch(output,
-                   vector = data$yhat,
-                   long = data)
-  return(result)
+  return(NULL)
 }
 
 predict_all <- function(object, at, output) {
@@ -246,30 +275,61 @@ predict_all <- function(object, at, output) {
   return(NULL)
 }
 
-predict_all_at_new_x <- function(object, new_x, output = "long") {
-  if (!inherits(object, "brokenstick"))
-    stop("object not of class brokenstick")
-  
-  # case: if no `x` is given, just use the knots
-  if (missing(new_x)) new_x <- get_knots(object)
 
-  # extract X and y from object
-  X <- get_X(object)
-  y <- get_y(object)
+predict_all_atx <- function(object, x,
+                            output = "long",
+                            filter_na = FALSE, ...) {
+  # auxiliary function to calculate predictions at a common set
+  # of x values for all individuals
+  # called by predict.brokenstick()
+  if (length(x) == 0) return(numeric(0))
   
-  # construct new records with knots
+  export <- export(object)
   
-  # calculate random effect through empirical Bayes (BLUP) predictor
-  bs.z <- EB(object, y = y, X)
+  # recreate the original data
+  brk <- get_knots(object)
+  data1 <- data.frame(subjid = model.frame(object)$subject,
+                      x = model.matrix(object) %*% brk,
+                      y = model.frame(object)$y,
+                      knot = FALSE,
+                      row.names = as.character(1:nrow(model.matrix(object))))
   
-  # prediction at knots
-  if (at == "knots")
-    return(switch(output,
-                  vector = bs.z,
-                  long = data.frame(subjid = NA, x = knots, y = NA, yhat = bs.z,
-                                    knot = TRUE,
-                                    row.names = as.character(1:length(knots)))))
+  # construct supplemental data
+  grd <- expand.grid(x = x, # x: new break ages
+                     subjid = as.factor(rownames(lme4::ranef(object)$subject)))
+  data2 <- data.frame(subjid = grd$subjid,
+                      x = grd$x,
+                      y = NA,
+                      knot = TRUE,
+                      row.names = as.character(1:length(grd$x)))
   
+  # concatenate, sort and split over subjid
+  data <- rbind(data1, data2)
+  data <- data[order(data$subjid, data$x), ]
+  ds <- split(data, f = data$subjid)
+  
+  # simple loop over subjid
+  result <- vector("list", length(ds))
+  for (i in seq_along(ds)) {
+    d <- ds[[i]]
+    if (nrow(d) > 0) result[[i]] <- predict(export, y = d$y,
+                                            x = d$x, at = "x",
+                                            output = "vector",
+                                            ...)
+  }
+  
+  # save
+  data$yhat <- unlist(result)
+  data <- data[, c("subjid", "x", "y", "yhat", "knot")]
+  if (filter_na || output == "broad") data <- data[is.na(data$y), ]
+  
+  # convert to proper output format
+  result <- switch(output,
+                   vector = data$yhat,
+                   long = data,
+                   broad = matrix(data$yhat, ncol = length(x), byrow = TRUE,
+                                  dimnames = list(NULL, x)))
+  return(result)
 }
 
 
@@ -337,7 +397,7 @@ bs_robust <- function(x, df = NULL, knots = NULL, degree = 3,
 
 ####
 predict_atx_experimental <- function(object, x, ids = NULL,
-                        output = "long", ...) {
+                                     output = "long", ...) {
   # auxiliary function to calculate predictions at a common set
   # of x values for individuals in ids
   # called by predict.brokenstick()
@@ -366,67 +426,94 @@ predict_atx_experimental <- function(object, x, ids = NULL,
   }
   result2 <- do.call(rbind, result)
   result3 <- switch(output,
-                   vector = result2$yhat,
-                   long = result2,
-                   broad = NULL)
-                   # broad = matrix(data$yhat, ncol = length(x), byrow = TRUE,
-                   #                dimnames = list(NULL, x)))
+                    vector = result2$yhat,
+                    long = result2,
+                    broad = NULL)
+  # broad = matrix(data$yhat, ncol = length(x), byrow = TRUE,
+  #                dimnames = list(NULL, x)))
   return(result3)
 }
 
 
-predict_atx <- function(object, x,
-                        output = "long",
-                        filter_na = FALSE, ...) {
-  # auxiliary function to calculate predictions at a common set
-  # of x values for all individuals
-  # called by predict.brokenstick()
-  if (length(x) == 0) return(numeric(0))
+predict_ids <- function(object, ids = NULL, at = "x", output = "long") {
+  if (!inherits(object, "brokenstick"))
+    stop("object not of class brokenstick")
   
-  export <- export(object)
+  if (is.null(ids)) return(predict_all(object, at = at, output = output))
   
-  # recreate the original data
-  brk <- get_knots(object)
-  data1 <- data.frame(subjid = model.frame(object)$subject,
-                      x = model.matrix(object) %*% brk,
-                      y = model.frame(object)$y,
-                      knot = FALSE,
-                      row.names = as.character(1:nrow(model.matrix(object))))
+  # Prepare to call predict.brokenstick_export() for selected ids
+  exp <- export(object)
+  knots <- get_knots(object)
+  data <- get_xy(object, ids = ids)
+  data <- split(data, data$subjid, drop = TRUE)
+  result <- vector("list", length(data))
+  subjids <- names(result) <- names(data)
   
-  # construct supplemental data
-  grd <- expand.grid(x = x, # x: new break ages
-                     subjid = as.factor(rownames(lme4::ranef(object)$subject)))
-  data2 <- data.frame(subjid = grd$subjid,
-                      x = grd$x,
-                      y = NA,
-                      knot = TRUE,
-                      row.names = as.character(1:length(grd$x)))
-  
-  # concatenate, sort and split over subjid
-  data <- rbind(data1, data2)
-  data <- data[order(data$subjid, data$x), ]
-  ds <- split(data, f = data$subjid)
-  
-  # simple loop over subjid
-  result <- vector("list", length(ds))
-  for (i in seq_along(ds)) {
-    d <- ds[[i]]
-    if (nrow(d) > 0) result[[i]] <- predict(export, y = d$y,
-                                            x = d$x, at = "x",
-                                            output = "vector",
-                                            ...)
+  # FIXME: write lapply version for speed
+  for (i in 1:length(data)) {
+    local_x <- data[[i]]$x
+    local_y <- data[[i]]$y
+    if (at == "knots" || at == "both") {
+      local_x <- c(local_x, knots)
+      local_y <- c(local_y, rep(NA, length(knots)))
+    }
+    result[[i]] <- predict(exp, x = local_x, y = local_y, 
+                           subjid = subjids[i], output = "long", at = at)
   }
+  if (output == "list") return(result)
+  result <- do.call(rbind, result)
+  if (at == "x" || at == "both")
+    r <- switch(output,
+                vector = result$yhat,
+                long = result,
+                broad = NULL)
+  if (at == "knots")
+    r <- switch(output,
+                vector = result$yhat,
+                long = result,
+                broad = matrix(result$yhat, ncol = length(knots),
+                               byrow = TRUE,
+                               dimnames = list(as.character(subjids),
+                                               as.character(knots))))
+  return(r)
+}
+
+predict_ids_atx <- function(object, x, ids = NULL, at = "x", output = "long") {
+  if (!inherits(object, "brokenstick"))
+    stop("object not of class brokenstick")
   
-  # save
-  data$yhat <- unlist(result)
-  data <- data[, c("subjid", "x", "y", "yhat", "knot")]
-  if (filter_na || output == "broad") data <- data[is.na(data$y), ]
+  if (is.null(ids)) return(predict_all(object, at = at, output = output))
+  if (missing(x)) x <- NULL
   
-  # convert to proper output format
-  result <- switch(output,
-                   vector = data$yhat,
-                   long = data,
-                   broad = matrix(data$yhat, ncol = length(x), byrow = TRUE,
-                                  dimnames = list(NULL, x)))
-  return(result)
+  # Prepare to call predict.brokenstick_export() for selected ids
+  knots <- get_knots(object)
+  exp <- export(object)
+  data <- get_xy(object, ids = ids)
+  data <- split(data, data$subjid, drop = TRUE)
+  result <- vector("list", length(data))
+  subjids <- names(result) <- names(data)
+  
+  # FIXME: write lapply version for speed
+  for (i in 1:length(data)) {
+    local_x <- c(data[[i]]$x, x)
+    local_y <- c(data[[i]]$y, rep(NA, length(x)))
+    result[[i]] <- predict(exp, x = local_x, y = local_y, 
+                           subjid = subjids[i], output = "long", at = at)
+  }
+  if (output == "list") return(result)
+  result <- do.call(rbind, result)
+  if (at == "x" || at == "both")
+    r <- switch(output,
+                vector = result$yhat,
+                long = result,
+                broad = NULL)
+  if (at == "knots")
+    r <- switch(output,
+                vector = result$yhat,
+                long = result,
+                broad = matrix(result$yhat, ncol = length(knots),
+                               byrow = TRUE,
+                               dimnames = list(as.character(subjids),
+                                               as.character(knots))))
+  return(r)
 }
