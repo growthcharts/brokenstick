@@ -24,7 +24,7 @@ boundary <- c(0, 3)
 ## ------------------------------------------------------------------------
 fit <- brokenstick(y = smc$haz,
                    x = smc$age,
-                   subject = smc$subjid,
+                   subjid = smc$subjid,
                    knots = knots,
                    boundary = boundary)
 

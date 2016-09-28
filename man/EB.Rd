@@ -37,8 +37,8 @@ The current implementation does not provide prediction errors.
 # EB estimate random effect for child id 8
 model <- export(fit_hgt)
 data <- slot(fit_hgt, "frame")
-y <- data[data$subject == 10001, "y"]
-X <- as.matrix(data[data$subject == 10001, paste0("x", 1:11)])
+y <- data[data$subjid == 10001, "y"]
+X <- as.matrix(data[data$subjid == 10001, paste0("x", 1:11)])
 EB(model, y, X)
 }
 \author{

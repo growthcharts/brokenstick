@@ -73,12 +73,18 @@ The `brokenstick` function performs the actual model fitting. The fitting algori
 ```{r}
 fit <- brokenstick(y = smc$haz,
                    x = smc$age,
-                   subject = smc$subjid,
+                   subjid = smc$subjid,
                    knots = knots,
                    boundary = boundary)
 ```
 
-The fitted object `fit` is of S4 class `brokenstick`, and extends class `lmerMod` with additional attributes `knots`, `Boundary.knots`, `degree` and if `storeX = TRUE`, a slot called `fit@X`. 
+The fitted object `fit` is of S4 class `brokenstick`, and extends class `lmerMod` with additional attributes `knots`, `Boundary.knots` and `degree`. 
+
+
+The fixed effects correspond to the mean of sample of children in the data. At birth, the children are on average 0.11 SD taller than the WHO standard. At the ages of 1 and 2 years, these estimates rise to 0.35 SD and 0.51 SD, respectively. The fact that these are positive and rising is not surprising. These are Dutch children, and the Dutch are known to be among the tallest in the world. Thus, at the age of 2 years, the Dutch are already about 0.5 SD taller than the WHO standard. The estimate for `x4` (0.87), corresponding to the maximum age in the data, is just there for technical reasons. It is based on extreme extrapolation beyond the data, and should be disregarded.
+
+The column labeled `Std.Dev.` contains the standard deviations of the random effects. These numbers are expected to be around 1, since - under the assumption that the WHO standard appropriately describes this sample - the dependent variable follow a standard normal distribution with zero mean and standard deviation equal to one. The `Corr` component of the random effects lists the correlations between the broken stick estimates between the time point. Thus, the correlation between the estimates at birth (`x1`) and at 2 years (`x3`) is 0.51. The standard deviation of the residuals (within-person error) for this model is of 0.50. 
+
 
 ### Export estimates
 

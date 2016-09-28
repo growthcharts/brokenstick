@@ -255,7 +255,7 @@ predict_all <- function(object, at, output) {
   
   # For everybody, prediction at the knots
   if (at == "knots") {
-    yhat <- t(lme4::ranef(object)$subject) + lme4::fixef(object)
+    yhat <- t(lme4::ranef(object)$subjid) + lme4::fixef(object)
     rownames(yhat) <- get_knots(object)
     r <- switch(output,
                 vector = as.vector(yhat),
@@ -288,7 +288,7 @@ predict_all_atx <- function(object, x,
   
   # recreate the original data
   brk <- get_knots(object)
-  data1 <- data.frame(subjid = model.frame(object)$subject,
+  data1 <- data.frame(subjid = model.frame(object)$subjid,
                       x = model.matrix(object) %*% brk,
                       y = model.frame(object)$y,
                       knot = FALSE,
@@ -296,7 +296,7 @@ predict_all_atx <- function(object, x,
   
   # construct supplemental data
   grd <- expand.grid(x = x, # x: new break ages
-                     subjid = as.factor(rownames(lme4::ranef(object)$subject)))
+                     subjid = as.factor(rownames(lme4::ranef(object)$subjid)))
   data2 <- data.frame(subjid = grd$subjid,
                       x = grd$x,
                       y = NA,
@@ -346,7 +346,7 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
   
   if (at == "knots") {
     grd <- expand.grid(x = brk,
-                       subjid = as.factor(rownames(lme4::ranef(object)$subject)))
+                       subjid = as.factor(rownames(lme4::ranef(object)$subjid)))
     result <- data.frame(subjid = grd$subjid,
                          x = grd$x,
                          y = NA,
@@ -359,12 +359,12 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
   if (at == "both") {
     data <- get_xy(object)
     yhat1 <- fitted(object)
-    yhat2 <- t(lme4::ranef(object)$subject) + lme4::fixef(object)
+    yhat2 <- t(lme4::ranef(object)$subjid) + lme4::fixef(object)
     data1 <- data.frame(data, 
                         yhat = as.vector(yhat1)[!is.na(yhat1)],
                         knot = FALSE)
     grd <- expand.grid(x = brk,
-                       subjid = as.factor(rownames(lme4::ranef(object)$subject)))
+                       subjid = as.factor(rownames(lme4::ranef(object)$subjid)))
     data2 <- data.frame(subjid = grd$subjid,
                         x = grd$x,
                         y = NA,

@@ -106,8 +106,9 @@ The *broken stick model* describes a trajectory by a series of connected straigh
 knots <- 0:2
 fit1 <- brokenstick(y = smc$haz, 
 					x = smc$age,
-					subject = smc$subjid,
+					subjid = smc$subjid,
 					knots = knots)
+class(fit1)
 ```
 
 The `brokenstick()` function calls the `lmer()` function for actual model fitting. The `fit1` object has S4 class `brokenstick`, and collects the results from model fitting and some information related to the knot specification. For example, the `knots` argument to `brokenstick()` specifies knots at birth, 1 year and 2 years, respectively. In total, there are four knots:
@@ -119,13 +120,8 @@ get_knots(fit1)
 The last knot is equal to the maximum age, and is added automatically. The first and last knots may also be specified manually by the boundary argument. Proper knot placement is vital to obtaining a high quality model. The [vignette on knots placement](knotplacement.html) discusses the issue in more detail.
 
 ```{r}
-class(fit1)
 fit1
 ```
-
-The fixed effects correspond to the mean of sample of children in the data. At birth, the children are on average 0.11 SD taller than the WHO standard. At the ages of 1 and 2 years, these estimates rise to 0.35 SD and 0.51 SD, respectively. The fact that these are positive and rising is not surprising. These are Dutch children, and the Dutch are known to be among the tallest in the world. Thus, at the age of 2 years, the Dutch are already about 0.5 SD taller than the WHO standard. The estimate for `x4` (0.87), corresponding to the maximum age in the data, is just there for technical reasons. It is based on extreme extrapolation beyond the data, and should be disregarded.
-
-The column labeled `Std.Dev.` contains the standard deviations of the random effects. These numbers are expected to be around 1, since - under the assumption that the WHO standard appropriately describes this sample - the dependent variable follow a standard normal distribution with zero mean and standard deviation equal to one. The `Corr` component of the random effects lists the correlations between the broken stick estimates between the time point. Thus, the correlation between the estimates at birth (`x1`) and at 2 years (`x3`) is 0.51. The standard deviation of the residuals (within-person error) for this model is of 0.50. 
 
 
 
@@ -182,7 +178,7 @@ knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 boundary <- c(0, 3)
 fit2 <- brokenstick(y = smc$haz, 
 					x = smc$age,
-					subject = smc$subjid,
+					subjid = smc$subjid,
 					knots = knots,
 					boundary = boundary)
 ```

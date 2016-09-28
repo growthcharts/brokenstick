@@ -4,7 +4,7 @@
 \alias{brokenstick}
 \title{Fit a broken stick model to irregular data}
 \usage{
-brokenstick(y, x, subject, knots = pretty(x), boundary = c(min(knots),
+brokenstick(y, x, subjid, knots = pretty(x), boundary = c(min(knots),
   max(max(x, na.rm = TRUE, max(knots)))), degree = 1,
   control = lmerControl(check.nobs.vs.nRE = "warning"),
   na.action = na.exclude, ...)
@@ -12,10 +12,10 @@ brokenstick(y, x, subject, knots = pretty(x), boundary = c(min(knots),
 \arguments{
 \item{y}{a vector containing the measurements to be analyzed}
 
-\item{x}{a vector of \code{length(y)} with the predictor on which 
-the break points should be defined. In longitudinal data, this is usually decimal age.}
+\item{x}{a vector of length \code{length(y)} with the explanatory variable on which 
+the break points should be defined. In longitudinal data, this is usually age.}
 
-\item{subject}{a vector containing the subject identification}
+\item{subjid}{a vector length \code{length(y)} containing the subject identification}
 
 \item{knots}{a numerical vector with the locations of the breaks to be 
 placed on the values of \code{x}. This setting is passed to \code{bs()}. Specify \code{knots} to include the range of \code{x}. This will evade the warning 
@@ -54,19 +54,17 @@ chosen break ages, and hence look like a 'broken stick'.
 Relations over time are modeled by the variance-covariance 
 parameters of the random effects. Currently, this matrix is estimated
 as unstructured by \code{lmer()} from the \code{lme4} package. 
-Experience has shown that if 
-there are enough children relative to the number of specified 
-random effects, the variance-variance matrix will have elements
-that diminish as they move away from the diagonal, as one would
-expect for data without seasonality, like growth data.
-
-This function can be time consuming for data sets with several hundreds
-of children.
+This estimate may be unstable if 
+the number of children is small relative to the number of specified 
+knots.
+ 
+This function can be time consuming for data sets with thousands of 
+children.
 }
 \examples{
 library(mice)
 data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
-fit <- brokenstick(y = data$hgt.z, x = data$age, subject = data$id, 
+fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$id, 
                    knots = c(0, 1, 2))
 }
 

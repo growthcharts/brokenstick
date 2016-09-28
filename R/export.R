@@ -19,7 +19,7 @@ export <- function(model) {
   # extract estimates from merMod object
   beta <- fixef(model)
   # get variance of RE, Q*Q
-  omega <- as.matrix(as.data.frame(VarCorr(model)$subject))
+  omega <- as.matrix(as.data.frame(VarCorr(model)$subjid))
   df <- as.data.frame(VarCorr(model))
   sigma2 <- df[df$grp == "Residual", "vcov"]
 

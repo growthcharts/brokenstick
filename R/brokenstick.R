@@ -4,7 +4,8 @@
 setClass("brokenstick",
          representation(knots = "numeric",
                         boundary = "numeric",
-                        degree = "numeric"),
+                        degree = "numeric",
+                        bs.call = "ANY"),
          contains = "lmerMod")
 
 # ==============================================================================
@@ -12,15 +13,14 @@ setClass("brokenstick",
 # ==============================================================================
 setGeneric("print")
 setMethod("print", signature( x = "brokenstick" ),
-          function ( x, ... ) {
-            print.brokenstick( x, ...)
+          function (x, ... ) {
+            print_brokenstick(x, ...)
           }
 )
 
-print.brokenstick <- function ( x, ... ) {
-  cat ("knots: ", x@knots, "\n")
-  cat ("boundary: ", x@boundary, "\n")
-  # cat ("degree: ", x@degree, "\n")
+print_brokenstick <- function (x, ... ) {
+  cat("broken stick model \n")
+  cat("knots: ", get_knots(x), "\n")
   print(summary(x))
   invisible(x)
 }
@@ -40,19 +40,17 @@ print.brokenstick <- function ( x, ... ) {
 #' Relations over time are modeled by the variance-covariance 
 #' parameters of the random effects. Currently, this matrix is estimated
 #' as unstructured by \code{lmer()} from the \code{lme4} package. 
-#' Experience has shown that if 
-#' there are enough children relative to the number of specified 
-#' random effects, the variance-variance matrix will have elements
-#' that diminish as they move away from the diagonal, as one would
-#' expect for data without seasonality, like growth data.
-#' 
-#' This function can be time consuming for data sets with several hundreds
-#' of children.
+#' This estimate may be unstable if 
+#' the number of children is small relative to the number of specified 
+#' knots.
+#'  
+#' This function can be time consuming for data sets with thousands of 
+#' children.
 #' @aliases brokenstick
 #' @param y a vector containing the measurements to be analyzed
-#' @param x a vector of \code{length(y)} with the predictor on which 
-#' the break points should be defined. In longitudinal data, this is usually decimal age.
-#' @param subject a vector containing the subject identification
+#' @param x a vector of length \code{length(y)} with the explanatory variable on which 
+#' the break points should be defined. In longitudinal data, this is usually age.
+#' @param subjid a vector length \code{length(y)} containing the subject identification
 #' @param knots a numerical vector with the locations of the breaks to be 
 #' placed on the values of \code{x}. This setting is passed to \code{bs()}. Specify \code{knots} to include the range of \code{x}. This will evade the warning 
 #' \code{some 'x' values beyond boundary knots may cause ill-conditioned bases}, a situation that may lead to nonsensical results. If in doubt, set argument \code{storeX = TRUE} and inspect the \code{X} slot of the result. The \code{X} matrix should have values between 0 and 1, and each row should add up to 1.
@@ -72,10 +70,10 @@ print.brokenstick <- function ( x, ... ) {
 #' @examples 
 #' library(mice)
 #' data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
-#' fit <- brokenstick(y = data$hgt.z, x = data$age, subject = data$id, 
+#' fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$id, 
 #'                    knots = c(0, 1, 2))
 #' @export
-brokenstick <- function(y, x, subject,
+brokenstick <- function(y, x, subjid,
                         knots = pretty(x),
                         boundary =
                           c(min(knots),
@@ -84,13 +82,15 @@ brokenstick <- function(y, x, subject,
                         control = lmerControl(check.nobs.vs.nRE = "warning"),
                         na.action = na.exclude,
                         ...) {
+  call <- match.call()
+  if (degree != 1) stop("No support for a degree different from 1.")
   X <- bs(x = x, knots = knots, Boundary.knots = boundary,
           degree = degree)
   colnames(X) <- paste("x", 1:ncol(X), sep = "")
   pred <- paste("0 +", paste(colnames(X), collapse = " + "))
-  data <- data.frame(subject = subject, x = x, y = y, X)
+  data <- data.frame(subjid = subjid, x = x, y = y, X)
   f <- as.formula(paste("y", "~", pred,
-                        "+ (", pred, "| subject)"))
+                        "+ (", pred, "| subjid)"))
   fit <- lmer(f, data = data,
               control = control,
               na.action = na.action,
@@ -100,5 +100,6 @@ brokenstick <- function(y, x, subject,
   fit@knots <- knots
   fit@boundary <- boundary
   fit@degree <- degree
+  fit@bs.call <- call
   return(fit)
 }

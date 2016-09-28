@@ -61,7 +61,7 @@ d$subjid <- as.factor(d$subjid)
 fit_hgt <- with(d,
 				brokenstick(y = haz,
 							x = age,
-							subject = subjid,
+							subjid = subjid,
 							knots = knots,
 							boundary = boundary))
 

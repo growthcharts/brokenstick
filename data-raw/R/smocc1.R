@@ -35,7 +35,7 @@ boundary <- c(0, 3)
 fit.hgt <- with(d,
 				brokenstick(y = hgt.z, 
 							x = age, 
-							subject = id,
+							subjid = id,
 							knots = knots, 
 							boundary = boundary))
 

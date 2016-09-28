@@ -2,12 +2,15 @@
 knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 
 ## ------------------------------------------------------------------------
+if (!require(rbokeh)) install.packages("rbokeh")
+if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
 require("brokenstick")
-smc <- smocc_hgtwgt[1:2000, ]
-head(smc)
 
 ## ------------------------------------------------------------------------
-if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
+smc <- brokenstick::smocc_hgtwgt[1:2000, ]
+head(smc, 3)
+
+## ------------------------------------------------------------------------
 smc2 <- hbgd::get_smocc_data()[1:2000, ]
 smc2$subjid <- as.numeric(as.character(smc2$subjid))
 smc2$src <- as.character(smc2$src)
@@ -26,7 +29,6 @@ smc2 <- smc2[, keep]
 identical(smc, smc2)
 
 ## ----fig1----------------------------------------------------------------
-library(rbokeh)
 ids <- c(10001, 10005, 10022)
 d <- subset(smc, subjid %in% ids)
 idx <- split(d, d$subjid)
@@ -56,7 +58,6 @@ grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, width = 680, height = 30
 get_knots(fit1)
 
 ## ------------------------------------------------------------------------
-class(fit1)
 fit1
 
 ## ------------------------------------------------------------------------

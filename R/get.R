@@ -29,7 +29,7 @@ get_knots <- function(object) {
 get_xy <- function(object, ids = NULL) {
   brk <- get_knots(object)
   if (inherits(object, "brokenstick")) {
-    subjid <- model.frame(object)$subject
+    subjid <- model.frame(object)$subjid
     idx <- rep(TRUE, length(subjid))
     if (!is.null(ids)) idx <- subjid %in% ids
     data <- data.frame(subjid = subjid[idx],
@@ -53,7 +53,7 @@ get_xy <- function(object, ids = NULL) {
 get_X <- function(object, ids = NULL) {
   if (inherits(object, "brokenstick")) {
     if (is.null(ids)) return(model.matrix(object))
-    subjid <- model.frame(object)$subject
+    subjid <- model.frame(object)$subjid
     idx <- subjid %in% ids
     return(model.matrix(object)[idx, , drop = FALSE])
   }
@@ -72,7 +72,7 @@ get_X <- function(object, ids = NULL) {
 get_y <- function(object, ids = NULL) {
   if (inherits(object, "brokenstick")) {
     if (is.null(ids)) return(model.frame(object)$y)
-    subjid <- model.frame(object)$subject
+    subjid <- model.frame(object)$subjid
     idx <- subjid %in% ids
     return(model.frame(object)$y[idx])
   }

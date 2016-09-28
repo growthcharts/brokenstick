@@ -126,12 +126,12 @@ boundary &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv
 <p>The <code>brokenstick</code> function performs the actual model fitting. The fitting algorithm may complain that the number of random effect is too high, but my experience is that this will not affect the quality of the predictions.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">fit &lt;-<span class="st"> </span><span class="kw">brokenstick</span>(<span class="dt">y =</span> smc$haz,
                    <span class="dt">x =</span> smc$age,
-                   <span class="dt">subject =</span> smc$subjid,
+                   <span class="dt">subjid =</span> smc$subjid,
                    <span class="dt">knots =</span> knots,
                    <span class="dt">boundary =</span> boundary)</code></pre></div>
 <pre><code>## Warning: number of observations (=1960) &lt;= number of random effects (=2266)
 ## for term (0 + x1 + x2 + x3 + x4 + x5 + x6 + x7 + x8 + x9 + x10 + x11 |
-## subject); the random-effects parameters and the residual variance (or scale
+## subjid); the random-effects parameters and the residual variance (or scale
 ## parameter) are probably unidentifiable</code></pre>
 <pre><code>## Warning in commonArgs(par, fn, control, environment()): maxfun &lt; 10 *
 ## length(par)^2 is not recommended.</code></pre>
@@ -141,14 +141,16 @@ boundary &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv
 <pre><code>## Warning in checkConv(attr(opt, &quot;derivs&quot;), opt$par, ctrl = control
 ## $checkConv, : Model failed to converge with max|grad| = 0.190157 (tol =
 ## 0.002, component 1)</code></pre>
-<p>The fitted object <code>fit</code> is of S4 class <code>brokenstick</code>, and extends class <code>lmerMod</code> with additional attributes <code>knots</code>, <code>Boundary.knots</code>, <code>degree</code> and if <code>storeX = TRUE</code>, a slot called <code>fit@X</code>.</p>
+<p>The fitted object <code>fit</code> is of S4 class <code>brokenstick</code>, and extends class <code>lmerMod</code> with additional attributes <code>knots</code>, <code>Boundary.knots</code> and <code>degree</code>.</p>
+<p>The fixed effects correspond to the mean of sample of children in the data. At birth, the children are on average 0.11 SD taller than the WHO standard. At the ages of 1 and 2 years, these estimates rise to 0.35 SD and 0.51 SD, respectively. The fact that these are positive and rising is not surprising. These are Dutch children, and the Dutch are known to be among the tallest in the world. Thus, at the age of 2 years, the Dutch are already about 0.5 SD taller than the WHO standard. The estimate for <code>x4</code> (0.87), corresponding to the maximum age in the data, is just there for technical reasons. It is based on extreme extrapolation beyond the data, and should be disregarded.</p>
+<p>The column labeled <code>Std.Dev.</code> contains the standard deviations of the random effects. These numbers are expected to be around 1, since - under the assumption that the WHO standard appropriately describes this sample - the dependent variable follow a standard normal distribution with zero mean and standard deviation equal to one. The <code>Corr</code> component of the random effects lists the correlations between the broken stick estimates between the time point. Thus, the correlation between the estimates at birth (<code>x1</code>) and at 2 years (<code>x3</code>) is 0.51. The standard deviation of the residuals (within-person error) for this model is of 0.50.</p>
 <div id="export-estimates" class="section level3">
 <h3>Export estimates</h3>
 <p>For easy handling and storage accross sessions, the <code>export()</code> function selects from <code>fit</code> the minimal set of estimates needed to make predictions, and stores the results in an S3 class <code>brokenstick.export</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(fit)</code></pre></div>
 <pre><code>## [1] &quot;brokenstick&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">slotNames</span>(fit)</code></pre></div>
-<pre><code>##  [1] &quot;knots&quot;    &quot;boundary&quot; &quot;degree&quot;   &quot;X&quot;        &quot;resp&quot;     &quot;Gp&quot;      
+<pre><code>##  [1] &quot;knots&quot;    &quot;boundary&quot; &quot;degree&quot;   &quot;bs.call&quot;  &quot;resp&quot;     &quot;Gp&quot;      
 ##  [7] &quot;call&quot;     &quot;frame&quot;    &quot;flist&quot;    &quot;cnms&quot;     &quot;lower&quot;    &quot;theta&quot;   
 ## [13] &quot;beta&quot;     &quot;u&quot;        &quot;devcomp&quot;  &quot;pp&quot;       &quot;optinfo&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">exp &lt;-<span class="st"> </span><span class="kw">export</span>(fit)
