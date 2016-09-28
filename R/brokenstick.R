@@ -76,7 +76,6 @@ print.brokenstick <- function ( x, ... ) {
 #' data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
 #' fit <- brokenstick(y = data$hgt.z, x = data$age, subject = data$id, 
 #'                    knots = c(0, 1, 2))
-#' plot(fit)
 #' @export
 brokenstick <- function(y, x, subject,
                         knots = pretty(x),

@@ -4,8 +4,8 @@
 \alias{predict.brokenstick}
 \title{Predict growth curve according to the broken stick model}
 \usage{
-\method{predict}{brokenstick}(object, y, x, at = "x", output = "long",
-  include_boundaries = TRUE, filter_na = FALSE, ...)
+\method{predict}{brokenstick}(object, y, x, ids = NULL, at = "x",
+  output = "long", ...)
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick} or of class
@@ -22,9 +22,12 @@ If both \code{y} and \code{x} not specified,
   \code{object}. Note that the \code{at = "x"} argument is needed to make
   predictions at the \code{x} values.}
 
+\item{ids}{A vector with one or more subject identification codes.}
+
 \item{at}{If \code{at = "x"} (the default) the function returns
 predictions at the \code{x} values in the data. Specify \code{at =
-"knots"} to obtain predictions at the knots of the model.}
+"knots"} to obtain predictions at the knots of the model, or 
+\code{at = "both"} to obtain both.}
 
 \item{output}{A string specifying the desired type of output. If \code{output
 = "long"} (the default), the result is cast into a data frame of the long
@@ -37,20 +40,8 @@ otherwise. If \code{output = "vector"}, the result is returned as a vector.
 This is the fastest method, and should be used in programming
 and simulation.}
 
-\item{include_boundaries}{Logical indicating whether the broken stick
-estimates on the right-hand side boundary should be included. The default
-is \code{TRUE}.}
-
-\item{filter_na}{Logical indicating whether to return estimates for new values
-of \code{y} only. The default is \code{FALSE}, so all predictions are
-returned. Prediction at a given \code{x} values may be forced by setting
-the corresponding entries of \code{y} equal to \code{NA}. Prediction at the
-knots is also considered new, even if there are observed values at \code{x}
-and \code{y}.}
-
 \item{\dots}{Additional arguments passed down to \code{predict.merMod()},
-\code{predict.brokenstick_export()} and \code{predict.atx()}. Set the flag
-\code{filter_na = FALSE} to obtain predictions for both old and new \code{x}.}
+\code{predict.brokenstick_export()} and \code{predict_all()}.}
 }
 \value{
 If \code{output == "long"}, a data frame with five columns named:
@@ -96,17 +87,12 @@ round(head(p), 2)
 p <- predict(fit_hgt, output = "vector", at = "knots")
 round(head(p), 2)
 
-# Obtain broken stick estimates at the measured ages
-p <- predict(fit_hgt)
-head(p)
-
 # Obtain estimates at weeks 1-4 for all children, include old points
 p <- predict(fit_hgt, x = round((1:4)*7/365.25, 4))
 head(p)
 
 # Same, but now organised as broad matrix of new points only
-p <- predict(fit_hgt, x = round((1:4)*7/365.25, 4), output = "broad",
-filter_na = TRUE)
+p <- predict(fit_hgt, x = round((1:4)*7/365.25, 4), output = "broad")
 head(p)
 
 }

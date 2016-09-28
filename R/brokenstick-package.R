@@ -2,6 +2,7 @@
 #'@importFrom splines bs
 #'@importFrom methods setGeneric setMethod
 #'@importFrom stats approx as.formula na.omit predict fitted model.frame model.matrix na.exclude
+#'@importFrom rbokeh figure ly_lines ly_points grid_plot "%>%"
 NULL
 
 #' \pkg{brokenstick}: A package for irregular longitudinal data.
