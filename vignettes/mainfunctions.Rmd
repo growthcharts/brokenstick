@@ -1,9 +1,9 @@
 ---
-title: "Main functions"
+title: "Overview of main functions"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Main functions}
+  %\VignetteIndexEntry{Overview main functions}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -15,9 +15,9 @@ knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 
 ## Objective
 
-The vignette demonstrates the main functions in the `brokenstick` package: `brokenstick()`, `predict()` and `export`.
+The vignette demonstrates the main functions in the `brokenstick` package: `brokenstick()`, `predict()`, `plot()` and `export` by a series of steps.
 
-## Preliminaries
+## Set up libraries
 
 This vignette uses functions from the `rbokeh`, `hbgd` and `brokenstick` packages. 
 
@@ -28,7 +28,7 @@ require("brokenstick")
 ```
 
 
-## Data set
+## Load data set
 
 The `smocc_hgtwgt` data in the `brokenstick` package contain the heights and weights of 1933 Dutch children measured on 10 visits at ages 0-2 years. Here we take the first 2000 records from the data.
 
@@ -60,7 +60,7 @@ identical(smc, smc2)
 
 Variable names and types conform to the HBGD definitions as implemented in `view_variables()`. 
 
-## Exploratory analysis
+## Perform exploratory analysis
 
 Interactive plots of the height trajectories of three children can be made using the `rbokeh` package as follows:
 
@@ -98,7 +98,7 @@ grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, width = 680, height = 30
 
 ---
 
-## Broken stick model with two lines
+## Fit broken stick model with two lines
 
 The *broken stick model* describes a trajectory by a series of connected straight lines. We first calculate a rough approximation in the above trajectories using just two lines. The first line should start at birth and end at the age of exactly 1 years. The second line should span the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate this model as follows:
 
@@ -123,11 +123,11 @@ The last knot is equal to the maximum age, and is added automatically. The first
 fit1
 ```
 
+The fixed effects correspond to the mean of sample of children in the data, whereas the correlation between ages is modelled by the random effects. The interpretation of the estimates is discussed in the [vignette for prediction](prediction.html).
 
+## Obtain predicted values
 
-## Predicted values
-
-The broken stick model defines predicted values as a compromise between the person's data values and the global mean. This compromise is called the *conditional mean* of the posterior distribution, it is calculated as the sum of fixed and random effects. The `predict()` function obtains predictions from the broken stick model. In order to obtain the predicted values for each measured data point for all children in the fitted model use
+The `predict()` function obtains predictions from the broken stick model. The function is extremely flexible, and allows for prediction of new subjects at arbitrary ages in a variety of output formats. The simplest call 
 
 ```{r}
 p1 <- predict(fit1)
@@ -135,40 +135,41 @@ dim(p1)
 head(p1, 4)
 ```
 
-The observed $Z$-score is stored in column called `y`, and the corresponding broken stick estimates are stored in the column called `yhat`. The column `knot` is set to `FALSE` if `y` is actually observed. We obtain the connected lines according to the broken stick model by obtaining predictions at the break ages by specifying the `at = "knots"` argument.
+just produces the predicted value (in `yhat`) for each measured data point for all children used to fit the model in the `long` output format. The predicted values represent a compromise between the person's data values and the global mean. In general, the fewer and less extreme data points of a person are, the closer the compromise will be toward the global mean. The compromise is called the *conditional mean* of the posterior distribution. In the broken stick model, it is simply calculated as the sum of the fixed and random effects. 
+
+The observed $Z$-score is stored in column called `y`, and the corresponding broken stick estimates are stored in the column called `yhat`. The column `knot` is set to `FALSE` if `y` is actually observed. 
+
+We can obtain the location at which the lines in the broken stick model connect by specifying the `at = "knots"` argument, e.g.
 
 ```{r}
 p2 <- predict(fit1, at = "knots")
 head(p2, 4)
 ```
 
-Break ages are distinguihsed from observed ages by the `knot` column, which is now `TRUE`. We may obtain both types of estimates simultaneously for all children by 
+Note that the column `knot` is now `TRUE`. We may obtain both types of estimates simultaneously for all children by using the 
 
 ```{r}
-pr <- predict(fit1, x = get_knots(fit1))
-head(pr, 15)
+pr <- predict(fit1, at = "both")
+head(pr, 4)
 ```
 
 We plot the original data and the broken stick estimates jointly by `xyplot()` from the `lattice` package by
 
 ```{r fig3}
-d <- subset(pr, subjid %in% ids & x <= 2.2)
-idx <- split(d, d$subjid)
-figs <- lapply(idx, function(x) {
-  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
-  ly_zband( x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
-  ly_lines( x = x$x[!x$knot], y = x$y[!x$knot], color = "grey") %>%
-  ly_points(x = x$x[!x$knot], x$y[!x$knot], color = "blue", size = 6) %>%
-  ly_lines( x = x$x[x$knot], y = x$yhat[x$knot], col = "darkred") %>%
-  ly_points(x = x$x[x$knot], x$yhat[x$knot], col = "red", size = 6) 
-  })
-grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, 
-          width = 680, height = 300)
+plot(fit1, ids = 10001, x_trim = c(0, 2.2))
 ```
+
+Plot for the three children given above can be obtained by 
+
+```{r}
+plot(fit1, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300)
+```
+
+The plot shows that the two-line model is fairly crude. 
 
 ---
 
-## Extension to nine lines
+## Extend to nine lines
 
 We now refine the model in the first two years by adding a knot for each age at which a visit was scheduled. This model can be run as
 
@@ -183,37 +184,28 @@ fit2 <- brokenstick(y = smc$haz,
 					boundary = boundary)
 ```
 
-The model contains 11 random effects. This optimization problem is more difficult. The optimization routine issues a number of warnings related to the number of random effects relative to the number of observations, and the complexity of the optimization problem. These warnings may indicate degeneracies in the numerical solution, and are generally be less frequent for large samples. 
+The model contains 11 random effects. This optimization problem is more difficult, so it takes longer to run. The optimization routine issues a number of warnings related to the number of random effects relative to the number of observations. These warnings may indicate degeneracies in the numerical solution, which may be particularly problematic of a complex model (i.e. many knots) is fitted to a small data set.  
 
 As before, predicted values can be obtained by
 
 ```{r}
-pr <- predict(fit2, x = get_knots(fit_hgt))
+pr <- predict(fit2, at = "both")
 head(pr, 4)
 ```
 
+and plotted by
+
 ```{r echo=FALSE}
-d <- subset(pr, subjid %in% ids & x <= 2.2)
-idx <- split(d, d$subjid)
-figs <- lapply(idx, function(x) {
-  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
-  ly_zband( x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
-  ly_lines( x = x$x[!x$knot], y = x$y[!x$knot], color = "grey") %>%
-  ly_points(x = x$x[!x$knot], x$y[!x$knot], color = "blue", size = 6) %>%
-  ly_lines( x = x$x[x$knot], y = x$yhat[x$knot], col = "darkred") %>%
-  ly_points(x = x$x[x$knot], x$yhat[x$knot], col = "red", size = 6) 
-  })
-grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, 
-          width = 680, height = 300)
+plot(fit2, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300)
 ```
 
 ---
 
-The figure plots the nine line model, with break points at the scheduled ages (indicated by the grey dashed lines). The model now fits the data very well. Formal model assessment can be done with standard `lmer` diagnostic plots. See the vignette on *Model diagnostics* for more detail [NOTE: vignette still has to be written]. 
+The broken stick model now fits the data very well. Formal model assessment can be done with standard `lmer` diagnostic plots. See the vignette on *Model diagnostics* for more detail. 
 
-The broken stick model is sensitive to the location of the knots. Some advice about knot placement: Evidently, using more knots can improve the fit to the data. However, adding an excessive number of knots will substantially increase calculation time, and create solutions that are less stable. Try using not more than the (average) number of data points per person. Also, knot placement requires some care. Here, the knots are added at the scheduled visits, which is a reasonable strategy for obtaining good predictions as there are generally many observations in the neighourbood of the scheduled ages. In contrast, placing knots at ages where the data are very sparse (e.g. exactly in-between visits) may result in bad predictions and should be avoided. 
+<!-- The broken stick model is sensitive to the location of the knots. Some advice about knot placement: Evidently, using more knots can improve the fit to the data. However, adding an excessive number of knots will substantially increase calculation time, and create solutions that are less stable. Try using not more than the (average) number of data points per person. Also, knot placement requires some care. Here, the knots are added at the scheduled visits, which is a reasonable strategy for obtaining good predictions as there are generally many observations in the neighourbood of the scheduled ages. In contrast, placing knots at ages where the data are very sparse (e.g. exactly in-between visits) may result in bad predictions and should be avoided.  -->
 
-## Explained variance
+## Compare explained variance
 
 The proportion of the variance of the outcome explained by the two-line model is
 
@@ -230,9 +222,9 @@ var(fitted(fit2), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
 so the nine-line broken stick model explains about `r round(100 * var(fitted(fit2), na.rm = TRUE) / var(smc$haz, na.rm = TRUE))` percent of the variance of the height SDS.
 
 
-## Publishing your model
+## Export and publish model
 
-The `fit2` object can be stored by `save()` for future use in R. However, a more parsimonious and convenient way to reuse the model is to export its parameter estimates, and store only these. As a matter of fact, prediction using the broken stick model requires only the knot locations, the fixed effect estimates, the variance/covariance matrix of the random effects, and the size of the residual variance. The `export()` function will collect this information from the fitted model, and store it as a list.
+A brokenstick model like in `fit2` can be stored by `save()` for future use in R. However, this is a fairly large object that contains a lot of superfluous information. As a matter of fact, if we know the `x` and `y` variables of a given person, prediction using the broken stick model requires only the knot locations, the fixed effect estimates, the variance/covariance matrix of the random effects, and the size of the residual variance. The `export()` function will collect this information from the fitted model, and store it as a list.
 
 ```{r}
 # export the broken stick models
@@ -241,41 +233,26 @@ attributes(exp)
 lapply(exp, round, 2)
 ```
 
-Such estimates can be published as a longitudinal growth reference.
+This set of estimates represents a longitudinal growth reference, and can be published as such.
 
-## Prediction using a published broken stick reference
+## Predict from the published model
 
-Suppose we have four measured a new child and want to obtain predictions according to the published model stored in `export_hgt`. The following code calculates the predictions.
+Suppose we have measured a new boy, say Fred. We wish to obtain predictions for Fred using the exported model in `exp`. The following code calculates these predictions.
 
 ```{r}
-# four height measurement on new child
+# Five age-haz observations for Fred
 x <- c(0, 0.12, 0.32, 0.62, 1.1)
 y <- c(-1.2, -1.8, -1.7, -1.9, -2.1)
-
-# prediction at ages x
-atx <- predict(exp, y = y, x = x)
-atx
-# prediction at the knots
-atknots <- predict(exp, y = y, x = x, at = "knots")
-head(atknots)
+predict(exp, y, x, at = "both", subjid = "Fred")
 ```
 
-The predicted values are found such that the published model fits best to the given age and height values. The figure below plots the observed data and the predicted data at the break ages for the new child.
+The figure below plots the observed data (five blue points) and the broken stick predictions (red points) for Fred. 
 
 ```{r echo = FALSE, fig.align = "center"}
-pr <- rbind(atx, atknots)
-d <- subset(pr, x <= 2.2)
-idx <- list(d)
-figs <- lapply(idx, function(x) {
-  if (is.null(x)) return(NULL)
-  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
-  ly_zband( x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
-  ly_lines( x = x$x[!x$knot], y = x$y[!x$knot], color = "grey") %>%
-  ly_points(x = x$x[!x$knot], x$y[!x$knot], color = "blue", size = 10) %>%
-  ly_lines( x = x$x[x$knot], y = x$yhat[x$knot], col = "red") %>%
-  ly_points(x = x$x[x$knot], x$yhat[x$knot], col = "red", size = 10) 
-  })
-
-grid_plot(figs)
+plot(exp, y, x, at = "both", x_trim = c(0, 2.2))
 ```
+
+---
+
+Thus, based on the data up to 1.1 year, the model predicts that Fred's growth curve would remain around -2.0 SD until Fred is 1.5 years, and then would increase to -1.5 SD.
 

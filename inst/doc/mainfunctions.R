@@ -54,6 +54,14 @@ figs <- lapply(idx, function(x) {
 })
 grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, width = 680, height = 300)
 
+## ----fit1, cache = TRUE--------------------------------------------------
+knots <- 0:2
+fit1 <- brokenstick(y = smc$haz, 
+					x = smc$age,
+					subjid = smc$subjid,
+					knots = knots)
+class(fit1)
+
 ## ------------------------------------------------------------------------
 get_knots(fit1)
 
@@ -70,40 +78,31 @@ p2 <- predict(fit1, at = "knots")
 head(p2, 4)
 
 ## ------------------------------------------------------------------------
-pr <- predict(fit1, x = get_knots(fit1))
-head(pr, 15)
+pr <- predict(fit1, at = "both")
+head(pr, 4)
 
 ## ----fig3----------------------------------------------------------------
-d <- subset(pr, subjid %in% ids & x <= 2.2)
-idx <- split(d, d$subjid)
-figs <- lapply(idx, function(x) {
-  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
-  ly_zband( x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
-  ly_lines( x = x$x[!x$knot], y = x$y[!x$knot], color = "grey") %>%
-  ly_points(x = x$x[!x$knot], x$y[!x$knot], color = "blue", size = 6) %>%
-  ly_lines( x = x$x[x$knot], y = x$yhat[x$knot], col = "darkred") %>%
-  ly_points(x = x$x[x$knot], x$yhat[x$knot], col = "red", size = 6) 
-  })
-grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, 
-          width = 680, height = 300)
+plot(fit1, ids = 10001, x_trim = c(0, 2.2))
 
 ## ------------------------------------------------------------------------
-pr <- predict(fit2, x = get_knots(fit_hgt))
+plot(fit1, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300)
+
+## ----fit2, cache = TRUE--------------------------------------------------
+# 10 scheduled visits
+knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
+boundary <- c(0, 3)
+fit2 <- brokenstick(y = smc$haz, 
+					x = smc$age,
+					subjid = smc$subjid,
+					knots = knots,
+					boundary = boundary)
+
+## ------------------------------------------------------------------------
+pr <- predict(fit2, at = "both")
 head(pr, 4)
 
 ## ----echo=FALSE----------------------------------------------------------
-d <- subset(pr, subjid %in% ids & x <= 2.2)
-idx <- split(d, d$subjid)
-figs <- lapply(idx, function(x) {
-  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
-  ly_zband( x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
-  ly_lines( x = x$x[!x$knot], y = x$y[!x$knot], color = "grey") %>%
-  ly_points(x = x$x[!x$knot], x$y[!x$knot], color = "blue", size = 6) %>%
-  ly_lines( x = x$x[x$knot], y = x$yhat[x$knot], col = "darkred") %>%
-  ly_points(x = x$x[x$knot], x$yhat[x$knot], col = "red", size = 6) 
-  })
-grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, 
-          width = 680, height = 300)
+plot(fit2, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300)
 
 ## ------------------------------------------------------------------------
 var(fitted(fit1), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
@@ -118,30 +117,11 @@ attributes(exp)
 lapply(exp, round, 2)
 
 ## ------------------------------------------------------------------------
-# four height measurement on new child
+# Five age-haz observations for Fred
 x <- c(0, 0.12, 0.32, 0.62, 1.1)
 y <- c(-1.2, -1.8, -1.7, -1.9, -2.1)
-
-# prediction at ages x
-atx <- predict(exp, y = y, x = x)
-atx
-# prediction at the knots
-atknots <- predict(exp, y = y, x = x, at = "knots")
-head(atknots)
+predict(exp, y, x, at = "both", subjid = "Fred")
 
 ## ----echo = FALSE, fig.align = "center"----------------------------------
-pr <- rbind(atx, atknots)
-d <- subset(pr, x <= 2.2)
-idx <- list(d)
-figs <- lapply(idx, function(x) {
-  if (is.null(x)) return(NULL)
-  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
-  ly_zband( x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
-  ly_lines( x = x$x[!x$knot], y = x$y[!x$knot], color = "grey") %>%
-  ly_points(x = x$x[!x$knot], x$y[!x$knot], color = "blue", size = 10) %>%
-  ly_lines( x = x$x[x$knot], y = x$yhat[x$knot], col = "red") %>%
-  ly_points(x = x$x[x$knot], x$yhat[x$knot], col = "red", size = 10) 
-  })
-
-grid_plot(figs)
+plot(exp, y, x, at = "both", x_trim = c(0, 2.2))
 
