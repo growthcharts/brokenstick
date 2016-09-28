@@ -78,7 +78,7 @@ fit <- brokenstick(y = smc$haz,
                    boundary = boundary)
 ```
 
-The fitted object `fit` is of S4 class `brokenstick`, and extends class `lmerMod` with additional attributes `knots`, `Boundary.knots`, `degree` and if `storeX = TRUE`, a slot called `fit@X`. 
+The fitted object `fit` is of S4 class `brokenstick`, and extends class `lmerMod` with additional attributes `knots`, `Boundary.knots` and `degree`. 
 
 ### Export estimates
 

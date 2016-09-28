@@ -17,21 +17,29 @@ knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 
 The vignette demonstrates the main functions in the `brokenstick` package: `brokenstick()`, `predict()` and `export`.
 
-## Data set
+## Preliminaries
 
+This vignette uses functions from the `rbokeh`, `hbgd` and `brokenstick` packages. 
+
+```{r}
+if (!require(rbokeh)) install.packages("rbokeh")
+if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
+require("brokenstick")
+```
+
+
+## Data set
 
 The `smocc_hgtwgt` data in the `brokenstick` package contain the heights and weights of 1933 Dutch children measured on 10 visits at ages 0-2 years. Here we take the first 2000 records from the data.
 
 ```{r}
-require("brokenstick")
-smc <- smocc_hgtwgt[1:2000, ]
-head(smc)
+smc <- brokenstick::smocc_hgtwgt[1:2000, ]
+head(smc, 3)
 ```
 
-Another way to obtain the same data is to use the `get_smocc_data()` function from the `github::HBGDki/hbgd` package, followed by a little post-processing:
+Another way to obtain these data is to use the `get_smocc_data()` function from the `github::HBGDki/hbgd` package, followed by a little post-processing:
 
 ```{r}
-if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
 smc2 <- hbgd::get_smocc_data()[1:2000, ]
 smc2$subjid <- as.numeric(as.character(smc2$subjid))
 smc2$src <- as.character(smc2$src)
@@ -54,10 +62,9 @@ Variable names and types conform to the HBGD definitions as implemented in `view
 
 ## Exploratory analysis
 
-Plots of the first the height trajectories of two children can be made with the `lattice` function `xyplot()`, as follows:
+Interactive plots of the height trajectories of three children can be made using the `rbokeh` package as follows:
 
 ```{r fig1}
-library(rbokeh)
 ids <- c(10001, 10005, 10022)
 d <- subset(smc, subjid %in% ids)
 idx <- split(d, d$subjid)
@@ -103,24 +110,24 @@ fit1 <- brokenstick(y = smc$haz,
 					knots = knots)
 ```
 
-The `knots` argument to `brokenstick()` specifies that the break ages are birth, 1 year and 2 years, respectively. In total, there are four knots:
+The `brokenstick()` function calls the `lmer()` function for actual model fitting. The `fit1` object has S4 class `brokenstick`, and collects the results from model fitting and some information related to the knot specification. For example, the `knots` argument to `brokenstick()` specifies knots at birth, 1 year and 2 years, respectively. In total, there are four knots:
 
 ```{r}
 get_knots(fit1)
 ```
 
-This broken stick model uses break ages 0, 1 and 2 years. The knot at age `r get_knots(fit1)[4]` is equal to the maximum age, and is added automatically for technical reasons since the knot range must at least be a wide as the age range in the data. The first and last knots may also be specified manually by the boundary argument, e.g. `boundary = c(0, 3)`.
+The last knot is equal to the maximum age, and is added automatically. The first and last knots may also be specified manually by the boundary argument. Proper knot placement is vital to obtaining a high quality model. The [vignette on knots placement](knotplacement.html) discusses the issue in more detail.
 
 ```{r}
 class(fit1)
 fit1
 ```
 
-The `brokenstick()` function calls the `lmer()` function for model fitting. The `fit1` object is of S4 class `brokenstick`, which contains the results of `lmer()` as well as some additional slots related to the knot specification. 
-
 The fixed effects correspond to the mean of sample of children in the data. At birth, the children are on average 0.11 SD taller than the WHO standard. At the ages of 1 and 2 years, these estimates rise to 0.35 SD and 0.51 SD, respectively. The fact that these are positive and rising is not surprising. These are Dutch children, and the Dutch are known to be among the tallest in the world. Thus, at the age of 2 years, the Dutch are already about 0.5 SD taller than the WHO standard. The estimate for `x4` (0.87), corresponding to the maximum age in the data, is just there for technical reasons. It is based on extreme extrapolation beyond the data, and should be disregarded.
 
 The column labeled `Std.Dev.` contains the standard deviations of the random effects. These numbers are expected to be around 1, since - under the assumption that the WHO standard appropriately describes this sample - the dependent variable follow a standard normal distribution with zero mean and standard deviation equal to one. The `Corr` component of the random effects lists the correlations between the broken stick estimates between the time point. Thus, the correlation between the estimates at birth (`x1`) and at 2 years (`x3`) is 0.51. The standard deviation of the residuals (within-person error) for this model is of 0.50. 
+
+
 
 ## Predicted values
 

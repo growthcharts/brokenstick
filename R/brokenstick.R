@@ -4,8 +4,7 @@
 setClass("brokenstick",
          representation(knots = "numeric",
                         boundary = "numeric",
-                        degree = "numeric",
-                        X = "ANY"),
+                        degree = "numeric"),
          contains = "lmerMod")
 
 # ==============================================================================
@@ -21,7 +20,7 @@ setMethod("print", signature( x = "brokenstick" ),
 print.brokenstick <- function ( x, ... ) {
   cat ("knots: ", x@knots, "\n")
   cat ("boundary: ", x@boundary, "\n")
-  cat ("degree: ", x@degree, "\n")
+  # cat ("degree: ", x@degree, "\n")
   print(summary(x))
   invisible(x)
 }
@@ -66,7 +65,6 @@ print.brokenstick <- function ( x, ... ) {
 #' is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 #' fatal errors with respect the number of parameters into warnings.
 #' @param na.action The function to call for the \code{na.action} argument in \code{lmer()}. The default is \code{na.exclude}.
-#' @param store_x A logical indicating whether the spline model matrix should be returned as slot \code{x} in the result. The default is \code{FALSE}
 #' @param \dots Additional arguments passed down to \code{lmer()} 
 #' (e.g. to specify additional \code{lmer()} options.
 #' @return A fitted model of class \code{brokenstick}, which extends the 
@@ -85,7 +83,6 @@ brokenstick <- function(y, x, subject,
                         degree = 1,
                         control = lmerControl(check.nobs.vs.nRE = "warning"),
                         na.action = na.exclude,
-                        store_x = FALSE,
                         ...) {
   X <- bs(x = x, knots = knots, Boundary.knots = boundary,
           degree = degree)
@@ -103,6 +100,5 @@ brokenstick <- function(y, x, subject,
   fit@knots <- knots
   fit@boundary <- boundary
   fit@degree <- degree
-  if (store_x) fit@x <- X
   return(fit)
 }

@@ -7,7 +7,7 @@
 brokenstick(y, x, subject, knots = pretty(x), boundary = c(min(knots),
   max(max(x, na.rm = TRUE, max(knots)))), degree = 1,
   control = lmerControl(check.nobs.vs.nRE = "warning"),
-  na.action = na.exclude, store_x = FALSE, ...)
+  na.action = na.exclude, ...)
 }
 \arguments{
 \item{y}{a vector containing the measurements to be analyzed}
@@ -33,8 +33,6 @@ is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 fatal errors with respect the number of parameters into warnings.}
 
 \item{na.action}{The function to call for the \code{na.action} argument in \code{lmer()}. The default is \code{na.exclude}.}
-
-\item{store_x}{A logical indicating whether the spline model matrix should be returned as slot \code{x} in the result. The default is \code{FALSE}}
 
 \item{\dots}{Additional arguments passed down to \code{lmer()} 
 (e.g. to specify additional \code{lmer()} options.}
