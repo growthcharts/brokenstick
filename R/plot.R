@@ -128,3 +128,18 @@ plot_trajectory <- function(x = x, data = data,
   grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, nrow = nrow, 
             height = height, width = width)
 }
+
+#'Get the label of a HBGD standard variable
+#'
+#'This functions consults the \code{hbgd::hbgd_labels} table to find the variable
+#'label.
+#'
+#'@note This function should be placed in the \code{hbgd} package.
+#'@param x An character object with the name of one variable
+#'@return A character vector, either the label found in the table, or the name of the variable.
+#'@export
+get_label <- function(x) {
+  label <- hbgd::hbgd_labels[[x]]
+  if (is.null(label)) return(x)
+  return(label)
+}
