@@ -11,9 +11,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2016-09-28" />
+<meta name="date" content="2016-09-29" />
 
-<title>Getting started</title>
+<title>Getting started with brokenstick</title>
 
 
 
@@ -29,13 +29,13 @@
 
 
 
-<h1 class="title toc-ignore">Getting started</h1>
-<h4 class="date"><em>2016-09-28</em></h4>
+<h1 class="title toc-ignore">Getting started with <code>brokenstick</code></h1>
+<h4 class="date"><em>2016-09-29</em></h4>
 
 
 
-<div id="overview" class="section level2">
-<h2>Overview</h2>
+<div id="what-is-the-broken-stick-model" class="section level2">
+<h2>What is the broken stick model?</h2>
 <p>The <em>broken stick model</em> describes a set of individual curves by a linear mixed model using first order linear B-splines. The model can be used to</p>
 <ul>
 <li>smooth growth curves by a series of connected straight lines;</li>
@@ -45,27 +45,28 @@
 <li>predict future observations.</li>
 </ul>
 <p>The user specifies a set of break ages at which the straight lines connect. Each individual obtains an estimate at each break age, so the set of estimates of the individual form a smoothed version of the observed trajectory.</p>
+</div>
+<div id="what-are-the-main-model-assumptions" class="section level2">
+<h2>What are the main model assumptions?</h2>
 <p>The main assumptions of the broken stick model are:</p>
 <ul>
 <li>The development between the break ages follows a straight line;</li>
 <li>Broken stick estimates follow a common multivariate normal distribution;</li>
 </ul>
-<p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (Z) scale. Unique feature of the broken stick model are:</p>
+<p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (<span class="math inline">\(Z\)</span>) scale.</p>
+</div>
+<div id="why-should-i-want-to-use-the-broken-stick-model" class="section level2">
+<h2>Why should I want to use the broken stick model?</h2>
+<p>Three unique features of the broken stick model are:</p>
 <ul>
 <li><em>Modular</em>: Issues related to nonlinearities of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;</li>
 <li><em>Local</em>: A given data point will contribute only to the estimates corresponding to the closest break ages;</li>
 <li><em>Exportable</em>: The broken stick model can be exported and reused for prediction for new data in alternative computing environments.</li>
 </ul>
-<p>The <code>brokenstick</code> package contains functions for</p>
-<ul>
-<li>Fitting the broken stick model to data,</li>
-<li>Predicting broken stick estimates for new data.</li>
-<li>Exporting the parameters of the model for independent use outside this package.</li>
-</ul>
 </div>
-<div id="main-functions" class="section level2">
-<h2>Main functions</h2>
-<p>The main functions in the <code>brokenstick</code> package are:</p>
+<div id="what-is-in-the-package" class="section level2">
+<h2>What is in the package?</h2>
+<p>The <code>brokenstick</code> package contains functions to fit, predict, plot and export data. The main functions in the <code>brokenstick</code> package are:</p>
 <table>
 <thead>
 <tr class="header">
@@ -83,6 +84,10 @@
 <td>Predict broken stick estimates for new growth data</td>
 </tr>
 <tr class="odd">
+<td><code>plot()</code></td>
+<td>Plot individual trajectories</td>
+</tr>
+<tr class="even">
 <td><code>export()</code></td>
 <td>Export broken stick model parameters</td>
 </tr>
@@ -91,7 +96,11 @@
 </div>
 <div id="further-reading" class="section level2">
 <h2>Further reading</h2>
-<p>A <a href="example.html">vignette with a simple example</a> is available as well. Additional details on model fitting and prediction are given in the <a href="prediction.html">vignette for prediction</a>.</p>
+<p>The <a href="mainfunctions.html">overview of the main functions</a> provides a short introduction into the capabilities of the package. Additional details are given in vignettes <a href="prediction.html">fit and predict</a>, <a href="knotplacement.html">knot placement</a> and <a href="model.html">model formulation</a>. Also, browse the <a href="paperbrokenstick.html">manuscript</a> on the model and several applications.</p>
+</div>
+<div id="acknowledgement" class="section level2">
+<h2>Acknowledgement</h2>
+<p>The development of the <code>brokenstick</code> package was kindly supported by the <em>Healthy Birth Growth and Development</em> (HBGD) program of the Bill &amp; Melinda Gates Foundation. Other packages developed under the same program include <code>hbgd</code> and <code>dscore</code>.</p>
 </div>
 
 

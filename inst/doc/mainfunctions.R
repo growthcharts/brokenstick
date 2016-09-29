@@ -54,14 +54,6 @@ figs <- lapply(idx, function(x) {
 })
 grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, width = 680, height = 300)
 
-## ----fit1, cache = TRUE--------------------------------------------------
-knots <- 0:2
-fit1 <- brokenstick(y = smc$haz, 
-					x = smc$age,
-					subjid = smc$subjid,
-					knots = knots)
-class(fit1)
-
 ## ------------------------------------------------------------------------
 get_knots(fit1)
 
@@ -86,16 +78,6 @@ plot(fit1, ids = 10001, x_trim = c(0, 2.2))
 
 ## ------------------------------------------------------------------------
 plot(fit1, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300)
-
-## ----fit2, cache = TRUE--------------------------------------------------
-# 10 scheduled visits
-knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-boundary <- c(0, 3)
-fit2 <- brokenstick(y = smc$haz, 
-					x = smc$age,
-					subjid = smc$subjid,
-					knots = knots,
-					boundary = boundary)
 
 ## ------------------------------------------------------------------------
 pr <- predict(fit2, at = "both")
