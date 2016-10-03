@@ -1,5 +1,6 @@
 ---
 title: "Overview of main functions"
+author: "Stef van Buuren"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -135,9 +136,7 @@ dim(p1)
 head(p1, 4)
 ```
 
-just produces the predicted value (in `yhat`) for each measured data point for all children used to fit the model in the `long` output format. The predicted values represent a compromise between the person's data values and the global mean. In general, the fewer and less extreme data points of a person are, the closer the compromise will be toward the global mean. The compromise is called the *conditional mean* of the posterior distribution. In the broken stick model, it is simply calculated as the sum of the fixed and random effects. 
-
-The observed $Z$-score is stored in column called `y`, and the corresponding broken stick estimates are stored in the column called `yhat`. The column `knot` is set to `FALSE` if `y` is actually observed. 
+just produces the predicted value (in `yhat`) for each measured data point for all children used to fit the model in the `long` output format. The observed $Z$-score is stored in column called `y`, and the corresponding broken stick estimates are stored in the column called `yhat`. The column `knot` is set to `FALSE` if `y` is actually observed. 
 
 We can obtain the location at which the lines in the broken stick model connect by specifying the `at = "knots"` argument, e.g.
 
@@ -153,7 +152,7 @@ pr <- predict(fit1, at = "both")
 head(pr, 4)
 ```
 
-We plot the original data and the broken stick estimates jointly by `xyplot()` from the `lattice` package by
+We plot the original data and the broken stick estimates jointly as
 
 ```{r fig3}
 plot(fit1, ids = 10001, x_trim = c(0, 2.2))
@@ -201,9 +200,8 @@ plot(fit2, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680
 
 ---
 
-The broken stick model now fits the data very well. Formal model assessment can be done with standard `lmer` diagnostic plots. See the vignette on *Model diagnostics* for more detail. 
-
-<!-- The broken stick model is sensitive to the location of the knots. Some advice about knot placement: Evidently, using more knots can improve the fit to the data. However, adding an excessive number of knots will substantially increase calculation time, and create solutions that are less stable. Try using not more than the (average) number of data points per person. Also, knot placement requires some care. Here, the knots are added at the scheduled visits, which is a reasonable strategy for obtaining good predictions as there are generally many observations in the neighourbood of the scheduled ages. In contrast, placing knots at ages where the data are very sparse (e.g. exactly in-between visits) may result in bad predictions and should be avoided.  -->
+The broken stick model now fits the data very well. Formal model assessment can be done with standard `lmer` diagnostic plots. 
+<!-- See the vignette on *Model diagnostics* for more detail.  -->
 
 ## Compare explained variance
 

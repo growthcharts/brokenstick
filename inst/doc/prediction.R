@@ -1,38 +1,63 @@
 ## ----setup, include=FALSE------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE, fig.width = 7, fig.height = 5)
+knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 
 ## ----data----------------------------------------------------------------
-library("brokenstick")
+require("brokenstick")
+require("hbgd")
+require("rbokeh")
 smc <- smocc_hgtwgt[1:2000,]
-head(smc)
 
 ## ----zscores-------------------------------------------------------------
-if (!require(hbgd)) devtools::install_github("hafen/hbgd")
-smc$haz <- round(who_htcm2zscore(smc$agedays, smc$htcm, smc$sex), 3)
+haz <- who_htcm2zscore(smc$agedays, smc$htcm, smc$sex)
+
+## ------------------------------------------------------------------------
+htcm <- who_zscore2htcm(smc$agedays, haz, smc$sex)
 
 ## ----echo=FALSE----------------------------------------------------------
-hist(smc$haz, main = "SMOCC data, first 2000 records", 
-     xlab = "Height (Z-score)")
+plot_univar(smc, subject = FALSE, width = 220, height = 220)
 
-## ----echo = FALSE--------------------------------------------------------
-plot(x = smc$age, y = smc$haz, xlab = "Age (in years)", ylab = "Height SDS", main = "SMOCC data, first 2000 records", pch = 20, cex = 0.5) 
+## ------------------------------------------------------------------------
+figure(xlab = "Age (years)", ylab = get_label("haz")) %>%
+  ly_zband(x = seq(0, 2.5, 0.5), z = -c(2.5,2,1,0)) %>%
+  ly_points(smc$age, smc$haz, hover = c(smc$age, smc$htcm), size = 4)
+
+## ------------------------------------------------------------------------
+plot_visit_distn(smc, width = 350, height = 350)
+
+## ------------------------------------------------------------------------
+plot_missing(smc, width = 600, height = 400)
 
 ## ------------------------------------------------------------------------
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 boundary <- c(0, 3)
 
 ## ------------------------------------------------------------------------
-fit <- brokenstick(y = smc$haz,
-                   x = smc$age,
-                   subjid = smc$subjid,
-                   knots = knots,
-                   boundary = boundary)
+round(lme4::fixef(fit), 2)
+round(get_knots(fit), 2)
 
 ## ------------------------------------------------------------------------
-class(fit)
-slotNames(fit)
-exp <- export(fit)
-names(exp)
+figure(xlab = "Age (years)", ylab = get_label("haz"), title = "Mean trajectory (n = 206)") %>%
+  ly_zband(x = seq(0, 2.5, 0.5), z = -c(2.5,2,1,0)) %>%
+  ly_points(get_knots(fit), lme4::fixef(fit), hover = c(get_knots(fit), lme4::fixef(fit))) %>%
+  ly_lines(get_knots(fit), lme4::fixef(fit))
+
+## ------------------------------------------------------------------------
+fit
+
+## ------------------------------------------------------------------------
+p <- predict(fit)
+head(p, 4)
+
+## ------------------------------------------------------------------------
+p2 <- predict(fit, at = "knots")
+head(p2, 4)
+
+## ------------------------------------------------------------------------
+pr <- predict(fit, at = "both")
+head(pr, 4)
+
+## ----fig3----------------------------------------------------------------
+plot(fit, ids = 10001, x_trim = c(0, 2.2))
 
 ## ------------------------------------------------------------------------
 UID <- unique(smc$subjid)
@@ -46,7 +71,7 @@ lines(x = p$x, y = p$yhat, col = "red", lwd = 1.5, lty = 2, type = "b")
 abline(v = p$x, lty = 5, col = "grey80")
 
 ## ------------------------------------------------------------------------
-p <- predict(exp, y = d$haz, x = d$age)
+p <- predict(fit, y = d$haz, x = d$age)
 
 ## ----echo = FALSE--------------------------------------------------------
 plot(x = d$age, y = d$haz, type = "b", col = "blue", 
@@ -139,4 +164,10 @@ smc$yhatcm <- who_zscore2htcm(smc$agedays, smc$yhat, smc$sex)
 eqscplot(y = smc$yhatcm, x = smc$htcm, pch = ".", ylab = "Predicted (cm)", 
          xlab = "Observed (cm)", main = "Holdout sample")
 abline(0, 1, col = "grey")
+
+## ------------------------------------------------------------------------
+class(fit)
+slotNames(fit)
+exp <- export(fit)
+names(exp)
 

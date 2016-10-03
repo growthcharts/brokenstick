@@ -1,5 +1,6 @@
 ---
 title: "Fit and predict"
+author: "Stef van Buuren"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -8,69 +9,90 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-  ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.width = 7, fig.height = 5)
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 ```
+
 
 ## Objective
 
-This vignette shows how to fit the broken stick model to data, predict observations by the fitted model, and validate the predictions against a holdout sample.
+This vignette shows a step-by-step introduction of how to 
+- Fit the broken stick model to data;
+- Predict observations by the fitted model; 
+- Validate predictions against a holdout sample.
 
-## Data
+## Get the data
 
-### Data source
-
+This vignette assumes the `rbokeh`, `hbgd` and `brokenstick` packages are installed. See [getting started with `brokenstick`](gettingstarted.html) for the installation procedure.
 We will use the `smocc_hgtwgt` demo data that is built-in into the `brokenstick` package. For computational efficiency in this vignette, we take the first 2000 observations of the `smocc_hgtwgt` data. 
 
 ```{r data}
-library("brokenstick")
+require("brokenstick")
+require("hbgd")
+require("rbokeh")
 smc <- smocc_hgtwgt[1:2000,]
-head(smc)
 ```
 
-### Calculate Z-scores
+## Calculate $Z$-scores
 
-The broken stick model can fit observations in either the raw scale (cm, kg, and so on) or in the Z-score scale. As the results from the analysis of the $Z$-score will often be **much better**, we advise to convert the measurements into the **Z-score scale**, fit the mode, and convert back to the raw scale afterwards when needed. Use the `AGD` package (from CRAN) or the `hbgd` package to convert back and forth between both scales. 
+The broken stick model can fit observations in either the raw scale (cm, kg, and so on) or as a standard deviation score (SDS), or $Z$-score. The results from the analysis of the $Z$-score will often be better for two reasons: 1) for growth curves, a straight line assumption is more plausible in the $Z$-score scale, and 2) the assumption of normality is more plausible in the $Z$-score scale. It is easy to convert the measurements into the $Z$-score scale, fit the model, and convert back to the raw scale afterwards, if desired. The `hbgd` package contains several functions to convert back and forth between both scales. For example, 
 
 ```{r zscores}
-if (!require(hbgd)) devtools::install_github("hafen/hbgd")
-smc$haz <- round(who_htcm2zscore(smc$agedays, smc$htcm, smc$sex), 3)
+haz <- who_htcm2zscore(smc$agedays, smc$htcm, smc$sex)
 ```
 
-The main outcome measure will be `smc$haz`, the age and sex-adjusted Z-score relative to the WHO growth standard.
+The main outcome measure will be `haz`, the age and sex-adjusted $Z$-score relative to the WHO growth standard. The inverse calculation can be done as
+
+```{r}
+htcm <- who_zscore2htcm(smc$agedays, haz, smc$sex)
+```
+
+Note that slight differences between `smc$htcm` and `htcm` may occur because of rounding, but the deviations are small and irrelevant.
 
 ```{r echo=FALSE}
-hist(smc$haz, main = "SMOCC data, first 2000 records", 
-     xlab = "Height (Z-score)")
+plot_univar(smc, subject = FALSE, width = 220, height = 220)
 ```
 
-The mean Z-score is around 0.3, indicating that Dutch children are taller than the WHO height standard. 
+The mean $Z$-score is around 0.3, indicating that Dutch children under two years are taller than the WHO height standard.
 
-The age range is 0-2 years. The scatterplot of Height SDS by age clearly shows the pattern in the visits.
+The age range is 0-2 years. The scatterplot of height SDS by age clearly shows the pattern in the visits.
 
-```{r echo = FALSE}
-plot(x = smc$age, y = smc$haz, xlab = "Age (in years)", ylab = "Height SDS", main = "SMOCC data, first 2000 records", pch = 20, cex = 0.5) 
+```{r}
+figure(xlab = "Age (years)", ylab = get_label("haz")) %>%
+  ly_zband(x = seq(0, 2.5, 0.5), z = -c(2.5,2,1,0)) %>%
+  ly_points(smc$age, smc$haz, hover = c(smc$age, smc$htcm), size = 4)
+```
+
+Note that the data contain some outliers. Child 10069 was born after a gestational age of 34 weeks and has several extremely low SDS values. Child 10075 had an observation at the age of 2.67 years.
+
+The plot of the number of visits per child reveals that most children had 10 visits. It appears that children with fewer than six visits were removed from the data. Two children had more than 10 visits.  
+
+```{r}
+plot_visit_distn(smc, width = 350, height = 350)
+```
+
+The missing data plot shows that number of missing values in the time varying variables was very low. 
+
+```{r}
+plot_missing(smc, width = 600, height = 400)
 ```
 
 
-## Fit model
+## Define the knots
 
-### Define knots
-
-The SMOCC data has 10 scheduled visits: at birth, and at ages of 1, 2, 3, 6, 9, 12, 15, 18 and 24 months. Here, we place the knots at the scheduled ages. Depending on the scientific question at hand, we could place knots at other locations. If we want to predict at specific ages, then specify knots at those ages. For example, if we are interested in predictions at 0.5, 1.0 and 2.0 years, define knots at those ages. In general, keep the number of knots low, for speed and simplicity. 
-
-The `boundary` argument should be specified with some care. Specify the first break point `knot[1]` equal to `Boundary.knots[1]` and equal to the minumum age (otherwise unpredictable things occur). For technical reasons, `Boundary.knots[2]` should be equal to or larger than the maximum age in the data. The broken stick estimate at this knot has no useful interpretation.
+The SMOCC study had 10 scheduled visits: at birth, and at ages of 1, 2, 3, 6, 9, 12, 15, 18 and 24 months. Here, we place the knots at the scheduled ages. Depending on the scientific question at hand, we could place knots at other locations. See the vignette on [knot placement](knotplacement.html) for more details. 
 
 ```{r}
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 boundary <- c(0, 3)
 ```
 
-## Model fitting
 
-The `brokenstick` function performs the actual model fitting. The fitting algorithm may complain that the number of random effect is too high, but my experience is that this will not affect the quality of the predictions. 
+## Fit the model
 
-```{r}
+The `brokenstick` function performs the actual model fitting. 
+
+```{r cache = TRUE}
 fit <- brokenstick(y = smc$haz,
                    x = smc$age,
                    subjid = smc$subjid,
@@ -78,26 +100,71 @@ fit <- brokenstick(y = smc$haz,
                    boundary = boundary)
 ```
 
-The fitted object `fit` is of S4 class `brokenstick`, and extends class `lmerMod` with additional attributes `knots`, `Boundary.knots` and `degree`. 
+It frequently happens that the fitting algorithm issues warnings about the number of random effect (too high), or reports that one of the random effects is deleted before fitting. This may or nay not affect the quality of the predictions. At the least, the user should check the fitted object for plausibilty. The current version uses the general purpose methods from the `lme4` package. Future versions of the `brokenstick` package may feature dedicated and stabler fitting methods.
 
+The fitted object `fit` is of S4 class `brokenstick`, and extends class `lmerMod` with additional attributes `knots`, `boundary` and `degree`. The `brokenstick()` function only supports `degree = 1`, the straight line model.
 
-The fixed effects correspond to the mean of sample of children in the data. At birth, the children are on average 0.11 SD taller than the WHO standard. At the ages of 1 and 2 years, these estimates rise to 0.35 SD and 0.51 SD, respectively. The fact that these are positive and rising is not surprising. These are Dutch children, and the Dutch are known to be among the tallest in the world. Thus, at the age of 2 years, the Dutch are already about 0.5 SD taller than the WHO standard. The estimate for `x4` (0.87), corresponding to the maximum age in the data, is just there for technical reasons. It is based on extreme extrapolation beyond the data, and should be disregarded.
+## Interpret the model
 
-The column labeled `Std.Dev.` contains the standard deviations of the random effects. These numbers are expected to be around 1, since - under the assumption that the WHO standard appropriately describes this sample - the dependent variable follow a standard normal distribution with zero mean and standard deviation equal to one. The `Corr` component of the random effects lists the correlations between the broken stick estimates between the time point. Thus, the correlation between the estimates at birth (`x1`) and at 2 years (`x3`) is 0.51. The standard deviation of the residuals (within-person error) for this model is of 0.50. 
-
-
-### Export estimates
-
-For easy handling and storage accross sessions, the `export()` function selects from `fit` the minimal set of estimates  needed to make predictions, and stores the results in an S3 class `brokenstick.export`. 
+Let us first extract the fixed effects and the corresponding knot locations.
 
 ```{r}
-class(fit)
-slotNames(fit)
-exp <- export(fit)
-names(exp)
+round(lme4::fixef(fit), 2)
+round(get_knots(fit), 2)
 ```
 
-## Predict values, single child
+The fixed effects correspond to the mean of sample of children in the data. The mean development over all 206 children may be plotted as:
+
+```{r}
+figure(xlab = "Age (years)", ylab = get_label("haz"), title = "Mean trajectory (n = 206)") %>%
+  ly_zband(x = seq(0, 2.5, 0.5), z = -c(2.5,2,1,0)) %>%
+  ly_points(get_knots(fit), lme4::fixef(fit), hover = c(get_knots(fit), lme4::fixef(fit))) %>%
+  ly_lines(get_knots(fit), lme4::fixef(fit))
+```
+
+At birth, the 206 children are on average 0.64 SD taller than the WHO standard, but at the ages of month 1-3, the mean rapidly falls near or below the mean of the WHO standard. After that, there is a the trajectory consistently is above the mean, with values around 0.3-0.6 SDS. The fact that these are positive is not surprising as the Dutch are known to be among the tallest populations in the world. Thus, at the age of 2 years, the Dutch are about 0.5-0.6 SD taller than the WHO standard. The estimate for `x11` (0.56), corresponding to the age of 3 years is just there for technical reasons. The estimate is based on extreme extrapolation beyond the data. The last knot of the broken stick model has no interpretation, and should be disregarded.
+
+```{r}
+fit
+```
+
+The column labeled `Std.Dev.` contains the standard deviations of the random effects. These numbers are expected to be around 1, since - under the assumption that the WHO standard appropriately describes this sample - the dependent variable follow a standard normal distribution with zero mean and standard deviation equal to one. The `Corr` component of the random effects lists the correlations between the broken stick estimates at different ages. The correlation matrix shows a typically pattern where the highest elements are close to the diagonal, and where off-diagonal elements decrease. The standard deviation of the residuals (within-person error) for this model is of 0.26, so on average, the discrepancy between observed and fitted trajectories is about one quarter of a standard deviation. At the age of 2 years, the standard deviation in height is about 32 mm, so on average the difference between the model and the observed data is about 8 mm, about twice the size of the technical error of measurement of a carefully conducted height measurement.
+
+## Obtain predicted values, all children
+
+The `predict()` function obtains predictions from the broken stick model. The function is extremely flexible, and allows for prediction of new subjects at arbitrary ages in a variety of output formats. The simplest call 
+
+```{r}
+p <- predict(fit)
+head(p, 4)
+```
+
+produces the predicted value (in `yhat`) for each measured data point for all children used to fit the model in the `long` output format. The observed $Z$-score is stored in column called `y`, and the corresponding broken stick estimates are stored in the column called `yhat`. The column `knot` is set to `FALSE` if `y` is actually observed. 
+
+The predicted values represent a compromise between the person's data values and the global mean. In general, the fewer and less extreme data points of a person are, the closer the compromise will be toward the global mean. The compromise is called the *conditional mean* of the posterior distribution. In the broken stick model, it is simply calculated as the sum of the fixed and random effects.
+
+We can obtain the location at which the lines in the broken stick model connect by specifying the `at = "knots"` argument, e.g.
+
+```{r}
+p2 <- predict(fit, at = "knots")
+head(p2, 4)
+```
+
+Note that the column `knot` is now `TRUE`. We may obtain both types of estimates simultaneously for all children by using the 
+
+```{r}
+pr <- predict(fit, at = "both")
+head(pr, 4)
+```
+
+## Obtain predicted values, single child
+
+We plot the original data and the broken stick estimates for child 10001 jointly as
+
+```{r fig3}
+plot(fit, ids = 10001, x_trim = c(0, 2.2))
+```
+
 
 ### Prediction at break ages, single child
 
@@ -120,7 +187,7 @@ abline(v = p$x, lty = 5, col = "grey80")
 Suppose we want a predicted value at each age at which the child was measured. 
 
 ```{r}
-p <- predict(exp, y = d$haz, x = d$age)
+p <- predict(fit, y = d$haz, x = d$age)
 ```
 
 ```{r echo = FALSE}
@@ -260,5 +327,17 @@ The plot for the holdout sample is given below.
 eqscplot(y = smc$yhatcm, x = smc$htcm, pch = ".", ylab = "Predicted (cm)", 
          xlab = "Observed (cm)", main = "Holdout sample")
 abline(0, 1, col = "grey")
+```
+
+
+## Export estimates
+
+For easy handling and storage accross sessions, the `export()` function selects from `fit` the minimal set of estimates  needed to make predictions, and stores the results in an S3 class `brokenstick.export`. 
+
+```{r}
+class(fit)
+slotNames(fit)
+exp <- export(fit)
+names(exp)
 ```
 
