@@ -16,6 +16,6 @@ A vector with knot locations
 Obtain the knots from a broken stick model
 }
 \examples{
-get_knots(fit_hgt)
+get_knots(fit_1933)
 }
 

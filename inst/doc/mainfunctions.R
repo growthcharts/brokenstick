@@ -92,18 +92,3 @@ var(fitted(fit1), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
 ## ------------------------------------------------------------------------
 var(fitted(fit2), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
 
-## ------------------------------------------------------------------------
-# export the broken stick models
-exp <- export(fit2)
-attributes(exp)
-lapply(exp, round, 2)
-
-## ------------------------------------------------------------------------
-# Five age-haz observations for Fred
-x <- c(0, 0.12, 0.32, 0.62, 1.1)
-y <- c(-1.2, -1.8, -1.7, -1.9, -2.1)
-predict(exp, y, x, at = "both", subjid = "Fred")
-
-## ----echo = FALSE, fig.align = "center"----------------------------------
-plot(exp, y, x, at = "both", x_trim = c(0, 2.2))
-

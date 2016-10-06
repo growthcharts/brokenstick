@@ -19,6 +19,6 @@ The result is \code{NULL} if \code{object} is not of class \code{brokenstick}.
 Obtain the y variable from a broken stick model
 }
 \examples{
-get_y(fit_hgt, ids = c(10001, 10002))
+get_y(fit_1933, ids = c(10001, 10002))
 }
 

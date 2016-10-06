@@ -14,7 +14,7 @@
 \item{y}{A vector with measurements using the same response scale as the
 fitted model.}
 
-\item{x}{A vector with decimal ages of length \code{length(y)}. 
+\item{x}{A vector with decimal ages of length \code{length(y)}.
 If both \code{y} and \code{x} not specified,
   the function calculates the predicted values for all persons on which
   \code{object} was fitted. If \code{y} is not specified, but \code{x} is,
@@ -26,7 +26,7 @@ If both \code{y} and \code{x} not specified,
 
 \item{at}{If \code{at = "x"} (the default) the function returns
 predictions at the \code{x} values in the data. Specify \code{at =
-"knots"} to obtain predictions at the knots of the model, or 
+"knots"} to obtain predictions at the knots of the model, or
 \code{at = "both"} to obtain both.}
 
 \item{output}{A string specifying the desired type of output. If \code{output
@@ -51,7 +51,7 @@ If \code{output == "long"}, a data frame with five columns named:
   \item{\code{y}}{Response values (in scale defined by the model)}
   \item{\code{yhat}}{Predicted values}
   \item{\code{knot}}{Logical, TRUE indicates that the prediction is
-  done at the location of the knot, or at a location specified by an 
+  done at the location of the knot, or at a location specified by an
   isolated \code{x} argument, i.e., without a corresponding \code{y} argument.}
   }
   If \code{output == "broad"}, a
@@ -75,28 +75,28 @@ The original data are only present in the \code{object} of class
 }
 \examples{
 # Estimates at each measured age for all persons in fitted model
-class(fit_hgt)
-p <- predict(fit_hgt)
+class(fit_1933)
+p <- predict(fit_1933)
 head(p)
 
 # Estimates at knots, stored into the broad matrix
-p <- predict(fit_hgt, output = "broad", at = "knots")
+p <- predict(fit_1933, output = "broad", at = "knots")
 round(head(p), 2)
 
 # Get these estimates as a vector, useful for programming
-p <- predict(fit_hgt, output = "vector", at = "knots")
+p <- predict(fit_1933, output = "vector", at = "knots")
 round(head(p), 2)
 
 # Obtain estimates at weeks 1-4 for all children, include old points
-p <- predict(fit_hgt, x = round((1:4)*7/365.25, 4))
+p <- predict(fit_1933, x = round((1:4)*7/365.25, 4))
 head(p)
 
 # Same, but now organised as broad matrix of new points only
-p <- predict(fit_hgt, x = round((1:4)*7/365.25, 4), output = "broad")
+p <- predict(fit_1933, x = round((1:4)*7/365.25, 4), output = "broad")
 head(p)
 
-head(predict(fit_hgt, at = "knots", output = "broad"), 3)
-predict(fit_hgt, id = c(10001, 10003), at = "knots", output = "broad")
+head(predict(fit_1933, at = "knots", output = "broad"), 3)
+predict(fit_1933, id = c(10001, 10003), at = "knots", output = "broad")
 }
 \author{
 Stef van Buuren 2016

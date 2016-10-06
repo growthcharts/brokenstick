@@ -28,7 +28,7 @@ Herngreen WP, van Buuren S, van Wieringen JC, Reerink JD, Verloove-Vanhorick SP 
 Longitudinal height and weight measurements during ages 0-2 years for a representative sample of 1933 Dutch children born in 1988-1989. The dataset \code{smocc_hgtwgt} is a subset of the \code{smocc[["time"]]} data from the \pkg{donordata} package.
 }
 \note{
-This dataset is property of the Netherlands Organisation for Applied Scientific Research TNO. Distribution is not permitted. 
+This dataset is property of the Netherlands Organisation for Applied Scientific Research TNO. Distribution is not permitted.
 Inquiries at \email{stef.vanbuuren@tno.nl}.
 }
 \keyword{datasets}

@@ -58,19 +58,34 @@ d <- data[trim, ]
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 boundary <- c(0, 3)
 d$subjid <- as.factor(d$subjid)
-fit_hgt <- with(d,
+fit_1933 <- with(d,
 				brokenstick(y = haz,
 							x = age,
 							subjid = subjid,
 							knots = knots,
 							boundary = boundary))
 
+# select first 2000 rows (206 children), including missing data and outliers
+d <- data[1:2000, ]
+d$subjid <- as.factor(d$subjid)
+fit_206 <- with(d,
+                brokenstick(y = haz,
+                            x = age,
+                            subjid = subjid,
+                            knots = knots,
+                            boundary = boundary))
+
+
 # store 'smocc_hgtwgt' for lazy loading
 smocc_hgtwgt <- data
 fn1 <- path.expand("~/Package/brokenstick/brokenstick/data/smocc_hgtwgt.rda")
 save(smocc_hgtwgt, file = fn1, compress = "xz")
 
-# store 'fit_hgt' for lazy loading
-fn2 <- path.expand("~/Package/brokenstick/brokenstick/data/fit_hgt.rda")
-save(fit_hgt, file = fn2, compress = "xz")
+# store 'fit_1933' for lazy loading
+fn2 <- path.expand("~/Package/brokenstick/brokenstick/data/fit_1933.rda")
+save(fit_1933, file = fn2, compress = "xz")
+
+# store 'fit_206' for lazy loading
+fn3 <- path.expand("~/Package/brokenstick/brokenstick/data/fit_206.rda")
+save(fit_206, file = fn3, compress = "xz")
 

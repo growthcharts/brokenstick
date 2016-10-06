@@ -12,13 +12,13 @@ get_X(object, ids = NULL)
 \item{ids}{A vector specifying the id's of the persons. If omitted, all id's are included.}
 }
 \value{
-A matrix with number of columns equal to the number of knots. 
+A matrix with number of columns equal to the number of knots.
 The result is \code{NULL} if \code{object} is not of class \code{brokenstick}.
 }
 \description{
 Obtain the X model matrix from a broken stick model
 }
 \examples{
-get_X(fit_hgt, ids = c(10001, 10002))
+get_X(fit_1933, ids = c(10001, 10002))
 }
 

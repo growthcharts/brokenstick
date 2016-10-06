@@ -18,6 +18,6 @@ A data frame with subjid, x and y. The result is \code{NULL} if \code{object} is
 Obtain the x and y data from a broken stick model
 }
 \examples{
-get_xy(fit_hgt, ids = c(10001, 10002))
+get_xy(fit_1933, ids = c(10001, 10002))
 }
 

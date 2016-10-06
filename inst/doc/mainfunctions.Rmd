@@ -16,7 +16,7 @@ knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 
 ## Objective
 
-The vignette demonstrates the main functions in the `brokenstick` package: `brokenstick()`, `predict()`, `plot()` and `export` by a series of steps.
+This vignette demonstrates three major functions in the `brokenstick` package: `brokenstick()`, `predict()` and `plot()`.
 
 ## Set up libraries
 
@@ -82,8 +82,6 @@ figs <- lapply(idx, function(x) {
 grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, width = 680, height = 300)
 ```
 
----
-
 The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-values) are plotted. The column `haz` contains the $Z$-scores of height relative to the WHO standard.
 
 ```{r fig2}
@@ -96,8 +94,6 @@ figs <- lapply(idx, function(x) {
 })
 grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, width = 680, height = 300)
 ```
-
----
 
 ## Fit broken stick model with two lines
 
@@ -128,7 +124,7 @@ The fixed effects correspond to the mean of sample of children in the data, wher
 
 ## Obtain predicted values
 
-The `predict()` function obtains predictions from the broken stick model. The function is extremely flexible, and allows for prediction of new subjects at arbitrary ages in a variety of output formats. The simplest call 
+The `predict()` function obtains predictions from the broken stick model. The simplest call 
 
 ```{r}
 p1 <- predict(fit1)
@@ -138,7 +134,7 @@ head(p1, 4)
 
 just produces the predicted value (in `yhat`) for each measured data point for all children used to fit the model in the `long` output format. The observed $Z$-score is stored in column called `y`, and the corresponding broken stick estimates are stored in the column called `yhat`. The column `knot` is set to `FALSE` if `y` is actually observed. 
 
-We can obtain the location at which the lines in the broken stick model connect by specifying the `at = "knots"` argument, e.g.
+We can obtain the locations at which the lines connect by specifying the `at = "knots"` argument, e.g.
 
 ```{r}
 p2 <- predict(fit1, at = "knots")
@@ -165,8 +161,6 @@ plot(fit1, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680
 ```
 
 The plot shows that the two-line model is fairly crude. 
-
----
 
 ## Extend to nine lines
 
@@ -198,8 +192,6 @@ and plotted by
 plot(fit2, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300)
 ```
 
----
-
 The broken stick model now fits the data very well. Formal model assessment can be done with standard `lmer` diagnostic plots. 
 <!-- See the vignette on *Model diagnostics* for more detail.  -->
 
@@ -218,39 +210,4 @@ var(fitted(fit2), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
 ```
 
 so the nine-line broken stick model explains about `r round(100 * var(fitted(fit2), na.rm = TRUE) / var(smc$haz, na.rm = TRUE))` percent of the variance of the height SDS.
-
-
-## Export and publish model
-
-A brokenstick model like in `fit2` can be stored by `save()` for future use in R. However, this is a fairly large object that contains a lot of superfluous information. As a matter of fact, if we know the `x` and `y` variables of a given person, prediction using the broken stick model requires only the knot locations, the fixed effect estimates, the variance/covariance matrix of the random effects, and the size of the residual variance. The `export()` function will collect this information from the fitted model, and store it as a list.
-
-```{r}
-# export the broken stick models
-exp <- export(fit2)
-attributes(exp)
-lapply(exp, round, 2)
-```
-
-This set of estimates represents a longitudinal growth reference, and can be published as such.
-
-## Predict from the published model
-
-Suppose we have measured a new boy, say Fred. We wish to obtain predictions for Fred using the exported model in `exp`. The following code calculates these predictions.
-
-```{r}
-# Five age-haz observations for Fred
-x <- c(0, 0.12, 0.32, 0.62, 1.1)
-y <- c(-1.2, -1.8, -1.7, -1.9, -2.1)
-predict(exp, y, x, at = "both", subjid = "Fred")
-```
-
-The figure below plots the observed data (five blue points) and the broken stick predictions (red points) for Fred. 
-
-```{r echo = FALSE, fig.align = "center"}
-plot(exp, y, x, at = "both", x_trim = c(0, 2.2))
-```
-
----
-
-Thus, based on the data up to 1.1 year, the model predicts that Fred's growth curve would remain around -2.0 SD until Fred is 1.5 years, and then would increase to -1.5 SD.
 

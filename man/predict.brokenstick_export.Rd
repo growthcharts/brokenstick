@@ -14,7 +14,7 @@
 \item{y}{A vector with measurements using the same response scale as the
 fitted model.}
 
-\item{x}{A vector with decimal ages of length \code{length(y)}. 
+\item{x}{A vector with decimal ages of length \code{length(y)}.
 If both \code{y} and \code{x} not specified,
   the function calculates the predicted values for all persons on which
   \code{object} was fitted. If \code{y} is not specified, but \code{x} is,
@@ -24,7 +24,7 @@ If both \code{y} and \code{x} not specified,
 
 \item{at}{If \code{at = "x"} (the default) the function returns
 predictions at the \code{x} values in the data. Specify \code{at =
-"knots"} to obtain predictions at the knots of the model, or 
+"knots"} to obtain predictions at the knots of the model, or
 \code{at = "both"} to obtain both.}
 
 \item{output}{A string specifying the desired type of output. If \code{output
@@ -47,7 +47,7 @@ and simulation.}
 Predict growth curve according to the broken stick model
 }
 \examples{
-exp <- export(fit_hgt)
+exp <- export(fit_1933)
 
 # no data predicts mean trajectory
 p <- predict(exp)

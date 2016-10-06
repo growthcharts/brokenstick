@@ -7,7 +7,7 @@ library(brokenstick)
 project <-  path.expand("~/Package/brokenstick/brokenstick")
 
 # copy some columns from the smocc data stored in the donordata package
-data <- smocc[[3]][, c("src", "id", "rec", "nrec", "age", "sex", 
+data <- smocc[[3]][, c("src", "id", "rec", "nrec", "age", "sex",
 					   "etn", "ga", "bw", "hgt", "wgt")]
 rownames(data) <- NULL
 
@@ -15,8 +15,8 @@ rownames(data) <- NULL
 data$id <- as.factor(data$id)
 
 # calculate Z-scores
-data$hgt.z <- y2z(y = data$hgt, 
-				  x = data$age, 
+data$hgt.z <- y2z(y = data$hgt,
+				  x = data$age,
 				  sex = ifelse(data$sex == "female", "F", "M"),
 				  ref = get("who.hgt", pos = "package:AGD"))
 
@@ -33,10 +33,10 @@ d <- data[trim, ]
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 boundary <- c(0, 3)
 fit.hgt <- with(d,
-				brokenstick(y = hgt.z, 
-							x = age, 
+				brokenstick(y = hgt.z,
+							x = age,
 							subjid = id,
-							knots = knots, 
+							knots = knots,
 							boundary = boundary))
 
 # store 'smocc.hgtwgt' for lazy loading

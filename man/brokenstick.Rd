@@ -12,19 +12,19 @@ brokenstick(y, x, subjid, knots = pretty(x), boundary = c(min(knots),
 \arguments{
 \item{y}{a vector containing the measurements to be analyzed}
 
-\item{x}{a vector of length \code{length(y)} with the explanatory variable on which 
+\item{x}{a vector of length \code{length(y)} with the explanatory variable on which
 the break points should be defined. In longitudinal data, this is usually age.}
 
 \item{subjid}{a vector length \code{length(y)} containing the subject identification}
 
-\item{knots}{a numerical vector with the locations of the breaks to be 
-placed on the values of \code{x}. This setting is passed to \code{bs()}. Specify \code{knots} to include the range of \code{x}. This will evade the warning 
+\item{knots}{a numerical vector with the locations of the breaks to be
+placed on the values of \code{x}. This setting is passed to \code{bs()}. Specify \code{knots} to include the range of \code{x}. This will evade the warning
 \code{some 'x' values beyond boundary knots may cause ill-conditioned bases}, a situation that may lead to nonsensical results. If in doubt, set argument \code{storeX = TRUE} and inspect the \code{X} slot of the result. The \code{X} matrix should have values between 0 and 1, and each row should add up to 1.}
 
-\item{boundary}{a numerical vector of length 2 with the minimum and maximum 
+\item{boundary}{a numerical vector of length 2 with the minimum and maximum
 break point for \code{x}. This setting is passed to \code{bs()}. The default is to set the left boundary knot equal to the \code{min(knots)}. The right boundary knots is taken as the larger of \code{max(knots)} and the maximum of \code{x}.}
 
-\item{degree}{the degree of the B-spline. For the broken stick model this 
+\item{degree}{the degree of the B-spline. For the broken stick model this
 should be to 1 (the default), which specifies that values between the break
 points are located on a straight line.}
 
@@ -34,37 +34,37 @@ fatal errors with respect the number of parameters into warnings.}
 
 \item{na.action}{The function to call for the \code{na.action} argument in \code{lmer()}. The default is \code{na.exclude}.}
 
-\item{\dots}{Additional arguments passed down to \code{lmer()} 
+\item{\dots}{Additional arguments passed down to \code{lmer()}
 (e.g. to specify additional \code{lmer()} options.}
 }
 \value{
-A fitted model of class \code{brokenstick}, which extends the 
+A fitted model of class \code{brokenstick}, which extends the
  class \code{lmerMod}
 }
 \description{
-The broken stick model models an irregularly observed series 
-of measurement by scaling them onto a user-specified set of 
+The broken stick model models an irregularly observed series
+of measurement by scaling them onto a user-specified set of
 'ideal' ages. The model codes age by a series of linear B-splines.
-Differences between persons are expressed by a random effect 
-pertaining to each knot. On the individual level, each 
-modeled growth curve connect straight lines that join at the 
+Differences between persons are expressed by a random effect
+pertaining to each knot. On the individual level, each
+modeled growth curve connect straight lines that join at the
 chosen break ages, and hence look like a 'broken stick'.
 }
 \details{
-Relations over time are modeled by the variance-covariance 
+Relations over time are modeled by the variance-covariance
 parameters of the random effects. Currently, this matrix is estimated
-as unstructured by \code{lmer()} from the \code{lme4} package. 
-This estimate may be unstable if 
-the number of children is small relative to the number of specified 
+as unstructured by \code{lmer()} from the \code{lme4} package.
+This estimate may be unstable if
+the number of children is small relative to the number of specified
 knots.
- 
-This function can be time consuming for data sets with thousands of 
+
+This function can be time consuming for data sets with thousands of
 children.
 }
 \examples{
 library(mice)
 data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
-fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$id, 
+fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$id,
                    knots = c(0, 1, 2))
 }
 

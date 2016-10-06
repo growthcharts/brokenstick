@@ -34,11 +34,12 @@ The current implementation does not provide prediction errors.
 }
 \examples{
 #
-# EB estimate random effect for child id 8
-model <- export(fit_hgt)
-data <- slot(fit_hgt, "frame")
-y <- data[data$subjid == 10001, "y"]
-X <- as.matrix(data[data$subjid == 10001, paste0("x", 1:11)])
+# EB estimate random effect for child id 10001
+model <- export(fit_1933)
+data <- get_xy(fit_1933, ids = 10001)
+y <- data$y
+X <- make_basis(data$x, knots = model$knots,
+ boundary = model$boundary)
 EB(model, y, X)
 }
 \author{
