@@ -71,6 +71,7 @@ predict(exp, x = round(c(1,4)*7/365.25, 4), y = c(1, 0.7),
   at = "knots")
 }
 \seealso{
-Other brokenstick: \code{\link{predict.brokenstick}}
+Other brokenstick: \code{\link{fitted.brokenstick}},
+  \code{\link{predict.brokenstick}}
 }
 
