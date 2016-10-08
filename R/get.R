@@ -48,22 +48,3 @@ get_X <- function(object, ids = NULL) {
   }
   return(NULL)
 }
-
-#' Obtain the y variable from a broken stick model
-#'
-#' @param object An object of class \code{brokenstick}
-#' @param ids A vector specifying the id's of the persons. If omitted, all id's are included.
-#' @return A vector
-#' The result is \code{NULL} if \code{object} is not of class \code{brokenstick}.
-#' @examples
-#' get_y(fit_1933, ids = c(10001, 10002))
-#' @export
-get_y <- function(object, ids = NULL) {
-  if (inherits(object, "brokenstick")) {
-    if (is.null(ids)) return(model.frame(object)$y)
-    subjid <- model.frame(object)$subjid
-    idx <- subjid %in% ids
-    return(model.frame(object)$y[idx])
-  }
-  return(NULL)
-}
