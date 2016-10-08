@@ -23,7 +23,7 @@ This vignette demonstrates three major functions in the `brokenstick` package: `
 This vignette uses functions from the `rbokeh`, `hbgd` and `brokenstick` packages. 
 
 ```{r}
-if (!require(rbokeh)) install.packages("rbokeh")
+if (!require(rbokeh)) devtools::install_github("hafen/rbokeh")
 if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
 require("brokenstick")
 ```
