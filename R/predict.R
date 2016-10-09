@@ -206,7 +206,7 @@ predict.brokenstick_export <- function(object, y, x,
                            row.names = as.character(1:length(knots)))
   if (at == "knots") return(
     switch(output,
-           vector = bs.z,
+           vector = as.vector(bs.z),
            long = long_knots,
            broad = matrix(bs.z, ncol = length(knots), byrow = TRUE,
                           dimnames = list(as.character(subjid),
@@ -266,9 +266,10 @@ predict_all <- function(object, at, output) {
 
   # For everybody, prediction at the measured x and knots
   if (at == "both") {
+    long <- yhat2long(object, at = at)
     r <- switch(output,
-                vector = NULL,
-                long = yhat2long(object, at = at),
+                vector = long$yhat,
+                long = long,
                 broad = NULL)
     return(r)
   }

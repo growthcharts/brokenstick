@@ -29,4 +29,25 @@ test_that("returns proper number of rows with at = 'both'", {
   expect_equal(nrow(predict(obj, x = c(NA, NA), y = c(-1, 10), at = "both")), 2 + k)
 })
 
+test_that("output = 'vector' and output = 'long' are consistent", {
+  expect_equal(predict(obj)$yhat,
+               predict(obj, output = "vector"))
+  expect_equal(predict(obj, x = NA)$yhat,
+               predict(obj, x = NA, output = "vector"))
+  expect_equal(predict(obj, x = c(NA, 1), y = c(1, NA))$yhat,
+               predict(obj, x = c(NA, 1), y = c(1, NA), 10, output = "vector"))
+  expect_equal(predict(obj, at = "knots")$yhat,
+               predict(obj, at = "knots", output = "vector"))
+  expect_equal(predict(obj, x = NA, at = "knots")$yhat,
+               predict(obj, x = NA, at = "knots", output = "vector"))
+  expect_equal(predict(obj, x = NA, y = 10, at = "knots")$yhat,
+               predict(obj, x = NA, y = 10, at = "knots", output = "vector"))
+  expect_equal(predict(obj, at = "both")$yhat,
+               predict(obj, at = "both", output = "vector"))
+  expect_equal(predict(obj, x = NA, at = "both")$yhat,
+               predict(obj, x = NA, at = "both", output = "vector"))
+  expect_equal(predict(obj, x = NA, y = 10, at = "both")$yhat,
+               predict(obj, x = NA, y = 10, at = "both", output = "vector"))
+})
+
 
