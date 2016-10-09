@@ -303,7 +303,7 @@ predict_all_atx <- function(object, x,
 
   # concatenate, sort and split over subjid
   data <- rbind(data1, data2)
-  data <- data[order(data$subjid, data$x), ]
+  data <- data[order(data$subjid, data$knot), ]
   ds <- split(data, f = data$subjid)
 
   # simple loop over subjid
@@ -372,7 +372,7 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
 
     # concatenate, sort and split over subjid
     data <- rbind(data1, data2)
-    data <- data[order(data$subjid, data$x), ]
+    data <- data[order(data$subjid, data$knot), ]
     return(data)
   }
   return(NULL)
@@ -420,7 +420,7 @@ predict_atx_experimental <- function(object, x, ids = NULL,
                        y = y,
                        yhat = yhat,
                        knot = knot)
-    result[[i]] <- data[order(data$subjid, data$x), ]
+    result[[i]] <- data[order(data$subjid, data$knot), ]
   }
   result2 <- do.call(rbind, result)
   result3 <- switch(output,
