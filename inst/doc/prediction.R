@@ -114,6 +114,7 @@ for (i in seq_along(ds)) {
   if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$haz, x = d$age, subjid = d$subjid[1])
 }
 result <- do.call(rbind, result)
+row.names(result) <- 1:nrow(result)
 
 # do we get same answers?
 all.equal(result, p)

@@ -25,6 +25,7 @@ test_that("returns proper number of rows with at = 'knots'", {
 test_that("returns proper number of rows with at = 'both'", {
   expect_equal(nrow(predict(obj, at = "both")), n + k * m)
   # expect_equal(nrow(predict(obj, x = NA, at = "both")), n + k * m + m)
+  expect_equal(nrow(predict(obj, x = NA, at = "both")), n + m)
   expect_equal(nrow(predict(obj, x = NA, y = 10, at = "both")), 1 + k)
   expect_equal(nrow(predict(obj, x = c(NA, NA), y = c(-1, 10), at = "both")), 2 + k)
 })
