@@ -2,4 +2,9 @@ Potential extensions:
 
 1) An impute function that produces multiple imputations according to the fitted broken stick model
 2) A vignette that shows how to use the diagnostic for lmer() in the context of the broken stick model
-3) A plot function for trajectories that can select ids from a brokenstick object
+3) A plot function for trajectories that can select ids from a brokenstick object [REALIZED IN V0.44]
+
+
+Bugs/not so nice parts:
+1) predict(exp, x = .., y = ..., subjid = ...) should produce by-subjid estimates. Currently, the system will hang (infinite loop).
+
