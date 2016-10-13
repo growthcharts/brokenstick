@@ -257,7 +257,7 @@ p <- predict(fit)
 head(p, 3)
 ```
 
-The `brokenstick_export` object does not store the individual data, but one may obtain predictions as follows:
+The `brokenstick_export` object does not store the individual data, but if we have the data stored in another place (here `smc`), we may obtain predictions as follows:
 
 ```{r}
 # case-by-case prediction on external data 
@@ -270,7 +270,55 @@ for (i in seq_along(ds)) {
 result <- do.call(rbind, result)
 row.names(result) <- 1:nrow(result)
 
-# do we get same answers?
+# check that we get the same answers
 all.equal(result, p)
 ```
+
+## Assess quality of prediction ($Z$-scale)
+
+The scatterplot of the observed versus predicted values indicates an extremely accurate prediction. 
+
+```{r echo = FALSE, fig.width=4, fig.align="center"}
+library("MASS")
+eqscplot(x = p$y, xlab = get_label("haz"), 
+         y = p$yhat, ylab = "Predicted Z-score", pch = ".")
+abline(0, 1, col = "grey")
+```
+
+The correlation is to `r round(cor(p$yhat, p$y, use = "complete.obs"), 4)`. The standard deviation of the residuals is equal to `r round(sd(p$yhat - p$y, na.rm = TRUE), 3)`, a small value in the $Z$-scale.
+
+## Assess quality of prediction (cm scale)
+
+When back-converted to centimeters, the scatterplot of the observed versus predicted values is even a little tighter.  
+
+```{r echo = FALSE, fig.width=4, fig.align="center"}
+y_cm <- who_zscore2htcm(p$x, p$y, smc$sex)
+yhat_cm <- who_zscore2htcm(p$x, p$yhat, smc$sex)
+eqscplot(x = y_cm, xlab = get_label("htcm"),
+         y = yhat_cm, ylab = "Predicted (cm)", pch = ".")
+abline(0, 1, col = "grey")
+```
+
+The correlation is to `r round(cor(y_cm, yhat_cm, use = "complete.obs"), 4)`. The standard deviation of the residuals is equal to `r round(sd(y_cm - yhat_cm, na.rm = TRUE), 3)` cm, which is very small. 
+
+## Apply to holdout sample
+
+The `smcc_hgtwgt` data has `r nrow(smocc_hgtwgt)` rows, but until now we've used only the first 2000 rows. Is prediction equally good if we apply our fitted model to the remaining rows, that is, to observations that were not part of the model fitting? This can be calculated with the following code:
+
+```{r}
+holdout <- smocc_hgtwgt[-(1:2000), ]
+ds <- split(holdout, f = holdout$subjid, drop = TRUE)
+result <- vector("list", length(ds))
+for (i in seq_along(ds)) {
+  d <- ds[[i]]
+  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$haz, x = d$age, 
+                                          output = "vector")
+}
+holdout$yhat_z <- unlist(result)
+holdout$yhat_cm <- who_zscore2htcm(holdout$agedays, 
+                                   holdout$yhat_z, 
+                                   holdout$sex)
+```
+
+The correlation (in the $Z$-scale) is now equal to `r round(cor(holdout$yhat_z, holdout$haz, use = "complete.obs"), 4)`. The standard deviation of the residuals is equal to `r round(sd(holdout$yhat_z - holdout$haz, na.rm = TRUE), 3)`. In the scale of the raw meassurements we find a correlation equal to `r round(cor(holdout$yhat_cm, holdout$htcm, use = "pairwise"), 4)`. The standard deviation of the residuals in the cm scale is equal to `r round(sd(holdout$yhat_cm - holdout$htcm, na.rm = TRUE), 4)`. Such residuals  are about the size of the measurement error for height (0.5 cm), and are to be expected when applied to a new sample.
 

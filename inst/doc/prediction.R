@@ -31,6 +31,13 @@ plot_missing(smc, width = 600, height = 400)
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 boundary <- c(0, 3)
 
+## ----cache = TRUE--------------------------------------------------------
+fit <- brokenstick(y = smc$haz,
+                   x = smc$age,
+                   subjid = smc$subjid,
+                   knots = knots,
+                   boundary = boundary)
+
 ## ------------------------------------------------------------------------
 class(fit)
 
@@ -116,6 +123,33 @@ for (i in seq_along(ds)) {
 result <- do.call(rbind, result)
 row.names(result) <- 1:nrow(result)
 
-# do we get same answers?
+# check that we get the same answers
 all.equal(result, p)
+
+## ----echo = FALSE, fig.width=4, fig.align="center"-----------------------
+library("MASS")
+eqscplot(x = p$y, xlab = get_label("haz"), 
+         y = p$yhat, ylab = "Predicted Z-score", pch = ".")
+abline(0, 1, col = "grey")
+
+## ----echo = FALSE, fig.width=4, fig.align="center"-----------------------
+y_cm <- who_zscore2htcm(p$x, p$y, smc$sex)
+yhat_cm <- who_zscore2htcm(p$x, p$yhat, smc$sex)
+eqscplot(x = y_cm, xlab = get_label("htcm"),
+         y = yhat_cm, ylab = "Predicted (cm)", pch = ".")
+abline(0, 1, col = "grey")
+
+## ------------------------------------------------------------------------
+holdout <- smocc_hgtwgt[-(1:2000), ]
+ds <- split(holdout, f = holdout$subjid, drop = TRUE)
+result <- vector("list", length(ds))
+for (i in seq_along(ds)) {
+  d <- ds[[i]]
+  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$haz, x = d$age, 
+                                          output = "vector")
+}
+holdout$yhat_z <- unlist(result)
+holdout$yhat_cm <- who_zscore2htcm(holdout$agedays, 
+                                   holdout$yhat_z, 
+                                   holdout$sex)
 
