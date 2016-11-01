@@ -6,7 +6,8 @@
 \usage{
 plot_trajectory(x = x, data = data, color.y = c("blue", "darkgreen"),
   size.y = 10, color.yhat = c("red", "darkgreen"), size.yhat = 10,
-  height = 520, width = 480, nrow = 1, x_range = c(0, 2), ...)
+  height = 520, width = 480, nrow = 1, x_range = c(0, 2),
+  xlab = "Age (years)", ylab = "Length (SDS)", show_reference = TRUE, ...)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
@@ -29,8 +30,15 @@ plot_trajectory(x = x, data = data, color.y = c("blue", "darkgreen"),
 
 \item{x_range}{a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis}
 
-\item{\dots}{Parameters passed down to \code{\link[rbokeh]{figure}}, 
-\code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}} 
+\item{xlab}{The label of the x-axis}
+
+\item{ylab}{The label of the y-axis}
+
+\item{show_reference}{A logical indicating whether the reference should be
+added to the plot. The default is \code{TRUE}.}
+
+\item{\dots}{Parameters passed down to \code{\link[rbokeh]{figure}},
+\code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
 and '\code{\link[rbokeh]{grid_plot}} functions.}
 }
 \value{
