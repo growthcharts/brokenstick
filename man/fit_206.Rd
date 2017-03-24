@@ -22,4 +22,3 @@ The object \code{fit_206} is an object of class \code{brokenstick} that contains
 \code{\link{brokenstick}}
 }
 \keyword{datasets}
-

@@ -52,4 +52,3 @@ plot(fit, size.y = 12, color.y = c("navy", "darkgreen" ),
 \author{
 Stef van Buuren 2016
 }
-

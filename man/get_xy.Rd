@@ -20,4 +20,3 @@ Obtain the x and y data from a broken stick model
 \examples{
 get_xy(fit_1933, ids = c(10001, 10002))
 }
-

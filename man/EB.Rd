@@ -42,12 +42,11 @@ X <- make_basis(data$x, knots = model$knots,
  boundary = model$boundary)
 EB(model, y, X)
 }
-\author{
-Stef van Buuren, 2015
-}
 \references{
 Skrondal, A., Rabe-Hesketh, S. (2009).
 Prediction in multilevel generalized linear models.
 J. R. Statist. Soc. A, 172, 3, 659-687.
 }
-
+\author{
+Stef van Buuren, 2015
+}

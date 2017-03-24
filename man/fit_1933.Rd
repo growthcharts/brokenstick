@@ -39,4 +39,3 @@ fit_1933 <- with(d, brokenstick(y = haz, x = age,
 \code{\link{brokenstick}}
 }
 \keyword{datasets}
-
