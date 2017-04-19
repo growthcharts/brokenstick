@@ -59,28 +59,28 @@
 #' @family brokenstick
 #' @examples
 #' # Estimates at each measured age for all persons in fitted model
-#' class(fit_1933)
-#' p <- predict(fit_1933)
+#' class(fit_206)
+#' p <- predict(fit_206)
 #' head(p)
 #'
 #' # Estimates at knots, stored into the broad matrix
-#' p <- predict(fit_1933, output = "broad", at = "knots")
+#' p <- predict(fit_206, output = "broad", at = "knots")
 #' round(head(p), 2)
 #'
 #' # Get these estimates as a vector, useful for programming
-#' p <- predict(fit_1933, output = "vector", at = "knots")
+#' p <- predict(fit_206, output = "vector", at = "knots")
 #' round(head(p), 2)
 #'
 #' # Obtain estimates at weeks 1-4 for all children, include old points
-#' p <- predict(fit_1933, x = round((1:4)*7/365.25, 4))
+#' p <- predict(fit_206, x = round((1:4)*7/365.25, 4))
 #' head(p)
 #'
 #' # Same, but now organised as broad matrix of new points only
-#' p <- predict(fit_1933, x = round((1:4)*7/365.25, 4), output = "broad")
+#' p <- predict(fit_206, x = round((1:4)*7/365.25, 4), output = "broad")
 #' head(p)
 #'
-#' head(predict(fit_1933, at = "knots", output = "broad"), 3)
-#' predict(fit_1933, id = c(10001, 10003), at = "knots", output = "broad")
+#' head(predict(fit_206, at = "knots", output = "broad"), 3)
+#' predict(fit_206, id = c(10001, 10003), at = "knots", output = "broad")
 #' @export
 predict.brokenstick <- function(object, y, x, ids = NULL,
                                 at = "x", output = "long",
@@ -140,7 +140,7 @@ predict.brokenstick <- function(object, y, x, ids = NULL,
 #' @aliases predict.brokenstick_export
 #' @family brokenstick
 #' @examples
-#' exp <- export(fit_1933)
+#' exp <- export(fit_206)
 #'
 #' # no data predicts mean trajectory
 #' p <- predict(exp)

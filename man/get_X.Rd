@@ -19,5 +19,5 @@ The result is \code{NULL} if \code{object} is not of class \code{brokenstick}.
 Obtain the X model matrix from a broken stick model
 }
 \examples{
-get_X(fit_1933, ids = c(10001, 10002))
+get_X(fit_206, ids = c(10001, 10002))
 }

@@ -18,8 +18,7 @@ knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 
 This vignette shows a step-by-step introduction of how to 
 - Fit the broken stick model to data;
-- Predict observations by the fitted model; 
-- Validate predictions against a holdout sample.
+- Predict observations by the fitted model.
 
 ## Get the data
 
@@ -30,7 +29,7 @@ We will use the `smocc_hgtwgt` demo data that is built-in into the `brokenstick`
 require("brokenstick")
 require("hbgd")
 require("rbokeh")
-smc <- smocc_hgtwgt[1:2000,]
+smc <- smocc_hgtwgt
 ```
 
 ## Calculate $Z$-scores
@@ -300,25 +299,3 @@ abline(0, 1, col = "grey")
 ```
 
 The correlation is to `r round(cor(y_cm, yhat_cm, use = "complete.obs"), 4)`. The standard deviation of the residuals is equal to `r round(sd(y_cm - yhat_cm, na.rm = TRUE), 3)` cm, which is very small. 
-
-## Apply to holdout sample
-
-The `smcc_hgtwgt` data has `r nrow(smocc_hgtwgt)` rows, but until now we've used only the first 2000 rows. Is prediction equally good if we apply our fitted model to the remaining rows, that is, to observations that were not part of the model fitting? This can be calculated with the following code:
-
-```{r}
-holdout <- smocc_hgtwgt[-(1:2000), ]
-ds <- split(holdout, f = holdout$subjid, drop = TRUE)
-result <- vector("list", length(ds))
-for (i in seq_along(ds)) {
-  d <- ds[[i]]
-  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$haz, x = d$age, 
-                                          output = "vector")
-}
-holdout$yhat_z <- unlist(result)
-holdout$yhat_cm <- who_zscore2htcm(holdout$agedays, 
-                                   holdout$yhat_z, 
-                                   holdout$sex)
-```
-
-The correlation (in the $Z$-scale) is now equal to `r round(cor(holdout$yhat_z, holdout$haz, use = "complete.obs"), 4)`. The standard deviation of the residuals is equal to `r round(sd(holdout$yhat_z - holdout$haz, na.rm = TRUE), 3)`. In the scale of the raw meassurements we find a correlation equal to `r round(cor(holdout$yhat_cm, holdout$htcm, use = "pairwise"), 4)`. The standard deviation of the residuals in the cm scale is equal to `r round(sd(holdout$yhat_cm - holdout$htcm, na.rm = TRUE), 4)`. Such residuals  are about the size of the measurement error for height (0.5 cm), and are to be expected when applied to a new sample.
-

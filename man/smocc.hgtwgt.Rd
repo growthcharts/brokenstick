@@ -23,7 +23,8 @@
 Herngreen WP, van Buuren S, van Wieringen JC, Reerink JD, Verloove-Vanhorick SP & Ruys JH (1994). Growth in length and weight from birth to 2 years of a representative sample of Netherlands children (born in 1988-89) related to socio-economic status and other background characteristics. \emph{Annals of Human Biology}, \bold{21}, 449-463.
 }
 \description{
-Longitudinal height and weight measurements during ages 0-2 years for a representative sample of 1933 Dutch children born in 1988-1989. The dataset \code{smocc.hgtwgt} is a subset of the \code{smocc[["time"]]} data from the \pkg{donordata} package.
+Longitudinal height and weight measurements during ages 0-2 years for a representative sample of 1933 Dutch children born in 1988-1989.
+The dataset \code{smocc.hgtwgt} is a subset of the full data covering the first 206 children.
 }
 \note{
 This dataset is property of the Netherlands Organisation for Applied Scientific Research TNO. Distribution is not permitted.

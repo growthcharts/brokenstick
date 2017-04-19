@@ -5,7 +5,7 @@ knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 require("brokenstick")
 require("hbgd")
 require("rbokeh")
-smc <- smocc_hgtwgt[1:2000,]
+smc <- smocc_hgtwgt
 
 ## ----zscores-------------------------------------------------------------
 haz <- who_htcm2zscore(smc$agedays, smc$htcm, smc$sex)
@@ -131,18 +131,4 @@ yhat_cm <- who_zscore2htcm(p$x, p$yhat, smc$sex)
 eqscplot(x = y_cm, xlab = get_label("htcm"),
          y = yhat_cm, ylab = "Predicted (cm)", pch = ".")
 abline(0, 1, col = "grey")
-
-## ------------------------------------------------------------------------
-holdout <- smocc_hgtwgt[-(1:2000), ]
-ds <- split(holdout, f = holdout$subjid, drop = TRUE)
-result <- vector("list", length(ds))
-for (i in seq_along(ds)) {
-  d <- ds[[i]]
-  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$haz, x = d$age, 
-                                          output = "vector")
-}
-holdout$yhat_z <- unlist(result)
-holdout$yhat_cm <- who_zscore2htcm(holdout$agedays, 
-                                   holdout$yhat_z, 
-                                   holdout$sex)
 

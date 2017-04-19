@@ -38,16 +38,12 @@ The \code{plot} method for a \code{brokenstick} object plots the observed and
 fitted trajectories of one or more individuals.
 }
 \examples{
-smc <- smocc_hgtwgt[1:2000,]
+smc <- smocc_hgtwgt
 fit <- brokenstick(y=smc$haz, x=smc$age, subj = smc$subjid,
  knots = 0:2, boundary = c(0, 3))
-plot(fit, ids = c(10001, 10004, 10005))
 plot(fit, ids = c(10001, 10004, 10005),
  px = get_knots(fit), x_trim = c(0, 2.2), size.y = 6,
  size.yhat = 6, height = 300, width = 600)
-plot(fit, size.y = 12, color.y = c("navy", "darkgreen" ),
- x_trim = c(0, 2.2), x_range = c(0,2), nrow = 3,
- ids = c(10001, 10004, 10005))
 }
 \author{
 Stef van Buuren 2016

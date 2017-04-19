@@ -15,7 +15,7 @@ slots:
 \item{xy}{A data frame with column names \code{subjid}, \code{x} and \code{y} containing the data on which the model was fitted when called by the call in slot \code{bs.call}.}
 }}
 \description{
-The object \code{fit_206} is an object of class \code{brokenstick} that contains the fitted broken stick model. The class \code{brokenstick} extend the \code{lmerMod} class with additional attributes. This object is similar to \code{fit_1933} with two important differences. First, the object is fitted in the first 2000 rows of \code{smocc_hgtwgt}, and thus contains data of 206 children. Second, the data were not filtered for out-of-range and missing values.
+The object \code{fit_206} is an object of class \code{brokenstick} that contains the fitted broken stick model. The class \code{brokenstick} extend the \code{lmerMod} class with additional attributes.
 }
 \seealso{
 \code{\link[lme4]{lmer}}, \code{\link[lme4]{merMod-class}},

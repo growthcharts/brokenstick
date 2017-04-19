@@ -3,7 +3,7 @@
 #' @param object An object of class \code{brokenstick} or \code{brokenstick.export}
 #' @return A vector with knot locations
 #' @examples
-#' get_knots(fit_1933)
+#' get_knots(fit_206)
 #' @export
 get_knots <- function(object) {
   if (inherits(object, "brokenstick")) {
@@ -23,7 +23,7 @@ get_knots <- function(object) {
 #' @param ids A vector specifying the id's of the persons. If omitted, all id's are included.
 #' @return A data frame with subjid, x and y. The result is \code{NULL} if \code{object} is not of class \code{brokenstick}.
 #' @examples
-#' get_xy(fit_1933, ids = c(10001, 10002))
+#' get_xy(fit_206, ids = c(10001, 10002))
 #' @export
 get_xy <- function(object, ids = NULL) {
   if (is.null(ids)) return(object@xy)
@@ -37,7 +37,7 @@ get_xy <- function(object, ids = NULL) {
 #' @return A matrix with number of columns equal to the number of knots.
 #' The result is \code{NULL} if \code{object} is not of class \code{brokenstick}.
 #' @examples
-#' get_X(fit_1933, ids = c(10001, 10002))
+#' get_X(fit_206, ids = c(10001, 10002))
 #' @export
 get_X <- function(object, ids = NULL) {
   if (inherits(object, "brokenstick")) {

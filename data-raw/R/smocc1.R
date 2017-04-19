@@ -11,6 +11,9 @@ data <- smocc[[3]][, c("src", "id", "rec", "nrec", "age", "sex",
 					   "etn", "ga", "bw", "hgt", "wgt")]
 rownames(data) <- NULL
 
+# take first 2000 records
+data <- data[1:2000, ]
+
 # make a factor of id
 data$id <- as.factor(data$id)
 

@@ -47,7 +47,7 @@ and simulation.}
 Predict growth curve according to the broken stick model
 }
 \examples{
-exp <- export(fit_1933)
+exp <- export(fit_206)
 
 # no data predicts mean trajectory
 p <- predict(exp)

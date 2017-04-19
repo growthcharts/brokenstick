@@ -50,8 +50,7 @@ Function name        | Description
 
 ## Further reading
 
-The [overview of the main functions](mainfunctions.html) provides a short introduction into the capabilities of the package. Additional details are given in vignettes [fit and predict](prediction.html), [knot placement](knotplacement.html) and [model formulation](model.html). Also, browse the [manuscript](paperbrokenstick.html) on the model and several applications.
-
+The [overview of the main functions](mainfunctions.html) provides a short introduction into the capabilities of the package. Additional details are given in vignettes [fit and predict](prediction.html), [knot placement](knotplacement.html) and [model formulation](model.html). 
 ## Acknowledgement
 
-The development of the `brokenstick` package was kindly supported by the *Healthy Birth Growth and Development* (HBGD) program of the Bill & Melinda Gates Foundation. Other packages developed under the same program include `hbgd` and `dscore`.
+The development of the `brokenstick` package was kindly supported by the *Healthy Birth Growth and Development* (HBGD) program of the Bill & Melinda Gates Foundation.

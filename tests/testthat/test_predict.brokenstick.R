@@ -31,7 +31,7 @@ test_that("returns proper number of rows with at = 'both'", {
 })
 
 test_that("output = 'vector' and output = 'long' are consistent", {
-  expect_equal(predict(obj)$yhat,
+  expect_equivalent(predict(obj)$yhat,
                predict(obj, output = "vector"))
   expect_equal(predict(obj, x = NA)$yhat,
                predict(obj, x = NA, output = "vector"))
