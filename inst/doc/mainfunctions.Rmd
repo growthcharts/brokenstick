@@ -25,6 +25,7 @@ This vignette uses functions from the `rbokeh`, `hbgd` and `brokenstick` package
 ```{r}
 if (!require(rbokeh)) devtools::install_github("hafen/rbokeh")
 if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
+require("hbgd")
 require("brokenstick")
 ```
 

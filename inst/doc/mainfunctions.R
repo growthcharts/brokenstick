@@ -4,6 +4,7 @@ knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 ## ------------------------------------------------------------------------
 if (!require(rbokeh)) devtools::install_github("hafen/rbokeh")
 if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
+require("hbgd")
 require("brokenstick")
 
 ## ------------------------------------------------------------------------
