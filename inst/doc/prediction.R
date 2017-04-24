@@ -31,6 +31,13 @@ plot_missing(smc, width = 600, height = 400)
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 boundary <- c(0, 3)
 
+## ----cache = TRUE--------------------------------------------------------
+fit <- brokenstick(y = smc$haz,
+                   x = smc$age,
+                   subjid = smc$subjid,
+                   knots = knots,
+                   boundary = boundary)
+
 ## ------------------------------------------------------------------------
 class(fit)
 

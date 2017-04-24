@@ -73,10 +73,6 @@ smocc_hgtwgt <- data
 fn1 <- path.expand("~/Package/brokenstick/brokenstick/data/smocc_hgtwgt.rda")
 save(smocc_hgtwgt, file = fn1, compress = "xz")
 
-# store 'fit_1933' for lazy loading
-#fn2 <- path.expand("~/Package/brokenstick/brokenstick/data/fit_1933.rda")
-#save(fit_1933, file = fn2, compress = "xz")
-
 # store 'fit_206' for lazy loading
 fn3 <- path.expand("~/Package/brokenstick/brokenstick/data/fit_206.rda")
 save(fit_206, file = fn3, compress = "xz")
