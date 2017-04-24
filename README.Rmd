@@ -22,13 +22,14 @@ All fitting can done in the Z-score scale, so nonlinearities and irregular data 
 
 ## Installation
 
-If you have been marked as a collaborator on GitHub, generated a personal access token (PAT) on <https://github.com/settings/tokens>, and stored your PAT by `Sys.setenv(GITHUB_PAT = "51he..")`, then install the `brokenstick` package from GitHub as follows: 
+The `brokenstick` package can be installed from GitHub as follows: 
 
 ```{r eval = FALSE}
 install.packages("devtools")
-devtools::install_github(repo = "stefvanbuuren/brokenstick", oath = Sys.getenv("GITHUB_PAT"))
+devtools::install_github("stefvanbuuren/brokenstick")
 ```
 
+There is currently no CRAN version.
 
 ## Overview
 
@@ -55,9 +56,10 @@ In order to conform to the assumption of multivariate normality, the user may fi
 
 The `brokenstick` package contains functions for
 
-- Fitting the broken stick model to data, 
-- Exporting the parameters of the model for independent use outside this package,
-- Predicting broken stick estimates for new data.
+- Fitting the broken stick model to data,
+- Plotting individual trajectories,
+- Predicting broken stick estimates for new data,
+- Exporting the parameters of the model for independent use outside this package.
 
 ## Main functions
 
@@ -66,6 +68,7 @@ The main functions in the `brokenstick` package are:
 Function name        | Description
 ---------------------|---------------------------------
 `brokenstick()`      | Fit a broken stick model to irregular data
+`plot()`             | Plot observed and fitted trajectories
 `predict()`          | Predict broken stick estimates
 `export()`           | Export minimal broken stick model for publication
 
