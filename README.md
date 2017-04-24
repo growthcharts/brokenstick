@@ -60,3 +60,13 @@ The main functions in the `brokenstick` package are:
 | `plot()`        | Plot observed and fitted trajectories             |
 | `predict()`     | Predict broken stick estimates                    |
 | `export()`      | Export minimal broken stick model for publication |
+
+Examples
+--------
+
+1.  [Getting started](https://stefvanbuuren.github.io/brokenstick/gettingstarted.html)
+2.  [Overview of main functions](https://stefvanbuuren.github.io/brokenstick/mainfunctions.html)
+3.  [Model formulation](https://stefvanbuuren.github.io/brokenstick/model.html)
+4.  [Fit and predict](https://stefvanbuuren.github.io/brokenstick/prediction.html)
+5.  [Check perfect model](https://stefvanbuuren.github.io/brokenstick/perfectmodel.html)
+6.  [Knot placements](https://stefvanbuuren.github.io/brokenstick/knotplacement.html)
