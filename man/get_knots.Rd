@@ -18,3 +18,4 @@ Obtain the knots from a broken stick model
 \examples{
 get_knots(fit_206)
 }
+

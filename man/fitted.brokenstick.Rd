@@ -22,10 +22,11 @@ Calculate fitted values
 \note{
 If \code{x} is known and \code{y} is \code{NA} then \code{lme4:::fitted.medMod()} returns \code{NA}. The \code{fitted.brokenstick()} function intercepts subjects with \code{NA}'s in \code{y}, and calculates \code{yhat} for the relevent rows by calling \code{predict.brokenstick_export()}.
 }
+\author{
+Stef van Buuren 2016
+}
 \seealso{
 Other brokenstick: \code{\link{predict.brokenstick_export}},
   \code{\link{predict.brokenstick}}
 }
-\author{
-Stef van Buuren 2016
-}
+

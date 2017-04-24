@@ -47,3 +47,4 @@ An object of class \code{rbokeh}
 \description{
 This function is called by \code{plot.brokenstick()} and \code{plot.brokenstick_export()}, and implements the plotting routines using \code{rbokeh}.
 }
+

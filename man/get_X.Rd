@@ -21,3 +21,4 @@ Obtain the X model matrix from a broken stick model
 \examples{
 get_X(fit_206, ids = c(10001, 10002))
 }
+

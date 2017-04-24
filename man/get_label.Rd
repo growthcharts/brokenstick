@@ -19,3 +19,4 @@ label.
 \note{
 This function should be placed in the \code{hbgd} package.
 }
+

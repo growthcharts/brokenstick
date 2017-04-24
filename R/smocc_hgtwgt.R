@@ -6,7 +6,7 @@
 #'@name smocc.hgtwgt
 #'@docType data
 #'@format
-#'A data frame with 17056 rows and 12 columns:
+#'A data frame with 2000 rows and 12 columns:
 #'\describe{
 #'\item{src}{Source, here \code{"smocc"} (factor)}
 #'\item{id}{ID, unique \code{id} of each child (factor)}
@@ -22,19 +22,18 @@
 #'\item{hgt.z}{Height in SDS relative to WHO standard) (numeric)}
 #'}
 #'@source Herngreen WP, van Buuren S, van Wieringen JC, Reerink JD, Verloove-Vanhorick SP & Ruys JH (1994). Growth in length and weight from birth to 2 years of a representative sample of Netherlands children (born in 1988-89) related to socio-economic status and other background characteristics. \emph{Annals of Human Biology}, \bold{21}, 449-463.
-#'@note This dataset is property of the Netherlands Organisation for Applied Scientific Research TNO. Distribution is not permitted.
-#'Inquiries at \email{stef.vanbuuren@@tno.nl}.
 #'@keywords datasets
 NULL
 
 #'Infant growth of 0-2 years, SMOCC data extract
 #'
-#'Longitudinal height and weight measurements during ages 0-2 years for a representative sample of 1933 Dutch children born in 1988-1989. The dataset \code{smocc_hgtwgt} is a subset of the \code{smocc[["time"]]} data from the \pkg{donordata} package.
+#'Longitudinal height and weight measurements during ages 0-2 years for a representative sample of 1933 Dutch children born in 1988-1989.
+#'The dataset \code{smocc_hgtwgt} is a subset of the full data covering the first 206 children.
 #'
 #'@name smocc_hgtwgt
 #'@docType data
 #'@format
-#'A data frame with 17056 rows and 12 columns:
+#'A data frame with 2000 rows and 14 columns:
 #'\describe{
 #'\item{src}{Source, here \code{"smocc"} (character)}
 #'\item{subjid}{ID, unique identifyer of each child (character)}
@@ -48,12 +47,12 @@ NULL
 #'\item{birthwt}{Birth weight in grammes (810-5100) (numeric)}
 #'\item{htcm}{Length/height in cm (34-102) (numeric)}
 #'\item{wtkg}{Weight measurement in kg (0.8-20.5) (numeric)}
-#'\item{haz}{Height in SDS relative to WHO standard) (numeric)}
-#'\item{waz}{Weight in SDS relative to WHO standard) (numeric)}
+#'\item{haz}{Height in SDS relative to WHO child growth standard (numeric)}
+#'\item{waz}{Weight in SDS relative to WHO child growth standard (numeric)}
 #'}
 #'@source Herngreen WP, van Buuren S, van Wieringen JC, Reerink JD, Verloove-Vanhorick SP & Ruys JH (1994). Growth in length and weight from birth to 2 years of a representative sample of Netherlands children (born in 1988-89) related to socio-economic status and other background characteristics. \emph{Annals of Human Biology}, \bold{21}, 449-463.
-#'@note This dataset is property of the Netherlands Organisation for Applied Scientific Research TNO. Distribution is not permitted.
-#'Inquiries at \email{stef.vanbuuren@@tno.nl}.
+#'@note This dataset contains the same information as
+#'\code{\link{smocc.hgtwgt}}, but conforms HBGDki conventions.
 #'@keywords datasets
 NULL
 

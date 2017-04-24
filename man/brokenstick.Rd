@@ -67,3 +67,4 @@ data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
 fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$id,
                    knots = c(0, 1, 2))
 }
+

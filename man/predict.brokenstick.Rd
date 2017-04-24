@@ -98,10 +98,11 @@ head(p)
 head(predict(fit_206, at = "knots", output = "broad"), 3)
 predict(fit_206, id = c(10001, 10003), at = "knots", output = "broad")
 }
+\author{
+Stef van Buuren 2016
+}
 \seealso{
 Other brokenstick: \code{\link{fitted.brokenstick}},
   \code{\link{predict.brokenstick_export}}
 }
-\author{
-Stef van Buuren 2016
-}
+
