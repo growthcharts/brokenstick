@@ -4,3 +4,4 @@
 ^notes$
 ^README\.Rmd$
 ^README-.*\.png$
+^docs$

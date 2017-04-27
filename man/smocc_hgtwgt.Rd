@@ -33,4 +33,3 @@ This dataset contains the same information as
 \code{\link{smocc.hgtwgt}}, but conforms HBGDki conventions.
 }
 \keyword{datasets}
-

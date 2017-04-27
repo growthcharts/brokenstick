@@ -18,4 +18,3 @@ Exports the crucial estimates of a fitted brokenstick model so that the
 stored estimates can be used by the EB() function 
 to calculate random effect estimates for new data.
 }
-

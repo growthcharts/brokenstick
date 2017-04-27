@@ -31,6 +31,7 @@ The main functions are:
   \code{predict()} \tab Obtain predictions from fitted model\cr
   \code{export()} \tab Export estimates of the model}
 }
+
 \references{
 van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hall/CRC, 2012. Chapter 9.
 }
@@ -39,4 +40,3 @@ van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hal
 \code{\link{EB}}, 
 \code{\link{export}}, \code{\link{predict.brokenstick}}
 }
-

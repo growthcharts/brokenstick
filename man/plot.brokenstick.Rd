@@ -48,4 +48,3 @@ plot(fit, ids = c(10001, 10004, 10005),
 \author{
 Stef van Buuren 2016
 }
-

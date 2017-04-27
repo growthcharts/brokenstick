@@ -13,6 +13,7 @@ The `brokenstick` package can be installed from GitHub as follows:
 
 ``` r
 install.packages("devtools")
+devtools::install_github("hafen/hbgd")
 devtools::install_github("stefvanbuuren/brokenstick")
 ```
 

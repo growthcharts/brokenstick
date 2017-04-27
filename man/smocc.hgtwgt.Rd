@@ -27,4 +27,3 @@ Longitudinal height and weight measurements during ages 0-2 years for a represen
 The dataset \code{smocc.hgtwgt} is a subset of the full data covering the first 206 children.
 }
 \keyword{datasets}
-
