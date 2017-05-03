@@ -24,11 +24,11 @@
 #'fit <- brokenstick(y=smc$haz, x=smc$age, subj = smc$subjid,
 #'  knots = 0:2, boundary = c(0, 3))
 #'plot(fit, ids = c(10001, 10004, 10005),
-#'  px = get_knots(fit), x_trim = c(0, 2.2), size.y = 6,
-#'  size.yhat = 6, height = 300, width = 600)
+#'  px = get_knots(fit), x_trim = c(0, 2.2), xlim = c(0, 2.2))
 #'@export
 plot.brokenstick <- function(x, py, px, ids = NULL,
-                             x_trim = c(-Inf, Inf), max_ids = 3,
+                             max_ids = 3,
+                             x_trim = c(-Inf, Inf),
                              show_measurements = TRUE,
                              show_estimates = TRUE, ...) {
   if (!inherits(x, "brokenstick")) stop ("Argument `x` not of class brokenstick.")
@@ -38,14 +38,12 @@ plot.brokenstick <- function(x, py, px, ids = NULL,
   if (missing(py)) pr <- predict(object = x, x = px, ...)
   else pr <- predict(object = x, y = py, x = px, ...)
 
-  # plot all trajectories if ids == NULL
-  if (is.null(ids)) idx <- pr$x >= x_trim[1] & pr$x <= x_trim[2]
-  else idx <- pr$subjid %in% ids & pr$x >= x_trim[1] & pr$x <= x_trim[2]
+  # plot first max_ids trajectories if ids == NULL
+  if (is.null(ids)) idx <- pr$subjid %in% unique(pr$subjid)[1:max_ids]
+  else idx <- pr$subjid %in% ids
+  idx <- idx & pr$x >= x_trim[1] & pr$x <= x_trim[2]
   data <- pr[idx, , drop = FALSE]
-  data <- split(data, as.factor(as.character(data$subjid)))
 
-  # safety trunctions
-  if (length(data) >= max_ids) data <- data[1:max_ids]
   plot_trajectory(x = x, data = data, ...)
 }
 
@@ -53,7 +51,7 @@ plot.brokenstick <- function(x, py, px, ids = NULL,
 #' @method plot brokenstick_export
 #' @export
 plot.brokenstick_export <- function(x, py, px, ids = NULL,
-                                    x_trim = c(-Inf, Inf), max_ids = 6, ...) {
+                                    x_trim = c(-Inf, Inf), max_ids = 3, ...) {
   if (!inherits(x, "brokenstick_export")) stop ("Argument `x` not of class brokenstick.")
 
   # calculate brokenstick predictions, long format
@@ -65,7 +63,7 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
   else pr <- predict(object = x, y = py, x = px, ...)
 
   idx <- pr$x >= x_trim[1] & pr$x <= x_trim[2]
-  data <- list(pr[idx, , drop = FALSE])
+  data <- pr[idx, , drop = FALSE]
   plot_trajectory(x = x, data = data, ...)
 }
 
@@ -79,12 +77,14 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' @param size.y Dot size of measured data points
 #' @param color.yhat A character vector with two elements specifying the symbol and line color of the predicted data points
 #' @param size.yhat Dot size of predicted data points
-#' @param nrow Number of rows in plot
+#' @param ncol Number of columns in plot
 #' @param height Figure height in pixels
 #' @param width Figure width in pixels
 #' @param x_range a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis
 #' @param xlab The label of the x-axis
 #' @param ylab The label of the y-axis
+#' @param xlim Vector of length 2 with range of x-axis
+#' @param ylim Vector of length 2 with range of y-axis
 #' @param show_reference A logical indicating whether the reference should be
 #' added to the plot. The default is \code{FALSE}.
 #' @param bokeh A logical indicating whether \code{rbokeh} should be used. The default
@@ -94,31 +94,44 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' and '\code{\link[rbokeh]{grid_plot}} functions.
 #' @return An object of class \code{ggplot} or \code{rbokeh}.
 #' @rdname plot_trajectory
+#' @examples
+#' smc <- brokenstick::smocc_hgtwgt
+#' knots <- 0:2
+#' fit <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = knots)
+#'
+#' # plot first three cases
+#' plot(fit, bokeh = FALSE)
 #' @export
-plot_trajectory <- function(x, data, bokeh = TRUE, ...) {
-  if (bokeh) return(plot_trajectory_bokeh(x = x, data = data, ...))
+plot_trajectory <- function(x, data, bokeh = FALSE, ...) {
+  if (!bokeh) return(plot_trajectory_ggplot(x = x, data = data, ...))
+  return(plot_trajectory_bokeh(x = x, data = data, ...))
 }
 
 #' @rdname plot_trajectory
 plot_trajectory_bokeh <- function(x, data,
-                            color.y = c("blue", "darkgreen"),
-                            size.y = 10,
-                            color.yhat = c("red", "darkgreen"),
-                            size.yhat = 10,
-                            height = 520, width = 480,
-                            nrow = 1,
-                            x_range = c(0, 2),
-                            xlab = "Age (years)",
-                            ylab = "Length (SDS)",
-                            show_reference = FALSE,
-                            ...) {
-  if (!is.list(data)) stop("Argument `data` should be a list")
+                                  color.y = c("blue", "darkgreen"),
+                                  size.y = 6,
+                                  color.yhat = c("red", "darkgreen"),
+                                  size.yhat = 6,
+                                  height = 300, width = 680,
+                                  ncol = 3,
+                                  x_range = c(0, 2),
+                                  xlab = "Age (years)",
+                                  ylab = "Length (SDS)",
+                                  show_reference = FALSE,
+                                  xlim = NULL,
+                                  ylim = NULL,
+                                  ...) {
+  # split since rbokeh does not support faceting
+  data <- split(data, as.factor(as.character(data$subjid)))
 
   figs <- lapply(data, function(x) {
     # browser()
     k <- x$knot
     fig <- figure(xlab = xlab, ylab = ylab,
                   height = height, width = width, ...)
+    if (!is.null(xlim)) fig <- fig + xlim(xlim)
+    if (!is.null(ylim)) fig <- fig + ylim(ylim)
     if (show_reference)
       fig <- hbgd::ly_zband(fig, x = x_range, z = -c(2.5, 2, 1, 0))
     if (any(!k)) {
@@ -138,10 +151,62 @@ plot_trajectory_bokeh <- function(x, data,
     }
     fig
   })
+
+  # put together different plots
   if (length(figs) == 1) return(figs[[1]])
-  grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, nrow = nrow,
+  grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, ncol = ncol,
             height = height, width = width)
 }
+
+#' @rdname plot_trajectory
+plot_trajectory_ggplot <- function(x, data,
+                                   color.y = c("blue", "darkgreen"),
+                                   size.y = 2,
+                                   color.yhat = c("red", "darkgreen"),
+                                   size.yhat = 2,
+                                   ncol = 3,
+                                   x_range = c(0, 2),
+                                   xlab = "Age (years)",
+                                   ylab = "Length (SDS)",
+                                   show_reference = FALSE,
+                                   xlim = NULL,
+                                   ylim = NULL,
+                                   ...) {
+
+  g <- ggplot(data, aes_string(x = "x", y = "y")) +
+    xlab(xlab) + ylab(ylab)
+
+  if (!is.null(xlim)) g <- g + xlim(xlim)
+  if (!is.null(ylim)) g <- g + ylim(ylim)
+
+  if (show_reference)
+    g <- hbgd::geom_zband(g, x = x_range,
+                          z = -c(2.5, 2, 1, 0),
+                          color = "springgreen")
+
+  # add observed data points and lines
+  k <- data$knot
+  if (any(!k)) {
+    g <- g +
+    geom_line(data = data[!k, ], color = color.y[2]) +
+    geom_point(data = data[!k, ], color = color.y[1], size = size.y)
+  }
+
+  # add broken stick points and lines
+  if (any(k)) {
+    g <- g +
+      geom_line(aes_string(y = "yhat"),
+                data = data[k, ], color = color.yhat[2]) +
+      geom_point(aes_string(y = "yhat"),
+                 data = data[k, ], color = color.yhat[1],
+                 size = size.yhat)
+  }
+
+  # split out according to subjid
+  g <- g + facet_wrap(~subjid, ncol = ncol)
+  return(g)
+}
+
 
 #'Get the label of a HBGD standard variable
 #'

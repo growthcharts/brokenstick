@@ -3,15 +3,22 @@
 \name{plot_trajectory}
 \alias{plot_trajectory}
 \alias{plot_trajectory_bokeh}
+\alias{plot_trajectory_ggplot}
 \title{Plot observed and fitted trajectories from fitted brokenstick model}
 \usage{
-plot_trajectory(x, data, bokeh = TRUE, ...)
+plot_trajectory(x, data, bokeh = FALSE, ...)
 
-plot_trajectory_bokeh(x, data, color.y = c("blue", "darkgreen"),
-  size.y = 10, color.yhat = c("red", "darkgreen"), size.yhat = 10,
-  height = 520, width = 480, nrow = 1, x_range = c(0, 2),
-  xlab = "Age (years)", ylab = "Length (SDS)", show_reference = FALSE,
-  ...)
+plot_trajectory_bokeh(x, data, color.y = c("blue", "darkgreen"), size.y = 6,
+  color.yhat = c("red", "darkgreen"), size.yhat = 6, height = 300,
+  width = 680, ncol = 3, x_range = c(0, 2), xlab = "Age (years)",
+  ylab = "Length (SDS)", show_reference = FALSE, xlim = NULL,
+  ylim = NULL, ...)
+
+plot_trajectory_ggplot(x, data, color.y = c("blue", "darkgreen"),
+  size.y = 2, color.yhat = c("red", "darkgreen"), size.yhat = 2,
+  ncol = 3, x_range = c(0, 2), xlab = "Age (years)",
+  ylab = "Length (SDS)", show_reference = FALSE, xlim = NULL,
+  ylim = NULL, ...)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
@@ -37,7 +44,7 @@ and '\code{\link[rbokeh]{grid_plot}} functions.}
 
 \item{width}{Figure width in pixels}
 
-\item{nrow}{Number of rows in plot}
+\item{ncol}{Number of columns in plot}
 
 \item{x_range}{a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis}
 
@@ -47,6 +54,10 @@ and '\code{\link[rbokeh]{grid_plot}} functions.}
 
 \item{show_reference}{A logical indicating whether the reference should be
 added to the plot. The default is \code{FALSE}.}
+
+\item{xlim}{Vector of length 2 with range of x-axis}
+
+\item{ylim}{Vector of length 2 with range of y-axis}
 }
 \value{
 An object of class \code{ggplot} or \code{rbokeh}.
@@ -54,4 +65,12 @@ An object of class \code{ggplot} or \code{rbokeh}.
 \description{
 This function plot the observed and fitted trajectories from brokenstick model.
 Actual plotting may be done by \code{gglot} or \code{rbokeh}.
+}
+\examples{
+smc <- brokenstick::smocc_hgtwgt
+knots <- 0:2
+fit <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = knots)
+
+# plot first three cases
+plot(fit, bokeh = FALSE)
 }

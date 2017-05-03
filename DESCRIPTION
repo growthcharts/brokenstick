@@ -18,7 +18,8 @@ Imports:
     lme4,
     splines,
     methods,
-    rbokeh
+    rbokeh,
+    ggplot2
 Suggests:
     mice,
     knitr,

@@ -4,8 +4,9 @@
 \alias{plot.brokenstick}
 \title{Plot observed and fitted trajectories}
 \usage{
-\method{plot}{brokenstick}(x, py, px, ids = NULL, x_trim = c(-Inf, Inf),
-  max_ids = 3, show_measurements = TRUE, show_estimates = TRUE, ...)
+\method{plot}{brokenstick}(x, py, px, ids = NULL, max_ids = 3,
+  x_trim = c(-Inf, Inf), show_measurements = TRUE, show_estimates = TRUE,
+  ...)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
@@ -18,9 +19,9 @@ fitted model. Used as \code{x} in \code{\link{predict.brokenstick}}.}
 
 \item{ids}{A vector with one or more subject identification codes.}
 
-\item{x_trim}{A range to select the x-axis}
-
 \item{max_ids}{A scalar indicating the maximum number of individual plots. The default is 3, which select the first six figures. Setting \code{max_ids} to a high number increses the maximum. The parameter implements a safety measure to avoid unintended plots of the entire data set.}
+
+\item{x_trim}{A range to select the x-axis}
 
 \item{show_measurements}{A logical indicating whether the measurement should be plotted. The default is \code{TRUE}.}
 
@@ -42,8 +43,7 @@ smc <- smocc_hgtwgt
 fit <- brokenstick(y=smc$haz, x=smc$age, subj = smc$subjid,
  knots = 0:2, boundary = c(0, 3))
 plot(fit, ids = c(10001, 10004, 10005),
- px = get_knots(fit), x_trim = c(0, 2.2), size.y = 6,
- size.yhat = 6, height = 300, width = 600)
+ px = get_knots(fit), x_trim = c(0, 2.2), xlim = c(0, 2.2))
 }
 \author{
 Stef van Buuren 2016
