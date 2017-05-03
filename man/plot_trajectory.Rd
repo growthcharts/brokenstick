@@ -2,17 +2,28 @@
 % Please edit documentation in R/plot.R
 \name{plot_trajectory}
 \alias{plot_trajectory}
+\alias{plot_trajectory_bokeh}
 \title{Plot observed and fitted trajectories from fitted brokenstick model}
 \usage{
-plot_trajectory(x = x, data = data, color.y = c("blue", "darkgreen"),
+plot_trajectory(x, data, bokeh = TRUE, ...)
+
+plot_trajectory_bokeh(x, data, color.y = c("blue", "darkgreen"),
   size.y = 10, color.yhat = c("red", "darkgreen"), size.yhat = 10,
   height = 520, width = 480, nrow = 1, x_range = c(0, 2),
-  xlab = "Age (years)", ylab = "Length (SDS)", show_reference = TRUE, ...)
+  xlab = "Age (years)", ylab = "Length (SDS)", show_reference = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
 
 \item{data}{A list of data frames produced by \code{predict.brokenstick} and \code{predict.brokenstick_export}}
+
+\item{bokeh}{A logical indicating whether \code{rbokeh} should be used. The default
+(\code{bokeh = FALSE}) produces a \code{ggplot}.}
+
+\item{\dots}{Parameters passed down to \code{\link[rbokeh]{figure}},
+\code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
+and '\code{\link[rbokeh]{grid_plot}} functions.}
 
 \item{color.y}{A character vector with two elements specifying the symbol and line color of the measured data points}
 
@@ -35,15 +46,12 @@ plot_trajectory(x = x, data = data, color.y = c("blue", "darkgreen"),
 \item{ylab}{The label of the y-axis}
 
 \item{show_reference}{A logical indicating whether the reference should be
-added to the plot. The default is \code{TRUE}.}
-
-\item{\dots}{Parameters passed down to \code{\link[rbokeh]{figure}},
-\code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
-and '\code{\link[rbokeh]{grid_plot}} functions.}
+added to the plot. The default is \code{FALSE}.}
 }
 \value{
-An object of class \code{rbokeh}
+An object of class \code{ggplot} or \code{rbokeh}.
 }
 \description{
-This function is called by \code{plot.brokenstick()} and \code{plot.brokenstick_export()}, and implements the plotting routines using \code{rbokeh}.
+This function plot the observed and fitted trajectories from brokenstick model.
+Actual plotting may be done by \code{gglot} or \code{rbokeh}.
 }

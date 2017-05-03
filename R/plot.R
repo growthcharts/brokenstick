@@ -71,7 +71,8 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 
 #' Plot observed and fitted trajectories from fitted brokenstick model
 #'
-#'This function is called by \code{plot.brokenstick()} and \code{plot.brokenstick_export()}, and implements the plotting routines using \code{rbokeh}.
+#' This function plot the observed and fitted trajectories from brokenstick model.
+#' Actual plotting may be done by \code{gglot} or \code{rbokeh}.
 #' @param x An object of class \code{brokenstick} or \code{brokenstick_export}
 #' @param data A list of data frames produced by \code{predict.brokenstick} and \code{predict.brokenstick_export}
 #' @param color.y A character vector with two elements specifying the symbol and line color of the measured data points
@@ -85,13 +86,21 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' @param xlab The label of the x-axis
 #' @param ylab The label of the y-axis
 #' @param show_reference A logical indicating whether the reference should be
-#' added to the plot. The default is \code{TRUE}.
+#' added to the plot. The default is \code{FALSE}.
+#' @param bokeh A logical indicating whether \code{rbokeh} should be used. The default
+#' (\code{bokeh = FALSE}) produces a \code{ggplot}.
 #' @param \dots Parameters passed down to \code{\link[rbokeh]{figure}},
 #' \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
 #' and '\code{\link[rbokeh]{grid_plot}} functions.
-#' @return An object of class \code{rbokeh}
+#' @return An object of class \code{ggplot} or \code{rbokeh}.
+#' @rdname plot_trajectory
 #' @export
-plot_trajectory <- function(x = x, data = data,
+plot_trajectory <- function(x, data, bokeh = TRUE, ...) {
+  if (bokeh) return(plot_trajectory_bokeh(x = x, data = data, ...))
+}
+
+#' @rdname plot_trajectory
+plot_trajectory_bokeh <- function(x, data,
                             color.y = c("blue", "darkgreen"),
                             size.y = 10,
                             color.yhat = c("red", "darkgreen"),
@@ -101,7 +110,7 @@ plot_trajectory <- function(x = x, data = data,
                             x_range = c(0, 2),
                             xlab = "Age (years)",
                             ylab = "Length (SDS)",
-                            show_reference = TRUE,
+                            show_reference = FALSE,
                             ...) {
   if (!is.list(data)) stop("Argument `data` should be a list")
 
