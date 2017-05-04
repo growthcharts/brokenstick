@@ -1,17 +1,19 @@
 #' Obtain the knots from a broken stick model
 #'
 #' @param object An object of class \code{brokenstick} or \code{brokenstick.export}
-#' @return A vector with knot locations
+#' @return A vector with knot locations (both internal and boundary)
 #' @examples
 #' get_knots(fit_206)
 #' @export
 get_knots <- function(object) {
   if (inherits(object, "brokenstick")) {
-    knots <- c(object@knots, object@boundary[2])
+    knots <- c(object@boundary[1], object@knots, object@boundary[2])
+    knots <- unique(knots)
     return(knots)
   }
   if (inherits(object, "brokenstick_export")) {
-    knots <- c(object$knots, object$boundary[2])
+    knots <- c(object$boundary[1], object$knots, object$boundary[2])
+    knots <- unique(knots)
     return(knots)
   }
   return(NULL)

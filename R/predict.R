@@ -188,9 +188,9 @@ predict.brokenstick_export <- function(object, y, x,
 
   # code the x at which the child is observed as
   # linear splines with given knots
-  X <- bs_robust(x = x, knots = object$knots,
+  X <- make_basis(x = x, knots = object$knots,
                  boundary = object$boundary,
-                 degree = object$degree)
+                 degree = object$degree, warn = FALSE)
   colnames(X) <- paste("x", 1:ncol(X), sep = "")
 
   # calculate random effect through empirical Bayes (BLUP) predictor
@@ -378,20 +378,6 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
   return(NULL)
 }
 
-
-bs_robust <- function(x, df = NULL, knots = NULL, degree = 3,
-                      intercept = FALSE, boundary = range(x)) {
-  # this is a wrapper to splines::bs that
-  # 1) accepts an X that is fully NA
-  # 2) suppresses warnings about out-of-range values
-  padx <- all(is.na(x))
-  if (padx) x <- c(0, x)
-  X <- suppressWarnings(
-    splines::bs(x = x, df = df, knots = knots, degree = degree,
-                intercept = intercept, Boundary.knots = boundary))
-  if (padx) X <- X[-1, , drop = FALSE]
-  return(X)
-}
 
 ####
 predict_atx_experimental <- function(object, x, ids = NULL,

@@ -1,7 +1,7 @@
 #'@importFrom lme4 lmer fixef ranef VarCorr lmerControl
 #'@importFrom splines bs
 #'@importFrom methods setGeneric setMethod
-#'@importFrom stats approx as.formula na.omit predict fitted model.frame model.matrix na.exclude
+#'@importFrom stats approx as.formula na.omit predict fitted model.frame model.matrix na.exclude quantile
 #'@importFrom rbokeh figure ly_lines ly_points grid_plot "%>%"
 #'@importFrom ggplot2 ggplot geom_line geom_point facet_wrap aes_string xlab ylab xlim ylim
 NULL

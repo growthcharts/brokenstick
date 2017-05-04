@@ -52,14 +52,22 @@ print_brokenstick <- function (x, ... ) {
 #' @param x a vector of length \code{length(y)} with the explanatory variable on which
 #' the break points should be defined. In longitudinal data, this is usually age.
 #' @param subjid a vector length \code{length(y)} containing the subject identification
-#' @param knots a numerical vector with the locations of the breaks to be
-#' placed on the values of \code{x}. This setting is passed to \code{bs()}. Specify \code{knots} to include the range of \code{x}. This will evade the warning
-#' \code{some 'x' values beyond boundary knots may cause ill-conditioned bases}, a situation that may lead to nonsensical results. If in doubt, set argument \code{storeX = TRUE} and inspect the \code{X} slot of the result. The \code{X} matrix should have values between 0 and 1, and each row should add up to 1.
-#' @param boundary a numerical vector of length 2 with the minimum and maximum
-#' break point for \code{x}. This setting is passed to \code{bs()}. The default is to set the left boundary knot equal to the \code{min(knots)}. The right boundary knots is taken as the larger of \code{max(knots)} and the maximum of \code{x}.
-#' @param degree the degree of the B-spline. For the broken stick model this
-#' should be to 1 (the default), which specifies that values between the break
-#' points are located on a straight line.
+#' @param k optional, scalar indicating the number of internal knots. If specified, then
+#' \code{k} internal knots are placed at equidense quantiles of \code{x}. For example,
+#' specifying \code{k = 1} puts a knot at the 50th quantile (median), specifying \code{k = 3} puts knots
+#' at the 25th, 50th and 75th quantiles of \code{x}, and so on. If both \code{k} and
+#' \code{knots} are specified, then \code{k} take precendence. Note that knots specified
+#' via \code{k} are data-dependent and do not transfer well to other data sets. Use \code{knots}
+#' to specify knots that are independent of the data \code{x}.
+#' @param knots optional, numerical vector with the locations of the breaks to be
+#' placed on the values of \code{x}. Be careful with values outside the range
+#' of the data since this extends the \code{boundary} knots (see below) beyond
+#' the data range.
+#' @param boundary optional, numerical vector of length 2 with the minimum and maximum
+#' knot. This \code{boundary} setting is passed to \code{splines::bs()} as the
+#' \code{Boundary.knots} argument. If not specified, then the range of \code{x}
+#' is taken. If \code{knots} is specified, then the boundary range is extended
+#' to include at least \code{range{knots}}.
 #' @param control A function to control fitting of \code{lmer()}. The default
 #' is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 #' fatal errors with respect the number of parameters into warnings.
@@ -73,21 +81,59 @@ print_brokenstick <- function (x, ... ) {
 #' data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
 #' fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$id,
 #'                    knots = c(0, 1, 2))
+#' @note
+#' The \code{storeX} and \code{degree} arguments have been deprecated in
+#' version 0.54.
 #' @export
 brokenstick <- function(y, x, subjid,
-                        knots = pretty(x),
-                        boundary =
-                          c(min(knots),
-                            max(max(x, na.rm = TRUE, max(knots)))),
-                        degree = 1,
+                        k = NULL,
+                        knots = NULL,
+                        boundary = NULL,
                         control = lmerControl(check.nobs.vs.nRE = "warning"),
                         na.action = na.exclude,
                         ...) {
   call <- match.call()
-  if (degree != 1) stop("No support for a degree different from 1.")
-  X <- bs(x = x, knots = knots, Boundary.knots = boundary,
-          degree = degree)
-  colnames(X) <- paste("x", 1:ncol(X), sep = "")
+
+  k_orig <- k
+  knots_orig <- knots
+  boundary_orig <- boundary
+
+  # if not specified, define boundary as data range
+  range <- range(x, na.rm = TRUE)
+  if (is.null(boundary_orig)) boundary <- range
+  if (length(boundary_orig) != 2) boundary <- range
+
+  # if knots is specified
+  #   extend lower boundary to min(knots)
+  #   extend upper boundary to max(knots)
+  if (!is.null(knots_orig)) {
+    boundary[1] <- min(min(knots_orig, na.rm = TRUE), boundary[1])
+    boundary[2] <- max(max(knots_orig, na.rm = TRUE), boundary[2])
+  }
+
+  # set k to zero if not specified
+  if (is.null(k_orig)) k <- 0
+
+  # if there is vector input via knots and if no k specified
+  # trim knots to exclude boundary points, and calculate k
+  if (is.null(k_orig) & length(knots_orig) >= 1) {
+    knots <- as.numeric(knots_orig)
+    knots <- knots[knots > boundary[1] & knots < boundary[2]]
+    k <- length(knots)
+  }
+
+  # for scalar k, calculate equidense quantiles from the data
+  if (!is.null(k_orig)) {
+    if (k_orig >= 0 & k_orig <= 25) {
+      k <- k_orig
+      knots <- quantile(x, probs = seq(0, 1, length.out = k + 2))[-c(1, k + 2)]
+    }
+    else
+      stop("Number of knots outside range 0-25")
+  }
+
+  X <- make_basis(x = x, knots = knots, boundary = boundary)
+
   pred <- paste("0 +", paste(colnames(X), collapse = " + "))
   data <- data.frame(subjid = subjid, x = x, y = y, X)
   f <- as.formula(paste("y", "~", pred,
@@ -98,9 +144,9 @@ brokenstick <- function(y, x, subjid,
               ...)
 
   class(fit) <- "brokenstick"
-  fit@knots <- knots
-  fit@boundary <- boundary
-  fit@degree <- degree
+  fit@knots <- as.numeric(knots)
+  fit@boundary <- as.numeric(boundary)
+  fit@degree <- 1
   fit@bs.call <- call
   fit@xy <- data[, 1:3]
   return(fit)
