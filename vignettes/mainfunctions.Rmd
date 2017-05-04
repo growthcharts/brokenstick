@@ -128,9 +128,9 @@ The fixed effects correspond to the mean of sample of children in the data, wher
 The `predict()` function obtains predictions from the broken stick model. The simplest call 
 
 ```{r}
-p1 <- predict(fit1)
-dim(p1)
-head(p1, 4)
+#p1 <- predict(fit1)
+#dim(p1)
+#head(p1, 4)
 ```
 
 just produces the predicted value (in `yhat`) for each measured data point for all children used to fit the model in the `long` output format. The observed $Z$-score is stored in column called `y`, and the corresponding broken stick estimates are stored in the column called `yhat`. The column `knot` is set to `FALSE` if `y` is actually observed. 
@@ -158,7 +158,7 @@ plot(fit1, ids = 10001, x_trim = c(0, 2.2))
 Plot for the three children given above can be obtained by 
 
 ```{r}
-plot(fit1, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300)
+plot(fit1, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300, show_references = TRUE)
 ```
 
 The plot shows that the two-line model is fairly crude. 
@@ -190,7 +190,7 @@ head(pr, 4)
 and plotted by
 
 ```{r echo=FALSE}
-plot(fit2, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300)
+plot(fit2, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300, show_references = TRUE)
 ```
 
 The broken stick model now fits the data very well. Formal model assessment can be done with standard `lmer` diagnostic plots. 
