@@ -9,10 +9,11 @@
 #' @param px A vector with decimal ages of length \code{length(py)}.
 #'   fitted model. Used as \code{x} in \code{\link{predict.brokenstick}}.
 #'@param ids A vector with one or more subject identification codes.
-#'@param x_trim A range to select the x-axis
-#'@param max_ids A scalar indicating the maximum number of individual plots. The default is 3, which select the first six figures. Setting \code{max_ids} to a high number increses the maximum. The parameter implements a safety measure to avoid unintended plots of the entire data set.
-#'@param show_measurements A logical indicating whether the measurement should be plotted. The default is \code{TRUE}.
-#'@param show_estimates A logical indicating whether the estimates should be plotted. The default is \code{TRUE}.
+#'@param x_trim A range on the x-axis that can be used to subset values that are
+#'displayed
+#'@param max_ids A scalar indicating the number of individual plots. The default is 3, which plots the trajectories of the first three persons. The \code{max_ids} is a safety measure to prevent unintended plots of the entire data set.
+#'@param measurements A logical indicating whether the measurements should be plotted. The default is \code{TRUE}.
+#'@param estimates A logical indicating whether the broken stick estimates should be plotted. The default is \code{TRUE}.
 #'@param ... Extra arguments passed down to \code{\link[rbokeh]{figure}} and
 #' \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}},
 #' '\code{\link[hbgd]{ly_zband}} and '\code{\link[rbokeh]{grid_plot}} functions.
@@ -20,34 +21,38 @@
 #'@author Stef van Buuren 2016
 #'@method plot brokenstick
 #'@examples
-#' data <- smocc_hgtwgt
-#' head(data)
+#'library("brokenstick")
+#'dat <- smocc_hgtwgt
+#'# fit one line model for data exploration
+#'fit <- brokenstick(y = dat$htcm, x = dat$age, subj = dat$subjid)
 #'
-#' # fit one line model on data range of length (in cm)
-#' fit <- brokenstick(y = data$htcm, x = data$age, subj = data$subjid)
+#'# plot measurements for first three cases
+#'plot(fit, zband = FALSE, est = FALSE)
+#'plot(fit, zband = FALSE, est = FALSE, pkg = "bokeh", width = 250, height = 350)
 #'
-#' # plot data and estimates for person 10001
-#' plot(fit, ids = 10001)
+#'# fit model with knots at 1 and 2 years
+#'fit <- brokenstick(y = dat$haz, x = dat$age, subj = dat$subjid, knots = 1:2)
 #'
-#' # fit one line model on length (in SDS)
-#' fit <- brokenstick(y = data$haz, x = data$age, subj = data$subjid)
-#' plot(fit, ids = 10001, show_zband = TRUE)
+#'# ggplot
+#'plot(fit, xlim = c(0, 2.2), ylim = c(-3, 3))
+#'plot(fit, ids = c(10005, 10012), xlim = c(0, 2.2))
 #'
-#'smc <- smocc_hgtwgt
-#'fit <- brokenstick(y=smc$haz, x=smc$age, subj = smc$subjid,
-#'  knots = 0:2, boundary = c(0, 3))
-#'plot(fit, ids = c(10001, 10004, 10005),
-#'  px = get_knots(fit), x_trim = c(0, 2.2), xlim = c(0, 2.2))
+#'# bokeh plots with using x_trim
+#'plot(fit, pkg = "bokeh", width = 250, height = 350, x_trim = c(0, 2.2))
+#'
+#'# bokeh plots with xlim and ylim
+#'plot(fit, xlim = c(0, 2), ylim = c(-3, 3), pkg = "b", width = 250, height = 350)
+#'plot(fit, ids = 10005, pkg = "bokeh", width = 350, height = 300)
 #'@export
 plot.brokenstick <- function(x, py, px, ids = NULL,
                              max_ids = 3,
                              x_trim = c(-Inf, Inf),
-                             show_measurements = TRUE,
-                             show_estimates = TRUE, ...) {
+                             measurements = TRUE,
+                             estimates = TRUE, ...) {
   if (!inherits(x, "brokenstick")) stop ("Argument `x` not of class brokenstick.")
 
   # calculate brokenstick predictions, long format
-  if (show_estimates & missing(px)) px <- get_knots(x)
+  if (estimates & missing(px)) px <- get_knots(x)
   if (missing(py)) pr <- predict(object = x, x = px, ...)
   else pr <- predict(object = x, y = py, x = px, ...)
 
@@ -91,15 +96,13 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' @param color.yhat A character vector with two elements specifying the symbol and line color of the predicted data points
 #' @param size.yhat Dot size of predicted data points
 #' @param ncol Number of columns in plot
-#' @param height Figure height in pixels. The default is 300 pixels (only bokeh)
-#' @param width Figure width in pixels. The defaults is 680 pixels (only bokeh)
 #' @param xlab The label of the x-axis
 #' @param ylab The label of the y-axis
 #' @param xlim Vector of length 2 with range of x-axis
 #' @param ylim Vector of length 2 with range of y-axis
 #' @param theme Plotting theme (only ggplot)
-#' @param show_zband A logical indicating whether the Z-score band should be
-#' added to the plot. The default is \code{FALSE}.
+#' @param zband A logical indicating whether the Z-score band should be
+#' added to the plot. The default is \code{TRUE}.
 #' @param zband_range a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
 #' default is the entire data range.
 #' @param pkg A string indicating whether the \code{"ggplot"} or
@@ -129,28 +132,29 @@ plot_trajectory_bokeh <- function(x, data,
                                   size.y = 6,
                                   color.yhat = c("red", "grey"),
                                   size.yhat = 6,
-                                  height = 300, width = 680,
                                   ncol = 3,
                                   xlab = "Age (years)",
                                   ylab = "Length (SDS)",
-                                  show_zband = FALSE,
+                                  zband = TRUE,
                                   zband_range = NULL,
                                   xlim = NULL,
                                   ylim = NULL,
                                   ...) {
-  if (is.null(zband_range)) zband_range <- range(data$x, na.rm = TRUE)
+  if (is.null(zband_range)) {
+    if (!is.null(xlim)) zband_range <- xlim
+    else zband_range <- range(data$x, na.rm = TRUE)
+  }
 
   # split since rbokeh does not support faceting
   data <- split(data, as.factor(as.character(data$subjid)))
 
   figs <- lapply(data, function(x) {
-    # browser()
+
     k <- x$knot
-    fig <- figure(xlab = xlab, ylab = ylab,
-                  height = height, width = width, ...)
-    if (!is.null(xlim)) fig <- fig + xlim(xlim)
-    if (!is.null(ylim)) fig <- fig + ylim(ylim)
-    if (show_zband)
+    fig <- figure(xlab = xlab, ylab = ylab, ...)
+    # if (length(xlim) == 2) fig <- x_range(fig, xlim)
+    # if (length(ylim) == 2) fig <- y_range(fig, ylim)
+    if (zband)
       fig <- hbgd::ly_zband(fig, x = zband_range, z = -c(2.5, 2, 1, 0))
     if (any(!k)) {
       fig <- fig %>%
@@ -172,8 +176,8 @@ plot_trajectory_bokeh <- function(x, data,
 
   # put together different plots
   if (length(figs) == 1) return(figs[[1]])
-  grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, ncol = ncol,
-            height = height, width = width)
+  grid_plot(figs, xlim = xlim, ylim = ylim,
+            same_axes = TRUE, simplify_axes = TRUE, ncol = ncol)
 }
 
 #' @rdname plot_trajectory
@@ -185,7 +189,7 @@ plot_trajectory_ggplot <- function(x, data,
                                    ncol = 3,
                                    xlab = "Age (years)",
                                    ylab = "Length (SDS)",
-                                   show_zband = TRUE,
+                                   zband = TRUE,
                                    zband_range = NULL,
                                    xlim = NULL,
                                    ylim = NULL,
@@ -200,9 +204,11 @@ plot_trajectory_ggplot <- function(x, data,
 
   # zband_color Note color #59a14f is Tableau10 green
   zband_color <- "#59a14f"
-  if (is.null(zband_range)) zband_range <- range(data$x, na.rm = TRUE)
-  # zband_color <- ggplot2::alpha("green", 0.25)
-  if (show_zband)
+  if (is.null(zband_range)) {
+    if (!is.null(xlim)) zband_range <- xlim
+    else zband_range <- range(data$x, na.rm = TRUE)
+  }
+  if (zband)
     g <- hbgd::geom_zband(g, x = zband_range,
                           z = -c(2.5, 2, 1, 0),
                           color = zband_color,
