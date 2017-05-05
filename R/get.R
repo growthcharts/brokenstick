@@ -50,3 +50,18 @@ get_X <- function(object, ids = NULL) {
   }
   return(NULL)
 }
+
+#' Obtain proportion of explained variance from a broken stick model
+#'
+#' @param object An object of class \code{brokenstick}
+#' @return Proportion of explained variance
+#' @examples
+#' get_pev(fit_206)
+#' @export
+get_pev <- function(object) {
+  if (inherits(object, "brokenstick")) {
+    p <- predict(object)
+    return(var(p$yhat, na.rm = TRUE) / var(p$y, na.rm = TRUE))
+  }
+  return(NULL)
+}

@@ -63,5 +63,5 @@ plot(fit, xlim = c(0, 2), ylim = c(-3, 3), pkg = "b", width = 250, height = 350)
 plot(fit, ids = 10005, pkg = "bokeh", width = 350, height = 300)
 }
 \author{
-Stef van Buuren 2016
+Stef van Buuren 2017
 }

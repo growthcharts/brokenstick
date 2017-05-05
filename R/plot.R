@@ -18,7 +18,7 @@
 #' \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}},
 #' '\code{\link[hbgd]{ly_zband}} and '\code{\link[rbokeh]{grid_plot}} functions.
 #'@return An object of class \code{rbokeh}.
-#'@author Stef van Buuren 2016
+#'@author Stef van Buuren 2017
 #'@method plot brokenstick
 #'@examples
 #'library("brokenstick")
@@ -106,7 +106,7 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' @param zband_range a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
 #' default is the entire data range.
 #' @param pkg A string indicating whether the \code{"ggplot"} or
-#' \code{"bokeh"} plotting package should be used. The default is \code{"ggplot"}.
+#' \code{"bokeh"} plotting package should be used. The default is \code{"bokeh"}.
 #' @param \dots Parameters passed down to \code{\link[rbokeh]{figure}},
 #' \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
 #' and '\code{\link[rbokeh]{grid_plot}} functions.
@@ -120,7 +120,7 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' # plot first three cases
 #' plot(fit)
 #' @export
-plot_trajectory <- function(x, data, pkg = c("ggplot", "bokeh"), ...) {
+plot_trajectory <- function(x, data, pkg = c("bokeh", "ggplot"), ...) {
   pkg <- match.arg(pkg)
   if (pkg == "ggplot") return(plot_trajectory_ggplot(x = x, data = data, ...))
   return(plot_trajectory_bokeh(x = x, data = data, ...))
@@ -145,15 +145,9 @@ plot_trajectory_bokeh <- function(x, data,
     else zband_range <- range(data$x, na.rm = TRUE)
   }
 
-  # split since rbokeh does not support faceting
-  data <- split(data, as.factor(as.character(data$subjid)))
-
-  figs <- lapply(data, function(x) {
-
+  plot_one_fig <- function(x) {
     k <- x$knot
     fig <- figure(xlab = xlab, ylab = ylab, ...)
-    # if (length(xlim) == 2) fig <- x_range(fig, xlim)
-    # if (length(ylim) == 2) fig <- y_range(fig, ylim)
     if (zband)
       fig <- hbgd::ly_zband(fig, x = zband_range, z = -c(2.5, 2, 1, 0))
     if (any(!k)) {
@@ -171,8 +165,12 @@ plot_trajectory_bokeh <- function(x, data,
         ly_points(x = x$x[k], x$yhat[k],
                   color = color.yhat[1], size = size.yhat)
     }
-    fig
-  })
+    return(fig)
+  }
+
+  # split since rbokeh does not support faceting
+  data <- split(data, as.factor(as.character(data$subjid)), drop = TRUE)
+  figs <- lapply(data, FUN = plot_one_fig)
 
   # put together different plots
   if (length(figs) == 1) return(figs[[1]])
