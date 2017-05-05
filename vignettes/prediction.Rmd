@@ -163,7 +163,7 @@ head(p3, 4)
 The first three fitted trajectories are plotted by
 
 ```{r}
-plot(fit, height = 300, size.y = 4, size.yhat = 4, x_trim = c(0, 2.2))
+plot(fit, height = 300, size.y = 4, size.yhat = 4, x_trim = c(0, 2.2), show_reference = TRUE)
 ```
 
 
@@ -182,7 +182,7 @@ The `predict()` function can return additional information by altering these arg
 We plot the original data and the broken stick estimates for child 10001 jointly as
 
 ```{r fig3}
-plot(fit, ids = 10001, x_trim = c(0, 2.2))
+plot(fit, ids = 10001, x_trim = c(0, 2.2), show_reference = TRUE)
 ```
 
 
@@ -238,7 +238,7 @@ predict(exp, y, x, at = "both", subjid = "Fred")
 The figure below plots the observed data (five blue points) and the broken stick predictions (red points) for Fred. 
 
 ```{r echo = FALSE, fig.align = "center"}
-plot(exp, y, x, at = "both", x_trim = c(0, 2.2))
+# plot(x = exp, py = y, px = x, at = "both", x_trim = c(0, 2.2))
 ```
 
 ---

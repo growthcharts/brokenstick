@@ -6,16 +6,16 @@
 \alias{brokenstick-pkg-package}
 \title{\pkg{brokenstick}: A package for irregular longitudinal data.}
 \description{
-The broken stick model describes a set of individual curves 
-by a linear mixed model using first order linear B-splines. The 
-main use of the model is to align irregularly observed data to a 
+The broken stick model describes a set of individual curves
+by a linear mixed model using first order linear B-splines. The
+main use of the model is to align irregularly observed data to a
 user-specified grid of break ages.
 }
 \details{
-The \pkg{brokenstick} package contains functions for 
-fitting a broken stick 
-model to data, for exporting the parameters of the model for 
-independent use outside this package, and for predicting broken 
+The \pkg{brokenstick} package contains functions for
+fitting a broken stick
+model to data, for exporting the parameters of the model for
+independent use outside this package, and for predicting broken
 stick curves for new data.
 }
 \note{
@@ -36,7 +36,7 @@ The main functions are:
 van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hall/CRC, 2012. Chapter 9.
 }
 \seealso{
-\code{\link{brokenstick}}, 
-\code{\link{EB}}, 
+\code{\link{brokenstick}},
+\code{\link{EB}},
 \code{\link{export}}, \code{\link{predict.brokenstick}}
 }

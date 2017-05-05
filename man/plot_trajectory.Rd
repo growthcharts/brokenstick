@@ -2,17 +2,34 @@
 % Please edit documentation in R/plot.R
 \name{plot_trajectory}
 \alias{plot_trajectory}
+\alias{plot_trajectory_bokeh}
+\alias{plot_trajectory_ggplot}
 \title{Plot observed and fitted trajectories from fitted brokenstick model}
 \usage{
-plot_trajectory(x = x, data = data, color.y = c("blue", "darkgreen"),
-  size.y = 10, color.yhat = c("red", "darkgreen"), size.yhat = 10,
-  height = 520, width = 480, nrow = 1, x_range = c(0, 2),
-  xlab = "Age (years)", ylab = "Length (SDS)", show_reference = TRUE, ...)
+plot_trajectory(x, data, pkg = c("bokeh", "ggplot"), ...)
+
+plot_trajectory_bokeh(x, data, color.y = c("blue", "grey"), size.y = 6,
+  color.yhat = c("red", "grey"), size.yhat = 6, ncol = 3,
+  xlab = "Age (years)", ylab = "Length (SDS)", zband = TRUE,
+  zband_range = NULL, xlim = NULL, ylim = NULL, ...)
+
+plot_trajectory_ggplot(x, data, color.y = c("blue", "grey"), size.y = 2,
+  color.yhat = c("red", "grey"), size.yhat = 2, ncol = 3,
+  xlab = "Age (years)", ylab = "Length (SDS)", zband = TRUE,
+  zband_range = NULL, xlim = NULL, ylim = NULL,
+  theme = ggplot2::theme_light(), ...)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
 
 \item{data}{A list of data frames produced by \code{predict.brokenstick} and \code{predict.brokenstick_export}}
+
+\item{pkg}{A string indicating whether the \code{"ggplot"} or
+\code{"bokeh"} plotting package should be used. The default is \code{"bokeh"}.}
+
+\item{\dots}{Parameters passed down to \code{\link[rbokeh]{figure}},
+\code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
+and '\code{\link[rbokeh]{grid_plot}} functions.}
 
 \item{color.y}{A character vector with two elements specifying the symbol and line color of the measured data points}
 
@@ -22,28 +39,36 @@ plot_trajectory(x = x, data = data, color.y = c("blue", "darkgreen"),
 
 \item{size.yhat}{Dot size of predicted data points}
 
-\item{height}{Figure height in pixels}
-
-\item{width}{Figure width in pixels}
-
-\item{nrow}{Number of rows in plot}
-
-\item{x_range}{a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis}
+\item{ncol}{Number of columns in plot}
 
 \item{xlab}{The label of the x-axis}
 
 \item{ylab}{The label of the y-axis}
 
-\item{show_reference}{A logical indicating whether the reference should be
+\item{zband}{A logical indicating whether the Z-score band should be
 added to the plot. The default is \code{TRUE}.}
 
-\item{\dots}{Parameters passed down to \code{\link[rbokeh]{figure}},
-\code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
-and '\code{\link[rbokeh]{grid_plot}} functions.}
+\item{zband_range}{a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
+default is the entire data range.}
+
+\item{xlim}{Vector of length 2 with range of x-axis}
+
+\item{ylim}{Vector of length 2 with range of y-axis}
+
+\item{theme}{Plotting theme (only ggplot)}
 }
 \value{
-An object of class \code{rbokeh}
+An object of class \code{ggplot} or \code{rbokeh}.
 }
 \description{
-This function is called by \code{plot.brokenstick()} and \code{plot.brokenstick_export()}, and implements the plotting routines using \code{rbokeh}.
+This function plot the observed and fitted trajectories from brokenstick model.
+Actual plotting may be done by \code{gglot} or \code{rbokeh}.
+}
+\examples{
+smc <- brokenstick::smocc_hgtwgt
+knots <- 0:2
+fit <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = knots)
+
+# plot first three cases
+plot(fit)
 }

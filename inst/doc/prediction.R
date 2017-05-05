@@ -67,13 +67,13 @@ p3 <- predict(fit, at = "both")
 head(p3, 4)
 
 ## ------------------------------------------------------------------------
-plot(fit, height = 300, size.y = 4, size.yhat = 4, x_trim = c(0, 2.2))
+plot(fit, height = 300, size.y = 4, size.yhat = 4, x_trim = c(0, 2.2), show_reference = TRUE)
 
 ## ------------------------------------------------------------------------
 p1 <- predict(fit, ids = 10001, at = "knots", output = "vector")
 
 ## ----fig3----------------------------------------------------------------
-plot(fit, ids = 10001, x_trim = c(0, 2.2))
+plot(fit, ids = 10001, x_trim = c(0, 2.2), show_reference = TRUE)
 
 ## ------------------------------------------------------------------------
 # convert Z-score to CM
@@ -105,7 +105,7 @@ y <- c(-1.2, -1.8, -1.7, -1.9, -2.1)
 predict(exp, y, x, at = "both", subjid = "Fred")
 
 ## ----echo = FALSE, fig.align = "center"----------------------------------
-plot(exp, y, x, at = "both", x_trim = c(0, 2.2))
+plot(exp, y, x, at = "both", x_trim = c(0, 2.2), show_reference = TRUE)
 
 ## ----fig.height=7, fig.width=7-------------------------------------------
 # if we have access to the brokenstick object

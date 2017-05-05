@@ -10,7 +10,7 @@ get_knots(object)
 \item{object}{An object of class \code{brokenstick} or \code{brokenstick.export}}
 }
 \value{
-A vector with knot locations
+A vector with knot locations (both internal and boundary)
 }
 \description{
 Obtain the knots from a broken stick model
