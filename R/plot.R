@@ -78,13 +78,14 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' @param color.yhat A character vector with two elements specifying the symbol and line color of the predicted data points
 #' @param size.yhat Dot size of predicted data points
 #' @param ncol Number of columns in plot
-#' @param height Figure height in pixels
-#' @param width Figure width in pixels
+#' @param height Figure height in pixels (only bokeh)
+#' @param width Figure width in pixels (only bokeh)
 #' @param x_range a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis
 #' @param xlab The label of the x-axis
 #' @param ylab The label of the y-axis
 #' @param xlim Vector of length 2 with range of x-axis
 #' @param ylim Vector of length 2 with range of y-axis
+#' @param theme Plotting theme (only ggplot)
 #' @param show_reference A logical indicating whether the reference should be
 #' added to the plot. The default is \code{FALSE}.
 #' @param pkg A string indicating whether the \code{"ggplot"} or
@@ -172,6 +173,7 @@ plot_trajectory_ggplot <- function(x, data,
                                    show_reference = FALSE,
                                    xlim = NULL,
                                    ylim = NULL,
+                                   theme = ggplot2::theme_light(),
                                    ...) {
 
   g <- ggplot(data, aes_string(x = "x", y = "y")) +
@@ -207,6 +209,10 @@ plot_trajectory_ggplot <- function(x, data,
 
   # split out according to subjid
   g <- g + facet_wrap(~subjid, ncol = ncol)
+
+  # set theme
+  g <- g + theme
+
   return(g)
 }
 

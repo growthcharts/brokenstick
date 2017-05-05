@@ -17,7 +17,7 @@ plot_trajectory_bokeh(x, data, color.y = c("blue", "grey"), size.y = 6,
 plot_trajectory_ggplot(x, data, color.y = c("blue", "grey"), size.y = 2,
   color.yhat = c("red", "grey"), size.yhat = 2, ncol = 3, x_range = c(0,
   2), xlab = "Age (years)", ylab = "Length (SDS)", show_reference = FALSE,
-  xlim = NULL, ylim = NULL, ...)
+  xlim = NULL, ylim = NULL, theme = ggplot2::theme_light(), ...)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
@@ -39,9 +39,9 @@ and '\code{\link[rbokeh]{grid_plot}} functions.}
 
 \item{size.yhat}{Dot size of predicted data points}
 
-\item{height}{Figure height in pixels}
+\item{height}{Figure height in pixels (only bokeh)}
 
-\item{width}{Figure width in pixels}
+\item{width}{Figure width in pixels (only bokeh)}
 
 \item{ncol}{Number of columns in plot}
 
@@ -57,6 +57,8 @@ added to the plot. The default is \code{FALSE}.}
 \item{xlim}{Vector of length 2 with range of x-axis}
 
 \item{ylim}{Vector of length 2 with range of y-axis}
+
+\item{theme}{Plotting theme (only ggplot)}
 }
 \value{
 An object of class \code{ggplot} or \code{rbokeh}.
