@@ -87,8 +87,8 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' @param ylim Vector of length 2 with range of y-axis
 #' @param show_reference A logical indicating whether the reference should be
 #' added to the plot. The default is \code{FALSE}.
-#' @param bokeh A logical indicating whether \code{rbokeh} should be used. The default
-#' (\code{bokeh = FALSE}) produces a \code{ggplot}.
+#' @param pkg A string indicating whether the \code{"ggplot"} or
+#' \code{"bokeh"} plotting package should be used. The default is \code{"ggplot"}.
 #' @param \dots Parameters passed down to \code{\link[rbokeh]{figure}},
 #' \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
 #' and '\code{\link[rbokeh]{grid_plot}} functions.
@@ -100,18 +100,19 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' fit <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = knots)
 #'
 #' # plot first three cases
-#' plot(fit, bokeh = FALSE)
+#' plot(fit)
 #' @export
-plot_trajectory <- function(x, data, bokeh = FALSE, ...) {
-  if (!bokeh) return(plot_trajectory_ggplot(x = x, data = data, ...))
+plot_trajectory <- function(x, data, pkg = c("ggplot", "bokeh"), ...) {
+  pkg <- match.arg(pkg)
+  if (pkg == "ggplot") return(plot_trajectory_ggplot(x = x, data = data, ...))
   return(plot_trajectory_bokeh(x = x, data = data, ...))
 }
 
 #' @rdname plot_trajectory
 plot_trajectory_bokeh <- function(x, data,
-                                  color.y = c("blue", "darkgreen"),
+                                  color.y = c("blue", "grey"),
                                   size.y = 6,
-                                  color.yhat = c("red", "darkgreen"),
+                                  color.yhat = c("red", "grey"),
                                   size.yhat = 6,
                                   height = 300, width = 680,
                                   ncol = 3,
@@ -160,9 +161,9 @@ plot_trajectory_bokeh <- function(x, data,
 
 #' @rdname plot_trajectory
 plot_trajectory_ggplot <- function(x, data,
-                                   color.y = c("blue", "darkgreen"),
+                                   color.y = c("blue", "grey"),
                                    size.y = 2,
-                                   color.yhat = c("red", "darkgreen"),
+                                   color.yhat = c("red", "grey"),
                                    size.yhat = 2,
                                    ncol = 3,
                                    x_range = c(0, 2),
@@ -182,7 +183,9 @@ plot_trajectory_ggplot <- function(x, data,
   if (show_reference)
     g <- hbgd::geom_zband(g, x = x_range,
                           z = -c(2.5, 2, 1, 0),
-                          color = "springgreen")
+                          color = "#59a14f")
+
+  # Note color #59a14f is Tableau10 green
 
   # add observed data points and lines
   k <- data$knot

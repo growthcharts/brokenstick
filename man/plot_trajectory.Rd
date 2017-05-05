@@ -6,27 +6,26 @@
 \alias{plot_trajectory_ggplot}
 \title{Plot observed and fitted trajectories from fitted brokenstick model}
 \usage{
-plot_trajectory(x, data, bokeh = FALSE, ...)
+plot_trajectory(x, data, pkg = c("ggplot", "bokeh"), ...)
 
-plot_trajectory_bokeh(x, data, color.y = c("blue", "darkgreen"), size.y = 6,
-  color.yhat = c("red", "darkgreen"), size.yhat = 6, height = 300,
+plot_trajectory_bokeh(x, data, color.y = c("blue", "grey"), size.y = 6,
+  color.yhat = c("red", "grey"), size.yhat = 6, height = 300,
   width = 680, ncol = 3, x_range = c(0, 2), xlab = "Age (years)",
   ylab = "Length (SDS)", show_reference = FALSE, xlim = NULL,
   ylim = NULL, ...)
 
-plot_trajectory_ggplot(x, data, color.y = c("blue", "darkgreen"),
-  size.y = 2, color.yhat = c("red", "darkgreen"), size.yhat = 2,
-  ncol = 3, x_range = c(0, 2), xlab = "Age (years)",
-  ylab = "Length (SDS)", show_reference = FALSE, xlim = NULL,
-  ylim = NULL, ...)
+plot_trajectory_ggplot(x, data, color.y = c("blue", "grey"), size.y = 2,
+  color.yhat = c("red", "grey"), size.yhat = 2, ncol = 3, x_range = c(0,
+  2), xlab = "Age (years)", ylab = "Length (SDS)", show_reference = FALSE,
+  xlim = NULL, ylim = NULL, ...)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
 
 \item{data}{A list of data frames produced by \code{predict.brokenstick} and \code{predict.brokenstick_export}}
 
-\item{bokeh}{A logical indicating whether \code{rbokeh} should be used. The default
-(\code{bokeh = FALSE}) produces a \code{ggplot}.}
+\item{pkg}{A string indicating whether the \code{"ggplot"} or
+\code{"bokeh"} plotting package should be used. The default is \code{"ggplot"}.}
 
 \item{\dots}{Parameters passed down to \code{\link[rbokeh]{figure}},
 \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
@@ -72,5 +71,5 @@ knots <- 0:2
 fit <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = knots)
 
 # plot first three cases
-plot(fit, bokeh = FALSE)
+plot(fit)
 }
