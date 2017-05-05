@@ -20,6 +20,19 @@
 #'@author Stef van Buuren 2016
 #'@method plot brokenstick
 #'@examples
+#' data <- smocc_hgtwgt
+#' head(data)
+#'
+#' # fit one line model on data range of length (in cm)
+#' fit <- brokenstick(y = data$htcm, x = data$age, subj = data$subjid)
+#'
+#' # plot data and estimates for person 10001
+#' plot(fit, ids = 10001)
+#'
+#' # fit one line model on length (in SDS)
+#' fit <- brokenstick(y = data$haz, x = data$age, subj = data$subjid)
+#' plot(fit, ids = 10001, show_zband = TRUE)
+#'
 #'smc <- smocc_hgtwgt
 #'fit <- brokenstick(y=smc$haz, x=smc$age, subj = smc$subjid,
 #'  knots = 0:2, boundary = c(0, 3))
@@ -78,16 +91,17 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' @param color.yhat A character vector with two elements specifying the symbol and line color of the predicted data points
 #' @param size.yhat Dot size of predicted data points
 #' @param ncol Number of columns in plot
-#' @param height Figure height in pixels (only bokeh)
-#' @param width Figure width in pixels (only bokeh)
-#' @param x_range a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis
+#' @param height Figure height in pixels. The default is 300 pixels (only bokeh)
+#' @param width Figure width in pixels. The defaults is 680 pixels (only bokeh)
 #' @param xlab The label of the x-axis
 #' @param ylab The label of the y-axis
 #' @param xlim Vector of length 2 with range of x-axis
 #' @param ylim Vector of length 2 with range of y-axis
 #' @param theme Plotting theme (only ggplot)
-#' @param show_reference A logical indicating whether the reference should be
+#' @param show_zband A logical indicating whether the Z-score band should be
 #' added to the plot. The default is \code{FALSE}.
+#' @param zband_range a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
+#' default is the entire data range.
 #' @param pkg A string indicating whether the \code{"ggplot"} or
 #' \code{"bokeh"} plotting package should be used. The default is \code{"ggplot"}.
 #' @param \dots Parameters passed down to \code{\link[rbokeh]{figure}},
@@ -117,13 +131,15 @@ plot_trajectory_bokeh <- function(x, data,
                                   size.yhat = 6,
                                   height = 300, width = 680,
                                   ncol = 3,
-                                  x_range = c(0, 2),
                                   xlab = "Age (years)",
                                   ylab = "Length (SDS)",
-                                  show_reference = FALSE,
+                                  show_zband = FALSE,
+                                  zband_range = NULL,
                                   xlim = NULL,
                                   ylim = NULL,
                                   ...) {
+  if (is.null(zband_range)) zband_range <- range(data$x, na.rm = TRUE)
+
   # split since rbokeh does not support faceting
   data <- split(data, as.factor(as.character(data$subjid)))
 
@@ -134,8 +150,8 @@ plot_trajectory_bokeh <- function(x, data,
                   height = height, width = width, ...)
     if (!is.null(xlim)) fig <- fig + xlim(xlim)
     if (!is.null(ylim)) fig <- fig + ylim(ylim)
-    if (show_reference)
-      fig <- hbgd::ly_zband(fig, x = x_range, z = -c(2.5, 2, 1, 0))
+    if (show_zband)
+      fig <- hbgd::ly_zband(fig, x = zband_range, z = -c(2.5, 2, 1, 0))
     if (any(!k)) {
       fig <- fig %>%
         ly_lines( x = x$x[!k], y = x$y[!k],
@@ -167,10 +183,10 @@ plot_trajectory_ggplot <- function(x, data,
                                    color.yhat = c("red", "grey"),
                                    size.yhat = 2,
                                    ncol = 3,
-                                   x_range = c(0, 2),
                                    xlab = "Age (years)",
                                    ylab = "Length (SDS)",
-                                   show_reference = FALSE,
+                                   show_zband = TRUE,
+                                   zband_range = NULL,
                                    xlim = NULL,
                                    ylim = NULL,
                                    theme = ggplot2::theme_light(),
@@ -182,12 +198,16 @@ plot_trajectory_ggplot <- function(x, data,
   if (!is.null(xlim)) g <- g + xlim(xlim)
   if (!is.null(ylim)) g <- g + ylim(ylim)
 
-  if (show_reference)
-    g <- hbgd::geom_zband(g, x = x_range,
+  # zband_color Note color #59a14f is Tableau10 green
+  zband_color <- "#59a14f"
+  if (is.null(zband_range)) zband_range <- range(data$x, na.rm = TRUE)
+  # zband_color <- ggplot2::alpha("green", 0.25)
+  if (show_zband)
+    g <- hbgd::geom_zband(g, x = zband_range,
                           z = -c(2.5, 2, 1, 0),
-                          color = "#59a14f")
+                          color = zband_color,
+                          alpha = 0.15)
 
-  # Note color #59a14f is Tableau10 green
 
   # add observed data points and lines
   k <- data$knot

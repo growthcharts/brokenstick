@@ -39,6 +39,19 @@ The \code{plot} method for a \code{brokenstick} object plots the observed and
 fitted trajectories of one or more individuals.
 }
 \examples{
+data <- smocc_hgtwgt
+head(data)
+
+# fit one line model on data range of length (in cm)
+fit <- brokenstick(y = data$htcm, x = data$age, subj = data$subjid)
+
+# plot data and estimates for person 10001
+plot(fit, ids = 10001)
+
+# fit one line model on length (in SDS)
+fit <- brokenstick(y = data$haz, x = data$age, subj = data$subjid)
+plot(fit, ids = 10001, show_zband = TRUE)
+
 smc <- smocc_hgtwgt
 fit <- brokenstick(y=smc$haz, x=smc$age, subj = smc$subjid,
  knots = 0:2, boundary = c(0, 3))

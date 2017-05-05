@@ -152,13 +152,13 @@ head(pr, 4)
 We plot the original data and the broken stick estimates jointly as
 
 ```{r fig3}
-plot(fit1, ids = 10001, x_trim = c(0, 2.2))
+plot(fit1, ids = 10001)
 ```
 
 Plot for the three children given above can be obtained by 
 
 ```{r}
-plot(fit1, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300, show_references = TRUE)
+plot(fit1, ids = ids, size.y = 6, size.yhat = 6, show_zband = TRUE)
 ```
 
 The plot shows that the two-line model is fairly crude. 

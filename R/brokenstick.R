@@ -126,7 +126,8 @@ brokenstick <- function(y, x, subjid,
   if (!is.null(k_orig)) {
     if (k_orig >= 0 & k_orig <= 25) {
       k <- k_orig
-      knots <- quantile(x, probs = seq(0, 1, length.out = k + 2))[-c(1, k + 2)]
+      knots <- quantile(x, probs = seq(0, 1, length.out = k + 2),
+                        na.rm = TRUE)[-c(1, k + 2)]
     }
     else
       stop("Number of knots outside range 0-25")

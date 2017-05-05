@@ -10,14 +10,14 @@ plot_trajectory(x, data, pkg = c("ggplot", "bokeh"), ...)
 
 plot_trajectory_bokeh(x, data, color.y = c("blue", "grey"), size.y = 6,
   color.yhat = c("red", "grey"), size.yhat = 6, height = 300,
-  width = 680, ncol = 3, x_range = c(0, 2), xlab = "Age (years)",
-  ylab = "Length (SDS)", show_reference = FALSE, xlim = NULL,
-  ylim = NULL, ...)
+  width = 680, ncol = 3, xlab = "Age (years)", ylab = "Length (SDS)",
+  show_zband = FALSE, zband_range = NULL, xlim = NULL, ylim = NULL, ...)
 
 plot_trajectory_ggplot(x, data, color.y = c("blue", "grey"), size.y = 2,
-  color.yhat = c("red", "grey"), size.yhat = 2, ncol = 3, x_range = c(0,
-  2), xlab = "Age (years)", ylab = "Length (SDS)", show_reference = FALSE,
-  xlim = NULL, ylim = NULL, theme = ggplot2::theme_light(), ...)
+  color.yhat = c("red", "grey"), size.yhat = 2, ncol = 3,
+  xlab = "Age (years)", ylab = "Length (SDS)", show_zband = TRUE,
+  zband_range = NULL, xlim = NULL, ylim = NULL,
+  theme = ggplot2::theme_light(), ...)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
@@ -39,20 +39,21 @@ and '\code{\link[rbokeh]{grid_plot}} functions.}
 
 \item{size.yhat}{Dot size of predicted data points}
 
-\item{height}{Figure height in pixels (only bokeh)}
+\item{height}{Figure height in pixels. The default is 300 pixels (only bokeh)}
 
-\item{width}{Figure width in pixels (only bokeh)}
+\item{width}{Figure width in pixels. The defaults is 680 pixels (only bokeh)}
 
 \item{ncol}{Number of columns in plot}
-
-\item{x_range}{a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis}
 
 \item{xlab}{The label of the x-axis}
 
 \item{ylab}{The label of the y-axis}
 
-\item{show_reference}{A logical indicating whether the reference should be
+\item{show_zband}{A logical indicating whether the Z-score band should be
 added to the plot. The default is \code{FALSE}.}
+
+\item{zband_range}{a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
+default is the entire data range.}
 
 \item{xlim}{Vector of length 2 with range of x-axis}
 
