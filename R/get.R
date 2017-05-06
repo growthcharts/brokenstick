@@ -1,22 +1,35 @@
 #' Obtain the knots from a broken stick model
 #'
 #' @param object An object of class \code{brokenstick} or \code{brokenstick.export}
-#' @return A vector with knot locations (both internal and boundary)
+#' @param what A character vector of length 1. Valid values are
+#' \code{"all"}, \code{"knots"} or \code{"boundary"}. The default is
+#' \code{what = "all"}.
+#' @return A vector with knot locations, either both, internal only or boundary only
 #' @examples
-#' get_knots(fit_206)
+#' get_knots(fit_206, "knots")
 #' @export
-get_knots <- function(object) {
+get_knots <- function(object, what = c("all", "knots", "boundary")) {
+
+  what <- match.arg(what)
+  if (!inherits(object, c("brokenstick", "brokenstick_export")))
+    stop ("Argument `object` not of class `brokenstick` or `brokenstick_export`")
+
   if (inherits(object, "brokenstick")) {
-    knots <- c(object@boundary[1], object@knots, object@boundary[2])
-    knots <- unique(knots)
-    return(knots)
+    knots <- object@knots
+    boundary <- object@boundary
   }
   if (inherits(object, "brokenstick_export")) {
-    knots <- c(object$boundary[1], object$knots, object$boundary[2])
-    knots <- unique(knots)
-    return(knots)
+    knots <- object$knots
+    boundary <- object$boundary
   }
-  return(NULL)
+
+  internal <- knots[knots > boundary[1] & knots < boundary[2]]
+
+  result <- switch(what,
+                   all = c(boundary[1], internal, boundary[2]),
+                   knots = internal,
+                   boundary = boundary)
+  return(result)
 }
 
 #' Obtain the x and y data from a broken stick model
