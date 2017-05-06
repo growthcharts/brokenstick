@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -12,7 +12,7 @@
 
 <meta name="author" content="Stef van Buuren" />
 
-<meta name="date" content="2017-04-24" />
+<meta name="date" content="2017-05-06" />
 
 <title>Check perfect model</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Check perfect model</h1>
 <h4 class="author"><em>Stef van Buuren</em></h4>
-<h4 class="date"><em>2017-04-24</em></h4>
+<h4 class="date"><em>2017-05-06</em></h4>
 
 
 
@@ -111,13 +111,13 @@ gen_dat &lt;-<span class="st"> </span><span class="kw">make_data_generator</span
                                <span class="dt">resid_var =</span> <span class="dv">1</span>)
 data &lt;-<span class="st"> </span><span class="kw">gen_dat</span>()
 <span class="kw">head</span>(data)</code></pre></div>
-<pre><code>##   subject age .n      X1
-## 1       1   1  1 -0.9478
-## 2       1   2  1 -2.0837
-## 3       1   3  1 -2.6512
-## 4       1   4  1 -2.5526
-## 5       2   1  2 -0.0825
-## 6       2   2  2 -1.2707</code></pre>
+<pre><code>##   subject age .n          X1
+## 1       1   1  1 -0.94777697
+## 2       1   2  1 -2.08372706
+## 3       1   3  1 -2.65116213
+## 4       1   4  1 -2.55255194
+## 5       2   1  2 -0.08250395
+## 6       2   2  2 -1.27072650</code></pre>
 <p>Check the correlation matrix of the <span class="math inline">\(y\)</span>’s.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(<span class="st">&quot;tidyr&quot;</span>)
 <span class="kw">library</span>(<span class="st">&quot;dplyr&quot;</span>)</code></pre></div>
@@ -136,11 +136,11 @@ data &lt;-<span class="st"> </span><span class="kw">gen_dat</span>()
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">d &lt;-<span class="st"> </span><span class="kw">as_data_frame</span>(data[,-<span class="dv">3</span>])
 broad &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">spread</span>(d, subject, X1))[-<span class="dv">1</span>,]
 <span class="kw">cor</span>(broad)</code></pre></div>
-<pre><code>##       1     2     3     4
-## 1 1.000 0.350 0.255 0.161
-## 2 0.350 1.000 0.406 0.246
-## 3 0.255 0.406 1.000 0.313
-## 4 0.161 0.246 0.313 1.000</code></pre>
+<pre><code>##           1         2         3         4
+## 1 1.0000000 0.3497654 0.2550082 0.1611466
+## 2 0.3497654 1.0000000 0.4061576 0.2460109
+## 3 0.2550082 0.4061576 1.0000000 0.3127620
+## 4 0.1611466 0.2460109 0.3127620 1.0000000</code></pre>
 </div>
 <div id="fit-model" class="section level2">
 <h2>Fit model</h2>
@@ -164,7 +164,7 @@ sigma2 &lt;-<span class="st"> </span><span class="kw">export</span>(fit)$sigma2
 <pre><code>##    x1    x2    x3    x4 
 ## -0.02 -0.02  0.01  0.01</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">round</span>(sigma2, <span class="dv">4</span>)</code></pre></div>
-<pre><code>## [1] 0.978</code></pre>
+<pre><code>## [1] 0.9781</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># correlation random effects</span>
 <span class="kw">round</span>(covar, <span class="dv">3</span>)</code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
@@ -221,7 +221,7 @@ sigma2 &lt;-<span class="st"> </span><span class="kw">export</span>(fit)$sigma2
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

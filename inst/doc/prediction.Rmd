@@ -238,7 +238,7 @@ predict(exp, y, x, at = "both", subjid = "Fred")
 The figure below plots the observed data (five blue points) and the broken stick predictions (red points) for Fred. 
 
 ```{r echo = FALSE, fig.align = "center"}
-plot(exp, y, x, at = "both", x_trim = c(0, 2.2), show_reference = TRUE)
+# plot(x = exp, py = y, px = x, at = "both", x_trim = c(0, 2.2))
 ```
 
 ---

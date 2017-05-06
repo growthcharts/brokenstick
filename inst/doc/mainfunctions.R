@@ -1,105 +1,71 @@
 ## ----setup, include=FALSE------------------------------------------------
 knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 
-## ------------------------------------------------------------------------
+## ----message=FALSE-------------------------------------------------------
 if (!require(rbokeh)) devtools::install_github("hafen/rbokeh")
 if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
 require("hbgd")
 require("brokenstick")
 
 ## ------------------------------------------------------------------------
-smc <- brokenstick::smocc_hgtwgt[1:2000, ]
+smc <- brokenstick::smocc_hgtwgt
 head(smc, 3)
 
-## ------------------------------------------------------------------------
-smc2 <- hbgd::get_smocc_data()[1:2000, ]
-smc2$subjid <- as.numeric(as.character(smc2$subjid))
-smc2$src <- as.character(smc2$src)
-smc2$agedays <- round(smc2$agedays)
-smc2$age <- round(smc2$agedays / 365.25, 4)
-smc2$gagebrth <- smc2$ga * 7 + 3
-smc2$etn <- as.character(smc2$etn)
-smc2$birthwt <- smc2$bw
-smc2$haz <- round(who_htcm2zscore(smc2$agedays, smc2$htcm, smc2$sex), 3)
-smc2$waz <- round(who_wtkg2zscore(smc2$agedays, smc2$wtkg, smc2$sex), 3)
-keep <- c("src", "subjid", "rec", "nrec",
-          "age", "agedays", "sex", "etn",
-          "gagebrth", "birthwt",
-          "htcm", "haz", "wtkg", "waz")
-smc2 <- smc2[, keep]
-identical(smc, smc2)
-
-## ----fig1----------------------------------------------------------------
+## ----plotmeasurements----------------------------------------------------
+fit <- brokenstick(y = smc$htcm, x = smc$age, subjid = smc$subjid)
 ids <- c(10001, 10005, 10022)
-d <- subset(smc, subjid %in% ids)
-idx <- split(d, d$subjid)
-figs <- lapply(idx, function(x) {
-  figure(xlab = "Age (years)", ylab = "Length (cm)") %>%
-  ly_who(x = seq(0, 750, by = 30), y_var = "htcm",
-    x_trans = days2years, sex = x$sex[1], color = "green",
-    p = 100 * pnorm(-c(2.5,2,1,0))) %>%
-  ly_lines(days2years(x$agedays), x$htcm,
-    col = "grey", hover = c(x$age, x$htcm)) %>%
-  ly_points(days2years(x$agedays), x$htcm,
-    col = "blue", hover = c(x$age, x$htcm), size = 6)
-})
-grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, width = 680, height = 300)
+plot(fit, ids = ids, zband = FALSE, height = 350, width = 225, ylab = "Length (cm)")
 
-## ----fig2----------------------------------------------------------------
-figs <- lapply(idx, function(x) {
-  figure(xlab = "Age (years)", ylab = "Length (SDS)") %>%
-  ly_zband(x = days2years(seq(0, 750, by = 30)), z = -c(2.5,2,1,0)) %>%
-  ly_lines(x$age, x$haz, col = "grey", hover = c(x$age, x$haz)) %>%
-  ly_points(x$age, x$haz,
-    col = "blue", hover = c(x$age, x$haz), size = 6)
-})
-grid_plot(figs, same_axes = TRUE, simplify_axes = TRUE, width = 680, height = 300)
+## ----bokeh---------------------------------------------------------------
+fit0 <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid)
+plot(fit0, ids = ids, width = 225, height = 350)
+
+## ----ggplot, fig.height=3, fig.width=7, warning=FALSE--------------------
+plot(fit0, ids = ids, pkg = "ggplot")
+
+## ----fit2, cache = TRUE--------------------------------------------------
+fit2 <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = 1:2)
+
+## ----plot_fit1-----------------------------------------------------------
+plot(fit2, ids = ids, x_trim = c(0, 2.2), width = 225, height = 350)
+
+## ----fit9, cache = TRUE, warning=FALSE-----------------------------------
+# 10 scheduled visits
+knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
+fit9 <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = knots)
 
 ## ------------------------------------------------------------------------
-get_knots(fit1)
+plot(fit9, ids = ids, x_trim = c(0, 2.2), width = 225, height = 350)
 
 ## ------------------------------------------------------------------------
-fit1
+p1 <- predict(fit2)
+head(p1, 4)
 
 ## ------------------------------------------------------------------------
-#p1 <- predict(fit1)
-#dim(p1)
-#head(p1, 4)
-
-## ------------------------------------------------------------------------
-p2 <- predict(fit1, at = "knots")
+p2 <- predict(fit2, at = "knots")
 head(p2, 4)
 
 ## ------------------------------------------------------------------------
-pr <- predict(fit1, at = "both")
-head(pr, 4)
-
-## ----fig3----------------------------------------------------------------
-plot(fit1, ids = 10001, x_trim = c(0, 2.2))
+get_pev(fit2)
 
 ## ------------------------------------------------------------------------
-plot(fit1, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300, show_references = TRUE)
-
-## ----fit2, cache = TRUE--------------------------------------------------
-# 10 scheduled visits
-knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-boundary <- c(0, 3)
-fit2 <- brokenstick(y = smc$haz, 
-					x = smc$age,
-					subjid = smc$subjid,
-					knots = knots,
-					boundary = boundary)
+get_pev(fit9)
 
 ## ------------------------------------------------------------------------
-pr <- predict(fit2, at = "both")
-head(pr, 4)
-
-## ----echo=FALSE----------------------------------------------------------
-plot(fit2, ids = ids, x_trim = c(0, 2.2), size.y = 6, size.yhat = 6, width = 680, height = 300, show_references = TRUE)
+subj <- get_subject_data(smc)
+head(subj, 3)
 
 ## ------------------------------------------------------------------------
-var(fitted(fit1), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
+bs <- predict(fit9, at = "knots", output = "broad")
+dim(bs)
+head(round(bs, 2), 3)
 
 ## ------------------------------------------------------------------------
-var(fitted(fit2), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
+data <- cbind(subj, bs)
+fit1_lm <- lm(`2` ~ sex + gagebrth + I(birthwt / 1000), data = data)
+summary(fit1_lm)
+
+## ------------------------------------------------------------------------
+fit2_lm <- lm(`2` ~ sex + gagebrth + I(birthwt / 1000) + `0`, data = data)
+summary(fit2_lm)
 

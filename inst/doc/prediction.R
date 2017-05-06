@@ -105,7 +105,7 @@ y <- c(-1.2, -1.8, -1.7, -1.9, -2.1)
 predict(exp, y, x, at = "both", subjid = "Fred")
 
 ## ----echo = FALSE, fig.align = "center"----------------------------------
-plot(exp, y, x, at = "both", x_trim = c(0, 2.2), show_reference = TRUE)
+# plot(x = exp, py = y, px = x, at = "both", x_trim = c(0, 2.2))
 
 ## ----fig.height=7, fig.width=7-------------------------------------------
 # if we have access to the brokenstick object

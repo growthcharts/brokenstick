@@ -1,3 +1,12 @@
+brokenstick 0.55 - 06MAY17
+--------------------------
+
+ADDED   New utility functions: get_pev()
+CHANGED get_knots() gets a `what` argument
+CHANGED smarter defaults for plot()
+CHANGED simplified arguments to plot()
+CHANGD  much simplified "Overview of main functions" vignette
+
 brokenstick 0.54 - 03MAY17
 --------------------------
 

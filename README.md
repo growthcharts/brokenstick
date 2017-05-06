@@ -65,9 +65,8 @@ The main functions in the `brokenstick` package are:
 Examples
 --------
 
-1.  [Getting started](https://stefvanbuuren.github.io/brokenstick/gettingstarted.html)
-2.  [Overview of main functions](https://stefvanbuuren.github.io/brokenstick/mainfunctions.html)
+1.  [Overview of main functions](https://stefvanbuuren.github.io/brokenstick/mainfunctions.html)
+2.  [Fit and predict](https://stefvanbuuren.github.io/brokenstick/prediction.html)
 3.  [Model formulation](https://stefvanbuuren.github.io/brokenstick/model.html)
-4.  [Fit and predict](https://stefvanbuuren.github.io/brokenstick/prediction.html)
-5.  [Check perfect model](https://stefvanbuuren.github.io/brokenstick/perfectmodel.html)
-6.  [Knot placements](https://stefvanbuuren.github.io/brokenstick/knotplacement.html)
+4.  [Check perfect model](https://stefvanbuuren.github.io/brokenstick/perfectmodel.html)
+5.  [Knot placement](https://stefvanbuuren.github.io/brokenstick/knotplacement.html)
