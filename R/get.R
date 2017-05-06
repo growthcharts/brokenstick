@@ -4,16 +4,17 @@
 #' @param what A character vector of length 1. Valid values are
 #' \code{"all"}, \code{"knots"} or \code{"boundary"}. The default is
 #' \code{what = "all"}.
-#' @return A vector with knot locations, either both, internal only or boundary only
+#' @return A vector with knot locations, either both, internal only or boundary only.
+#' The result is \code{NULL} if \code{object} does not have proper class. The function
+#' can return \code{numeric(0)} if there are no internal knots.
 #' @examples
 #' get_knots(fit_206, "knots")
 #' @export
 get_knots <- function(object, what = c("all", "knots", "boundary")) {
 
-  what <- match.arg(what)
-  if (!inherits(object, c("brokenstick", "brokenstick_export")))
-    stop ("Argument `object` not of class `brokenstick` or `brokenstick_export`")
+  if (!inherits(object, c("brokenstick", "brokenstick_export"))) return(NULL)
 
+  what <- match.arg(what)
   if (inherits(object, "brokenstick")) {
     knots <- object@knots
     boundary <- object@boundary
@@ -41,6 +42,7 @@ get_knots <- function(object, what = c("all", "knots", "boundary")) {
 #' get_xy(fit_206, ids = c(10001, 10002))
 #' @export
 get_xy <- function(object, ids = NULL) {
+  if (!inherits(object, "brokenstick")) return(NULL)
   if (is.null(ids)) return(object@xy)
   return(object@xy[object@xy$subjid %in% ids, ])
 }
@@ -55,13 +57,11 @@ get_xy <- function(object, ids = NULL) {
 #' get_X(fit_206, ids = c(10001, 10002))
 #' @export
 get_X <- function(object, ids = NULL) {
-  if (inherits(object, "brokenstick")) {
-    if (is.null(ids)) return(model.matrix(object))
-    subjid <- model.frame(object)$subjid
-    idx <- subjid %in% ids
-    return(model.matrix(object)[idx, , drop = FALSE])
-  }
-  return(NULL)
+  if (!inherits(object, "brokenstick")) return(NULL)
+  if (is.null(ids)) return(model.matrix(object))
+  subjid <- model.frame(object)$subjid
+  idx <- subjid %in% ids
+  return(model.matrix(object)[idx, , drop = FALSE])
 }
 
 #' Obtain proportion of explained variance from a broken stick model
@@ -72,9 +72,7 @@ get_X <- function(object, ids = NULL) {
 #' get_pev(fit_206)
 #' @export
 get_pev <- function(object) {
-  if (inherits(object, "brokenstick")) {
-    p <- predict(object)
-    return(var(p$yhat, na.rm = TRUE) / var(p$y, na.rm = TRUE))
-  }
-  return(NULL)
+  if (!inherits(object, "brokenstick")) return(NULL)
+  p <- predict(object)
+  return(var(p$yhat, na.rm = TRUE) / var(p$y, na.rm = TRUE))
 }

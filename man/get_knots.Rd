@@ -14,7 +14,9 @@ get_knots(object, what = c("all", "knots", "boundary"))
 \code{what = "all"}.}
 }
 \value{
-A vector with knot locations, either both, internal only or boundary only
+A vector with knot locations, either both, internal only or boundary only.
+The result is \code{NULL} if \code{object} does not have proper class. The function
+can return \code{numeric(0)} if there are no internal knots.
 }
 \description{
 Obtain the knots from a broken stick model
