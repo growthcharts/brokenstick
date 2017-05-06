@@ -13,7 +13,9 @@
 #'displayed
 #'@param max_ids A scalar indicating the number of individual plots. The default is 3, which plots the trajectories of the first three persons. The \code{max_ids} is a safety measure to prevent unintended plots of the entire data set.
 #'@param measurements A logical indicating whether the measurements should be plotted. The default is \code{TRUE}.
-#'@param estimates A logical indicating whether the broken stick estimates should be plotted. The default is \code{TRUE}.
+#'@param estimates A logical indicating whether the broken stick estimates should be plotted.
+#'By default, it is \code{TRUE} if there are internal knots, and \code{FALSE} if there are
+#'only boundary knots.
 #'@param ... Extra arguments passed down to \code{\link[rbokeh]{figure}} and
 #' \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}},
 #' '\code{\link[hbgd]{ly_zband}} and '\code{\link[rbokeh]{grid_plot}} functions.
@@ -48,8 +50,13 @@ plot.brokenstick <- function(x, py, px, ids = NULL,
                              max_ids = 3,
                              x_trim = c(-Inf, Inf),
                              measurements = TRUE,
-                             estimates = TRUE, ...) {
+                             estimates = NULL, ...) {
   if (!inherits(x, "brokenstick")) stop ("Argument `x` not of class brokenstick.")
+
+  # define default behavior of estimates flag
+  internal_knots <- get_knots(x, "knots")
+  if (is.null(estimates)) estimates <-
+    !is.null(internal_knots) & length(internal_knots) > 0
 
   # calculate brokenstick predictions, long format
   if (estimates & missing(px)) px <- get_knots(x)

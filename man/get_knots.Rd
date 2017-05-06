@@ -4,17 +4,23 @@
 \alias{get_knots}
 \title{Obtain the knots from a broken stick model}
 \usage{
-get_knots(object)
+get_knots(object, what = c("all", "knots", "boundary"))
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick} or \code{brokenstick.export}}
+
+\item{what}{A character vector of length 1. Valid values are
+\code{"all"}, \code{"knots"} or \code{"boundary"}. The default is
+\code{what = "all"}.}
 }
 \value{
-A vector with knot locations (both internal and boundary)
+A vector with knot locations, either both, internal only or boundary only.
+The result is \code{NULL} if \code{object} does not have proper class. The function
+can return \code{numeric(0)} if there are no internal knots.
 }
 \description{
 Obtain the knots from a broken stick model
 }
 \examples{
-get_knots(fit_206)
+get_knots(fit_206, "knots")
 }

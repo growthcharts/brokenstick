@@ -5,7 +5,7 @@
 \title{Plot observed and fitted trajectories}
 \usage{
 \method{plot}{brokenstick}(x, py, px, ids = NULL, max_ids = 3,
-  x_trim = c(-Inf, Inf), measurements = TRUE, estimates = TRUE, ...)
+  x_trim = c(-Inf, Inf), measurements = TRUE, estimates = NULL, ...)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
@@ -25,7 +25,9 @@ displayed}
 
 \item{measurements}{A logical indicating whether the measurements should be plotted. The default is \code{TRUE}.}
 
-\item{estimates}{A logical indicating whether the broken stick estimates should be plotted. The default is \code{TRUE}.}
+\item{estimates}{A logical indicating whether the broken stick estimates should be plotted.
+By default, it is \code{TRUE} if there are internal knots, and \code{FALSE} if there are
+only boundary knots.}
 
 \item{...}{Extra arguments passed down to \code{\link[rbokeh]{figure}} and
 \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}},

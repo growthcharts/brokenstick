@@ -22,7 +22,7 @@ This vignette demonstrates three major functions in the `brokenstick` package: `
 
 This vignette uses functions from the `rbokeh`, `hbgd` and `brokenstick` packages. 
 
-```{r}
+```{r message=FALSE}
 if (!require(rbokeh)) devtools::install_github("hafen/rbokeh")
 if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
 require("hbgd")
@@ -47,20 +47,20 @@ Let us first plot some of the individual growth curves. We may do so after fitti
 ```{r plotmeasurements}
 fit <- brokenstick(y = smc$htcm, x = smc$age, subjid = smc$subjid)
 ids <- c(10001, 10005, 10022)
-plot(fit, ids = ids, zband = FALSE, est = FALSE, height = 350, width = 225, ylab = "Length (cm)")
+plot(fit, ids = ids, zband = FALSE, height = 350, width = 225, ylab = "Length (cm)")
 ```
 
 The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-values) are plotted. The column `haz` contains the $Z$-scores of height relative to the WHO standard.
 
 ```{r bokeh}
 fit0 <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid)
-plot(fit0, ids = ids, est = FALSE, width = 225, height = 350)
+plot(fit0, ids = ids, width = 225, height = 350)
 ```
 
 The same type of plot can be made by `ggplot2::ggplot()`:
 
 ```{r ggplot, fig.height=3, fig.width=7, warning=FALSE}
-plot(fit0, ids = ids, est = FALSE, pkg = "ggplot")
+plot(fit0, ids = ids, pkg = "ggplot")
 ```
 
 ## Fit broken stick model with two lines
@@ -102,7 +102,7 @@ The broken stick model now fits the observed data quite close.
 
 ## Obtain predicted values
 
-The `brokenstick` package has an extensive `predict()` function that allows us to obtain various types of predictions from the broken stick model. The simplest call
+The `predict()` function allows us to obtain various types of predictions from the broken stick model. The simplest call
 
 ```{r}
 p1 <- predict(fit2)
@@ -118,29 +118,79 @@ p2 <- predict(fit2, at = "knots")
 head(p2, 4)
 ```
 
-Note that the column `knot` is now `TRUE`. Note there are also knots at ages 0.00 and 2.68 years. These are boundary knots, and added by the `brokenstick()` function. The right knot (at 2.68 years) corresponds to the maximum of the data. The estimates corresponding to this knot have no useful interpretation.
+Note that the column `knot` is now `TRUE`. Note there are also knots at ages 0.00 and 2.68 years. These are boundary knots, and added by the `brokenstick()` function. By default, the boundary knots span the age range in the data. The estimate for the knot at the maximum age has no useful interpretation. We may obtain estimates at both knots and observed ages by setting `at = "both"`. 
 
-We may obtain both types of estimates simultaneously for all children by using the 
-
-```{r}
-p3 <- predict(fit2, at = "both")
-table(p3$knot)
-```
-
-
-## Compare explained variance
+## Explained variance
 
 The proportion of the variance of the outcome explained by the two-line model is
 
 ```{r}
-var(fitted(fit2), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
+get_pev(fit2)
 ```
 
 For the second model we get
 
 ```{r}
-var(fitted(fit9), na.rm = TRUE) / var(smc$haz, na.rm = TRUE)
+get_pev(fit9)
 ```
 
-so the nine-line broken stick model explains about `r round(100 * var(fitted(fit9), na.rm = TRUE) / var(smc$haz, na.rm = TRUE))` percent of the variance of the height SDS.
+so the nine-line broken stick model explains about `r round(100 * get_pev(fit9))` percent of the variance of the height SDS.
 
+
+## Subject level analysis
+
+Suppose we are interest in knowing the effect of sex, gestational age and birth weight on the height SDS at the age of 2 years. This is an analysis at the subject level. The `get_subject_data()` function from the `hbgd` package extracts the variables that vary only over subjects.
+
+```{r}
+subj <- get_subject_data(smc)
+head(subj, 3)
+```
+
+The broken stick estimates per subject from the nine line solution are obtained by
+
+```{r}
+bs <- predict(fit9, at = "knots", output = "broad")
+dim(bs)
+head(round(bs, 2), 3)
+```
+
+The names of the columns correspond to the ages at which the knots were placed. The effect of the subject's sex, gestational age and birth weight on the height SDS at the age of 2 years (here denoted by the variable named `2`) can be estimated as 
+
+```{r}
+data <- cbind(subj, bs)
+fit1_lm <- lm(`2` ~ sex + gagebrth + I(birthwt / 1000), data = data)
+summary(fit1_lm)
+```
+
+Note that the analysis shows there is a substantial effect of birth weight. Of course, it might be that birth weight is directly related to height at the age of 2 years. Alternatively, the relation could be mediated by birth length. The following model adds birth length (the variable named `0`) to the model: 
+
+```{r}
+fit2_lm <- lm(`2` ~ sex + gagebrth + I(birthwt / 1000) + `0`, data = data)
+summary(fit2_lm)
+```
+
+The effect of birth length on length at age 2 is very strong. There is no separate effect of birth weight anymore, so this analysis suggests that the relation between birth weight and length at age 2 can be explained by their mutual associations to birth length.
+
+## Conclusion
+
+This vignette illustrated the use of the `brokenstick()`, `plot()` and `predict()` functions. Other vignettes highlight various other capabilities of the package. 
+
+* [Fit and predict](prediction.html)
+    + Data exploration
+    + Conversion back and forth to the Z-score scale
+    + Export and publish a broken stick model
+    + Predict growth curve of new subjects
+    + Assess the quality of the model
+ 
+ 
+* [Model formulation](model.html)
+    + Definition of the model
+    + Interpretation of the model
+
+
+* [Perfect model](perfectmodel.html)
+    + Properties of the perfect model
+    + Estimating time-to-time correlations
+
+* [Knot placement](knotplacement.html)
+    + Knot placement advice
