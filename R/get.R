@@ -2,7 +2,7 @@
 #'
 #' @param object An object of class \code{brokenstick} or \code{brokenstick.export}
 #' @param what A character vector of length 1. Valid values are
-#' \code{"all"}, \code{"knots"} or \code{"boundary"}. The default is
+#' \code{"all"}, \code{"knots"}, \code{"boundary"} or \code{"droplast"}. The default is
 #' \code{what = "all"}.
 #' @return A vector with knot locations, either both, internal only or boundary only.
 #' The result is \code{NULL} if \code{object} does not have proper class. The function
@@ -10,7 +10,7 @@
 #' @examples
 #' get_knots(fit_206, "knots")
 #' @export
-get_knots <- function(object, what = c("all", "knots", "boundary")) {
+get_knots <- function(object, what = c("all", "knots", "boundary", "droplast")) {
 
   if (!inherits(object, c("brokenstick", "brokenstick_export"))) return(NULL)
 
@@ -29,7 +29,8 @@ get_knots <- function(object, what = c("all", "knots", "boundary")) {
   result <- switch(what,
                    all = c(boundary[1], internal, boundary[2]),
                    knots = internal,
-                   boundary = boundary)
+                   boundary = boundary,
+                   droplast = c(boundary[1], internal))
   return(result)
 }
 
