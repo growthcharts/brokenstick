@@ -112,8 +112,8 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' added to the plot. The default is \code{TRUE}.
 #' @param zband_range a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
 #' default is the entire data range.
-#' @param pkg A string indicating whether the \code{"ggplot"} or
-#' \code{"bokeh"} plotting package should be used. The default is \code{"bokeh"}.
+#' @param pkg A string indicating whether the \code{"ggplot2"} or
+#' \code{"bokeh"} plotting package should be used. The default is \code{"ggplot2"}.
 #' @param \dots Parameters passed down to \code{\link[rbokeh]{figure}},
 #' \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
 #' and '\code{\link[rbokeh]{grid_plot}} functions.
@@ -127,9 +127,9 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' # plot first three cases
 #' plot(fit)
 #' @export
-plot_trajectory <- function(x, data, pkg = c("bokeh", "ggplot"), ...) {
+plot_trajectory <- function(x, data, pkg = c("ggplot2", "bokeh"), ...) {
   pkg <- match.arg(pkg)
-  if (pkg == "ggplot") return(plot_trajectory_ggplot(x = x, data = data, ...))
+  if (pkg == "ggplot2") return(plot_trajectory_ggplot(x = x, data = data, ...))
   return(plot_trajectory_bokeh(x = x, data = data, ...))
 }
 

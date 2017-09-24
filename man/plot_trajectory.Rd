@@ -6,7 +6,7 @@
 \alias{plot_trajectory_ggplot}
 \title{Plot observed and fitted trajectories from fitted brokenstick model}
 \usage{
-plot_trajectory(x, data, pkg = c("bokeh", "ggplot"), ...)
+plot_trajectory(x, data, pkg = c("ggplot2", "bokeh"), ...)
 
 plot_trajectory_bokeh(x, data, color.y = c("blue", "grey"), size.y = 6,
   color.yhat = c("red", "grey"), size.yhat = 6, ncol = 3,
@@ -24,8 +24,8 @@ plot_trajectory_ggplot(x, data, color.y = c("blue", "grey"), size.y = 2,
 
 \item{data}{A list of data frames produced by \code{predict.brokenstick} and \code{predict.brokenstick_export}}
 
-\item{pkg}{A string indicating whether the \code{"ggplot"} or
-\code{"bokeh"} plotting package should be used. The default is \code{"bokeh"}.}
+\item{pkg}{A string indicating whether the \code{"ggplot2"} or
+\code{"bokeh"} plotting package should be used. The default is \code{"ggplot2"}.}
 
 \item{\dots}{Parameters passed down to \code{\link[rbokeh]{figure}},
 \code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
