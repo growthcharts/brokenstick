@@ -1,8 +1,8 @@
 Package: brokenstick
 Type: Package
 Title: Broken Stick Model for Irregular Longitudinal Data
-Version: 0.57.0
-Date: 2017-09-24
+Version: 0.58.0
+Date: 2019-01-17
 Authors@R: person("Stef", "van Buuren", email = "stef.vanbuuren@tno.nl", role = c("aut","cre"))
 Description: The broken stick model describes a set of individual curves by a
     linear mixed model using first order linear B-splines. The main use of the model
@@ -38,4 +38,4 @@ LazyData: TRUE
 VignetteBuilder: knitr
 Acknowledgement: Development of this package was kindly supported by the HBGDki
     program of the Bill & Melinda Gates Foundation
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.1

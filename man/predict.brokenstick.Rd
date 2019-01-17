@@ -105,3 +105,4 @@ Other brokenstick: \code{\link{fitted.brokenstick}},
 \author{
 Stef van Buuren 2016
 }
+\concept{brokenstick}

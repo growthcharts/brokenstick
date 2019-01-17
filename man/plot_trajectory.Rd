@@ -13,10 +13,10 @@ plot_trajectory_bokeh(x, data, color.y = c("blue", "grey"), size.y = 6,
   xlab = "Age (years)", ylab = "Length (SDS)", zband = TRUE,
   zband_range = NULL, xlim = NULL, ylim = NULL, ...)
 
-plot_trajectory_ggplot(x, data, color.y = c("blue", "grey"), size.y = 2,
-  color.yhat = c("red", "grey"), size.yhat = 2, ncol = 3,
-  xlab = "Age (years)", ylab = "Length (SDS)", zband = TRUE,
-  zband_range = NULL, xlim = NULL, ylim = NULL,
+plot_trajectory_ggplot(x, data, color.y = c("blue", "grey"),
+  size.y = 2, color.yhat = c("red", "grey"), size.yhat = 2,
+  ncol = 3, xlab = "Age (years)", ylab = "Length (SDS)",
+  zband = TRUE, zband_range = NULL, xlim = NULL, ylim = NULL,
   theme = ggplot2::theme_light(), ...)
 }
 \arguments{

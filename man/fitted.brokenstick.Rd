@@ -29,3 +29,4 @@ Other brokenstick: \code{\link{predict.brokenstick_export}},
 \author{
 Stef van Buuren 2016
 }
+\concept{brokenstick}
