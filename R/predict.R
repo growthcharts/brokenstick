@@ -262,7 +262,7 @@ predict_all <- function(object, at, output) {
   if (at == "knots") {
     yhat <- t(lme4::ranef(object)$subjid) + lme4::fixef(object)
     # repair removal of incomplete subjid's by lme4
-    all_id <- unique(attributes(object)$xy$subjid)
+    all_id <- unique(get_xy(object)$subjid)
     yh <- data.frame(subjid = colnames(yhat), t(yhat))
     xh <- data.frame(subjid = all_id)
     merged <- merge(xh, yh, by = "subjid", all.x = TRUE)
@@ -307,7 +307,7 @@ predict_all_atx <- function(object, x,
 
   # construct supplemental data
   grd <- expand.grid(x = x, # x: new break ages
-                     subjid = as.factor(rownames(lme4::ranef(object)$subjid)))
+                     subjid = unique(get_xy(object)$subjid))
   data2 <- data.frame(subjid = grd$subjid,
                       x = grd$x,
                       y = NA,
@@ -357,7 +357,7 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
 
   if (at == "knots") {
     grd <- expand.grid(x = brk,
-                       subjid = as.factor(rownames(lme4::ranef(object)$subjid)))
+                       subjid = unique(get_xy(object)$subjid))
     result <- data.frame(subjid = grd$subjid,
                          x = grd$x,
                          y = NA,
@@ -370,12 +370,12 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
   if (at == "both") {
     data <- get_xy(object)
     yhat1 <- fitted(object)
-    yhat2 <- t(lme4::ranef(object)$subjid) + lme4::fixef(object)
+    yhat2 <- predict_all(object, at = "knots", output = "broad")
     data1 <- data.frame(data,
                         yhat = as.vector(yhat1),
                         knot = FALSE)
     grd <- expand.grid(x = brk,
-                       subjid = as.factor(rownames(lme4::ranef(object)$subjid)))
+                       subjid = unique(get_xy(object)$subjid))
     data2 <- data.frame(subjid = grd$subjid,
                         x = grd$x,
                         y = NA,
