@@ -10,7 +10,7 @@ project <-  path.expand("~/Package/brokenstick/brokenstick")
 get_smocc_data <- function() {
   from <- c("src", "id", "rec", "nrec", "age", "sex",
             "etn", "ga", "bw", "hgt", "wgt")
-  data <- donordata::smocc[[3]][, from]
+  data <- donordata::smocc[[2]][, from]
   to <- c("src", "subjid", "rec", "nrec", "age", "sex",
           "etn", "ga", "birthwt", "htcm", "wtkg")
   rownames(data) <- 1:nrow(data)
