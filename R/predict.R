@@ -46,9 +46,14 @@
 #'   done at the location of the knot, or at a location specified by an
 #'   isolated \code{x} argument, i.e., without a corresponding \code{y} argument.}
 #'   }
+#'
 #'   If \code{output == "broad"}, a
 #'   numeric matrix of predicted values with \code{length(slot(object,
-#'   "knots"))} columns. If \code{output == "vector"}, a numeric vector of
+#'   "knots"))} columns. The number of rows will equal the number of
+#'   \code{subjid}'s in the original data. Subject without any valid
+#'   outcome will have \code{NA}'s everywhere.
+#'
+#'   If \code{output == "vector"}, a numeric vector of
 #'   predicted values corresponding to the column \code{yhat}.
 #' @author Stef van Buuren 2016
 #' @note The original data are only present in the \code{object} of class
@@ -256,6 +261,14 @@ predict_all <- function(object, at, output) {
   # For everybody, prediction at the knots
   if (at == "knots") {
     yhat <- t(lme4::ranef(object)$subjid) + lme4::fixef(object)
+    # repair removal of incomplete subjid's by lme4
+    all_id <- unique(attributes(object)$xy$subjid)
+    yh <- data.frame(subjid = colnames(yhat), t(yhat))
+    xh <- data.frame(subjid = all_id)
+    merged <- merge(xh, yh, by = "subjid", all.x = TRUE)
+    yhat <- t(as.matrix(merged[, -1]))
+    colnames(yhat) <- all_id
+    # end repair
     rownames(yhat) <- get_knots(object)
     r <- switch(output,
                 vector = as.vector(yhat),

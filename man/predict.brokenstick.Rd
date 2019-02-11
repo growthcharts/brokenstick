@@ -54,9 +54,14 @@ If \code{output == "long"}, a data frame with five columns named:
   done at the location of the knot, or at a location specified by an
   isolated \code{x} argument, i.e., without a corresponding \code{y} argument.}
   }
+
   If \code{output == "broad"}, a
   numeric matrix of predicted values with \code{length(slot(object,
-  "knots"))} columns. If \code{output == "vector"}, a numeric vector of
+  "knots"))} columns. The number of rows will equal the number of
+  \code{subjid}'s in the original data. Subject without any valid
+  outcome will have \code{NA}'s everywhere.
+
+  If \code{output == "vector"}, a numeric vector of
   predicted values corresponding to the column \code{yhat}.
 }
 \description{
