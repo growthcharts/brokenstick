@@ -15,7 +15,7 @@
 fitted model.}
 
 \item{x}{A vector with decimal ages of length \code{length(y)}.
-If both \code{y} and \code{x} not specified,
+If both \code{y} and \code{x} are not specified,
   the function calculates the predicted values for all persons on which
   \code{object} was fitted. If \code{y} is not specified, but \code{x} is,
   then broken stick estimates are obtained at \code{x} for all persons in
@@ -35,8 +35,7 @@ each row represents a person. This format is useful as input to a secondary
 data analysis that analyzes the smoothed data as repeated measured. The
 format can be used if \code{at = "knots"}, and returns \code{NULL}
 otherwise. If \code{output = "vector"}, the result is returned as a vector.
-This is the fastest method, and should be used in programming
-and simulation.}
+This is the fastest method.}
 
 \item{subjid}{A subject identification}
 
