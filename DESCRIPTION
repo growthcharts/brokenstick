@@ -33,6 +33,8 @@ Suggests:
     mvtnorm,
     plyr,
     tidyr
+Remotes:
+    hafen/hbgd
 Encoding: UTF-8
 License: MIT + file LICENSE
 LazyData: TRUE
