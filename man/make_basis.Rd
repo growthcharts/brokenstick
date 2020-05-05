@@ -4,8 +4,7 @@
 \alias{make_basis}
 \title{Create linear splines basis}
 \usage{
-make_basis(x, knots = NULL, boundary = range(x), degree = 1,
-  warn = TRUE)
+make_basis(x, knots = NULL, boundary = range(x), degree = 1, warn = TRUE)
 }
 \arguments{
 \item{x}{a vector of ages at which the basis function are needed}

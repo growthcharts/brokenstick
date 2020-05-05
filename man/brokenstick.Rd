@@ -4,9 +4,17 @@
 \alias{brokenstick}
 \title{Fit a broken stick model to irregular data}
 \usage{
-brokenstick(y, x, subjid, k = NULL, knots = NULL, boundary = NULL,
+brokenstick(
+  y,
+  x,
+  subjid,
+  k = NULL,
+  knots = NULL,
+  boundary = NULL,
   control = lmerControl(check.nobs.vs.nRE = "warning"),
-  na.action = na.exclude, ...)
+  na.action = na.exclude,
+  ...
+)
 }
 \arguments{
 \item{y}{a vector containing the measurements to be analyzed}

@@ -4,7 +4,8 @@
 \name{fit_206}
 \alias{fit_206}
 \title{Broken stick model fitted on 206 children}
-\format{An object of class \code{brokenstick}, fitted by the
+\format{
+An object of class \code{brokenstick}, fitted by the
 \code{brokenstick()}. This is an \code{lmerMod} object with additional
 slots:
 \describe{
@@ -13,7 +14,8 @@ slots:
 \item{degree}{The degree of the spline. The brokenstick model corresponds to \code{degree = 1}.}
 \item{bs.call}{An object of class \code{call} representing the call that was used to construct the object.}
 \item{xy}{A data frame with column names \code{subjid}, \code{x} and \code{y} containing the data on which the model was fitted when called by the call in slot \code{bs.call}.}
-}}
+}
+}
 \description{
 The object \code{fit_206} is an object of class \code{brokenstick} that contains the fitted broken stick model. The class \code{brokenstick} extend the \code{lmerMod} class with additional attributes.
 }

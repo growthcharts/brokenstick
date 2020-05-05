@@ -3,7 +3,6 @@
 \docType{package}
 \name{brokenstick-pkg}
 \alias{brokenstick-pkg}
-\alias{brokenstick-pkg-package}
 \title{\pkg{brokenstick}: A package for irregular longitudinal data.}
 \description{
 The broken stick model describes a set of individual curves

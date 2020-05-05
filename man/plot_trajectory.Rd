@@ -8,16 +8,40 @@
 \usage{
 plot_trajectory(x, data, pkg = c("ggplot2", "bokeh"), ...)
 
-plot_trajectory_bokeh(x, data, color.y = c("blue", "grey"), size.y = 6,
-  color.yhat = c("red", "grey"), size.yhat = 6, ncol = 3,
-  xlab = "Age (years)", ylab = "Length (SDS)", zband = TRUE,
-  zband_range = NULL, xlim = NULL, ylim = NULL, ...)
+plot_trajectory_bokeh(
+  x,
+  data,
+  color.y = c("blue", "grey"),
+  size.y = 6,
+  color.yhat = c("red", "grey"),
+  size.yhat = 6,
+  ncol = 3,
+  xlab = "Age (years)",
+  ylab = "Length (SDS)",
+  zband = TRUE,
+  zband_range = NULL,
+  xlim = NULL,
+  ylim = NULL,
+  ...
+)
 
-plot_trajectory_ggplot(x, data, color.y = c("blue", "grey"),
-  size.y = 2, color.yhat = c("red", "grey"), size.yhat = 2,
-  ncol = 3, xlab = "Age (years)", ylab = "Length (SDS)",
-  zband = TRUE, zband_range = NULL, xlim = NULL, ylim = NULL,
-  theme = ggplot2::theme_light(), ...)
+plot_trajectory_ggplot(
+  x,
+  data,
+  color.y = c("blue", "grey"),
+  size.y = 2,
+  color.yhat = c("red", "grey"),
+  size.yhat = 2,
+  ncol = 3,
+  xlab = "Age (years)",
+  ylab = "Length (SDS)",
+  zband = TRUE,
+  zband_range = NULL,
+  xlim = NULL,
+  ylim = NULL,
+  theme = ggplot2::theme_light(),
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}

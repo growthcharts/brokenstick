@@ -4,7 +4,8 @@
 \name{smocc_hgtwgt}
 \alias{smocc_hgtwgt}
 \title{Infant growth of 0-2 years, SMOCC data extract}
-\format{A data frame with 2000 rows and 14 columns:
+\format{
+A data frame with 2000 rows and 14 columns:
 \describe{
 \item{src}{Source, here \code{"smocc"} (character)}
 \item{subjid}{ID, unique identifyer of each child (character)}
@@ -20,7 +21,8 @@
 \item{wtkg}{Weight measurement in kg (0.8-20.5) (numeric)}
 \item{haz}{Height in SDS relative to WHO child growth standard (numeric)}
 \item{waz}{Weight in SDS relative to WHO child growth standard (numeric)}
-}}
+}
+}
 \source{
 Herngreen WP, van Buuren S, van Wieringen JC, Reerink JD, Verloove-Vanhorick SP & Ruys JH (1994). Growth in length and weight from birth to 2 years of a representative sample of Netherlands children (born in 1988-89) related to socio-economic status and other background characteristics. \emph{Annals of Human Biology}, \bold{21}, 449-463.
 }

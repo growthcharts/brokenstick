@@ -4,8 +4,7 @@
 \alias{predict.brokenstick}
 \title{Predict growth curve according to the broken stick model}
 \usage{
-\method{predict}{brokenstick}(object, y, x, ids = NULL, at = "x",
-  output = "long", ...)
+\method{predict}{brokenstick}(object, y, x, ids = NULL, at = "x", output = "long", ...)
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick} or of class
@@ -103,8 +102,9 @@ head(predict(fit_206, at = "knots", output = "broad"), 3)
 predict(fit_206, id = c(10001, 10003), at = "knots", output = "broad")
 }
 \seealso{
-Other brokenstick: \code{\link{fitted.brokenstick}},
-  \code{\link{predict.brokenstick_export}}
+Other brokenstick: 
+\code{\link{fitted.brokenstick}()},
+\code{\link{predict.brokenstick_export}()}
 }
 \author{
 Stef van Buuren 2016

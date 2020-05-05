@@ -4,8 +4,17 @@
 \alias{plot.brokenstick}
 \title{Plot observed and fitted trajectories}
 \usage{
-\method{plot}{brokenstick}(x, py, px, ids = NULL, max_ids = 3,
-  x_trim = c(-Inf, Inf), measurements = TRUE, estimates = NULL, ...)
+\method{plot}{brokenstick}(
+  x,
+  py,
+  px,
+  ids = NULL,
+  max_ids = 3,
+  x_trim = c(-Inf, Inf),
+  measurements = TRUE,
+  estimates = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
