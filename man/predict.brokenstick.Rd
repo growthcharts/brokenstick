@@ -91,11 +91,11 @@ p <- predict(fit_206, output = "vector", at = "knots")
 round(head(p), 2)
 
 # Obtain estimates at weeks 1-4 for all children, include old points
-p <- predict(fit_206, x = round((1:4)*7/365.25, 4))
+p <- predict(fit_206, x = round((1:4) * 7 / 365.25, 4))
 head(p)
 
 # Same, but now organised as broad matrix of new points only
-p <- predict(fit_206, x = round((1:4)*7/365.25, 4), output = "broad")
+p <- predict(fit_206, x = round((1:4) * 7 / 365.25, 4), output = "broad")
 head(p)
 
 head(predict(fit_206, at = "knots", output = "broad"), 3)

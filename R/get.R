@@ -14,8 +14,9 @@
 #' @export
 get_knots <- function(object,
                       what = c("all", "knots", "boundary", "droplast")) {
-
-  if (!inherits(object, c("brokenstick", "brokenstick_export"))) return(NULL)
+  if (!inherits(object, c("brokenstick", "brokenstick_export"))) {
+    return(NULL)
+  }
 
   what <- match.arg(what)
   if (inherits(object, "brokenstick")) {
@@ -30,10 +31,11 @@ get_knots <- function(object,
   internal <- knots[knots > boundary[1] & knots < boundary[2]]
 
   result <- switch(what,
-                   all = c(boundary[1], internal, boundary[2]),
-                   knots = internal,
-                   boundary = boundary,
-                   droplast = c(boundary[1], internal))
+    all = c(boundary[1], internal, boundary[2]),
+    knots = internal,
+    boundary = boundary,
+    droplast = c(boundary[1], internal)
+  )
   return(result)
 }
 
@@ -48,8 +50,12 @@ get_knots <- function(object,
 #' get_xy(fit_206, ids = c(10001, 10002))
 #' @export
 get_xy <- function(object, ids = NULL) {
-  if (!inherits(object, "brokenstick")) return(NULL)
-  if (is.null(ids)) return(object@xy)
+  if (!inherits(object, "brokenstick")) {
+    return(NULL)
+  }
+  if (is.null(ids)) {
+    return(object@xy)
+  }
   return(object@xy[object@xy$subjid %in% ids, ])
 }
 
@@ -65,8 +71,12 @@ get_xy <- function(object, ids = NULL) {
 #' get_X(fit_206, ids = c(10001, 10002))
 #' @export
 get_X <- function(object, ids = NULL) {
-  if (!inherits(object, "brokenstick")) return(NULL)
-  if (is.null(ids)) return(model.matrix(object))
+  if (!inherits(object, "brokenstick")) {
+    return(NULL)
+  }
+  if (is.null(ids)) {
+    return(model.matrix(object))
+  }
   subjid <- model.frame(object)$subjid
   idx <- subjid %in% ids
   return(model.matrix(object)[idx, , drop = FALSE])
@@ -80,7 +90,9 @@ get_X <- function(object, ids = NULL) {
 #' get_pev(fit_206)
 #' @export
 get_pev <- function(object) {
-  if (!inherits(object, "brokenstick")) return(NULL)
+  if (!inherits(object, "brokenstick")) {
+    return(NULL)
+  }
   p <- predict(object)
   return(var(p$yhat, na.rm = TRUE) / var(p$y, na.rm = TRUE))
 }

@@ -2,24 +2,28 @@
 #
 
 setClass("brokenstick",
-         representation(knots = "numeric",
-                        boundary = "numeric",
-                        degree = "numeric",
-                        bs.call = "call",
-                        xy = "data.frame"),
-         contains = "lmerMod")
+  representation(
+    knots = "numeric",
+    boundary = "numeric",
+    degree = "numeric",
+    bs.call = "call",
+    xy = "data.frame"
+  ),
+  contains = "lmerMod"
+)
 
 # ==============================================================================
 # S4 print function for brokenstick object
 # ==============================================================================
 setGeneric("print")
-setMethod("print", signature( x = "brokenstick" ),
-          function (x, ... ) {
-            print_brokenstick(x, ...)
-          }
+setMethod(
+  "print", signature(x = "brokenstick"),
+  function(x, ...) {
+    print_brokenstick(x, ...)
+  }
 )
 
-print_brokenstick <- function (x, ... ) {
+print_brokenstick <- function(x, ...) {
   cat("broken stick model \n")
   cat("knots: ", get_knots(x), "\n")
   print(summary(x))
@@ -78,9 +82,11 @@ print_brokenstick <- function (x, ... ) {
 #'  class \code{lmerMod}
 #' @examples
 #' library(mice)
-#' data <- tbc[tbc$id < 1000 & tbc$age < 2.5,]
-#' fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$id,
-#'                    knots = c(0, 1, 2))
+#' data <- tbc[tbc$id < 1000 & tbc$age < 2.5, ]
+#' fit <- brokenstick(
+#'   y = data$hgt.z, x = data$age, subjid = data$id,
+#'   knots = c(0, 1, 2)
+#' )
 #' @note
 #' The \code{storeX} and \code{degree} arguments have been deprecated in
 #' version 0.54.
@@ -126,23 +132,30 @@ brokenstick <- function(y, x, subjid,
   if (!is.null(k_orig)) {
     if (k_orig >= 0 & k_orig <= 25) {
       k <- k_orig
-      knots <- quantile(x, probs = seq(0, 1, length.out = k + 2),
-                        na.rm = TRUE)[-c(1, k + 2)]
+      knots <- quantile(x,
+        probs = seq(0, 1, length.out = k + 2),
+        na.rm = TRUE
+      )[-c(1, k + 2)]
     }
-    else
+    else {
       stop("Number of knots outside range 0-25")
+    }
   }
 
   X <- make_basis(x = x, knots = knots, boundary = boundary)
 
   pred <- paste("0 +", paste(colnames(X), collapse = " + "))
   data <- data.frame(subjid = subjid, x = x, y = y, X)
-  f <- as.formula(paste("y", "~", pred,
-                        "+ (", pred, "| subjid)"))
-  fit <- lmer(f, data = data,
-              control = control,
-              na.action = na.action,
-              ...)
+  f <- as.formula(paste(
+    "y", "~", pred,
+    "+ (", pred, "| subjid)"
+  ))
+  fit <- lmer(f,
+    data = data,
+    control = control,
+    na.action = na.action,
+    ...
+  )
 
   class(fit) <- "brokenstick"
   fit@knots <- as.numeric(knots)

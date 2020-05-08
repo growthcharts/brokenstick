@@ -7,14 +7,14 @@
 export(model)
 }
 \arguments{
-\item{model}{An object of class \code{brokenstick} or class 
+\item{model}{An object of class \code{brokenstick} or class
 \code{brokenstick_export}}
 }
 \value{
 A \code{list} of class \code{brokenstick_export}, with elements corresponding to the estimates parameters of the fitted model.
 }
 \description{
-Exports the crucial estimates of a fitted brokenstick model so that the 
-stored estimates can be used by the EB() function 
+Exports the crucial estimates of a fitted brokenstick model so that the
+stored estimates can be used by the EB() function
 to calculate random effect estimates for new data.
 }

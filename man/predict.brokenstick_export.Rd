@@ -52,21 +52,25 @@ p <- predict(exp)
 head(p)
 
 # predict mean trajectory at weeks 1-4
-predict(exp, x = round((1:4)*7/365.25, 4))
+predict(exp, x = round((1:4) * 7 / 365.25, 4))
 
 # add data at each week
-predict(exp, x = round((1:4)*7/365.25, 4), y = c(1, 0.8, 0.9, 0.7))
+predict(exp, x = round((1:4) * 7 / 365.25, 4), y = c(1, 0.8, 0.9, 0.7))
 
 # no data at weeks 2 and 3
-predict(exp, x = round((1:4)*7/365.25, 4), y = c(1, NA, NA, 0.7))
+predict(exp, x = round((1:4) * 7 / 365.25, 4), y = c(1, NA, NA, 0.7))
 
 # estimates at standard knots
-predict(exp, x = round((1:4)*7/365.25, 4), y = c(1, NA, NA, 0.7),
-  at = "knots")
+predict(exp,
+  x = round((1:4) * 7 / 365.25, 4), y = c(1, NA, NA, 0.7),
+  at = "knots"
+)
 
 # leaving out the missing data produces the same result
-predict(exp, x = round(c(1,4)*7/365.25, 4), y = c(1, 0.7),
-  at = "knots")
+predict(exp,
+  x = round(c(1, 4) * 7 / 365.25, 4), y = c(1, 0.7),
+  at = "knots"
+)
 }
 \seealso{
 Other brokenstick: 

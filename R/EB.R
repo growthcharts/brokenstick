@@ -29,11 +29,13 @@
 #' model <- export(fit_206)
 #' data <- get_xy(fit_206, ids = 10001)
 #' y <- data$y
-#' X <- make_basis(data$x, knots = model$knots,
-#'  boundary = model$boundary)
+#' X <- make_basis(data$x,
+#'   knots = model$knots,
+#'   boundary = model$boundary
+#' )
 #' EB(model, y, X)
 #' @export
-EB <- function (model, y, X, Z = X, BS = TRUE) {
+EB <- function(model, y, X, Z = X, BS = TRUE) {
 
   # X should be a matrix
   if (!is.matrix(X)) stop("Argument 'X' is not a matrix.")
@@ -44,9 +46,11 @@ EB <- function (model, y, X, Z = X, BS = TRUE) {
   # eliminate missing outcomes
   select <- !(is.na(y) | is.na(X[, 1]))
 
-    # if there are no valid values left, return the fixed effect
+  # if there are no valid values left, return the fixed effect
   # as broken stick estimates
-  if (!any(select)) return(exp$beta)
+  if (!any(select)) {
+    return(exp$beta)
+  }
 
   # get into shape for matrix multiplication
   # dimensions: y nj * 1; Z nj * q; X nj * p
@@ -57,7 +61,7 @@ EB <- function (model, y, X, Z = X, BS = TRUE) {
 
   # construct appropriate matrices
   sigma.inv <- solve(Z %*% exp$omega %*% t(Z) +
-                       diag(exp$sigma2, nrow(Z)))
+    diag(exp$sigma2, nrow(Z)))
 
   # calculate random effect by EB estimate
   re <- exp$omega %*% t(Z) %*% sigma.inv %*% (y - X %*% beta)

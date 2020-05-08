@@ -4,15 +4,19 @@
 library(donordata)
 if (!require(hbgd)) devtools::install_github("hafen/hbgd")
 library(brokenstick)
-project <-  path.expand("~/Package/brokenstick/brokenstick")
+project <- path.expand("~/Package/brokenstick/brokenstick")
 
 # Function to pull out form donordata, and convert to hbgd naming
 get_smocc_data <- function() {
-  from <- c("src", "id", "rec", "nrec", "age", "sex",
-            "etn", "ga", "bw", "hgt", "wgt")
+  from <- c(
+    "src", "id", "rec", "nrec", "age", "sex",
+    "etn", "ga", "bw", "hgt", "wgt"
+  )
   data <- donordata::smocc[[2]][, from]
-  to <- c("src", "subjid", "rec", "nrec", "age", "sex",
-          "etn", "ga", "birthwt", "htcm", "wtkg")
+  to <- c(
+    "src", "subjid", "rec", "nrec", "age", "sex",
+    "etn", "ga", "birthwt", "htcm", "wtkg"
+  )
   rownames(data) <- 1:nrow(data)
   names(data) <- to
   data$src <- as.character(data$src)
@@ -36,12 +40,14 @@ get_smocc_data <- function() {
   #                 x = data$age,
   #                 sex = ifelse(data$sex == "Female", "F", "M"),
   #                 ref = get("who.wgt", pos = "package:AGD"))
-  keep <- c("src", "subjid", "rec", "nrec",
-            "age", "agedays", "sex", "etn",
-            "gagebrth", "birthwt",
-            "htcm", "haz", "wtkg", "waz")
+  keep <- c(
+    "src", "subjid", "rec", "nrec",
+    "age", "agedays", "sex", "etn",
+    "gagebrth", "birthwt",
+    "htcm", "haz", "wtkg", "waz"
+  )
   return(data[, keep])
-  }
+}
 
 data <- get_smocc_data()
 
@@ -50,7 +56,7 @@ data <- data[1:2000, ]
 
 # distribution of Z-score by ahe
 with(data, plot(age, haz, main = "Dutch 1989-1990, height relative to WHO"))
-abline(h = c(-2,0,2), col = "grey")
+abline(h = c(-2, 0, 2), col = "grey")
 with(data, lines(loess.smooth(x = age, y = haz, span = 0.2), col = "red", lwd = 2))
 
 # remove outliers and records with missing ages and/or heights
@@ -58,15 +64,19 @@ trim <- with(data, !is.na(agedays) & !is.na(haz) & haz > (-5) & haz < 5)
 d <- data[trim, ]
 
 # fit the brokenstick model (takes substantial time)
-knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
+knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4)
 boundary <- c(0, 3)
 d$subjid <- as.factor(d$subjid)
-fit_206 <- with(d,
-				brokenstick(y = haz,
-							x = age,
-							subjid = subjid,
-							knots = knots,
-							boundary = boundary))
+fit_206 <- with(
+  d,
+  brokenstick(
+    y = haz,
+    x = age,
+    subjid = subjid,
+    knots = knots,
+    boundary = boundary
+  )
+)
 
 # store 'smocc_hgtwgt' for lazy loading
 smocc_hgtwgt <- data
@@ -76,4 +86,3 @@ save(smocc_hgtwgt, file = fn1, compress = "xz")
 # store 'fit_206' for lazy loading
 fn3 <- path.expand("~/Package/brokenstick/brokenstick/data/fit_206.rda")
 save(fit_206, file = fn3, compress = "xz")
-

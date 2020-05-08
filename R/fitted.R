@@ -13,13 +13,19 @@ fitted.brokenstick <- function(object, predict_NA = TRUE, ...) {
   # deal with standard case through lme4
   class(object) <- "merMod"
   yhat_lme4 <- fitted(object, ...)
-  if (!(predict_NA)) return(yhat_lme4)
-  if (!any(is.na(yhat_lme4))) return(yhat_lme4)
+  if (!(predict_NA)) {
+    return(yhat_lme4)
+  }
+  if (!any(is.na(yhat_lme4))) {
+    return(yhat_lme4)
+  }
 
   # prepare for re-prediction
   class(object) <- "brokenstick"
   xy <- cbind(get_xy(object), lme4 = yhat_lme4)
-  if (!any(is.na(xy$y))) return(yhat_lme4)
+  if (!any(is.na(xy$y))) {
+    return(yhat_lme4)
+  }
 
   # reevaluate cases with missing y
   exp <- export(object)
@@ -28,9 +34,12 @@ fitted.brokenstick <- function(object, predict_NA = TRUE, ...) {
   for (i in seq_along(ds)) {
     d <- ds[[i]]
     result[[i]] <- d$lme4
-    if (any(is.na(d$y)) && nrow(d) > 0)
-      result[[i]] <- predict(exp, y = d$y, x = d$x, subjid = d$subjid[1],
-                             output = "vector")
+    if (any(is.na(d$y)) && nrow(d) > 0) {
+      result[[i]] <- predict(exp,
+        y = d$y, x = d$x, subjid = d$subjid[1],
+        output = "vector"
+      )
+    }
   }
   return(unlist(result))
 }

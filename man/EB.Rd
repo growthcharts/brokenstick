@@ -38,8 +38,10 @@ The current implementation does not provide prediction errors.
 model <- export(fit_206)
 data <- get_xy(fit_206, ids = 10001)
 y <- data$y
-X <- make_basis(data$x, knots = model$knots,
- boundary = model$boundary)
+X <- make_basis(data$x,
+  knots = model$knots,
+  boundary = model$boundary
+)
 EB(model, y, X)
 }
 \references{

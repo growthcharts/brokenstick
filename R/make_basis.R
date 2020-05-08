@@ -32,17 +32,21 @@ make_basis <- function(x,
   if (padx) x <- c(0, x)
 
   if (warn) {
-    X <- splines::bs(x = x,
-                   knots = c(boundary[1], knots),
-                   Boundary.knots = boundary,
-                   degree = degree)
+    X <- splines::bs(
+      x = x,
+      knots = c(boundary[1], knots),
+      Boundary.knots = boundary,
+      degree = degree
+    )
   } else {
     suppressWarnings(
-      X <- splines::bs(x = x,
-                       knots = c(boundary[1], knots),
-                       Boundary.knots = boundary,
-                       degree = degree)
+      X <- splines::bs(
+        x = x,
+        knots = c(boundary[1], knots),
+        Boundary.knots = boundary,
+        degree = degree
       )
+    )
   }
   colnames(X) <- paste0("x", 1:ncol(X))
 
