@@ -9,10 +9,12 @@ get_xy(object, ids = NULL)
 \arguments{
 \item{object}{An object of class \code{brokenstick}}
 
-\item{ids}{A vector specifying the id's of the persons. If omitted, all id's are included.}
+\item{ids}{A vector specifying the id's of the persons. If omitted,
+all id's are included.}
 }
 \value{
-A data frame with subjid, x and y. The result is \code{NULL} if \code{object} is not of class \code{brokenstick}.
+A data frame with subjid, x and y. The result is \code{NULL}
+if \code{object} is not of class \code{brokenstick}.
 }
 \description{
 Obtain the x and y data from a broken stick model

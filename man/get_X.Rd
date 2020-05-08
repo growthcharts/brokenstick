@@ -9,11 +9,13 @@ get_X(object, ids = NULL)
 \arguments{
 \item{object}{An object of class \code{brokenstick}}
 
-\item{ids}{A vector specifying the id's of the persons. If omitted, all id's are included.}
+\item{ids}{A vector specifying the id's of the persons. If omitted,
+all id's are included.}
 }
 \value{
-A matrix with number of columns equal to the number of knots.
-The result is \code{NULL} if \code{object} is not of class \code{brokenstick}.
+A matrix with number of columns equal to the number of
+knots. The result is \code{NULL} if \code{object} is not of class
+\code{brokenstick}.
 }
 \description{
 Obtain the X model matrix from a broken stick model
