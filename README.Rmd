@@ -73,12 +73,3 @@ Function name        | Description
 `predict()`          | Predict broken stick estimates
 `export()`           | Export minimal broken stick model for publication
 
-## Examples
-
-1. [Overview of main functions](https://stefvanbuuren.github.io/brokenstick/mainfunctions.html)
-2. [Fit and predict](https://stefvanbuuren.github.io/brokenstick/prediction.html)
-3. [Model formulation](https://stefvanbuuren.github.io/brokenstick/model.html)
-4. [Check perfect model](https://stefvanbuuren.github.io/brokenstick/perfectmodel.html)
-5. [Knot placement](https://stefvanbuuren.github.io/brokenstick/knotplacement.html)
-
-
