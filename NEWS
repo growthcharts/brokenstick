@@ -1,3 +1,9 @@
+brokenstick 0.61.0 - 09MAY20
+
+ADDED   smocc_50 and fit_50 demo data
+REMOVED smocc.hgtwgt, smocc_hgtwgt and fit_206 datasets
+CHANGED many, many changes in the code and vignettes to reflect replacement of demo data
+
 brokenstick 0.60.0 - 05MAY20
 
 CHANGED Adapted to R 4.0.0.

@@ -1,7 +1,7 @@
 Package: brokenstick
 Type: Package
 Title: Broken Stick Model for Irregular Longitudinal Data
-Version: 0.60.0
+Version: 0.61.0
 Authors@R: person("Stef", "van Buuren", email = "stef.vanbuuren@tno.nl", role = c("aut","cre"))
 Description: The broken stick model describes a set of individual curves by a
     linear mixed model using first order linear B-splines. The main use of the model
@@ -12,7 +12,7 @@ Description: The broken stick model describes a set of individual curves by a
     independent use outside this package, and for predicting broken stick curves for
     new data.
 Depends:
-    R (>= 2.10)
+    R (>= 3.5.0)
 Imports:
     lme4,
     splines,
