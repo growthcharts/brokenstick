@@ -10,7 +10,7 @@
 #' @format
 #' A tibble with 476 rows and 4 columns:
 #' \describe{
-#' \item{id}{ID, unique \code{id} of each child (factor)}
+#' \item{subjid}{ID, unique \code{id} of each child (factor)}
 #' \item{age}{Decimal age, 0-2.99 (numeric)}
 #' \item{sex}{Sex, \code{"male"} or \code{"female"} (factor)}
 #' \item{hgt}{Height measurement in cm (34-102) (numeric)}
