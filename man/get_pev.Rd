@@ -16,5 +16,5 @@ Proportion of explained variance
 Obtain proportion of explained variance from a broken stick model
 }
 \examples{
-get_pev(fit_206)
+get_pev(fit_50)
 }

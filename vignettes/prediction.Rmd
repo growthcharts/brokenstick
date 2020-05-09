@@ -23,32 +23,32 @@ This vignette shows a step-by-step introduction of how to
 ## Get the data
 
 This vignette assumes the `rbokeh`, `hbgd` and `brokenstick` packages are installed. See [getting started with `brokenstick`](gettingstarted.html) for the installation procedure.
-We will use the `smocc_hgtwgt` demo data that is built-in into the `brokenstick` package. For computational efficiency in this vignette, we take the first 2000 observations of the `smocc_hgtwgt` data. 
+We will use the `smocc_50` demo data that is built-in into the `brokenstick` package.
 
 ```{r data}
 require("brokenstick")
 require("hbgd")
 require("rbokeh")
-smc <- smocc_hgtwgt
+smc <- smocc_50
 ```
 
 ## Calculate $Z$-scores
 
 The broken stick model can fit observations in either the raw scale (cm, kg, and so on) or as a standard deviation score (SDS), or $Z$-score. The results from the analysis of the $Z$-score will often be better for two reasons: 1) for growth curves, a straight line assumption is more plausible in the $Z$-score scale, and 2) the assumption of normality is more plausible in the $Z$-score scale. It is easy to convert the measurements into the $Z$-score scale, fit the model, and convert back to the raw scale afterwards, if desired. The `hbgd` package contains several functions to convert back and forth between both scales. For example, 
 
-```{r zscores}
+```{r zscores, eval=FALSE}
 haz <- who_htcm2zscore(smc$agedays, smc$htcm, smc$sex)
 ```
 
 The main outcome measure will be `haz`, the age and sex-adjusted $Z$-score relative to the WHO growth standard. The inverse calculation can be done as
 
-```{r}
+```{r eval=FALSE}
 htcm <- who_zscore2htcm(smc$agedays, haz, smc$sex)
 ```
 
 Note that slight differences between `smc$htcm` and `htcm` may occur because of rounding, but the deviations are small and irrelevant.
 
-```{r echo=FALSE}
+```{r echo=FALSE, eval=FALSE}
 plot_univar(smc, subject = FALSE, width = 220, height = 220)
 ```
 
@@ -56,7 +56,7 @@ The mean $Z$-score is around 0.3, indicating that Dutch children under two years
 
 The age range is 0-2 years. The scatterplot of height SDS by age clearly shows the pattern in the visits.
 
-```{r}
+```{r eval=FALSE}
 figure(xlab = "Age (years)", ylab = get_label("haz")) %>%
   ly_zband(x = seq(0, 2.5, 0.5), z = -c(2.5,2,1,0)) %>%
   ly_points(smc$age, smc$haz, hover = c(smc$age, smc$htcm), size = 4)
@@ -66,13 +66,13 @@ Note that the data contain some outliers. Child 10069 was born after a gestation
 
 The plot of the number of visits per child reveals that most children had 10 visits. It appears that children with fewer than six visits were removed from the data. Two children had more than 10 visits.  
 
-```{r}
+```{r eval=FALSE}
 plot_visit_distn(smc, width = 350, height = 350)
 ```
 
 The missing data plot shows that number of missing values in the time varying variables was very low. 
 
-```{r}
+```{r eval=FALSE}
 plot_missing(smc, width = 600, height = 400)
 ```
 
@@ -91,7 +91,7 @@ boundary <- c(0, 3)
 The `brokenstick` function performs the actual model fitting. 
 
 ```{r cache = TRUE}
-fit <- brokenstick(y = smc$haz,
+fit <- brokenstick(y = smc$hgt.z,
                    x = smc$age,
                    subjid = smc$subjid,
                    knots = knots,
@@ -172,7 +172,7 @@ plot(fit, height = 300, size.y = 4, size.yhat = 4, x_trim = c(0, 2.2), show_refe
 The computationally fastest way to obtain predicted values for just one subject from a fitted model is to specify the `ids`, `at` and `output` arguments as
 
 ```{r}
-p1 <- predict(fit, ids = 10001, at = "knots", output = "vector")
+p1 <- predict(fit, ids = 10032, at = "knots", output = "vector")
 ```
 
 The `predict()` function can return additional information by altering these arguments. Type `?predict.brokenstick` at the console to see the documentation.
@@ -182,7 +182,7 @@ The `predict()` function can return additional information by altering these arg
 We plot the original data and the broken stick estimates for child 10001 jointly as
 
 ```{r fig3}
-plot(fit, ids = 10001, x_trim = c(0, 2.2), show_reference = TRUE)
+plot(fit, ids = 10032, x_trim = c(0, 2.2), show_reference = TRUE)
 ```
 
 
@@ -192,7 +192,7 @@ Modeling was done in the $Z$-score scale for the reasons given above. We may plo
 
 ```{r}
 # convert Z-score to CM
-p <- predict(fit, ids = 10001, at = "both")
+p <- predict(fit, ids = 10032, at = "both")
 p$ycm <- round(who_zscore2htcm(years2days(p$x), p$y, sex = "Female"), 1)
 p$yhatcm <- who_zscore2htcm(years2days(p$x), p$yhat, sex = "Female")
 head(p)
@@ -290,7 +290,7 @@ The correlation is to `r round(cor(p$yhat, p$y, use = "complete.obs"), 4)`. The 
 
 When back-converted to centimeters, the scatterplot of the observed versus predicted values is even a little tighter.  
 
-```{r echo = FALSE, fig.width=4, fig.align="center"}
+```{r echo = FALSE, fig.width=4, fig.align="center", eval=FALSE}
 y_cm <- who_zscore2htcm(p$x, p$y, smc$sex)
 yhat_cm <- who_zscore2htcm(p$x, p$yhat, smc$sex)
 eqscplot(x = y_cm, xlab = get_label("htcm"),
@@ -298,4 +298,4 @@ eqscplot(x = y_cm, xlab = get_label("htcm"),
 abline(0, 1, col = "grey")
 ```
 
-The correlation is to `r round(cor(y_cm, yhat_cm, use = "complete.obs"), 4)`. The standard deviation of the residuals is equal to `r round(sd(y_cm - yhat_cm, na.rm = TRUE), 3)` cm, which is very small. 
+<!-- The correlation is to r round(cor(y_cm, yhat_cm, use = "complete.obs"), 4). The standard deviation of the residuals is equal to r round(sd(y_cm - yhat_cm, na.rm = TRUE), 3) cm, which is very small.  -->

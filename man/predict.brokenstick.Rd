@@ -78,28 +78,28 @@ The original data are only present in the \code{object} of class
 }
 \examples{
 # Estimates at each measured age for all persons in fitted model
-class(fit_206)
-p <- predict(fit_206)
+class(fit_50)
+p <- predict(fit_50)
 head(p)
 
 # Estimates at knots, stored into the broad matrix
-p <- predict(fit_206, output = "broad", at = "knots")
+p <- predict(fit_50, output = "broad", at = "knots")
 round(head(p), 2)
 
 # Get these estimates as a vector, useful for programming
-p <- predict(fit_206, output = "vector", at = "knots")
+p <- predict(fit_50, output = "vector", at = "knots")
 round(head(p), 2)
 
 # Obtain estimates at weeks 1-4 for all children, include old points
-p <- predict(fit_206, x = round((1:4) * 7 / 365.25, 4))
+p <- predict(fit_50, x = round((1:4) * 7 / 365.25, 4))
 head(p)
 
 # Same, but now organised as broad matrix of new points only
-p <- predict(fit_206, x = round((1:4) * 7 / 365.25, 4), output = "broad")
+p <- predict(fit_50, x = round((1:4) * 7 / 365.25, 4), output = "broad")
 head(p)
 
-head(predict(fit_206, at = "knots", output = "broad"), 3)
-predict(fit_206, id = c(10001, 10003), at = "knots", output = "broad")
+head(predict(fit_50, at = "knots", output = "broad"), 3)
+predict(fit_50, id = c(10001, 10003), at = "knots", output = "broad")
 }
 \seealso{
 Other brokenstick: 

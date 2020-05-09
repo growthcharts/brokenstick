@@ -20,5 +20,5 @@ if \code{object} is not of class \code{brokenstick}.
 Obtain the x and y data from a broken stick model
 }
 \examples{
-get_xy(fit_206, ids = c(10001, 10002))
+get_xy(fit_50, ids = c(10001, 10002))
 }

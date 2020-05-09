@@ -24,16 +24,16 @@
 #' @method plot brokenstick
 #' @examples
 #' library("brokenstick")
-#' dat <- smocc_hgtwgt
+#' dat <- smocc_50
 #' # fit one line model for data exploration
-#' fit <- brokenstick(y = dat$htcm, x = dat$age, subj = dat$subjid)
+#' fit <- brokenstick(y = dat$hgt, x = dat$age, subj = dat$subjid)
 #'
 #' # plot measurements for first three cases
 #' plot(fit, zband = FALSE, est = FALSE)
 #' plot(fit, zband = FALSE, est = FALSE, pkg = "bokeh", width = 250, height = 350)
 #'
 #' # fit model with knots at 1 and 2 years
-#' fit <- brokenstick(y = dat$haz, x = dat$age, subj = dat$subjid, knots = 1:2)
+#' fit <- brokenstick(y = dat$hgt.z, x = dat$age, subj = dat$subjid, knots = 1:2)
 #'
 #' # ggplot
 #' plot(fit, xlim = c(0, 2.2), ylim = c(-3, 3))
@@ -133,9 +133,9 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' @return An object of class \code{ggplot} or \code{rbokeh}.
 #' @rdname plot_trajectory
 #' @examples
-#' smc <- brokenstick::smocc_hgtwgt
+#' smc <- brokenstick::smocc_50
 #' knots <- 0:2
-#' fit <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = knots)
+#' fit <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid, knots = knots)
 #'
 #' # plot first three cases
 #' plot(fit)

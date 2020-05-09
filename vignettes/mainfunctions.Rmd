@@ -32,10 +32,10 @@ require("brokenstick")
 
 ## Load data set
 
-The `smocc_hgtwgt` data in the `brokenstick` package contain the heights and weights of 206 Dutch children measured on 10 visits at ages 0-2 years.
+The `smocc_50` data in the `brokenstick` package contain the heights of 50 Dutch children measured on 10 visits at ages 0-2 years.
 
 ```{r}
-smc <- brokenstick::smocc_hgtwgt
+smc <- brokenstick::smocc_50
 head(smc, 3)
 ```
 
@@ -45,15 +45,15 @@ head(smc, 3)
 Let us first plot some of the individual growth curves. We may do so after fitting a trivial broken stick model, and plot the trajectories of the three selected children as follows: 
 
 ```{r plotmeasurements}
-fit <- brokenstick(y = smc$htcm, x = smc$age, subjid = smc$subjid)
+fit <- brokenstick(y = smc$hgt, x = smc$age, subjid = smc$subjid)
 ids <- c(10001, 10005, 10022)
 plot(fit, ids = ids, zband = FALSE, height = 350, width = 225, ylab = "Length (cm)")
 ```
 
-The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-values) are plotted. The column `haz` contains the $Z$-scores of height relative to the WHO standard.
+The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-values) are plotted. The column `hgt.z` contains the $Z$-scores of height relative to the WHO standard.
 
 ```{r bokeh}
-fit0 <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid)
+fit0 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid)
 plot(fit0, ids = ids, width = 225, height = 350)
 ```
 
@@ -68,7 +68,7 @@ plot(fit0, ids = ids, pkg = "ggplot")
 The *broken stick model* describes a trajectory by a series of connected straight lines. We first calculate a rough approximation in the above trajectories using just two lines. The first line starts at birth and end at the age of exactly 1 years. The second line spans the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate this model as follows:
 
 ```{r fit2, cache = TRUE}
-fit2 <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = 1:2)
+fit2 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid, knots = 1:2)
 ```
 
 The fitted model can now be plotted by 
@@ -87,7 +87,7 @@ The plot shows that the two-line model is fairly crude. We now refine the model 
 ```{r fit9, cache = TRUE, warning=FALSE}
 # 10 scheduled visits
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-fit9 <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = knots)
+fit9 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid, knots = knots)
 ```
 
 The model contains 11 random effects. This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. In general, these warnings do not seem to affect the quality of the solution.
@@ -141,14 +141,14 @@ so the nine-line broken stick model explains about `r round(100 * get_pev(fit9))
 
 Suppose we are interest in knowing the effect of sex, gestational age and birth weight on the height SDS at the age of 2 years. This is an analysis at the subject level. The `get_subject_data()` function from the `hbgd` package extracts the variables that vary only over subjects.
 
-```{r}
+```{r eval=FALSE}
 subj <- get_subject_data(smc)
 head(subj, 3)
 ```
 
 The broken stick estimates per subject from the nine line solution are obtained by
 
-```{r}
+```{r eval=FALSE}
 bs <- predict(fit9, at = "knots", output = "broad")
 dim(bs)
 head(round(bs, 2), 3)
@@ -156,16 +156,16 @@ head(round(bs, 2), 3)
 
 The names of the columns correspond to the ages at which the knots were placed. The effect of the subject's sex, gestational age and birth weight on the height SDS at the age of 2 years (here denoted by the variable named `2`) can be estimated as 
 
-```{r}
+```{r eval = FALSE}
 data <- cbind(subj, bs)
-fit1_lm <- lm(`2` ~ sex + gagebrth + I(birthwt / 1000), data = data)
+fit1_lm <- lm(`2` ~ sex + ga + I(bw / 1000), data = data)
 summary(fit1_lm)
 ```
 
 Note that the analysis shows there is a substantial effect of birth weight. Of course, it might be that birth weight is directly related to height at the age of 2 years. Alternatively, the relation could be mediated by birth length. The following model adds birth length (the variable named `0`) to the model: 
 
-```{r}
-fit2_lm <- lm(`2` ~ sex + gagebrth + I(birthwt / 1000) + `0`, data = data)
+```{r eval=FALSE}
+fit2_lm <- lm(`2` ~ sex + ga + I(bw / 1000) + `0`, data = data)
 summary(fit2_lm)
 ```
 

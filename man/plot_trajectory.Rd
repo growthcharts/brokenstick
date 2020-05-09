@@ -89,9 +89,9 @@ This function plot the observed and fitted trajectories from brokenstick model.
 Actual plotting may be done by \code{gglot} or \code{rbokeh}.
 }
 \examples{
-smc <- brokenstick::smocc_hgtwgt
+smc <- brokenstick::smocc_50
 knots <- 0:2
-fit <- brokenstick(y = smc$haz, x = smc$age, subjid = smc$subjid, knots = knots)
+fit <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid, knots = knots)
 
 # plot first three cases
 plot(fit)
