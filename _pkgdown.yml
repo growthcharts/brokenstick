@@ -1,0 +1,24 @@
+destination: docs
+title: brokenstick
+url: https://stefvanbuuren.github.io/brokenstick
+template:
+  params:
+    bootswatch: flatly
+reference:
+  - title: "Package documentation"
+    desc: >
+      Overview of functions in the brokenstick package.
+    contents:
+      - brokenstick-package
+      - brokenstick
+      - export
+      - EB
+      - get_knots
+      - get_label
+      - get_pev
+      - get_xy
+      - make_basis
+      - plot
+      - predict
+navbar:
+  type: inverse
