@@ -264,7 +264,7 @@ ds <- split(smc, f = smc$subjid, drop = TRUE)
 result <- vector("list", length(ds))
 for (i in seq_along(ds)) {
   d <- ds[[i]]
-  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$haz, x = d$age, subjid = d$subjid[1])
+  if (nrow(d) > 0) result[[i]] <- predict(exp, y = d$hgt.z, x = d$age, subjid = d$subjid[1])
 }
 result <- do.call(rbind, result)
 row.names(result) <- 1:nrow(result)
