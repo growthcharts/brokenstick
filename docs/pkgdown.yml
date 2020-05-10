@@ -8,8 +8,5 @@ articles:
   model: model.html
   perfectmodel: perfectmodel.html
   prediction: prediction.html
-last_built: 2020-05-10T09:44Z
-urls:
-  reference: https://stefvanbuuren.github.io/brokenstick/reference
-  article: https://stefvanbuuren.github.io/brokenstick/articles
+last_built: 2020-05-10T10:08Z
 
