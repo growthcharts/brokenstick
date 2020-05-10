@@ -59,7 +59,7 @@ The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-
 
 ```{r zscore}
 fit0 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = as.factor(smc$subjid))
-plot(fit0, ids = ids, width = 225, height = 350, pkg = "ggplot")
+plot(fit0, ids = ids, pkg = "ggplot")
 ```
 
 The same type of plot can be made by `bokeh`:
@@ -75,7 +75,7 @@ fit2 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid, knots = 1:2
 The fitted model can now be plotted by 
 
 ```{r plotfit2}
-plot(fit2, ids = ids, x_trim = c(0, 2.2), width = 225, height = 350)
+plot(fit2, ids = ids, x_trim = c(0, 2.2))
 ```
 
 
@@ -96,7 +96,7 @@ The model contains 11 random effects. This optimization problem is more difficul
 As before, the observed and fitted trajectories can be plotted by
 
 ```{r plotfit9}
-plot(fit9, ids = ids, x_trim = c(0, 2.2), width = 225, height = 350)
+plot(fit9, ids = ids, x_trim = c(0, 2.2))
 ```
 
 The broken stick model now fits the observed data quite close.
