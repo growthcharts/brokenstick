@@ -2,16 +2,21 @@
 title: "Overview of main functions"
 author: "Stef van Buuren"
 date: "`r Sys.Date()`"
-output: rmarkdown::html_vignette
+output: 
+  rmarkdown::html_vignette
+bibliography: [bibliography.bib]
+biblio-style: apalike
+link-citations: yes
 vignette: >
   %\VignetteIndexEntry{Overview main functions}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
+knitr::opts_chunk$set(echo = TRUE, fig.retina = 2)
+# knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
 ```
 
 ## Objective
@@ -45,7 +50,7 @@ head(smc, 3)
 Let us first plot some of the individual growth curves. We may do so after fitting a trivial broken stick model, and plot the trajectories of the three selected children as follows: 
 
 ```{r plotmeasurements}
-fit <- brokenstick(y = smc$hgt, x = smc$age, subjid = smc$subjid)
+fit <- brokenstick(y = smc$hgt, x = smc$age, subjid = as.factor(smc$subjid))
 ids <- c(10001, 10005, 10022)
 plot(fit, ids = ids, zband = FALSE, height = 350, width = 225, ylab = "Length (cm)")
 ```
@@ -53,14 +58,14 @@ plot(fit, ids = ids, zband = FALSE, height = 350, width = 225, ylab = "Length (c
 The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-values) are plotted. The column `hgt.z` contains the $Z$-scores of height relative to the WHO standard.
 
 ```{r bokeh}
-fit0 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid)
+fit0 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = as.factor(smc$subjid))
 plot(fit0, ids = ids, width = 225, height = 350)
 ```
 
-The same type of plot can be made by `ggplot2::ggplot()`:
+The same type of plot can be made by `bokeh`:
 
 ```{r ggplot, fig.height=3, fig.width=7, warning=FALSE}
-plot(fit0, ids = ids, pkg = "ggplot")
+plot(fit0, ids = ids, pkg = "bokeh")
 ```
 
 ## Fit broken stick model with two lines

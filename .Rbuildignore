@@ -1,9 +1,10 @@
 ^Meta$
-^doc$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^data-raw$
 ^notes$
 ^README\.Rmd$
 ^README-.*\.png$
+^doc$
 ^docs$
+^_pkgdown\.yml$
