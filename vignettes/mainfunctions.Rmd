@@ -15,8 +15,8 @@ vignette: >
 
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, fig.retina = 2)
-# knitr::opts_chunk$set(fig.width = 7, fig.height = 3.5)
+knitr::opts_chunk$set(echo = TRUE, fig.retina = 2, 
+                      fig.width = 7, fig.height = 3.5)
 ```
 
 ## Objective
@@ -49,24 +49,20 @@ head(smc, 3)
 
 Let us first plot some of the individual growth curves. We may do so after fitting a trivial broken stick model, and plot the trajectories of the three selected children as follows: 
 
-```{r plotmeasurements}
+```{r measurements}
 fit <- brokenstick(y = smc$hgt, x = smc$age, subjid = as.factor(smc$subjid))
 ids <- c(10001, 10005, 10022)
-plot(fit, ids = ids, zband = FALSE, height = 350, width = 225, ylab = "Length (cm)")
+plot(fit, ids = ids, zband = FALSE, height = 350, width = 225, ylab = "Length (cm)", pkg = "ggplot")
 ```
 
 The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-values) are plotted. The column `hgt.z` contains the $Z$-scores of height relative to the WHO standard.
 
-```{r bokeh}
+```{r zscore}
 fit0 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = as.factor(smc$subjid))
-plot(fit0, ids = ids, width = 225, height = 350)
+plot(fit0, ids = ids, width = 225, height = 350, pkg = "ggplot")
 ```
 
 The same type of plot can be made by `bokeh`:
-
-```{r ggplot, fig.height=3, fig.width=7, warning=FALSE}
-plot(fit0, ids = ids, pkg = "bokeh")
-```
 
 ## Fit broken stick model with two lines
 
@@ -78,7 +74,7 @@ fit2 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid, knots = 1:2
 
 The fitted model can now be plotted by 
 
-```{r plot_fit1}
+```{r plotfit2}
 plot(fit2, ids = ids, x_trim = c(0, 2.2), width = 225, height = 350)
 ```
 
@@ -99,7 +95,7 @@ The model contains 11 random effects. This optimization problem is more difficul
 
 As before, the observed and fitted trajectories can be plotted by
 
-```{r}
+```{r plotfit9}
 plot(fit9, ids = ids, x_trim = c(0, 2.2), width = 225, height = 350)
 ```
 
@@ -161,7 +157,7 @@ head(round(bs, 2), 3)
 
 The names of the columns correspond to the ages at which the knots were placed. The effect of the subject's sex, gestational age and birth weight on the height SDS at the age of 2 years (here denoted by the variable named `2`) can be estimated as 
 
-```{r eval = FALSE}
+```{r lm1, eval = FALSE}
 data <- cbind(subj, bs)
 fit1_lm <- lm(`2` ~ sex + ga + I(bw / 1000), data = data)
 summary(fit1_lm)
@@ -169,7 +165,7 @@ summary(fit1_lm)
 
 Note that the analysis shows there is a substantial effect of birth weight. Of course, it might be that birth weight is directly related to height at the age of 2 years. Alternatively, the relation could be mediated by birth length. The following model adds birth length (the variable named `0`) to the model: 
 
-```{r eval=FALSE}
+```{r lm2, eval=FALSE}
 fit2_lm <- lm(`2` ~ sex + ga + I(bw / 1000) + `0`, data = data)
 summary(fit2_lm)
 ```
