@@ -14,24 +14,25 @@ Description: The broken stick model describes a set of individual curves by a
 Depends:
     R (>= 3.5.0)
 Imports:
+    ggplot2,
     lme4,
-    splines,
     methods,
-    rbokeh,
-    ggplot2
+    splines
 Suggests:
-    mice,
+    AGD,
+    devtools,
+    dplyr,
+    hbgd,
     knitr,
     lattice,
-    dplyr,
-    AGD,
     MASS,
-    devtools,
-    hbgd,
-    testthat,
+    mice,
     mvtnorm,
     plyr,
-    tidyr
+    rbokeh,
+    testthat,
+    tidyr,
+    svglite
 Remotes:
     hafen/hbgd
 Encoding: UTF-8

@@ -25,57 +25,55 @@ This vignette demonstrates three major functions in the `brokenstick` package: `
 
 ## Set up libraries
 
-This vignette uses functions from the `rbokeh`, `hbgd` and `brokenstick` packages. 
+This vignette uses functions from the `hbgd` and `brokenstick` packages. 
 
 ```{r message=FALSE}
-if (!require(rbokeh)) devtools::install_github("hafen/rbokeh")
 if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
 require("hbgd")
 require("brokenstick")
 ```
 
 
-## Load data set
+## Plot trajectories
 
-The `smocc_50` data in the `brokenstick` package contain the heights of 50 Dutch children measured on 10 visits at ages 0-2 years.
+The `smocc_50` data in the `brokenstick` package contain the heights of 50 Dutch children measured on 10 visits at ages 0-2 years. 
 
 ```{r}
-smc <- brokenstick::smocc_50
-head(smc, 3)
+data <- brokenstick::smocc_50
+head(data, 3)
+```
+
+We fit a trivial broken stick model and then plot the trajectories of three selected children as follows: 
+
+```{r fig1}
+library(svglite)
+library(ggplot2)
+fit <- brokenstick(y = data$hgt, x = data$age, subjid = data$subjid)
+ids <- c(10001, 10005, 10022)
+fn <- tempfile(fileext = ".svg")
+svglite(file = fn, height = 3, width = 7)
+plot(fit, ids = ids, zband = FALSE, ylab = "Length (cm)")
+dev.off()
 ```
 
 
-## Plot trajectories
-
-Let us first plot some of the individual growth curves. We may do so after fitting a trivial broken stick model, and plot the trajectories of the three selected children as follows: 
-
-```{r measurements}
-fit <- brokenstick(y = smc$hgt, x = smc$age, subjid = as.factor(smc$subjid))
-ids <- c(10001, 10005, 10022)
-plot(fit, ids = ids, zband = FALSE, height = 350, width = 225, ylab = "Length (cm)")
+```{r displaysvg, echo=FALSE, fig.align="center", fig.cap="Het bijschrift"}
+knitr::include_graphics(fn)
 ```
 
 The plots gain more resolution when the Standard Deviation Scores (SDS) (or $Z$-values) are plotted. The column `hgt.z` contains the $Z$-scores of height relative to the WHO standard.
 
 ```{r zscore}
-fit0 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = as.factor(smc$subjid))
+fit0 <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid)
 plot(fit0, ids = ids)
 ```
-
-The same type of plot can be made by `bokeh`:
-
-```{r zscorebokeh}
-fit0 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = as.factor(smc$subjid))
-plot(fit0, ids = ids, pkg = "bokeh", height = 350, width = 225)
-```
-
 
 ## Fit broken stick model with two lines
 
 The *broken stick model* describes a trajectory by a series of connected straight lines. We first calculate a rough approximation in the above trajectories using just two lines. The first line starts at birth and end at the age of exactly 1 years. The second line spans the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate this model as follows:
 
 ```{r fit2, cache = TRUE}
-fit2 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid, knots = 1:2)
+fit2 <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid, knots = 1:2)
 ```
 
 The fitted model can now be plotted by 
@@ -94,7 +92,7 @@ The plot shows that the two-line model is fairly crude. We now refine the model 
 ```{r fit9, cache = TRUE, warning=FALSE}
 # 10 scheduled visits
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-fit9 <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid, knots = knots)
+fit9 <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid, knots = knots)
 ```
 
 The model contains 11 random effects. This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. In general, these warnings do not seem to affect the quality of the solution.
@@ -149,7 +147,7 @@ so the nine-line broken stick model explains about `r round(100 * get_pev(fit9))
 Suppose we are interest in knowing the effect of sex, gestational age and birth weight on the height SDS at the age of 2 years. This is an analysis at the subject level. The `get_subject_data()` function from the `hbgd` package extracts the variables that vary only over subjects.
 
 ```{r eval=FALSE}
-subj <- get_subject_data(smc)
+subj <- get_subject_data(data)
 head(subj, 3)
 ```
 

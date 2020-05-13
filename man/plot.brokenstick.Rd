@@ -38,12 +38,10 @@ displayed}
 By default, it is \code{TRUE} if there are internal knots, and \code{FALSE} if there are
 only boundary knots.}
 
-\item{...}{Extra arguments passed down to \code{\link[rbokeh]{figure}} and
-\code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}},
-'\code{\link[hbgd]{ly_zband}} and '\code{\link[rbokeh]{grid_plot}} functions.}
+\item{...}{Extra arguments.}
 }
 \value{
-An object of class \code{rbokeh}.
+An object of class \code{ggplot}.
 }
 \description{
 The \code{plot} method for a \code{brokenstick} object plots the observed and
@@ -57,22 +55,18 @@ fit <- brokenstick(y = dat$hgt, x = dat$age, subj = dat$subjid)
 
 # plot measurements for first three cases
 plot(fit, zband = FALSE, est = FALSE)
-plot(fit, zband = FALSE, est = FALSE, pkg = "bokeh", width = 250, height = 350)
 
 # fit model with knots at 1 and 2 years
-fit <- brokenstick(y = dat$hgt.z, x = dat$age, subj = dat$subjid, knots = 1:2)
+fit <- brokenstick(y = dat$hgt.z, x = dat$age, subj = dat$subjid,
+  knots = 1:2)
 
-# ggplot
 plot(fit, xlim = c(0, 2.2), ylim = c(-3, 3))
 plot(fit, ids = c(10005, 10012), xlim = c(0, 2.2))
 
-# bokeh plots with using x_trim
-plot(fit, pkg = "bokeh", width = 250, height = 350, x_trim = c(0, 2.2))
-
 # bokeh plots with xlim and ylim
-plot(fit, xlim = c(0, 2), ylim = c(-3, 3), pkg = "b", width = 250, height = 350)
-plot(fit, ids = 10005, pkg = "bokeh", width = 350, height = 300)
+plot(fit, xlim = c(0, 2), ylim = c(-3, 3))
+plot(fit, ids = 10005)
 }
 \author{
-Stef van Buuren 2017
+Stef van Buuren 2020
 }

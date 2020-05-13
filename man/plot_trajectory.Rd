@@ -2,30 +2,9 @@
 % Please edit documentation in R/plot.R
 \name{plot_trajectory}
 \alias{plot_trajectory}
-\alias{plot_trajectory_bokeh}
-\alias{plot_trajectory_ggplot}
 \title{Plot observed and fitted trajectories from fitted brokenstick model}
 \usage{
-plot_trajectory(x, data, pkg = c("ggplot2", "bokeh"), ...)
-
-plot_trajectory_bokeh(
-  x,
-  data,
-  color.y = c("blue", "grey"),
-  size.y = 6,
-  color.yhat = c("red", "grey"),
-  size.yhat = 6,
-  ncol = 3,
-  xlab = "Age (years)",
-  ylab = "Length (SDS)",
-  zband = TRUE,
-  zband_range = NULL,
-  xlim = NULL,
-  ylim = NULL,
-  ...
-)
-
-plot_trajectory_ggplot(
+plot_trajectory(
   x,
   data,
   color.y = c("blue", "grey"),
@@ -39,21 +18,13 @@ plot_trajectory_ggplot(
   zband_range = NULL,
   xlim = NULL,
   ylim = NULL,
-  theme = ggplot2::theme_light(),
-  ...
+  theme = ggplot2::theme_light()
 )
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
 
 \item{data}{A list of data frames produced by \code{predict.brokenstick} and \code{predict.brokenstick_export}}
-
-\item{pkg}{A string indicating whether the \code{"ggplot2"} or
-\code{"bokeh"} plotting package should be used. The default is \code{"ggplot2"}.}
-
-\item{\dots}{Parameters passed down to \code{\link[rbokeh]{figure}},
-\code{\link[rbokeh]{ly_lines}}, \code{\link[rbokeh]{ly_points}}
-and '\code{\link[rbokeh]{grid_plot}} functions.}
 
 \item{color.y}{A character vector with two elements specifying the symbol and line color of the measured data points}
 
@@ -79,10 +50,10 @@ default is the entire data range.}
 
 \item{ylim}{Vector of length 2 with range of y-axis}
 
-\item{theme}{Plotting theme (only ggplot)}
+\item{theme}{Plotting theme}
 }
 \value{
-An object of class \code{ggplot} or \code{rbokeh}.
+An object of class \code{ggplot}
 }
 \description{
 This function plot the observed and fitted trajectories from brokenstick model.

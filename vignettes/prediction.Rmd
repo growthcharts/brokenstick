@@ -27,7 +27,6 @@ We will use the `smocc_50` demo data that is built-in into the `brokenstick` pac
 ```{r lib, include = FALSE}
 require("brokenstick")
 require("rbokeh")
-require("growthstandards")
 ```
 
 ## Calculate $Z$-scores
@@ -108,7 +107,7 @@ round(get_knots(fit), 2)
 The fixed effects correspond to the mean of sample of children in the data. The mean development over all 206 children may be plotted as:
 
 ```{r}
-figure(xlab = "Age (years)", ylab = get_label("haz"), title = "Mean trajectory (n = 50)") %>%
+figure(xlab = "Age (years)", ylab = "Height (SDS)", title = "Mean trajectory (n = 50)") %>%
   ly_zband(x = seq(0, 2.2, 0.2), z = -c(2.5,2,1,0)) %>%
   ly_points(get_knots(fit, "droplast"), lme4::fixef(fit), hover = c(get_knots(fit), lme4::fixef(fit))) %>%
   ly_lines(get_knots(fit, "droplast"), lme4::fixef(fit)) %>% 
@@ -153,7 +152,7 @@ head(p3, 4)
 The first three fitted trajectories are plotted by
 
 ```{r}
-# plot(fit, x_trim = c(0, 2.3), show_reference = TRUE)
+# plot(fit, x_trim = c(0, 2.3))
 ```
 
 
@@ -172,7 +171,7 @@ The `predict()` function can return additional information by altering these arg
 We plot the original data and the broken stick estimates for child 10001 jointly as
 
 ```{r fig3}
-plot(fit, ids = c(10001, 10005, 10022), x_trim = c(0, 2.3), show_reference = TRUE)
+plot(fit, ids = c(10001, 10005, 10022), x_trim = c(0, 2.3))
 ```
 
 
@@ -192,7 +191,7 @@ The corresponding figure in the cm scale can be produced as
 
 ```{r}
 p <- p[p$x <= 2.5,]
-figure(xlab = "Age (years)", ylab = get_label("htcm")) %>%
+figure(xlab = "Age (years)", ylab = "Height (cm)") %>%
   ly_who(x = seq(0, 750, by = 30), y_var = "htcm",
     x_trans = days2years, sex = "Female", color = "green",
     p = 100 * pnorm(-c(2.5,2,1,0))) %>%
@@ -269,7 +268,7 @@ The scatterplot of the observed versus predicted values indicates an extremely a
 
 ```{r echo = FALSE, fig.width=4, fig.align="center"}
 library("MASS")
-eqscplot(x = p$y, xlab = get_label("haz"), 
+eqscplot(x = p$y, xlab = "Height (SDS)", 
          y = p$yhat, ylab = "Predicted Z-score", pch = ".")
 abline(0, 1, col = "grey")
 ```
@@ -283,7 +282,7 @@ When back-converted to centimeters, the scatterplot of the observed versus predi
 ```{r echo = FALSE, fig.width=4, fig.align="center", eval=FALSE}
 y_cm <- who_zscore2htcm(p$x, p$y, data$sex)
 yhat_cm <- who_zscore2htcm(p$x, p$yhat, data$sex)
-eqscplot(x = y_cm, xlab = get_label("htcm"),
+eqscplot(x = y_cm, xlab = "Height (cm)",
          y = yhat_cm, ylab = "Predicted (cm)", pch = ".")
 abline(0, 1, col = "grey")
 ```
