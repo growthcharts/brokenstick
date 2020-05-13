@@ -8,11 +8,13 @@
 #' @name smocc_50
 #' @docType data
 #' @format
-#' A tibble with 476 rows and 4 columns:
+#' A tibble with 486 rows and 7 columns:
 #' \describe{
-#' \item{subjid}{ID, unique \code{id} of each child (factor)}
-#' \item{age}{Decimal age, 0-2.99 (numeric)}
-#' \item{sex}{Sex, \code{"male"} or \code{"female"} (factor)}
+#' \item{subjid}{ID, unique \code{id} of each child (numeric)}
+#' \item{age}{Decimal age, 0-2.12 years (numeric)}
+#' \item{sex}{Sex, \code{"male"} or \code{"female"} (character)}
+#' \item{ga}{Gestational age, completed weeks (numeric)}
+#' \item{bw}{Birth weight in grammes (numeric)}
 #' \item{hgt}{Height measurement in cm (34-102) (numeric)}
 #' \item{hgt.z}{Height in SDS relative to WHO standard) (numeric)}
 #' }

@@ -3,7 +3,8 @@ library(brokenstick)
 
 # get data
 data <- load_data(dnr = "smocc", ids = 10001:10062)
-smocc_50 <- data$time[, c("id", "age", "sex", "hgt", "hgt.z")]
+smocc_50 <- data$time[, c("id", "age", "sex", "ga", "bw" ,
+                          "hgt", "hgt.z")]
 colnames(smocc_50)[1] <- "subjid"
 
 # fit the brokenstick model (takes about 20 seconds)
