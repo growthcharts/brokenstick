@@ -15,6 +15,7 @@ Depends:
     R (>= 3.5.0)
 Imports:
     ggplot2,
+    growthstandards,
     lme4,
     methods,
     splines
@@ -22,7 +23,6 @@ Suggests:
     AGD,
     devtools,
     dplyr,
-    hbgd,
     knitr,
     lattice,
     MASS,
@@ -34,7 +34,7 @@ Suggests:
     tidyr,
     svglite
 Remotes:
-    hafen/hbgd
+    ki-tools/growthstandards
 Encoding: UTF-8
 License: MIT + file LICENSE
 LazyData: TRUE

@@ -19,9 +19,9 @@ Installation
 The `brokenstick` package can be installed from GitHub as follows:
 
 ``` r
-install.packages("devtools")
-devtools::install_github("hafen/hbgd")
-devtools::install_github("stefvanbuuren/brokenstick")
+install.packages("remotes")
+remotes::install_github("ki-tools/growthstandards")
+remotes::install_github("stefvanbuuren/brokenstick")
 ```
 
 There is currently no CRAN version.

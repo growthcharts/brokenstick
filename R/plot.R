@@ -159,11 +159,11 @@ plot_trajectory  <- function(x, data,
     }
   }
   if (zband) {
-    g <- hbgd::geom_zband(g,
-                          x = zband_range,
-                          z = -c(2.5, 2, 1, 0),
-                          color = zband_color,
-                          alpha = 0.15
+    g <- geom_zband(g,
+                    x = zband_range,
+                    z = -c(2.5, 2, 1, 0),
+                    color = zband_color,
+                    alpha = 0.15
     )
   }
 

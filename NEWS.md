@@ -1,10 +1,11 @@
 # brokenstick 0.62.0
 
 * This version simplifies the plotting functions
-* Imports plotting functions from `ggplot2` only
 * Renders `ggplot` objects sharper in vignettes by `svglite`
 * Drops the `pkg` argument in `plot.brokenstick()`
 * Lessens the dependency on `rbokeh`
+* Replaces `hbgd` (which is no longer developed) by `growthstandards` package
+* Replaces `smocc_50`/`fit_50` by `smocc_200`/`fit_200` 
 * Added a `NEWS.md` file to track changes to the package
 
 # brokenstick 0.61.0

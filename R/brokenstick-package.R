@@ -1,4 +1,5 @@
 #' @importFrom ggplot2 ggplot geom_line geom_point facet_wrap aes_string xlab ylab xlim ylim
+#' @importFrom growthstandards geom_zband ly_zband
 #' @importFrom lme4 lmer fixef ranef VarCorr lmerControl
 #' @importFrom methods setGeneric setMethod
 #' @importFrom splines bs

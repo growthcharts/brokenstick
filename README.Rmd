@@ -25,9 +25,9 @@ All fitting can done in the Z-score scale, so nonlinearities and irregular data 
 The `brokenstick` package can be installed from GitHub as follows: 
 
 ```{r eval = FALSE}
-install.packages("devtools")
-devtools::install_github("hafen/hbgd")
-devtools::install_github("stefvanbuuren/brokenstick")
+install.packages("remotes")
+remotes::install_github("ki-tools/growthstandards")
+remotes::install_github("stefvanbuuren/brokenstick")
 ```
 
 There is currently no CRAN version.

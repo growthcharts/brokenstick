@@ -27,6 +27,7 @@ We will use the `smocc_200` demo data that is built-in into the `brokenstick` pa
 ```{r lib, include = FALSE}
 require("brokenstick")
 require("rbokeh")
+require("growthstandards")
 ```
 
 ## Calculate $Z$-scores
