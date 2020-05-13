@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.61.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.0</span>
       </span>
     </div>
 
@@ -113,6 +113,9 @@
       <a href="../articles/prediction.html">Fit and predict</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -202,67 +205,67 @@ This is the fastest method.</p></td>
 <code><a href='predict.brokenstick.html'>predict.brokenstick</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>exp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='export.html'>export</a></span>(<span class='no'>fit_50</span>)
+    <pre class="examples"><div class='input'><span class='no'>exp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='export.html'>export</a></span>(<span class='no'>fit_200</span>)
 
 <span class='co'># no data predicts mean trajectory</span>
 <span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>exp</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>p</span>)</div><div class='output co'>#&gt;   subjid      x  y         yhat knot
-#&gt; 1     NA 0.0000 NA -0.082753698 TRUE
-#&gt; 2     NA 0.0833 NA  0.398328018 TRUE
-#&gt; 3     NA 0.1667 NA  0.311552960 TRUE
-#&gt; 4     NA 0.2500 NA  0.350124345 TRUE
-#&gt; 5     NA 0.5000 NA  0.228374241 TRUE
-#&gt; 6     NA 0.7500 NA -0.001771215 TRUE</div><div class='input'>
+#&gt; 1     NA 0.0000 NA -0.205782025 TRUE
+#&gt; 2     NA 0.0833 NA  0.009782624 TRUE
+#&gt; 3     NA 0.1667 NA -0.007525853 TRUE
+#&gt; 4     NA 0.2500 NA  0.056515876 TRUE
+#&gt; 5     NA 0.5000 NA  0.067862597 TRUE
+#&gt; 6     NA 0.7500 NA -0.014426204 TRUE</div><div class='input'>
 <span class='co'># predict mean trajectory at weeks 1-4</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>exp</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>((<span class='fl'>1</span>:<span class='fl'>4</span>) * <span class='fl'>7</span> / <span class='fl'>365.25</span>, <span class='fl'>4</span>))</div><div class='output co'>#&gt;   subjid      x  y       yhat  knot
-#&gt; 1     NA 0.0192 NA 0.02813188 FALSE
-#&gt; 2     NA 0.0383 NA 0.13843994 FALSE
-#&gt; 3     NA 0.0575 NA 0.24932552 FALSE
-#&gt; 4     NA 0.0767 NA 0.36021110 FALSE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>exp</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>((<span class='fl'>1</span>:<span class='fl'>4</span>) * <span class='fl'>7</span> / <span class='fl'>365.25</span>, <span class='fl'>4</span>))</div><div class='output co'>#&gt;   subjid      x  y         yhat  knot
+#&gt; 1     NA 0.0192 NA -0.156096055 FALSE
+#&gt; 2     NA 0.0383 NA -0.106668867 FALSE
+#&gt; 3     NA 0.0575 NA -0.056982897 FALSE
+#&gt; 4     NA 0.0767 NA -0.007296928 FALSE</div><div class='input'>
 <span class='co'># add data at each week</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>exp</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>((<span class='fl'>1</span>:<span class='fl'>4</span>) * <span class='fl'>7</span> / <span class='fl'>365.25</span>, <span class='fl'>4</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>0.8</span>, <span class='fl'>0.9</span>, <span class='fl'>0.7</span>))</div><div class='output co'>#&gt;   subjid      x   y      yhat  knot
-#&gt; 1     NA 0.0192 1.0 0.9148645 FALSE
-#&gt; 2     NA 0.0383 0.8 0.8690146 FALSE
-#&gt; 3     NA 0.0575 0.9 0.8229246 FALSE
-#&gt; 4     NA 0.0767 0.7 0.7768346 FALSE</div><div class='input'>
+#&gt; 1     NA 0.0192 1.0 0.9199544 FALSE
+#&gt; 2     NA 0.0383 0.8 0.8667617 FALSE
+#&gt; 3     NA 0.0575 0.9 0.8132906 FALSE
+#&gt; 4     NA 0.0767 0.7 0.7598194 FALSE</div><div class='input'>
 <span class='co'># no data at weeks 2 and 3</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>exp</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>((<span class='fl'>1</span>:<span class='fl'>4</span>) * <span class='fl'>7</span> / <span class='fl'>365.25</span>, <span class='fl'>4</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>0.7</span>))</div><div class='output co'>#&gt;   subjid      x   y      yhat  knot
-#&gt; 1     NA 0.0192 1.0 0.9301203 FALSE
-#&gt; 2     NA 0.0383  NA 0.8717094 FALSE
-#&gt; 3     NA 0.0575  NA 0.8129926 FALSE
-#&gt; 4     NA 0.0767 0.7 0.7542759 FALSE</div><div class='input'>
+#&gt; 1     NA 0.0192 1.0 0.9287672 FALSE
+#&gt; 2     NA 0.0383  NA 0.8634701 FALSE
+#&gt; 3     NA 0.0575  NA 0.7978311 FALSE
+#&gt; 4     NA 0.0767 0.7 0.7321921 FALSE</div><div class='input'>
 <span class='co'># estimates at standard knots</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>exp</span>,
   <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>((<span class='fl'>1</span>:<span class='fl'>4</span>) * <span class='fl'>7</span> / <span class='fl'>365.25</span>, <span class='fl'>4</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='fl'>0.7</span>),
   <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"knots"</span>
-)</div><div class='output co'>#&gt;    subjid      x  y         yhat knot
-#&gt; 1      NA 0.0000 NA  0.988837030 TRUE
-#&gt; 2      NA 0.0833 NA  0.734092008 TRUE
-#&gt; 3      NA 0.1667 NA  0.712966698 TRUE
-#&gt; 4      NA 0.2500 NA  0.646615968 TRUE
-#&gt; 5      NA 0.5000 NA  0.283644520 TRUE
-#&gt; 6      NA 0.7500 NA  0.137621699 TRUE
-#&gt; 7      NA 1.0000 NA  0.146645329 TRUE
-#&gt; 8      NA 1.2500 NA  0.060475618 TRUE
-#&gt; 9      NA 1.5000 NA -0.002533962 TRUE
-#&gt; 10     NA 2.0000 NA -0.181272979 TRUE
-#&gt; 11     NA 3.0000 NA  1.689911149 TRUE</div><div class='input'>
+)</div><div class='output co'>#&gt;    subjid      x  y        yhat knot
+#&gt; 1      NA 0.0000 NA  0.99440615 TRUE
+#&gt; 2      NA 0.0833 NA  0.70962869 TRUE
+#&gt; 3      NA 0.1667 NA  0.69311013 TRUE
+#&gt; 4      NA 0.2500 NA  0.65865280 TRUE
+#&gt; 5      NA 0.5000 NA  0.43386536 TRUE
+#&gt; 6      NA 0.7500 NA  0.35544934 TRUE
+#&gt; 7      NA 1.0000 NA  0.28747936 TRUE
+#&gt; 8      NA 1.2500 NA  0.27333478 TRUE
+#&gt; 9      NA 1.5000 NA  0.23634310 TRUE
+#&gt; 10     NA 2.0000 NA  0.33687009 TRUE
+#&gt; 11     NA 3.0000 NA -0.04502027 TRUE</div><div class='input'>
 <span class='co'># leaving out the missing data produces the same result</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>exp</span>,
   <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>4</span>) * <span class='fl'>7</span> / <span class='fl'>365.25</span>, <span class='fl'>4</span>), <span class='kw'>y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>0.7</span>),
   <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"knots"</span>
-)</div><div class='output co'>#&gt;    subjid      x  y         yhat knot
-#&gt; 1      NA 0.0000 NA  0.988837030 TRUE
-#&gt; 2      NA 0.0833 NA  0.734092008 TRUE
-#&gt; 3      NA 0.1667 NA  0.712966698 TRUE
-#&gt; 4      NA 0.2500 NA  0.646615968 TRUE
-#&gt; 5      NA 0.5000 NA  0.283644520 TRUE
-#&gt; 6      NA 0.7500 NA  0.137621699 TRUE
-#&gt; 7      NA 1.0000 NA  0.146645329 TRUE
-#&gt; 8      NA 1.2500 NA  0.060475618 TRUE
-#&gt; 9      NA 1.5000 NA -0.002533962 TRUE
-#&gt; 10     NA 2.0000 NA -0.181272979 TRUE
-#&gt; 11     NA 3.0000 NA  1.689911149 TRUE</div></pre>
+)</div><div class='output co'>#&gt;    subjid      x  y        yhat knot
+#&gt; 1      NA 0.0000 NA  0.99440615 TRUE
+#&gt; 2      NA 0.0833 NA  0.70962869 TRUE
+#&gt; 3      NA 0.1667 NA  0.69311013 TRUE
+#&gt; 4      NA 0.2500 NA  0.65865280 TRUE
+#&gt; 5      NA 0.5000 NA  0.43386536 TRUE
+#&gt; 6      NA 0.7500 NA  0.35544934 TRUE
+#&gt; 7      NA 1.0000 NA  0.28747936 TRUE
+#&gt; 8      NA 1.2500 NA  0.27333478 TRUE
+#&gt; 9      NA 1.5000 NA  0.23634310 TRUE
+#&gt; 10     NA 2.0000 NA  0.33687009 TRUE
+#&gt; 11     NA 3.0000 NA -0.04502027 TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

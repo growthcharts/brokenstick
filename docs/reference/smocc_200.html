@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Page not found (404) • brokenstick</title>
+<title>Infant growth of 0-2 years, SMOCC data extract — smocc_200 • brokenstick</title>
 
 
 <!-- jquery -->
@@ -18,8 +18,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
 <!-- bootstrap-toc -->
-<link rel="stylesheet" href="bootstrap-toc.css">
-<script src="bootstrap-toc.js"></script>
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
@@ -33,13 +33,17 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
-<link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script>
+<link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script>
 
 
 
 
-<meta property="og:title" content="Page not found (404)" />
+<meta property="og:title" content="Infant growth of 0-2 years, SMOCC data extract — smocc_200" />
+<meta property="og:description" content="Longitudinal height and weight measurements during ages 0-2 years
+for a representative sample of 1933 Dutch children born in 1988-1989.
+The dataset smocc_200 is a subset of the full data covering
+200 children." />
 
 
 
@@ -58,7 +62,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-title-body">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -70,7 +74,7 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="index.html">brokenstick</a>
+        <a class="navbar-link" href="../index.html">brokenstick</a>
         <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.0</span>
       </span>
     </div>
@@ -78,13 +82,13 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
-  <a href="index.html">
+  <a href="../index.html">
     <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
 <li>
-  <a href="reference/index.html">Reference</a>
+  <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
   <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
@@ -94,27 +98,27 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="articles/gettingstarted.html">Getting started with `brokenstick`</a>
+      <a href="../articles/gettingstarted.html">Getting started with `brokenstick`</a>
     </li>
     <li>
-      <a href="articles/knotplacement.html">Knot placement</a>
+      <a href="../articles/knotplacement.html">Knot placement</a>
     </li>
     <li>
-      <a href="articles/mainfunctions.html">Overview of main functions</a>
+      <a href="../articles/mainfunctions.html">Overview of main functions</a>
     </li>
     <li>
-      <a href="articles/model.html">Model formulation</a>
+      <a href="../articles/model.html">Model formulation</a>
     </li>
     <li>
-      <a href="articles/perfectmodel.html">Check perfect model</a>
+      <a href="../articles/perfectmodel.html">Check perfect model</a>
     </li>
     <li>
-      <a href="articles/prediction.html">Fit and predict</a>
+      <a href="../articles/prediction.html">Fit and predict</a>
     </li>
   </ul>
 </li>
 <li>
-  <a href="news/index.html">Changelog</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -130,23 +134,46 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Page not found (404)</h1>
+    <h1>Infant growth of 0-2 years, SMOCC data extract</h1>
+    
+    <div class="hidden name"><code>smocc_200.Rd</code></div>
     </div>
 
-Content not found. Please use links in the navbar.
+    <div class="ref-description">
+    <p>Longitudinal height and weight measurements during ages 0-2 years
+for a representative sample of 1933 Dutch children born in 1988-1989.
+The dataset <code>smocc_200</code> is a subset of the full data covering
+200 children.</p>
+    </div>
+
+
+
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>A tibble with 1940 rows and 7 columns:</p><dl'>
+<dt>subjid</dt><dd><p>ID, unique <code>id</code> of each child (numeric)</p></dd>
+<dt>age</dt><dd><p>Decimal age, 0-2.12 years (numeric)</p></dd>
+<dt>sex</dt><dd><p>Sex, <code>"male"</code> or <code>"female"</code> (character)</p></dd>
+<dt>ga</dt><dd><p>Gestational age, completed weeks (numeric)</p></dd>
+<dt>bw</dt><dd><p>Birth weight in grammes (numeric)</p></dd>
+<dt>hgt</dt><dd><p>Height measurement in cm (34-102) (numeric)</p></dd>
+<dt>hgt.z</dt><dd><p>Height in SDS relative to WHO standard) (numeric)</p></dd>
+
+</dl>
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p>Herngreen WP, van Buuren S, van Wieringen JC, Reerink JD, Verloove-Vanhorick SP &amp; Ruys JH (1994). Growth in length and weight from birth to 2 years of a representative sample of Netherlands children (born in 1988-89) related to socio-economic status and other background characteristics. <em>Annals of Human Biology</em>, <b>21</b>, 449-463.</p>
 
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>
     </nav>
   </div>
-
 </div>
-
 
 
       <footer>

@@ -76,7 +76,7 @@ the fitted model, by specifying the x and y arguments." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.61.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.0</span>
       </span>
     </div>
 
@@ -117,6 +117,9 @@ the fitted model, by specifying the x and y arguments." />
       <a href="../articles/prediction.html">Fit and predict</a>
     </li>
   </ul>
+</li>
+<li>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -238,56 +241,57 @@ This is the fastest method.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Estimates at each measured age for all persons in fitted model</span>
-<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>fit_50</span>)</div><div class='output co'>#&gt; [1] "brokenstick"</div><div class='input'><span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_50</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>fit_200</span>)</div><div class='output co'>#&gt; [1] "brokenstick"</div><div class='input'><span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_200</span>)
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>p</span>)</div><div class='output co'>#&gt;   subjid      x      y       yhat  knot
-#&gt; 1  10001 0.0000  0.575  0.5117682 FALSE
-#&gt; 2  10001 0.0821  0.888  0.8762757 FALSE
-#&gt; 3  10001 0.1588  0.797  0.8107744 FALSE
-#&gt; 4  10001 0.2546  0.661  0.6530335 FALSE
-#&gt; 5  10001 0.5038  0.290  0.2564071 FALSE
-#&gt; 6  10001 0.7529 -0.398 -0.2521086 FALSE</div><div class='input'>
+#&gt; 1  10001 0.0000  0.575  0.5705123 FALSE
+#&gt; 2  10001 0.0821  0.888  0.8817845 FALSE
+#&gt; 3  10001 0.1588  0.797  0.7415178 FALSE
+#&gt; 4  10001 0.2546  0.661  0.6237670 FALSE
+#&gt; 5  10001 0.5038  0.290  0.2870223 FALSE
+#&gt; 6  10001 0.7529 -0.398 -0.2017717 FALSE</div><div class='input'>
 <span class='co'># Estimates at knots, stored into the broad matrix</span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_50</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"broad"</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"knots"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>p</span>), <span class='fl'>2</span>)</div><div class='output co'>#&gt;           0 0.0833 0.1667  0.25   0.5  0.75     1  1.25   1.5     2      3
-#&gt; 10001  0.51   0.88   0.80  0.66  0.26 -0.26  0.20  0.08 -0.08  0.06  -1.65
-#&gt; 10002 -0.18  -0.29  -0.27 -0.29 -0.26 -0.26 -0.30 -0.31 -0.52 -0.66   2.03
-#&gt; 10003  1.13   2.09   2.07  1.99  2.18  1.85  1.33  0.92  0.82  1.23 -10.49
-#&gt; 10004  0.09   0.52   0.36  0.88  0.78  0.52  0.23 -0.16 -0.36 -0.10  -4.95
-#&gt; 10005  1.23   1.83   1.35  0.93  0.91  0.97  1.69  2.48  2.29  1.85   7.47
-#&gt; 10006 -0.61   0.17  -0.08  0.53 -0.03 -0.17 -0.48  0.17  0.34  0.45   5.22</div><div class='input'>
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_200</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"broad"</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"knots"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>p</span>), <span class='fl'>2</span>)</div><div class='output co'>#&gt;           0 0.0833 0.1667  0.25   0.5  0.75     1  1.25   1.5     2     3
+#&gt; 10001  0.57   0.89   0.73  0.63  0.29 -0.21  0.11  0.13 -0.18  0.15  0.58
+#&gt; 10002 -0.19  -0.32  -0.25 -0.32 -0.24 -0.27 -0.33 -0.48 -0.50 -0.62 -1.24
+#&gt; 10003  1.18   2.07   1.98  2.10  2.04  1.77  1.33  1.10  0.91  1.16 -1.09
+#&gt; 10004  0.09   0.46   0.40  0.88  0.65  0.54  0.22 -0.08 -0.30 -0.14 -1.40
+#&gt; 10005  1.47   1.75   1.29  0.98  1.12  1.08  1.61  2.30  2.16  2.06  3.66
+#&gt; 10006 -0.60   0.07   0.03  0.39 -0.05 -0.13 -0.27  0.02  0.32  0.39  0.64</div><div class='input'>
 <span class='co'># Get these estimates as a vector, useful for programming</span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_50</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"vector"</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"knots"</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>p</span>), <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1]  0.51  0.88  0.80  0.66  0.26 -0.26</div><div class='input'>
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_200</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"vector"</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"knots"</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>p</span>), <span class='fl'>2</span>)</div><div class='output co'>#&gt; [1]  0.57  0.89  0.73  0.63  0.29 -0.21</div><div class='input'>
 <span class='co'># Obtain estimates at weeks 1-4 for all children, include old points</span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_50</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>((<span class='fl'>1</span>:<span class='fl'>4</span>) * <span class='fl'>7</span> / <span class='fl'>365.25</span>, <span class='fl'>4</span>))
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_200</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>((<span class='fl'>1</span>:<span class='fl'>4</span>) * <span class='fl'>7</span> / <span class='fl'>365.25</span>, <span class='fl'>4</span>))
 <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>p</span>)</div><div class='output co'>#&gt;   subjid      x      y       yhat  knot
-#&gt; 1  10001 0.0000  0.575  0.5117682 FALSE
-#&gt; 2  10001 0.0821  0.888  0.8762757 FALSE
-#&gt; 3  10001 0.1588  0.797  0.8107744 FALSE
-#&gt; 4  10001 0.2546  0.661  0.6530335 FALSE
-#&gt; 5  10001 0.5038  0.290  0.2564071 FALSE
-#&gt; 6  10001 0.7529 -0.398 -0.2521086 FALSE</div><div class='input'>
+#&gt; 1  10001 0.0000  0.575  0.5705123 FALSE
+#&gt; 2  10001 0.0821  0.888  0.8817845 FALSE
+#&gt; 3  10001 0.1588  0.797  0.7415178 FALSE
+#&gt; 4  10001 0.2546  0.661  0.6237670 FALSE
+#&gt; 5  10001 0.5038  0.290  0.2870223 FALSE
+#&gt; 6  10001 0.7529 -0.398 -0.2017717 FALSE</div><div class='input'>
 <span class='co'># Same, but now organised as broad matrix of new points only</span>
-<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_50</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>((<span class='fl'>1</span>:<span class='fl'>4</span>) * <span class='fl'>7</span> / <span class='fl'>365.25</span>, <span class='fl'>4</span>), <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"broad"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: data length [202] is not a sub-multiple or multiple of the number of rows [51]</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>p</span>)</div><div class='output co'>#&gt;          0.0192     0.0383     0.0575      0.0767
-#&gt; [1,]  0.5970123  0.6818125  0.7670567  0.85230081
-#&gt; [2,] -0.2052942 -0.2308557 -0.2565509 -0.28224614
-#&gt; [3,]  1.3549098  1.5748444  1.7959305  2.01701654
-#&gt; [4,]  0.1885569  0.2858509  0.3836542  0.48145762
-#&gt; [5,]  1.2251736  1.3637778  1.5016601  1.64026434
-#&gt; [6,]  1.7788685 -0.4319678 -0.2527700 -0.07263408</div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_50</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"knots"</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"broad"</span>), <span class='fl'>3</span>)</div><div class='output co'>#&gt;                0     0.0833     0.1667       0.25        0.5       0.75
-#&gt; 10001  0.5117682  0.8816035  0.8033631  0.6603196  0.2643374 -0.2573963
-#&gt; 10002 -0.1795990 -0.2910789 -0.2709276 -0.2918563 -0.2620037 -0.2648078
-#&gt; 10003  1.1338237  2.0930149  2.0693730  1.9904651  2.1840112  1.8468527
-#&gt;                1       1.25         1.5           2          3
-#&gt; 10001  0.1984385  0.0811640 -0.08167399  0.05944318  -1.652566
-#&gt; 10002 -0.3023886 -0.3088352 -0.51841890 -0.65750137   2.031763
-#&gt; 10003  1.3306968  0.9184405  0.82471139  1.22691579 -10.491509</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_50</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10001</span>, <span class='fl'>10003</span>), <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"knots"</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"broad"</span>)</div><div class='output co'>#&gt;               0    0.0833    0.1667      0.25       0.5       0.75         1
-#&gt; 10001 0.5117682 0.8816035 0.8033631 0.6603196 0.2643374 -0.2573963 0.1984385
-#&gt; 10003 1.1338237 2.0930149 2.0693730 1.9904651 2.1840112  1.8468527 1.3306968
-#&gt;            1.25         1.5          2          3
-#&gt; 10001 0.0811640 -0.08167399 0.05944318  -1.652566
-#&gt; 10003 0.9184405  0.82471139 1.22691579 -10.491509</div></pre>
+<span class='no'>p</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_200</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>((<span class='fl'>1</span>:<span class='fl'>4</span>) * <span class='fl'>7</span> / <span class='fl'>365.25</span>, <span class='fl'>4</span>), <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"broad"</span>)
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>p</span>)</div><div class='output co'>#&gt;          0.0192     0.0383     0.0575     0.0767
+#&gt; [1,]  0.6433067  0.7157221  0.7885166  0.8613111
+#&gt; [2,] -0.2167395 -0.2465005 -0.2764174 -0.3063343
+#&gt; [3,]  1.3833079  1.5882210  1.7942070  2.0001929
+#&gt; [4,]  0.1735663  0.2602390  0.3473656  0.4344921
+#&gt; [5,]  1.4673513  1.5327410  1.5977902  1.6631800
+#&gt; [6,]  1.7285698 -0.4428583 -0.2899656 -0.1362724</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_200</span>, <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"knots"</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"broad"</span>), <span class='fl'>3</span>)</div><div class='output co'>#&gt;                0     0.0833     0.1667       0.25        0.5       0.75
+#&gt; 10001  0.5705123  0.8863342  0.7263649  0.6299368  0.2946222 -0.2053723
+#&gt; 10002 -0.1868226 -0.3166182 -0.2539699 -0.3235495 -0.2373094 -0.2746838
+#&gt; 10003  1.1773219  2.0710006  1.9771740  2.1040238  2.0392138  1.7717735
+#&gt;                1       1.25        1.5          2          3
+#&gt; 10001  0.1050307  0.1289907 -0.1843961  0.1534859  0.5769778
+#&gt; 10002 -0.3307353 -0.4821327 -0.4997825 -0.6162842 -1.2393416
+#&gt; 10003  1.3284154  1.0965839  0.9079110  1.1596519 -1.0863068</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit_200</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10001</span>, <span class='fl'>10003</span>), <span class='kw'>at</span> <span class='kw'>=</span> <span class='st'>"knots"</span>, <span class='kw'>output</span> <span class='kw'>=</span> <span class='st'>"broad"</span>)</div><div class='output co'>#&gt;               0    0.0833    0.1667      0.25       0.5       0.75         1
+#&gt; 10001 0.5705123 0.8863342 0.7263649 0.6299368 0.2946222 -0.2053723 0.1050307
+#&gt; 10003 1.1773219 2.0710006 1.9771740 2.1040238 2.0392138  1.7717735 1.3284154
+#&gt;            1.25        1.5         2          3
+#&gt; 10001 0.1289907 -0.1843961 0.1534859  0.5769778
+#&gt; 10003 1.0965839  0.9079110 1.1596519 -1.0863068</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
