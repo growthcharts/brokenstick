@@ -45,7 +45,7 @@ This is the fastest method.}
 Predict growth curve according to the broken stick model
 }
 \examples{
-exp <- export(fit_50)
+exp <- export(fit_200)
 
 # no data predicts mean trajectory
 p <- predict(exp)

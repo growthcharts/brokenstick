@@ -2,13 +2,13 @@
 #'
 #' Longitudinal height and weight measurements during ages 0-2 years
 #' for a representative sample of 1933 Dutch children born in 1988-1989.
-#' The dataset \code{smocc_50} is a subset of the full data covering
-#' 50 children.
+#' The dataset \code{smocc_200} is a subset of the full data covering
+#' 200 children.
 #'
-#' @name smocc_50
+#' @name smocc_200
 #' @docType data
 #' @format
-#' A tibble with 486 rows and 7 columns:
+#' A tibble with 1940 rows and 7 columns:
 #' \describe{
 #' \item{subjid}{ID, unique \code{id} of each child (numeric)}
 #' \item{age}{Decimal age, 0-2.12 years (numeric)}
@@ -22,11 +22,11 @@
 #' @keywords datasets
 NULL
 
-#' Broken stick model fitted on 50 children
+#' Broken stick model fitted on 200 children
 #'
-#' The object \code{fit_50} is an object of class \code{brokenstick} that contains the fitted broken stick model. The class \code{brokenstick} extend the \code{lmerMod} class with additional attributes.
+#' The object \code{fit_200} is an object of class \code{brokenstick} that contains the fitted broken stick model. The class \code{brokenstick} extend the \code{lmerMod} class with additional attributes.
 #'
-#' @name fit_50
+#' @name fit_200
 #' @docType data
 #' @format An object of class \code{brokenstick}, fitted by the
 #' \code{brokenstick()}. This is an \code{lmerMod} object with additional

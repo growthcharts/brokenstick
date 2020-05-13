@@ -22,7 +22,7 @@
 #' @method plot brokenstick
 #' @examples
 #' library("brokenstick")
-#' dat <- smocc_50
+#' dat <- smocc_200
 #' # fit one line model for data exploration
 #' fit <- brokenstick(y = dat$hgt, x = dat$age, subj = dat$subjid)
 #'
@@ -122,7 +122,7 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' @return An object of class \code{ggplot}
 #' @rdname plot_trajectory
 #' @examples
-#' smc <- brokenstick::smocc_50
+#' smc <- brokenstick::smocc_200
 #' knots <- 0:2
 #' fit <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid, knots = knots)
 #'

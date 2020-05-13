@@ -49,7 +49,7 @@ fitted trajectories of one or more individuals.
 }
 \examples{
 library("brokenstick")
-dat <- smocc_50
+dat <- smocc_200
 # fit one line model for data exploration
 fit <- brokenstick(y = dat$hgt, x = dat$age, subj = dat$subjid)
 

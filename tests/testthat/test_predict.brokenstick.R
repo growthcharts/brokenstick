@@ -2,7 +2,7 @@
 library(brokenstick)
 context("predict.brokenstick()")
 
-obj <- fit_50
+obj <- fit_200
 data <- get_xy(obj)
 n <- nrow(data)
 m <- length(unique(data$subjid))

@@ -25,21 +25,20 @@ This vignette demonstrates three major functions in the `brokenstick` package: `
 
 ## Set up libraries
 
-This vignette uses functions from the `hbgd` and `brokenstick` packages. 
+This vignette uses functions from the ``brokenstick` packages. 
 
 ```{r message=FALSE}
-if (!require(hbgd)) devtools::install_github("HBGDki/hbgd")
-require("hbgd")
-require("brokenstick")
+require(brokenstick)
+require(dplyr)
 ```
 
 
 ## Plot trajectories
 
-The `smocc_50` data in the `brokenstick` package contain the heights of 50 Dutch children measured on 10 visits at ages 0-2 years. 
+The `smocc_200` data in the `brokenstick` package contain the heights of 200 Dutch children measured on 10 visits at ages 0-2 years. 
 
 ```{r}
-data <- brokenstick::smocc_50
+data <- brokenstick::smocc_200
 head(data, 3)
 ```
 
@@ -144,32 +143,33 @@ so the nine-line broken stick model explains about `r round(100 * get_pev(fit9))
 
 ## Subject level analysis
 
-Suppose we are interest in knowing the effect of sex, gestational age and birth weight on the height SDS at the age of 2 years. This is an analysis at the subject level. The `get_subject_data()` function from the `hbgd` package extracts the variables that vary only over subjects.
+Suppose we are interest in knowing the effect of sex, gestational age and birth weight on the height SDS at the age of 2 years. This is an analysis at the subject level. Let us first extract the subject-level data with variables that vary over subjects only.
 
-```{r eval=FALSE}
-subj <- get_subject_data(data)
+```{r subjleveldata}
+subj <- data %>%
+  select(subjid, sex, ga, bw) %>% 
+  group_by(subjid) %>% 
+  slice(1L)
 head(subj, 3)
 ```
 
-The broken stick estimates per subject from the nine line solution are obtained by
+We also need the outcome variable. We take it from the broken stick estimates from the nine line solution and append it to the subject level data.
 
-```{r eval=FALSE}
-bs <- predict(fit9, at = "knots", output = "broad")
-dim(bs)
-head(round(bs, 2), 3)
+```{r predictatknots}
+bs <- as.data.frame(predict(fit9, at = "knots", output = "broad"))
+data <- cbind(subj, bs)
 ```
 
-The names of the columns correspond to the ages at which the knots were placed. The effect of the subject's sex, gestational age and birth weight on the height SDS at the age of 2 years (here denoted by the variable named `2`) can be estimated as 
+The names of the columns in `bs` correspond to the ages at which the knots are placed. The effect of the subject's sex, gestational age and birth weight on the height SDS at the age of 2 years (here denoted by the variable named `2`) can be estimated as 
 
-```{r lm1, eval = FALSE}
-data <- cbind(subj, bs)
+```{r lm1}
 fit1_lm <- lm(`2` ~ sex + ga + I(bw / 1000), data = data)
 summary(fit1_lm)
 ```
 
 Note that the analysis shows there is a substantial effect of birth weight. Of course, it might be that birth weight is directly related to height at the age of 2 years. Alternatively, the relation could be mediated by birth length. The following model adds birth length (the variable named `0`) to the model: 
 
-```{r lm2, eval=FALSE}
+```{r lm2}
 fit2_lm <- lm(`2` ~ sex + ga + I(bw / 1000) + `0`, data = data)
 summary(fit2_lm)
 ```

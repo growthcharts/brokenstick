@@ -22,7 +22,7 @@ This vignette shows a step-by-step introduction of how to
 ## Get the data
 
 This vignette assumes the `rbokeh`, `AGD`, `brokenstick` packages are installed. See [getting started with `brokenstick`](gettingstarted.html) for the installation procedure.
-We will use the `smocc_50` demo data that is built-in into the `brokenstick` package.
+We will use the `smocc_200` demo data that is built-in into the `brokenstick` package.
 
 ```{r lib, include = FALSE}
 require("brokenstick")
@@ -39,11 +39,11 @@ The broken stick model can fit observations in either the raw scale (cm, kg, and
 
 It is easy to convert the measurements into the $Z$-score scale, fit the model, and convert back to the raw scale afterwards, if desired. There are several `R` packages that assist in the calculations: [AGD](https://cran.r-project.org/web/packages/AGD/index.html), [anthro](https://cran.r-project.org/web/packages/anthro/index.html), [childsds](https://cran.r-project.org/web/packages/childsds/index.html), [growthstandards](https://github.com/ki-tools/growthstandards) and [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html). 
 
-Here we use 50 children from the SMOCC data [@herngreen1994]. The `smocc_50` data contains the height measurement both in the original scale in cm (`hgt`) and the Z-score scale (`hgt.z`) as calculated against the growth references of the Fourth Dutch Growth study [@fredriks2000].
+Here we use 200 children from the SMOCC data [@herngreen1994]. The `smocc_200` data contains the height measurement both in the original scale in cm (`hgt`) and the Z-score scale (`hgt.z`) as calculated against the growth references of the Fourth Dutch Growth study [@fredriks2000].
 
 ```{r zscores}
 library(brokenstick)
-data <- smocc_50
+data <- smocc_200
 head(data)
 ```
 

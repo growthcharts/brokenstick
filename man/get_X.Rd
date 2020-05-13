@@ -21,5 +21,5 @@ knots. The result is \code{NULL} if \code{object} is not of class
 Obtain the X model matrix from a broken stick model
 }
 \examples{
-get_X(fit_50, ids = c(10001, 10002))
+get_X(fit_200, ids = c(10001, 10002))
 }

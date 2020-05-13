@@ -10,7 +10,7 @@
 #' have proper class. The function can return \code{numeric(0)} if
 #' there are no internal knots.
 #' @examples
-#' get_knots(fit_50, "knots")
+#' get_knots(fit_200, "knots")
 #' @export
 get_knots <- function(object,
                       what = c("all", "knots", "boundary", "droplast")) {
@@ -47,7 +47,7 @@ get_knots <- function(object,
 #' @return A data frame with subjid, x and y. The result is \code{NULL}
 #' if \code{object} is not of class \code{brokenstick}.
 #' @examples
-#' get_xy(fit_50, ids = c(10001, 10002))
+#' get_xy(fit_200, ids = c(10001, 10002))
 #' @export
 get_xy <- function(object, ids = NULL) {
   if (!inherits(object, "brokenstick")) {
@@ -68,7 +68,7 @@ get_xy <- function(object, ids = NULL) {
 #' knots. The result is \code{NULL} if \code{object} is not of class
 #' \code{brokenstick}.
 #' @examples
-#' get_X(fit_50, ids = c(10001, 10002))
+#' get_X(fit_200, ids = c(10001, 10002))
 #' @export
 get_X <- function(object, ids = NULL) {
   if (!inherits(object, "brokenstick")) {
@@ -87,7 +87,7 @@ get_X <- function(object, ids = NULL) {
 #' @param object An object of class \code{brokenstick}
 #' @return Proportion of explained variance
 #' @examples
-#' get_pev(fit_50)
+#' get_pev(fit_200)
 #' @export
 get_pev <- function(object) {
   if (!inherits(object, "brokenstick")) {
