@@ -1,35 +1,39 @@
-brokenstick 0.61.0 - 09MAY20
+# brokenstick 0.62.0
 
-ADDED   smocc_50 and fit_50 demo data
-REMOVED smocc.hgtwgt, smocc_hgtwgt and fit_206 datasets
-CHANGED many, many changes in the code and vignettes to reflect replacement of demo data
+* This version simplifies the plotting functions
+* Imports plotting functions from `ggplot2` only
+* Renders `ggplot` objects sharper in vignettes by `svglite`
+* Drops the `pkg` argument in `plot.brokenstick()`
+* Lessens the dependency on `rbokeh`
+* Added a `NEWS.md` file to track changes to the package
 
-brokenstick 0.60.0 - 05MAY20
+# brokenstick 0.61.0
 
-CHANGED Adapted to R 4.0.0.
+* Added `smocc_50` and `fit_50` demo data
+* Removed `smocc.hgtwgt`, `smocc_hgtwgt` and `fit_206 datasets`
+* Adapt code and vignettes to reflect replacement of demo data
 
-brokenstick 0.55 - 06MAY17
---------------------------
+# brokenstick 0.60.0
 
-ADDED   New utility functions: get_pev()
-CHANGED get_knots() gets a `what` argument
-CHANGED smarter defaults for plot()
-CHANGED simplified arguments to plot()
-CHANGD  much simplified "Overview of main functions" vignette
+* Adapted source to R 4.0.0.
 
-brokenstick 0.54 - 03MAY17
---------------------------
+# brokenstick 0.55
 
-ADDED   Support for ggplot
-CHANGED Made ggplot plot default
-CHANGED Changed default `show_references` flag to FALSE
+* Added new utility function `get_pev()` for proportion explained variance
+* `get_knots()` gets a `what` argument
+* Now using smarter defaults for `plot()`
+* Simplified arguments to `plot()`
+* Simplified vignette "Overview of main functions"
 
+# brokenstick 0.54
 
-brokenstick 0.53 - 26APR17
---------------------------
+* Added Support for `ggplot2`
+* Made `ggplot2` plot default
+* Changed default `show_references` flag to FALSE
 
-This is the version announced during my invited lecture at the
-7th Channel Network Conference, Hasselt, Belgium.
+# brokenstick 0.53
+
+* This is the version announced during my invited lecture at the 7th Channel Network Conference, Hasselt, Belgium.
 
 Here is the abstract of the lecture:
 
