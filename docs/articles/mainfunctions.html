@@ -102,17 +102,19 @@
 
     
     
+<style type="text/css">
+img {
+  border: 0px;
+  padding: 10px;
+}
+</style>
 <div id="objective" class="section level2">
 <h2 class="hasAnchor">
 <a href="#objective" class="anchor"></a>Objective</h2>
-<p>This vignette demonstrates three major functions in the <code>brokenstick</code> package: <code><a href="../reference/brokenstick.html">brokenstick()</a></code>, <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> and <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>.</p>
-</div>
-<div id="set-up-libraries" class="section level2">
-<h2 class="hasAnchor">
-<a href="#set-up-libraries" class="anchor"></a>Set up libraries</h2>
-<p>This vignette uses functions from the `<code>brokenstick</code> packages.</p>
+<p>This vignette demonstrates three major functions in the <code>brokenstick</code> package: <code><a href="../reference/brokenstick.html">brokenstick()</a></code>, <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> and <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>. We also need <code>dplyr</code> and <code>ggplot2</code>.</p>
 <div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">brokenstick</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">dplyr</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">require</a></span>(<span class="no">dplyr</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)</pre></body></html></div>
 </div>
 <div id="plot-trajectories" class="section level2">
 <h2 class="hasAnchor">
@@ -127,36 +129,22 @@
 ## 2  10001 0.0821 female    40  3960  55.6 0.888
 ## 3  10001 0.159  female    40  3960  58.2 0.797</code></pre>
 <p>We fit a trivial broken stick model and then plot the trajectories of three selected children as follows:</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">svglite</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggplot2</span>)
-<span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>)
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>)
 <span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span>)
-<span class="no">fn</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/tempfile.html">tempfile</a></span>(<span class="kw">fileext</span> <span class="kw">=</span> <span class="st">".svg"</span>)
-<span class="fu"><a href="https://rdrr.io/pkg/svglite/man/svglite.html">svglite</a></span>(<span class="kw">file</span> <span class="kw">=</span> <span class="no">fn</span>, <span class="kw">height</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">7</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">zband</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"Length (cm)"</span>)</pre></body></html></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/grDevices/dev.html">dev.off</a></span>()</pre></body></html></div>
-<pre><code>## quartz_off_screen 
-##                 2</code></pre>
-<div class="figure" style="text-align: center">
-<img src="../../../../../../../private/var/folders/py/58s36gjn5kn9zw6rfr7mnx680000gn/T/RtmpLYw8ip/file18120747a2c2d.svg" alt="Het bijschrift"><p class="caption">
-Het bijschrift
-</p>
-</div>
-<p>The plots gain more resolution when the Standard Deviation Scores (SDS) (or <span class="math inline">\(Z\)</span>-values) are plotted. The column <code>hgt.z</code> contains the <span class="math inline">\(Z\)</span>-scores of height relative to the WHO standard.</p>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">fit0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt.z</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>)
+<p><img src="mainfunctions_files/figure-html/figure1-1.png" width="672"></p>
+<p>While informative, the dispay gains more resolution when we plot the Standard Deviation Scores (SDS) (or <span class="math inline">\(Z\)</span>-values). The column <code>hgt.z</code> contains the <span class="math inline">\(Z\)</span>-scores of height relative to the Dutch height reference from the Fourth Dutch Growth Study.</p>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">fit0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt.z</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit0</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>)</pre></body></html></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
 <p><img src="mainfunctions_files/figure-html/zscore-1.png" width="672"></p>
 </div>
 <div id="fit-broken-stick-model-with-two-lines" class="section level2">
 <h2 class="hasAnchor">
 <a href="#fit-broken-stick-model-with-two-lines" class="anchor"></a>Fit broken stick model with two lines</h2>
 <p>The <em>broken stick model</em> describes a trajectory by a series of connected straight lines. We first calculate a rough approximation in the above trajectories using just two lines. The first line starts at birth and end at the age of exactly 1 years. The second line spans the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate this model as follows:</p>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">fit2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt.z</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>, <span class="kw">knots</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">2</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">fit2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt.z</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>, <span class="kw">knots</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">2</span>)</pre></body></html></div>
 <p>The fitted model can now be plotted by</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit2</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">x_trim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">2.2</span>))</pre></body></html></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit2</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">x_trim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">2.2</span>))</pre></body></html></div>
 <p><img src="mainfunctions_files/figure-html/plotfit2-1.png" width="672"></p>
 <p>The fixed effects correspond to the mean of sample of children in the data, whereas the correlation between ages is modelled by the random effects. The interpretation of the estimates is discussed in the <a href="prediction.html">vignette for prediction</a>.</p>
 </div>
@@ -164,21 +152,17 @@ Het bijschrift
 <h2 class="hasAnchor">
 <a href="#extend-to-nine-lines" class="anchor"></a>Extend to nine lines</h2>
 <p>The plot shows that the two-line model is fairly crude. We now refine the model in the first two years by adding a knot for each age at which a visit was scheduled. This model can be run as</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="co"># 10 scheduled visits</span>
-<span class="no">knots</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">24</span>)/<span class="fl">12</span>, <span class="fl">4</span>)
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">knots</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">24</span>)/<span class="fl">12</span>, <span class="fl">4</span>)
 <span class="no">fit9</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt.z</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>, <span class="kw">knots</span> <span class="kw">=</span> <span class="no">knots</span>)</pre></body></html></div>
-<p>The model contains 11 random effects. This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. In general, these warnings do not seem to affect the quality of the solution.</p>
-<p>As before, the observed and fitted trajectories can be plotted by</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit9</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">x_trim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">2.2</span>))</pre></body></html></div>
-<pre><code>## Warning: Removed 1 rows containing missing values (geom_point).</code></pre>
+<p>The model contains 11 random effects (10 visits + 1 end knot). This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. In general, these warnings do not affect the quality of the solution.</p>
 <p><img src="mainfunctions_files/figure-html/plotfit9-1.png" width="672"></p>
-<p>The broken stick model now fits the observed data quite close.</p>
+<p>The nine-line broken stick model fits the observed data quite close.</p>
 </div>
 <div id="obtain-predicted-values" class="section level2">
 <h2 class="hasAnchor">
 <a href="#obtain-predicted-values" class="anchor"></a>Obtain predicted values</h2>
 <p>The <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function allows us to obtain various types of predictions from the broken stick model. The simplest call</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit2</span>)
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit2</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">p1</span>, <span class="fl">4</span>)</pre></body></html></div>
 <pre><code>##   subjid      x     y      yhat  knot
 ## 1  10001 0.0000 0.575 0.7200512 FALSE
@@ -187,7 +171,7 @@ Het bijschrift
 ## 4  10001 0.2546 0.661 0.5334077 FALSE</code></pre>
 <p>produces the predicted value (in <code>yhat</code>) for each measured data point for all children used to fit the model in the <code>long</code> output format. The observed <span class="math inline">\(Z\)</span>-score is stored in column called <code>y</code>, and the corresponding broken stick estimates are stored in the column called <code>yhat</code>. The column <code>knot</code> is set to <code>FALSE</code> if <code>y</code> is actually observed.</p>
 <p>We can obtain the locations at which the lines connect (i.e. at the knots) by specifying the <code>at = "knots"</code> argument, e.g.</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">p2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit2</span>, <span class="kw">at</span> <span class="kw">=</span> <span class="st">"knots"</span>)
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">p2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit2</span>, <span class="kw">at</span> <span class="kw">=</span> <span class="st">"knots"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">p2</span>, <span class="fl">4</span>)</pre></body></html></div>
 <pre><code>##   subjid      x  y        yhat knot
 ## 1  10001 0.0000 NA  0.72005117 TRUE
@@ -200,10 +184,10 @@ Het bijschrift
 <h2 class="hasAnchor">
 <a href="#explained-variance" class="anchor"></a>Explained variance</h2>
 <p>The proportion of the variance of the outcome explained by the two-line model is</p>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="../reference/get_pev.html">get_pev</a></span>(<span class="no">fit2</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="../reference/get_pev.html">get_pev</a></span>(<span class="no">fit2</span>)</pre></body></html></div>
 <pre><code>## [1] 0.7856019</code></pre>
 <p>For the second model we get</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="../reference/get_pev.html">get_pev</a></span>(<span class="no">fit9</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="fu"><a href="../reference/get_pev.html">get_pev</a></span>(<span class="no">fit9</span>)</pre></body></html></div>
 <pre><code>## [1] 0.9128698</code></pre>
 <p>so the nine-line broken stick model explains about 91 percent of the variance of the height SDS.</p>
 </div>
@@ -211,7 +195,7 @@ Het bijschrift
 <h2 class="hasAnchor">
 <a href="#subject-level-analysis" class="anchor"></a>Subject level analysis</h2>
 <p>Suppose we are interest in knowing the effect of sex, gestational age and birth weight on the height SDS at the age of 2 years. This is an analysis at the subject level. Let us first extract the subject-level data with variables that vary over subjects only.</p>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="no">subj</span> <span class="kw">&lt;-</span> <span class="no">data</span> <span class="kw">%&gt;%</span>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="no">subj</span> <span class="kw">&lt;-</span> <span class="no">data</span> <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">subjid</span>, <span class="no">sex</span>, <span class="no">ga</span>, <span class="no">bw</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span>(<span class="no">subjid</span>) <span class="kw">%&gt;%</span>
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span>(<span class="fl">1L</span>)
@@ -224,10 +208,10 @@ Het bijschrift
 ## 2  10002 male      38  3210
 ## 3  10003 female    40  4170</code></pre>
 <p>We also need the outcome variable. We take it from the broken stick estimates from the nine line solution and append it to the subject level data.</p>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">bs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit9</span>, <span class="kw">at</span> <span class="kw">=</span> <span class="st">"knots"</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"broad"</span>))
+<div class="sourceCode" id="cb19"><html><body><pre class="r"><span class="no">bs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit9</span>, <span class="kw">at</span> <span class="kw">=</span> <span class="st">"knots"</span>, <span class="kw">output</span> <span class="kw">=</span> <span class="st">"broad"</span>))
 <span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span>(<span class="no">subj</span>, <span class="no">bs</span>)</pre></body></html></div>
 <p>The names of the columns in <code>bs</code> correspond to the ages at which the knots are placed. The effect of the subject’s sex, gestational age and birth weight on the height SDS at the age of 2 years (here denoted by the variable named <code>2</code>) can be estimated as</p>
-<div class="sourceCode" id="cb27"><html><body><pre class="r"><span class="no">fit1_lm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">`2`</span> ~ <span class="no">sex</span> + <span class="no">ga</span> + <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span>(<span class="no">bw</span> / <span class="fl">1000</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">data</span>)
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="no">fit1_lm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">`2`</span> ~ <span class="no">sex</span> + <span class="no">ga</span> + <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span>(<span class="no">bw</span> / <span class="fl">1000</span>), <span class="kw">data</span> <span class="kw">=</span> <span class="no">data</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fit1_lm</span>)</pre></body></html></div>
 <pre><code>## 
 ## Call:
@@ -250,7 +234,7 @@ Het bijschrift
 ## Multiple R-squared:  0.07922,    Adjusted R-squared:  0.06512 
 ## F-statistic: 5.621 on 3 and 196 DF,  p-value: 0.001023</code></pre>
 <p>Note that the analysis shows there is a substantial effect of birth weight. Of course, it might be that birth weight is directly related to height at the age of 2 years. Alternatively, the relation could be mediated by birth length. The following model adds birth length (the variable named <code>0</code>) to the model:</p>
-<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="no">fit2_lm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">`2`</span> ~ <span class="no">sex</span> + <span class="no">ga</span> + <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span>(<span class="no">bw</span> / <span class="fl">1000</span>) + <span class="no">`0`</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">data</span>)
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">fit2_lm</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span>(<span class="no">`2`</span> ~ <span class="no">sex</span> + <span class="no">ga</span> + <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span>(<span class="no">bw</span> / <span class="fl">1000</span>) + <span class="no">`0`</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">data</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="no">fit2_lm</span>)</pre></body></html></div>
 <pre><code>## 
 ## Call:
