@@ -49,7 +49,7 @@ library(svglite)
 library(ggplot2)
 fit <- brokenstick(y = data$hgt, x = data$age, subjid = data$subjid)
 ids <- c(10001, 10005, 10022)
-fn <- tempfile(fileext = ".svg")
+fn <- "figures/figure1.svg"
 svglite(file = fn, height = 3, width = 7)
 plot(fit, ids = ids, zband = FALSE, ylab = "Length (cm)")
 dev.off()
