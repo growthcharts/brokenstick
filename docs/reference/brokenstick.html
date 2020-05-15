@@ -12,8 +12,8 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -78,7 +78,7 @@ chosen break ages, and hence look like a 'broken stick'." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.1</span>
       </span>
     </div>
 
@@ -125,7 +125,12 @@ chosen break ages, and hence look like a 'broken stick'." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/stefvanbuuren/brokenstick/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -140,7 +145,7 @@ chosen break ages, and hence look like a 'broken stick'." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Fit a broken stick model to irregular data</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/R/brokenstick.R'><code>R/brokenstick.R</code></a></small>
     <div class="hidden name"><code>brokenstick.Rd</code></div>
     </div>
 
@@ -201,7 +206,7 @@ the data range.</p></td>
     </tr>
     <tr>
       <th>boundary</th>
-      <td><p>optional, numerical vector of length 2 with the minimum and maximum
+      <td><p>optional, but recommended. Numerical vector of length 2 with the minimum and maximum
 knot. This <code>boundary</code> setting is passed to <code><a href='https://rdrr.io/r/splines/bs.html'>splines::bs()</a></code> as the
 <code>Boundary.knots</code> argument. If not specified, then the range of <code>x</code>
 is taken. If <code>knots</code> is specified, then the boundary range is extended
@@ -244,14 +249,10 @@ children.</p>
 version 0.54.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>mice</span>)</div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘mice’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    cbind, rbind</span></div><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>tbc</span>[<span class='no'>tbc</span>$<span class='no'>id</span> <span class='kw'>&lt;</span> <span class='fl'>1000</span> <span class='kw'>&amp;</span> <span class='no'>tbc</span>$<span class='no'>age</span> <span class='kw'>&lt;</span> <span class='fl'>2.5</span>, ]
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(
-  <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>hgt.z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>age</span>, <span class='kw'>subjid</span> <span class='kw'>=</span> <span class='no'>data</span>$<span class='no'>id</span>,
-  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>)
-)</div></pre>
+    <pre class="examples"><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>brokenstick</span><span class='kw ns'>::</span><span class='no'><a href='smocc_200.html'>smocc_200</a></span>
+
+<span class='co'># fit with implicit boundary c(0, 3)</span>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>data</span>, <span class='fu'>brokenstick</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>hgt.z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>age</span>, <span class='kw'>subjid</span> <span class='kw'>=</span> <span class='no'>subjid</span>, <span class='kw'>knots</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>3</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
