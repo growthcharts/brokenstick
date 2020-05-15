@@ -16,13 +16,13 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
-                      fig.width = 10, fig.height = 5,
+                      fig.width = 10, fig.height = 4,
                       dev = "svglite")
 ```
 ```{css echo = FALSE}
 img {
   border: 0px;
-  padding: 0px;
+  padding: 10px;
 }
 ```
 
@@ -54,12 +54,14 @@ ids <- c(10001, 10005, 10022)
 plot(fit, ids = ids, zband = FALSE, ylab = "Length (cm)")
 ```
 
-While informative, the dispay gains more resolution when we plot the Standard Deviation Scores (SDS) (or $Z$-values). The column `hgt.z` contains the $Z$-scores of height relative to the Dutch height reference from the Fourth Dutch Growth Study.
+The following plot displays the same data, but in standardised units, the Standard Deviation Scores (SDS) or $Z$-score, taken from column `hgt.z`. 
 
 ```{r zscore, warning = FALSE}
 fit0 <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid)
 plot(fit0, ids = ids)
 ```
+
+The $Z$-score is the height corrected for age relative to the Dutch height reference from the Fourth Dutch Growth Study. Not that this plot has substantially more resolution. In addition, the data distribution follows an approximate standard normal distribution with zero mean and unit variance. That property facilitates modelling of the height.
 
 ## Fit broken stick model with two lines
 

@@ -105,7 +105,7 @@
 <style type="text/css">
 img {
   border: 0px;
-  padding: 0px;
+  padding: 10px;
 }
 </style>
 <div id="objective" class="section level2">
@@ -133,10 +133,11 @@ img {
 <span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">zband</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"Length (cm)"</span>)</pre></body></html></div>
 <p><img src="mainfunctions_files/figure-html/figure1-1.svg" width="960"></p>
-<p>While informative, the dispay gains more resolution when we plot the Standard Deviation Scores (SDS) (or <span class="math inline">\(Z\)</span>-values). The column <code>hgt.z</code> contains the <span class="math inline">\(Z\)</span>-scores of height relative to the Dutch height reference from the Fourth Dutch Growth Study.</p>
+<p>The following plot displays the same data, but in standardised units, the Standard Deviation Scores (SDS) or <span class="math inline">\(Z\)</span>-score, taken from column <code>hgt.z</code>.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">fit0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt.z</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit0</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>)</pre></body></html></div>
 <p><img src="mainfunctions_files/figure-html/zscore-1.svg" width="960"></p>
+<p>The <span class="math inline">\(Z\)</span>-score is the height corrected for age relative to the Dutch height reference from the Fourth Dutch Growth Study. Not that this plot has substantially more resolution. In addition, the data distribution follows an approximate standard normal distribution with zero mean and unit variance. That property facilitates modelling of the height.</p>
 </div>
 <div id="fit-broken-stick-model-with-two-lines" class="section level2">
 <h2 class="hasAnchor">
