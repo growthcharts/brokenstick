@@ -16,13 +16,13 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
-                      fig.width = 7, fig.height = 3.5,
+                      fig.width = 10, fig.height = 5,
                       dev = "svglite")
 ```
 ```{css echo = FALSE}
 img {
   border: 0px;
-  padding: 10px;
+  padding: 0px;
 }
 ```
 

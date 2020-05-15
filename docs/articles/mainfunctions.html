@@ -105,7 +105,7 @@
 <style type="text/css">
 img {
   border: 0px;
-  padding: 10px;
+  padding: 0px;
 }
 </style>
 <div id="objective" class="section level2">
@@ -132,11 +132,11 @@ img {
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>)
 <span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">zband</span> <span class="kw">=</span> <span class="fl">FALSE</span>, <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"Length (cm)"</span>)</pre></body></html></div>
-<p><img src="mainfunctions_files/figure-html/figure1-1.svg" width="672"></p>
+<p><img src="mainfunctions_files/figure-html/figure1-1.svg" width="960"></p>
 <p>While informative, the dispay gains more resolution when we plot the Standard Deviation Scores (SDS) (or <span class="math inline">\(Z\)</span>-values). The column <code>hgt.z</code> contains the <span class="math inline">\(Z\)</span>-scores of height relative to the Dutch height reference from the Fourth Dutch Growth Study.</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">fit0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt.z</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit0</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>)</pre></body></html></div>
-<p><img src="mainfunctions_files/figure-html/zscore-1.svg" width="672"></p>
+<p><img src="mainfunctions_files/figure-html/zscore-1.svg" width="960"></p>
 </div>
 <div id="fit-broken-stick-model-with-two-lines" class="section level2">
 <h2 class="hasAnchor">
@@ -145,7 +145,7 @@ img {
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">fit2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt.z</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>, <span class="kw">knots</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">2</span>)</pre></body></html></div>
 <p>The fitted model can now be plotted by</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit2</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">x_trim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">2.2</span>))</pre></body></html></div>
-<p><img src="mainfunctions_files/figure-html/plotfit2-1.svg" width="672"></p>
+<p><img src="mainfunctions_files/figure-html/plotfit2-1.svg" width="960"></p>
 <p>The fixed effects correspond to the mean of sample of children in the data, whereas the correlation between ages is modelled by the random effects. The interpretation of the estimates is discussed in the <a href="prediction.html">vignette for prediction</a>.</p>
 </div>
 <div id="extend-to-nine-lines" class="section level2">
@@ -155,7 +155,7 @@ img {
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">knots</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">24</span>)/<span class="fl">12</span>, <span class="fl">4</span>)
 <span class="no">fit9</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt.z</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>, <span class="kw">knots</span> <span class="kw">=</span> <span class="no">knots</span>)</pre></body></html></div>
 <p>The model contains 11 random effects (10 visits + 1 end knot). This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. In general, these warnings do not affect the quality of the solution.</p>
-<p><img src="mainfunctions_files/figure-html/plotfit9-1.svg" width="672"></p>
+<p><img src="mainfunctions_files/figure-html/plotfit9-1.svg" width="960"></p>
 <p>The nine-line broken stick model fits the observed data quite close.</p>
 </div>
 <div id="obtain-predicted-values" class="section level2">
