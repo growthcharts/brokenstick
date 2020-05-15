@@ -20,19 +20,15 @@ Imports:
     methods,
     splines
 Suggests:
-    AGD,
-    devtools,
     dplyr,
     knitr,
-    lattice,
     MASS,
-    mice,
     mvtnorm,
     plyr,
     rbokeh,
+    svglite,
     testthat,
-    tidyr,
-    svglite
+    tidyr
 Remotes:
     ki-tools/growthstandards
 Encoding: UTF-8

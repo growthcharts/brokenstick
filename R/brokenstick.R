@@ -67,7 +67,7 @@ print_brokenstick <- function(x, ...) {
 #' placed on the values of \code{x}. Be careful with values outside the range
 #' of the data since this extends the \code{boundary} knots (see below) beyond
 #' the data range.
-#' @param boundary optional, numerical vector of length 2 with the minimum and maximum
+#' @param boundary optional, but recommended. Numerical vector of length 2 with the minimum and maximum
 #' knot. This \code{boundary} setting is passed to \code{splines::bs()} as the
 #' \code{Boundary.knots} argument. If not specified, then the range of \code{x}
 #' is taken. If \code{knots} is specified, then the boundary range is extended
@@ -81,12 +81,10 @@ print_brokenstick <- function(x, ...) {
 #' @return A fitted model of class \code{brokenstick}, which extends the
 #'  class \code{lmerMod}
 #' @examples
-#' library(mice)
-#' data <- tbc[tbc$id < 1000 & tbc$age < 2.5, ]
-#' fit <- brokenstick(
-#'   y = data$hgt.z, x = data$age, subjid = data$id,
-#'   knots = c(0, 1, 2)
-#' )
+#' data <- brokenstick::smocc_200
+#'
+#' # fit with implicit boundary c(0, 3)
+#' fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = subjid, knots = 0:3))
 #' @note
 #' The \code{storeX} and \code{degree} arguments have been deprecated in
 #' version 0.54.
