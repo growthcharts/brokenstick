@@ -4,6 +4,8 @@ url: https://stefvanbuuren.name/brokenstick
 template:
   params:
     bootswatch: flatly
+navbar:
+  type: inverse
 figures:
   dev: svglite::svglite
   dpi: 96
