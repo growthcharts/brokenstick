@@ -1,3 +1,9 @@
+destination: docs
+title: brokenstick
+url: https://stefvanbuuren.name/brokenstick
+template:
+  params:
+    bootswatch: flatly
 figures:
   dev: svglite::svglite
   dpi: 96
