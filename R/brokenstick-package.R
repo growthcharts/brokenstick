@@ -1,9 +1,13 @@
-#' @importFrom ggplot2 ggplot geom_line geom_point facet_wrap aes_string xlab ylab xlim ylim
+#' @importFrom ggplot2         aes_string facet_wrap geom_line geom_point
+#'                             ggplot xlab xlim ylab ylim
 #' @importFrom growthstandards geom_zband ly_zband
-#' @importFrom lme4 lmer fixef ranef VarCorr lmerControl
-#' @importFrom methods setGeneric setMethod
-#' @importFrom splines bs
-#' @importFrom stats approx as.formula na.omit predict fitted model.frame model.matrix na.exclude quantile var
+#' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
+#' @importFrom methods         setMethod setGeneric
+#' @importFrom splines         bs
+#' @importFrom stats           approx as.formula fitted model.frame
+#'                             model.matrix na.exclude na.omit
+#'                             predict quantile rgamma rnorm
+#'                             rWishart var
 NULL
 
 #' \pkg{brokenstick}: A package for irregular longitudinal data.
@@ -24,12 +28,11 @@ NULL
 #' \tabular{ll}{
 #'   \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
 #'   \code{predict()} \tab Obtain predictions from fitted model\cr
-#'   \code{export()} \tab Export estimates of the model}
+#'   }
 #' @docType package
 #' @name brokenstick-pkg
 #' @seealso \code{\link{brokenstick}},
-#' \code{\link{EB}},
-#' \code{\link{export}}, \code{\link{predict.brokenstick}}
+#' \code{\link{EB}}, \code{\link{predict.brokenstick}}
 #' @note
 #' Development of this package was kindly supported under the Healthy
 #' Birth, Growth and Development knowledge integration (HBGDki)

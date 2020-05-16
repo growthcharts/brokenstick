@@ -28,7 +28,7 @@ The main functions are:
 \tabular{ll}{
   \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
   \code{predict()} \tab Obtain predictions from fitted model\cr
-  \code{export()} \tab Export estimates of the model}
+  }
 }
 
 \references{
@@ -36,6 +36,5 @@ van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hal
 }
 \seealso{
 \code{\link{brokenstick}},
-\code{\link{EB}},
-\code{\link{export}}, \code{\link{predict.brokenstick}}
+\code{\link{EB}}, \code{\link{predict.brokenstick}}
 }

@@ -46,37 +46,6 @@
 #'@keywords datagen
 #'@export
 kr <- function(y, ry, x, type, wy = NULL, intercept = TRUE, ...) {
-  rwishart <- function(df, p = nrow(SqrtSigma), SqrtSigma = diag(p)) {
-    ## rwishart, written by Bill Venables
-    Z <- matrix(0, p, p)
-    diag(Z) <- sqrt(rchisq(p, df:(df - p + 1)))
-    if (p > 1) {
-      pseq <- seq_len(p - 1)
-      Z[rep(p * pseq, pseq) + unlist(lapply(pseq, seq))] <- rnorm(p * (p - 1)/2)
-    }
-    crossprod(Z %*% SqrtSigma)
-  }
-
-  force.chol <- function(x, warn = TRUE) {
-    z <- 0
-
-    repeat {
-      lambda <- 0.1 * z
-      XT <- x + diag(x = lambda, nrow = nrow(x))
-      XT <- (XT + t(XT))/2
-      s <- try(expr = chol(XT), silent = TRUE)
-      if (class(s) != "try-error")
-        break
-      z <- z + 1
-    }
-
-    attr(s, "forced") <- (z > 0)
-    if (warn && z > 0)
-      warning("Cholesky decomposition had to be forced", call. = FALSE)
-
-    return(s)
-  }
-
   symridge <- function(x, ridge = 0.0001, ...) {
     x <- (x + t(x))/2
     if (nrow(x) == 1L) return(x)
@@ -126,8 +95,10 @@ kr <- function(y, ry, x, type, wy = NULL, intercept = TRUE, ...) {
                                   chol(chol2inv(chol(symridge(inv.psi, ...)))/n.class))
 
     ## Draw psi
-    inv.psi <- rwishart(df = n.class - n.rc - 1,
-                        SqrtSigma = chol(chol2inv(chol(symridge(crossprod(t(t(bees) - mu)), ...)))))
+    #inv.psi <- rwishart(df = n.class - n.rc - 1,
+    #                    SqrtSigma = chol(chol2inv(chol(symridge(crossprod(t(t(bees) - mu)), ...)))))
+    inv.psi <- rWishart(n = 1, df = n.class - n.rc - 1,
+                        Sigma = chol2inv(chol(symridge(crossprod(t(t(bees) - mu)), ...))))[, , 1L]
 
     ## Draw sigma2
     inv.sigma2 <- rgamma(n.class, n.g/2 + 1/(2 * theta), scale = 2 * theta/(ss * theta + sigma2.0))
@@ -152,15 +123,7 @@ kr <- function(y, ry, x, type, wy = NULL, intercept = TRUE, ...) {
        n.iter = n.iter,
        wy = wy,
        n.class = n.class,
-       gf.full = gf.full,
-       gf = gf,
-       XG = XG,
-       X.SS = X.SS,
-       yg = yg,
-       n.g = n.g,
-       n.rc = n.rc,
        bees = bees,
-       ss = ss,
        mu = mu,
        inv.psi = inv.psi,
        inv.sigma2 = inv.sigma2,
