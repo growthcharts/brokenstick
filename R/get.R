@@ -20,8 +20,8 @@ get_knots <- function(object,
 
   what <- match.arg(what)
   if (inherits(object, "brokenstick")) {
-    knots <- object@knots
-    boundary <- object@boundary
+    knots <- object$knots
+    boundary <- object$boundary
   }
   if (inherits(object, "brokenstick_export")) {
     knots <- object$knots
@@ -54,9 +54,9 @@ get_xy <- function(object, ids = NULL) {
     return(NULL)
   }
   if (is.null(ids)) {
-    return(object@xy)
+    return(object$xy)
   }
-  return(object@xy[object@xy$subjid %in% ids, ])
+  return(object$xy[object$xy$subjid %in% ids, ])
 }
 
 #' Obtain the X model matrix from a broken stick model
@@ -75,11 +75,11 @@ get_X <- function(object, ids = NULL) {
     return(NULL)
   }
   if (is.null(ids)) {
-    return(model.matrix(object))
+    return(model.matrix(object$model))
   }
-  subjid <- model.frame(object)$subjid
+  subjid <- model.frame(object$model)$subjid
   idx <- subjid %in% ids
-  return(model.matrix(object)[idx, , drop = FALSE])
+  return(model.matrix(object$model)[idx, , drop = FALSE])
 }
 
 #' Obtain proportion of explained variance from a broken stick model

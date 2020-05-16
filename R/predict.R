@@ -284,11 +284,13 @@ predict_all <- function(object, at, output) {
     stop("object not of class brokenstick")
   }
 
+  model <- object$model
+
   # For everybody, prediction at the measured x
   if (at == "x") {
     r <- switch(output,
-      vector = fitted(object),
-      long = yhat2long(object, fitted(object), at = at),
+      vector = fitted(model),
+      long = yhat2long(object, fitted(object$model), at = at),
       broad = NULL
     )
     return(r)
@@ -296,7 +298,7 @@ predict_all <- function(object, at, output) {
 
   # For everybody, prediction at the knots
   if (at == "knots") {
-    yhat <- t(lme4::ranef(object)$subjid) + lme4::fixef(object)
+    yhat <- t(lme4::ranef(model)$subjid) + lme4::fixef(model)
     # repair removal of incomplete subjid's by lme4
     all_id <- unique(get_xy(object)$subjid)
     yh <- data.frame(subjid = colnames(yhat), t(yhat))
@@ -425,7 +427,7 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
 
   if (at == "both") {
     data <- get_xy(object)
-    yhat1 <- fitted(object)
+    yhat1 <- fitted(object$model)
     yhat2 <- predict_all(object, at = "knots", output = "broad")
     data1 <- data.frame(data,
       yhat = as.vector(yhat1),

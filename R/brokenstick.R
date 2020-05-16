@@ -1,36 +1,3 @@
-# brokenstick.R
-#
-
-setClass("brokenstick",
-  representation(
-    knots = "numeric",
-    boundary = "numeric",
-    degree = "numeric",
-    bs.call = "call",
-    xy = "data.frame"
-  ),
-  contains = "lmerMod"
-)
-
-# ==============================================================================
-# S4 print function for brokenstick object
-# ==============================================================================
-setGeneric("print")
-setMethod(
-  "print", signature(x = "brokenstick"),
-  function(x, ...) {
-    print_brokenstick(x, ...)
-  }
-)
-
-print_brokenstick <- function(x, ...) {
-  cat("broken stick model \n")
-  cat("knots: ", get_knots(x), "\n")
-  print(summary(x))
-  invisible(x)
-}
-
-
 #' Fit a broken stick model to irregular data
 #'
 #' The broken stick model models an irregularly observed series
@@ -108,42 +75,56 @@ brokenstick <- function(y, x, subjid,
   data <- data.frame(subjid = subjid, x = x, y = y, X)
 
   if (method == "lmer") {
-  pred <- paste("0 +", paste(colnames(X), collapse = " + "))
-  f <- as.formula(paste(
-    "y", "~", pred,
-    "+ (", pred, "| subjid)"
-  ))
-  fit <- lmer(f,
-    data = data,
-    control = control,
-    na.action = na.action,
-    ...
-  )
+    pred <- paste("0 +", paste(colnames(X), collapse = " + "))
+    f <- as.formula(paste(
+      "y", "~", pred,
+      "+ (", pred, "| subjid)"
+    ))
+    model <- lmer(f,
+                  data = data,
+                  control = control,
+                  na.action = na.action,
+                  ...
+    )
 
-  class(fit) <- "brokenstick"
-  fit@knots <- as.numeric(l$knots)
-  fit@boundary <- as.numeric(l$boundary)
-  fit@degree <- 1
-  fit@bs.call <- call
-  fit@xy <- data[, 1:3]
-  } else {# kr sampler
-    smp <- kr(y = data$y,
-              ry = !is.na(data$y),
-              x = data[, c("group", colnames(X))],
-              type = c(-2, rep(2, ncol(X))),
-              intercept = FALSE,
-              ...)
     fit <- list(
-      beta = smp$mu,
-      omega = solve(smp$inv.psi),
-      sigma2 = mean(1/smp$inv.sigma2),
-      sigma2j = 1/smp$inv.sigma2)
-    class(fit) <- "brokenstick"
-    fit@knots <- as.numeric(l$knots)
-    fit@boundary <- as.numeric(l$boundary)
-    fit@degree <- 1
-    fit@bs.call <- call
-    fit@xy <- data[, 1:3]
+      model = model,
+      knots = as.numeric(l$knots),
+      boundary = as.numeric(l$boundary),
+      degree = 1,
+      bs.call = call,
+      xy = data[, 1:3]
+    )
+    class(fit) <- c("brokenstick")
   }
-  return(fit)
+  else
+  {# kr sampler
+    model <- kr(y = data$y,
+                ry = !is.na(data$y),
+                x = data[, c("group", colnames(X))],
+                type = c(-2, rep(2, ncol(X))),
+                intercept = FALSE,
+                ...)
+    fit <- list(
+      model = NA,
+      beta = model$mu,
+      omega = solve(model$inv.psi),
+      sigma2 = mean(1/model$inv.sigma2),
+      sigma2j = 1/model$inv.sigma2,
+      knots = as.numeric(l$knots),
+      boundary = as.numeric(l$boundary),
+      degree = 1,
+      bs.call = call,
+      xy = data[, 1:3])
+    class(fit) <- "brokenstick"
+  }
+  fit
 }
+
+print.brokenstick <- function(x, ...) {
+  cat("broken stick model \n")
+  cat("knots: ", get_knots(x), "\n")
+  print(summary(x))
+  invisible(x)
+}
+

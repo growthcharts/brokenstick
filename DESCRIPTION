@@ -17,7 +17,6 @@ Imports:
     ggplot2,
     growthstandards,
     lme4,
-    methods,
     splines
 Suggests:
     dplyr,

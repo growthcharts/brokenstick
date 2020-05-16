@@ -4,10 +4,10 @@
 \alias{export}
 \title{Export the estimates of a fitted brokenstick model}
 \usage{
-export(model)
+export(object)
 }
 \arguments{
-\item{model}{An object of class \code{brokenstick} or class
+\item{object}{An object of class \code{brokenstick} or class
 \code{brokenstick_export}}
 }
 \value{

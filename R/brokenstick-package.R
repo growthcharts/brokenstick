@@ -2,7 +2,6 @@
 #'                             ggplot xlab xlim ylab ylim
 #' @importFrom growthstandards geom_zband ly_zband
 #' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
-#' @importFrom methods         setMethod setGeneric
 #' @importFrom splines         bs
 #' @importFrom stats           approx as.formula fitted model.frame
 #'                             model.matrix na.exclude na.omit
