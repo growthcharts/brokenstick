@@ -11,6 +11,7 @@ brokenstick(
   k = NULL,
   knots = NULL,
   boundary = NULL,
+  method = c("lmer", "kr"),
   control = lmerControl(check.nobs.vs.nRE = "warning"),
   na.action = na.exclude,
   ...
@@ -43,11 +44,15 @@ knot. This \code{boundary} setting is passed to \code{splines::bs()} as the
 is taken. If \code{knots} is specified, then the boundary range is extended
 to include at least \code{range{knots}}.}
 
-\item{control}{A function to control fitting of \code{lmer()}. The default
+\item{method}{Either \code{"kr"} or \code{"lmer"}}
+
+\item{control}{A list with argument that can be used to control the
+fitting of \code{lmer()}. The default
 is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 fatal errors with respect the number of parameters into warnings.}
 
-\item{na.action}{The function to call for the \code{na.action} argument in \code{lmer()}. The default is \code{na.exclude}.}
+\item{na.action}{The function to call for the \code{na.action} argument
+in \code{lmer()}. The default is \code{na.exclude}.}
 
 \item{\dots}{Additional arguments passed down to \code{lmer()}
 (e.g. to specify additional \code{lmer()} options.}

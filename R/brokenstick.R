@@ -72,10 +72,13 @@ print_brokenstick <- function(x, ...) {
 #' \code{Boundary.knots} argument. If not specified, then the range of \code{x}
 #' is taken. If \code{knots} is specified, then the boundary range is extended
 #' to include at least \code{range{knots}}.
-#' @param control A function to control fitting of \code{lmer()}. The default
+#' @param method Either \code{"kr"} or \code{"lmer"}
+#' @param control A list with argument that can be used to control the
+#' fitting of \code{lmer()}. The default
 #' is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 #' fatal errors with respect the number of parameters into warnings.
-#' @param na.action The function to call for the \code{na.action} argument in \code{lmer()}. The default is \code{na.exclude}.
+#' @param na.action The function to call for the \code{na.action} argument
+#' in \code{lmer()}. The default is \code{na.exclude}.
 #' @param \dots Additional arguments passed down to \code{lmer()}
 #' (e.g. to specify additional \code{lmer()} options.
 #' @return A fitted model of class \code{brokenstick}, which extends the
@@ -93,16 +96,19 @@ brokenstick <- function(y, x, subjid,
                         k = NULL,
                         knots = NULL,
                         boundary = NULL,
+                        method = c("lmer", "kr"),
                         control = lmerControl(check.nobs.vs.nRE = "warning"),
                         na.action = na.exclude,
                         ...) {
   call <- match.call()
+  method <- match.arg(method)
 
   l <- calculate_knots(x, k, knots, boundary)
   X <- make_basis(x = x, knots = l$knots, boundary = l$boundary)
-
-  pred <- paste("0 +", paste(colnames(X), collapse = " + "))
   data <- data.frame(subjid = subjid, x = x, y = y, X)
+
+  if (method == "lmer") {
+  pred <- paste("0 +", paste(colnames(X), collapse = " + "))
   f <- as.formula(paste(
     "y", "~", pred,
     "+ (", pred, "| subjid)"
@@ -120,5 +126,24 @@ brokenstick <- function(y, x, subjid,
   fit@degree <- 1
   fit@bs.call <- call
   fit@xy <- data[, 1:3]
+  } else {# kr sampler
+    smp <- kr(y = data$y,
+              ry = !is.na(data$y),
+              x = data[, c("group", colnames(X))],
+              type = c(-2, rep(2, ncol(X))),
+              intercept = FALSE,
+              ...)
+    fit <- list(
+      beta = smp$mu,
+      omega = solve(smp$inv.psi),
+      sigma2 = mean(1/smp$inv.sigma2),
+      sigma2j = 1/smp$inv.sigma2)
+    class(fit) <- "brokenstick"
+    fit@knots <- as.numeric(l$knots)
+    fit@boundary <- as.numeric(l$boundary)
+    fit@degree <- 1
+    fit@bs.call <- call
+    fit@xy <- data[, 1:3]
+  }
   return(fit)
 }
