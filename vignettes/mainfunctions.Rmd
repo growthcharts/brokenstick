@@ -83,9 +83,13 @@ The fixed effects correspond to the mean of sample of children in the data, wher
 
 The plot shows that the two-line model is fairly crude. We now refine the model in the first two years by adding a knot for each age at which a visit was scheduled. This model can be run as
 
-```{r fit9, cache = TRUE, warning = FALSE}
+```{r fit9, cache = TRUE, warning = FALSE, eval = FALSE}
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 fit9 <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid, knots = knots)
+```
+
+```{r echo = FALSE}
+fit9 <- brokenstick::fit_200
 ```
 
 The model contains 11 random effects (10 visits + 1 end knot). This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. In general, these warnings do not affect the quality of the solution.
