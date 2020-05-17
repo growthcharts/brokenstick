@@ -11,6 +11,7 @@
 #' requires linear splines, so the default is \code{degree = 1}.
 #' @param warn a logical indicating whether warnings from \code{splines::bs()}
 #' should be given.
+#' @param knotnames Should the column names be the knots?
 #' @return A matrix with \code{length(x)} rows and \code{length(breaks)}
 #' columns, with some extra attributes described by \code{bs()}.
 #' @author Stef van Buuren, 2017
@@ -21,11 +22,12 @@ make_basis <- function(x,
                        knots = NULL,
                        boundary = range(x),
                        degree = 1,
-                       warn = TRUE) {
+                       warn = TRUE,
+                       knotnames = FALSE) {
 
   # safety check: remove lower boundary knot from knots to be compatiable
   # with models fitted prior to version 0.53
-  knots <- knots[knots > boundary[1] & knots < boundary[2]]
+  knots <- knots[knots > boundary[1L] & knots < boundary[2L]]
 
   # trick to evade error from bs() if x is fully NA
   padx <- all(is.na(x))
@@ -42,16 +44,17 @@ make_basis <- function(x,
     suppressWarnings(
       X <- splines::bs(
         x = x,
-        knots = c(boundary[1], knots),
+        knots = c(boundary[1L], knots),
         Boundary.knots = boundary,
         degree = degree
       )
     )
   }
-  colnames(X) <- paste0("x", 1:ncol(X))
+  if (!knotnames) colnames(X) <- paste0("x", 1:ncol(X))
+  else colnames(X) <- as.character(sort(unique(c(boundary, knots))))
 
   # restore original if padded
-  if (padx) X <- X[-1, , drop = FALSE]
+  if (padx) X <- X[-1L, , drop = FALSE]
 
   return(X)
 }

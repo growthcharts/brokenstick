@@ -4,7 +4,14 @@
 \alias{make_basis}
 \title{Create linear splines basis}
 \usage{
-make_basis(x, knots = NULL, boundary = range(x), degree = 1, warn = TRUE)
+make_basis(
+  x,
+  knots = NULL,
+  boundary = range(x),
+  degree = 1,
+  warn = TRUE,
+  knotnames = FALSE
+)
 }
 \arguments{
 \item{x}{a vector of ages at which the basis function are needed}
@@ -18,6 +25,8 @@ requires linear splines, so the default is \code{degree = 1}.}
 
 \item{warn}{a logical indicating whether warnings from \code{splines::bs()}
 should be given.}
+
+\item{knotnames}{Should the column names be the knots?}
 }
 \value{
 A matrix with \code{length(x)} rows and \code{length(breaks)}

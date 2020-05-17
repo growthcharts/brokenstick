@@ -35,16 +35,10 @@
 #' variance components models with heterogeneous within-group variance. Journal
 #' of Educational and Behavioral Statistics, 23(2), 93--116.
 #'
-#' Van Buuren, S., Groothuis-Oudshoorn, K. (2011). \code{mice}: Multivariate
-#' Imputation by Chained Equations in \code{R}. \emph{Journal of Statistical
-#' Software}, \bold{45}(3), 1-67. \url{https://www.jstatsoft.org/v45/i03/}
-#'
 #' Van Buuren, S. (2011) Multiple imputation of multilevel data. In Hox, J.J.
 #' and and Roberts, J.K. (Eds.), \emph{The Handbook of Advanced Multilevel
 #' Analysis}, Chapter 10, pp. 173--196. Milton Park, UK: Routledge.
-#' @family univariate-2l
-#' @keywords datagen
-kr <- function(y, ry, x, type, wy = NULL, intercept = TRUE, ...) {
+kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE, ...) {
   symridge <- function(x, ridge = 0.0001, ...) {
     x <- (x + t(x)) / 2
     if (nrow(x) == 1L) {
