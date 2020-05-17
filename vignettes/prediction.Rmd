@@ -87,12 +87,16 @@ Note that this is not the only way to set knots. Depending of the scientific que
 
 The `brokenstick()` function performs the actual model fitting, e.g., 
 
-```{r cache = TRUE}
-fit <- with(data, brokenstick(y = hgt.z, x = data$age, subjid = subjid,
+```{r cache = TRUE, eval = FALSE}
+fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = subjid,
                               knots = knots, boundary = boundary))
 ```
 
-The result is stored in the `fit` object, which has S4 class `brokenstick`. It extends class `lmerMod` with additional attributes `knots`, `boundary` and `degree`. By design, the `brokenstick()` function only supports a one spline degree, the straight line model.
+```{r echo = FALSE}
+fit <- brokenstick::fit_200
+```
+
+The result is stored in the `fit` object, which has S3 class `brokenstick`. It contains a component `model` with the fitted model, as well as additional attributes like `knots` and `boundary`.
 
 Behind the scenes, the `brokenstick()` function calls `lme4::lmer()` for performing the calculations. Depending on the number of knots, the fitting algorithm may issue warnings about the number of random effect (too high), or reports the random-effects parameters or residual variance are probably unidentifiable. Despite these warnings, the estimated random effects are still useable, and in fact a good summary of the individual trajectories. Alternatively, the user may wish to simplify the model by removing knots. Above 10 knots, fitting becomes hard. At the least, the user should check the fitted object for plausibility, for example by plotting observed and modelled trajectories together.
 
@@ -101,7 +105,8 @@ Behind the scenes, the `brokenstick()` function calls `lme4::lmer()` for perform
 Let us first extract the fixed effects and the corresponding knot locations.
 
 ```{r}
-round(lme4::fixef(fit), 2)
+model <- fit$model
+head(round(lme4::fixef(model), 2))
 round(get_knots(fit), 2)
 ```
 
@@ -110,8 +115,8 @@ The fixed effects correspond to the mean of sample of children in the data. The 
 ```{r}
 figure(xlab = "Age (years)", ylab = "Height (SDS)", title = "Mean trajectory (n = 50)") %>%
   ly_zband(x = seq(0, 2.2, 0.2), z = -c(2.5,2,1,0)) %>%
-  ly_points(get_knots(fit, "droplast"), lme4::fixef(fit), hover = c(get_knots(fit), lme4::fixef(fit))) %>%
-  ly_lines(get_knots(fit, "droplast"), lme4::fixef(fit)) %>% 
+  ly_points(get_knots(fit, "droplast"), lme4::fixef(model), hover = c(get_knots(fit), lme4::fixef(model))) %>%
+  ly_lines(get_knots(fit, "droplast"), lme4::fixef(model)) %>% 
   x_range(c(-0.1, 2.3))
 ```
 
