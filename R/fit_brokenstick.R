@@ -24,7 +24,7 @@
 #' placed on the values of \code{x}. Be careful with values outside the range
 #' of the data since this extends the \code{boundary} knots (see below) beyond
 #' the data range.
-#' @param Boundary.knots optional, but recommended. Numerical vector of length 2 with the minimum and maximum
+#' @param boundary optional, but recommended. Numerical vector of length 2 with the minimum and maximum
 #' knot. This \code{boundary} setting is passed to \code{splines::bs()} as the
 #' \code{Boundary.knots} argument. If not specified, then the range of \code{x}
 #' is taken. If \code{knots} is specified, then the boundary range is extended
@@ -56,10 +56,10 @@
 fit_brokenstick <- function(data,
                             formula,
                             knots = NULL,
-                            Boundary.knots = NULL,
+                            boundary = NULL,
                             k = NULL,
-                            subset,
-                            weights,
+                            subset = NULL,
+                            weights = NULL,
                             na.action = na.exclude,
                             method = c("lmer", "kr", "model.frame"),
                             control = list(),
@@ -68,13 +68,17 @@ fit_brokenstick <- function(data,
   method <- match.arg(method)
 
   # parse formula
+  mt <- match(c("formula", "data", "subset", "weights", "na.action",
+                "offset"), names(mc), 0L)
+  mc <- mc[c(1L, mt)]
   mc[[1]] <- quote(lme4::lFormula)
   lmod <- eval(mc, parent.frame(1L))
   if (method == "model.frame")
     return(lmod)
   nm <- names(lmod$fr)
 
-  # define data
+  # redefine data with B-splines
+  data <- lmod$fr
   y_name <- nm[1]
   x_name <- nm[2]
   z_name <- nm[length(nm)]
@@ -82,38 +86,44 @@ fit_brokenstick <- function(data,
   x <- data[, x_name, drop = TRUE]
   z <- data[, z_name, drop = TRUE]
 
-  l <- calculate_knots(x, k, knots, Boundary.knots)
+  l <- calculate_knots(x, k, knots, boundary)
   X <- make_basis(x = x, knots = l$knots, boundary = l$boundary,
                   knotnames = TRUE)
   colnames(X) <- paste(x_name, colnames(X), sep = "_")
-  df <- data.frame(y, x, z, X, stringsAsFactors = FALSE)
-  names(df) <- c(y_name, x_name, z_name, colnames(X))
+  data <- data.frame(y, x, z, X, stringsAsFactors = FALSE)
+  names(data) <- c(y_name, x_name, z_name, colnames(X))
 
   pred <- paste("0 +", paste(colnames(X), collapse = " + "))
-  f <- as.formula(paste(y_name, "~", pred, "+ (", pred, ") |", z_name))
+  fm <- as.formula(paste(y_name, "~", pred, "+ (", pred, "|", z_name, ")"))
 
   if (method == "lmer") {
     if (!length(control))
       control <- lmerControl(check.nobs.vs.nRE = "warning")
-    model <- lmer(data = df,
-                  formula = f,
+    model <- lmer(data = data,
+                  formula = fm,
                   control = control,
+                  subset = subset,
+                  weights = weights,
                   na.action = na.action,
                   ...)
+    df <- as.data.frame(VarCorr(model))
     fit <- list(
+      call = cl,
+      data = data,
       model = model,
       knots = as.numeric(l$knots),
       boundary = as.numeric(l$boundary),
-      degree = 1,
-      call = cl,
-      xy = data[, 1:3]
+      degree = 1L,
+      beta = lme4::fixef(model),
+      omega = as.matrix(as.data.frame(VarCorr(model)[[z_name]])),
+      sigma2 = df[df$grp == "Residual", "vcov"]
     )
     class(fit) <- c("brokenstick")
   }
 
   if (method == "kr") {
-    model <- kr(data = df,
-                formula = f,
+    model <- kr(data = data,
+                formula = fm,
                 control = control,
                 na.action = na.action,
                 ...)
@@ -125,17 +135,19 @@ fit_brokenstick <- function(data,
       sigma2j = 1/model$inv.sigma2,
       knots = as.numeric(l$knots),
       boundary = as.numeric(l$boundary),
-      degree = 1,
+      degree = 1L,
       call = cl,
-      xy = data[, 1:3])
+      xy = df)
     class(fit) <- "brokenstick"
   }
   fit
 }
 
+#' @export
 print.brokenstick <- function(x, ...) {
-  cat("broken stick model \n")
-  cat("knots: ", get_knots(x), "\n")
-  print(summary(x))
+  cat("Broken stick model - knots:",
+      get_knots(x, "knots"), "(inner)",
+      get_knots(x, "boundary"), "(outer)\n")
+  print(x$model)
   invisible(x)
 }

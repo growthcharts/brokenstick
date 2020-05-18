@@ -16,7 +16,7 @@ export <- function(object) {
   }
 
   if (!inherits(object, "brokenstick")) {
-    stop("Argument 'model' expected as class 'brokenstick'")
+    stop("Argument 'object' expected as class 'brokenstick'")
   }
 
   model <- object$model

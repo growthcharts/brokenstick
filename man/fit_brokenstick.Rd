@@ -8,10 +8,10 @@ fit_brokenstick(
   data,
   formula,
   knots = NULL,
-  Boundary.knots = NULL,
+  boundary = NULL,
   k = NULL,
-  subset,
-  weights,
+  subset = NULL,
+  weights = NULL,
   na.action = na.exclude,
   method = c("lmer", "kr", "model.frame"),
   control = list(),
@@ -31,7 +31,7 @@ placed on the values of \code{x}. Be careful with values outside the range
 of the data since this extends the \code{boundary} knots (see below) beyond
 the data range.}
 
-\item{Boundary.knots}{optional, but recommended. Numerical vector of length 2 with the minimum and maximum
+\item{boundary}{optional, but recommended. Numerical vector of length 2 with the minimum and maximum
 knot. This \code{boundary} setting is passed to \code{splines::bs()} as the
 \code{Boundary.knots} argument. If not specified, then the range of \code{x}
 is taken. If \code{knots} is specified, then the boundary range is extended
