@@ -19,25 +19,17 @@ export <- function(object) {
     stop("Argument 'object' expected as class 'brokenstick'")
   }
 
-  model <- object$model
-
-  # extract estimates from merMod object
-  beta <- lme4::fixef(model)
-  # get variance of RE, Q*Q
-  omega <- as.matrix(as.data.frame(VarCorr(model)[[object$names$z]]))
-  df <- as.data.frame(VarCorr(model))
-  sigma2 <- df[df$grp == "Residual", "vcov"]
-
   z <- list(
-    beta = beta,
-    omega = omega,
-    sigma2 = sigma2,
-    sigma2j = NA,
+    beta = object$beta,
+    omega = object$omega,
+    sigma2j = object$sigma2j,
+    sigma2 = object$sigma2,
     knots = object$knots,
     boundary = object$boundary,
-    degree = object$degree
+    degree = object$degree,
+    names = object$names
   )
 
   class(z) <- "brokenstick_export"
-  return(z)
+  z
 }

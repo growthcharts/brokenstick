@@ -131,16 +131,19 @@ fit_brokenstick <- function(data,
                 na.action = na.action,
                 ...)
     fit <- list(
-      model = NA,
-      beta = model$mu,
-      omega = solve(model$inv.psi),
-      sigma2 = mean(1/model$inv.sigma2),
-      sigma2j = 1/model$inv.sigma2,
+      call = cl,
+      data = lmod$fr,
+      formula = lmod$formula,
+      names = list(y = y_name, x = x_name, z = z_name),
       knots = as.numeric(l$knots),
       boundary = as.numeric(l$boundary),
       degree = 1L,
-      call = cl,
-      xy = df)
+      model = NA,
+      beta = model$mu,
+      omega = solve(model$inv.psi),
+      sigma2j = 1/model$inv.sigma2m,
+      sigma2 = mean(1/model$inv.sigma2)
+      )
     class(fit) <- "brokenstick"
   }
   fit
