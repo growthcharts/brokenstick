@@ -39,24 +39,25 @@ get_knots <- function(object,
   return(result)
 }
 
-#' Obtain the x and y data from a broken stick model
+#' Obtain the data from a broken stick model
 #'
 #' @param object An object of class \code{brokenstick}
 #' @param ids A vector specifying the id's of the persons. If omitted,
 #' all id's are included.
-#' @return A data frame with subjid, x and y. The result is \code{NULL}
+#' @return A data frame with x, y and z. The result is \code{NULL}
 #' if \code{object} is not of class \code{brokenstick}.
 #' @examples
-#' get_xy(fit_200, ids = c(10001, 10002))
+#' get_data(fit_200, ids = c(10001, 10002))
 #' @export
-get_xy <- function(object, ids = NULL) {
+get_data <- function(object, ids = NULL) {
   if (!inherits(object, "brokenstick")) {
     return(NULL)
   }
-  if (is.null(ids)) {
-    return(object$xy)
+  mf <- model.frame(object)
+  if (!is.null(ids)) {
+    mf <- mf[mf[[object$names$z]] %in% ids, ]
   }
-  return(object$xy[object$xy$subjid %in% ids, ])
+  mf
 }
 
 #' Obtain the X model matrix from a broken stick model
@@ -77,8 +78,8 @@ get_X <- function(object, ids = NULL) {
   if (is.null(ids)) {
     return(model.matrix(object$model))
   }
-  subjid <- model.frame(object$model)$subjid
-  idx <- subjid %in% ids
+  grp <- model.frame(object$model)[[object$names$z]]
+  idx <- grp %in% ids
   return(model.matrix(object$model)[idx, , drop = FALSE])
 }
 
