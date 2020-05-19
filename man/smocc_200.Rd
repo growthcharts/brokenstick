@@ -7,7 +7,7 @@
 \format{
 A tibble with 1940 rows and 7 columns:
 \describe{
-\item{subjid}{ID, unique \code{id} of each child (numeric)}
+\item{id}{ID, unique \code{id} of each child (numeric)}
 \item{age}{Decimal age, 0-2.12 years (numeric)}
 \item{sex}{Sex, \code{"male"} or \code{"female"} (character)}
 \item{ga}{Gestational age, completed weeks (numeric)}

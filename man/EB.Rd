@@ -36,7 +36,7 @@ The current implementation does not provide prediction errors.
 #
 # EB estimate random effect for child id 10001
 model <- export(fit_200)
-data <- get_xy(fit_200, ids = 10001)
+data <- get_data(fit_200, ids = 10001)
 y <- data$y
 X <- make_basis(data$x,
   knots = model$knots,

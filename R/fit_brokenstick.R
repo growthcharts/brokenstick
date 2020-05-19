@@ -50,7 +50,7 @@
 #' @examples
 #' data <- brokenstick::smocc_200
 #' # fit <- fit_brokenstick(data, hgt.z ~ age | subjid, 0:2)
-#' mf <- fit_brokenstick(smocc_200, hgt.z ~ age | subjid, knots = 0:2)
+#' fit <- fit_brokenstick(smocc_200, hgt.z ~ age | subjid, knots = 0:2)
 #'
 #' @export
 fit_brokenstick <- function(data,
@@ -75,31 +75,31 @@ fit_brokenstick <- function(data,
   lmod <- eval(mc, parent.frame(1L))
   if (method == "model.frame")
     return(lmod)
-  nm <- names(lmod$fr)
 
-  # redefine data with B-splines
-  data <- lmod$fr
-  y_name <- nm[1]
-  x_name <- nm[2]
-  z_name <- nm[length(nm)]
-  y <- data[, y_name, drop = TRUE]
-  x <- data[, x_name, drop = TRUE]
-  z <- data[, z_name, drop = TRUE]
+  # extract just three variable names
+  y_name <- names(lmod$fr)[1L]
+  x_name <- names(lmod$fr)[2L]
+  z_name <- names(lmod$fr)[length(names(lmod$fr))]
 
+  # pad data with the B-splines
+  x <- lmod$fr[, x_name, drop = TRUE]
   l <- calculate_knots(x, k, knots, boundary)
   X <- make_basis(x = x, knots = l$knots, boundary = l$boundary,
-                  knotnames = TRUE)
-  colnames(X) <- paste(x_name, colnames(X), sep = "_")
-  data <- data.frame(y, x, z, X, stringsAsFactors = FALSE)
-  names(data) <- c(y_name, x_name, z_name, colnames(X))
+                  knotnames = TRUE, x_name = x_name)
+  data_pad <- data.frame(lmod$fr[, c(y_name, x_name, z_name)],
+                         X,
+                         stringsAsFactors = FALSE)
+  names(data_pad) <- c(y_name, x_name, z_name, colnames(X))
 
+  # create the formula
   pred <- paste("0 +", paste(colnames(X), collapse = " + "))
   fm <- as.formula(paste(y_name, "~", pred, "+ (", pred, "|", z_name, ")"))
 
+  # and go..
   if (method == "lmer") {
     if (!length(control))
       control <- lmerControl(check.nobs.vs.nRE = "warning")
-    model <- lmer(data = data,
+    model <- lmer(data = data_pad,
                   formula = fm,
                   control = control,
                   subset = subset,
@@ -109,11 +109,13 @@ fit_brokenstick <- function(data,
     df <- as.data.frame(VarCorr(model))
     fit <- list(
       call = cl,
-      data = data,
-      model = model,
+      data = lmod$fr,
+      formula = lmod$formula,
+      names = list(y = y_name, x = x_name, z = z_name),
       knots = as.numeric(l$knots),
       boundary = as.numeric(l$boundary),
       degree = 1L,
+      model = model,
       beta = lme4::fixef(model),
       omega = as.matrix(as.data.frame(VarCorr(model)[[z_name]])),
       sigma2j = NA,
@@ -123,7 +125,7 @@ fit_brokenstick <- function(data,
   }
 
   if (method == "kr") {
-    model <- kr(data = data,
+    model <- kr(data = data_pad,
                 formula = fm,
                 control = control,
                 na.action = na.action,
@@ -142,21 +144,4 @@ fit_brokenstick <- function(data,
     class(fit) <- "brokenstick"
   }
   fit
-}
-
-#' @export
-print.brokenstick <- function(x, ...) {
-  cat(paste0("Class: brokenstick (", class(x$model),")\n"))
-  cat("Knots:", get_knots(x, "all"), "\n")
-  cat("Means:", x$beta, "\n")
-  cat("Variance-covariance matrix:\n")
-  print(x$omega)
-  if (!is.na(x$sigma2j)) cat("Cluster residuals: ", x$sigma2j, "\n")
-  cat("Residual variance: ", x$sigma2, "\n")
-  invisible(x)
-}
-
-#' @export
-fitted.brokenstick <- function(x, ...) {
-  predict(x, at = "knots", output = "broad")
 }

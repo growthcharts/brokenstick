@@ -3,7 +3,7 @@ library(brokenstick)
 context("predict.brokenstick()")
 
 obj <- fit_200
-data <- get_xy(obj)
+data <- get_data(obj)
 n <- nrow(data)
 m <- length(unique(data$subjid))
 k <- length(get_knots(obj))

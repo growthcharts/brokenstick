@@ -10,19 +10,15 @@
 #' @family brokenstick
 #' @export
 fitted.brokenstick <- function(object, predict_NA = TRUE, ...) {
+
   # deal with standard case through lme4
-  class(object) <- "merMod"
-  yhat_lme4 <- fitted(object, ...)
-  if (!(predict_NA)) {
+  model <- object$model
+  yhat_lme4 <- fitted(model, ...)
+  if (!(predict_NA && any(is.na(yhat_lme4))))
     return(yhat_lme4)
-  }
-  if (!any(is.na(yhat_lme4))) {
-    return(yhat_lme4)
-  }
 
   # prepare for re-prediction
-  class(object) <- "brokenstick"
-  xy <- cbind(get_xy(object), lme4 = yhat_lme4)
+  xy <- cbind(get_data(object), lme4 = yhat_lme4)
   if (!any(is.na(xy$y))) {
     return(yhat_lme4)
   }
@@ -43,3 +39,8 @@ fitted.brokenstick <- function(object, predict_NA = TRUE, ...) {
   }
   return(unlist(result))
 }
+
+# #' @export
+#fitted.brokenstick <- function(x, ...) {
+#  predict(x, at = "knots", output = "broad")
+#}

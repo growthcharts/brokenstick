@@ -300,7 +300,7 @@ predict_all <- function(object, at, output) {
   if (at == "knots") {
     yhat <- t(lme4::ranef(model)$subjid) + lme4::fixef(model)
     # repair removal of incomplete subjid's by lme4
-    all_id <- unique(get_xy(object)$subjid)
+    all_id <- unique(get_data(object)[[object$names$z]])
     yh <- data.frame(subjid = colnames(yhat), t(yhat))
     xh <- data.frame(subjid = all_id)
     merged <- merge(xh, yh, by = "subjid", all.x = TRUE)
@@ -344,14 +344,14 @@ predict_all_atx <- function(object, x,
 
   # recreate the original data
   brk <- get_knots(object)
-  data1 <- data.frame(get_xy(object),
+  data1 <- data.frame(get_data(object),
     knot = FALSE
   )
 
   # construct supplemental data
   grd <- expand.grid(
     x = x, # x: new break ages
-    subjid = unique(get_xy(object)$subjid)
+    subjid = unique(get_data(object)[[object$names$z]])
   )
   data2 <- data.frame(
     subjid = grd$subjid,
@@ -401,7 +401,7 @@ predict_all_atx <- function(object, x,
 yhat2long <- function(object, yhat = NULL, at = "x") {
   brk <- get_knots(object)
   if (at == "x") {
-    data <- get_xy(object)
+    data <- get_data(object)
     result <- data.frame(data,
       yhat = as.vector(yhat),
       knot = FALSE
@@ -412,7 +412,7 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
   if (at == "knots") {
     grd <- expand.grid(
       x = brk,
-      subjid = unique(get_xy(object)$subjid)
+      subjid = unique(get_data(object)[[object$names$z]])
     )
     result <- data.frame(
       subjid = grd$subjid,
@@ -426,7 +426,7 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
   }
 
   if (at == "both") {
-    data <- get_xy(object)
+    data <- get_data(object)
     yhat1 <- fitted(object$model)
     yhat2 <- predict_all(object, at = "knots", output = "broad")
     data1 <- data.frame(data,
@@ -435,7 +435,7 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
     )
     grd <- expand.grid(
       x = brk,
-      subjid = unique(get_xy(object)$subjid)
+      subjid = unique(get_data(object)[[object$names$z]])
     )
     data2 <- data.frame(
       subjid = grd$subjid,
@@ -469,7 +469,7 @@ predict_atx_experimental <- function(object, x, ids = NULL,
   export <- export(object)
 
   # recreate the original data for ids subset
-  data1 <- data.frame(get_xy(object, ids = ids), knot = FALSE)
+  data1 <- data.frame(get_data(object, ids = ids), knot = FALSE)
 
   # simple loop over subjid
   data2 <- split(data1, f = data1$subjid)
@@ -512,8 +512,8 @@ predict_ids <- function(object, ids = NULL, at = "x", output = "long") {
   # Prepare to call predict.brokenstick_export() for selected ids
   exp <- export(object)
   knots <- get_knots(object)
-  data <- get_xy(object, ids = ids)
-  data <- split(data, data$subjid, drop = TRUE)
+  data <- get_data(object, ids = ids)
+  data <- split(data, data[[object$names$z]], drop = TRUE)
   result <- vector("list", length(data))
   subjids <- names(result) <- names(data)
 
@@ -571,8 +571,8 @@ predict_ids_atx <- function(object, x, ids = NULL, at = "x", output = "long") {
   # Prepare to call predict.brokenstick_export() for selected ids
   knots <- get_knots(object)
   exp <- export(object)
-  data <- get_xy(object, ids = ids)
-  data <- split(data, data$subjid, drop = TRUE)
+  data <- get_data(object, ids = ids)
+  data <- split(data, data[[object$names$z]], drop = TRUE)
   result <- vector("list", length(data))
   subjids <- names(result) <- names(data)
 
