@@ -51,10 +51,10 @@
 #' @return A fitted model of class \code{brokenstick}, which extends the
 #'  class \code{lmerMod}
 #' @examples
-#' data <- brokenstick::smocc_200
+#' #data <- brokenstick::smocc_200
 #'
 #' # fit with implicit boundary c(0, 3)
-#' fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = subjid, knots = 0:3))
+#' # fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = id, knots = 0:3))
 #' @note
 #' The \code{storeX} and \code{degree} arguments have been deprecated in
 #' version 0.54.
@@ -67,6 +67,8 @@ brokenstick <- function(y, x, subjid,
                         control = lmerControl(check.nobs.vs.nRE = "warning"),
                         na.action = na.exclude,
                         ...) {
+  .Deprecated("fit_brokenstick")
+
   call <- match.call()
   method <- match.arg(method)
 

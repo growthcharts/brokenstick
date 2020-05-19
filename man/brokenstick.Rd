@@ -86,8 +86,8 @@ The \code{storeX} and \code{degree} arguments have been deprecated in
 version 0.54.
 }
 \examples{
-data <- brokenstick::smocc_200
+#data <- brokenstick::smocc_200
 
 # fit with implicit boundary c(0, 3)
-fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = subjid, knots = 0:3))
+# fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = id, knots = 0:3))
 }
