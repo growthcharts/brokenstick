@@ -116,6 +116,7 @@ fit_brokenstick <- function(data,
       degree = 1L,
       beta = lme4::fixef(model),
       omega = as.matrix(as.data.frame(VarCorr(model)[[z_name]])),
+      sigma2j = NA,
       sigma2 = df[df$grp == "Residual", "vcov"]
     )
     class(fit) <- c("brokenstick")
@@ -145,9 +146,17 @@ fit_brokenstick <- function(data,
 
 #' @export
 print.brokenstick <- function(x, ...) {
-  cat("Broken stick model - knots:",
-      get_knots(x, "knots"), "(inner)",
-      get_knots(x, "boundary"), "(outer)\n")
-  print(x$model)
+  cat(paste0("Class: brokenstick (", class(x$model),")\n"))
+  cat("Knots:", get_knots(x, "all"), "\n")
+  cat("Means:", x$beta, "\n")
+  cat("Variance-covariance matrix:\n")
+  print(x$omega)
+  if (!is.na(x$sigma2j)) cat("Cluster residuals: ", x$sigma2j, "\n")
+  cat("Residual variance: ", x$sigma2, "\n")
   invisible(x)
+}
+
+#' @export
+fitted.brokenstick <- function(x, ...) {
+  predict(x, at = "knots", output = "broad")
 }
