@@ -50,7 +50,7 @@
 #' @examples
 #' data <- brokenstick::smocc_200
 #' # fit <- fit_brokenstick(data, hgt.z ~ age | subjid, 0:2)
-#' fit <- fit_brokenstick(smocc_200, hgt.z ~ age | subjid, knots = 0:2)
+#' fit <- fit_brokenstick(smocc_200, hgt.z ~ age | id, knots = 0:2)
 #'
 #' @export
 fit_brokenstick <- function(data,

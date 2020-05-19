@@ -298,12 +298,12 @@ predict_all <- function(object, at, output) {
 
   # For everybody, prediction at the knots
   if (at == "knots") {
-    yhat <- t(lme4::ranef(model)$subjid) + lme4::fixef(model)
+    yhat <- t(lme4::ranef(model)[[object$names$z]]) + lme4::fixef(model)
     # repair removal of incomplete subjid's by lme4
     all_id <- unique(get_data(object)[[object$names$z]])
-    yh <- data.frame(subjid = colnames(yhat), t(yhat))
-    xh <- data.frame(subjid = all_id)
-    merged <- merge(xh, yh, by = "subjid", all.x = TRUE)
+    yh <- data.frame(z = colnames(yhat), t(yhat))
+    xh <- data.frame(z = all_id)
+    merged <- merge(xh, yh, by = "z", all.x = TRUE)
     yhat <- t(as.matrix(merged[, -1]))
     colnames(yhat) <- all_id
     # end repair
@@ -351,20 +351,22 @@ predict_all_atx <- function(object, x,
   # construct supplemental data
   grd <- expand.grid(
     x = x, # x: new break ages
-    subjid = unique(get_data(object)[[object$names$z]])
+    z = unique(get_data(object)[[object$names$z]])
   )
+  colnames(grd) <- c(object$names$x, object$names$z)
   data2 <- data.frame(
-    subjid = grd$subjid,
-    x = grd$x,
+    z = grd[[object$names$z]],
+    x = grd[[object$names$x]],
     y = NA,
     knot = TRUE,
-    row.names = as.character(1:length(grd$x))
+    row.names = as.character(1:length(grd[[object$names$x]]))
   )
+  colnames(data2)[1:3] <- c(object$names$z, object$names$x, object$names$y)
 
   # concatenate, sort and split over subjid
   data <- rbind(data1, data2)
-  data <- data[order(data$subjid, data$knot), ]
-  ds <- split(data, f = data$subjid)
+  data <- data[order(data[[object$names$z]], data$knot), ]
+  ds <- split(data, f = data[[object$names$z]])
 
   # simple loop over subjid
   result <- vector("list", length(ds))
@@ -372,8 +374,8 @@ predict_all_atx <- function(object, x,
     d <- ds[[i]]
     if (nrow(d) > 0) {
       result[[i]] <- predict(export,
-        y = d$y,
-        x = d$x, at = "x",
+        y = d[[object$names$y]],
+        x = d[[object$names$x]], at = "x",
         output = "vector",
         ...
       )
@@ -382,8 +384,8 @@ predict_all_atx <- function(object, x,
 
   # save
   data$yhat <- unlist(result)
-  data <- data[, c("subjid", "x", "y", "yhat", "knot")]
-  if (filter_na || output == "broad") data <- data[is.na(data$y), ]
+  data <- data[, c(object$names$z, object$names$x, object$names$y, "yhat", "knot")]
+  if (filter_na || output == "broad") data <- data[is.na(data[[object$names$y]]), ]
 
   # convert to proper output format
   result <- switch(output,
@@ -412,16 +414,17 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
   if (at == "knots") {
     grd <- expand.grid(
       x = brk,
-      subjid = unique(get_data(object)[[object$names$z]])
+      z = unique(get_data(object)[[object$names$z]])
     )
     result <- data.frame(
-      subjid = grd$subjid,
+      z = grd$z,
       x = grd$x,
       y = NA,
       yhat = as.vector(yhat),
       knot = TRUE,
       row.names = as.character(1:length(grd$x))
     )
+    colnames(result)[1:3] <- c(object$names$z, object$names$x, object$names$y)
     return(result)
   }
 
@@ -435,20 +438,21 @@ yhat2long <- function(object, yhat = NULL, at = "x") {
     )
     grd <- expand.grid(
       x = brk,
-      subjid = unique(get_data(object)[[object$names$z]])
+      z = unique(get_data(object)[[object$names$z]])
     )
     data2 <- data.frame(
-      subjid = grd$subjid,
+      z = grd$z,
       x = grd$x,
       y = NA,
       yhat = as.vector(yhat2),
       knot = TRUE,
       row.names = as.character(1:length(grd$x))
     )
+    colnames(data2)[1:3] <- c(object$names$z, object$names$x, object$names$y)
 
     # concatenate, sort and split over subjid
     data <- rbind(data1, data2)
-    data <- data[order(data$subjid, data$knot), ]
+    data <- data[order(data[[object$names$z]], data$knot), ]
     return(data)
   }
   return(NULL)
@@ -472,7 +476,7 @@ predict_atx_experimental <- function(object, x, ids = NULL,
   data1 <- data.frame(get_data(object, ids = ids), knot = FALSE)
 
   # simple loop over subjid
-  data2 <- split(data1, f = data1$subjid)
+  data2 <- split(data1, f = data1[[object$names$z]])
   result <- vector("list", length(data2))
   for (i in seq_along(result)) {
     y <- c(data2[[i]]$y, rep(NA, k))
@@ -480,13 +484,14 @@ predict_atx_experimental <- function(object, x, ids = NULL,
     knot <- c(rep(FALSE, nrow(data2[[i]])), rep(TRUE, k))
     yhat <- predict(export, x = px, y = y, output = "vector")
     data <- data.frame(
-      subjid = names(data2)[i],
+      z = names(data2)[i],
       x = px,
       y = y,
       yhat = yhat,
       knot = knot
     )
-    result[[i]] <- data[order(data$subjid, data$knot), ]
+    colnames(data)[1:3] <- c(object$names$z, object$names$x, object$names$y)
+    result[[i]] <- data[order(data[[object$names$z]], data$knot), ]
   }
   result2 <- do.call(rbind, result)
   result3 <- switch(output,
@@ -578,8 +583,8 @@ predict_ids_atx <- function(object, x, ids = NULL, at = "x", output = "long") {
 
   # FIXME: write lapply version for speed
   for (i in 1:length(data)) {
-    local_x <- c(data[[i]]$x, x)
-    local_y <- c(data[[i]]$y, rep(NA, length(x)))
+    local_x <- c(data[[i]][[object$names$x]], x)
+    local_y <- c(data[[i]][[object$names$y]], rep(NA, length(x)))
     result[[i]] <- predict(exp,
       x = local_x, y = local_y,
       subjid = subjids[i], output = "long", at = at

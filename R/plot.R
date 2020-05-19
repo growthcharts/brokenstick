@@ -24,14 +24,13 @@
 #' library("brokenstick")
 #' dat <- smocc_200
 #' # fit one line model for data exploration
-#' fit <- brokenstick(y = dat$hgt, x = dat$age, subj = dat$subjid)
+#' fit <- fit_brokenstick(dat, hgt ~ age | id)
 #'
 #' # plot measurements for first three cases
 #' plot(fit, zband = FALSE, est = FALSE)
 #'
 #' # fit model with knots at 1 and 2 years
-#' fit <- brokenstick(y = dat$hgt.z, x = dat$age, subj = dat$subjid,
-#'   knots = 1:2)
+#' fit <- fit_brokenstick(dat, hgt.z ~ age | id, knots = 1:2)
 #'
 #' plot(fit, xlim = c(0, 2.2), ylim = c(-3, 3))
 #' plot(fit, ids = c(10005, 10012), xlim = c(0, 2.2))
@@ -64,11 +63,11 @@ plot.brokenstick <- function(x, py, px, ids = NULL,
 
   # plot first max_ids trajectories if ids == NULL
   if (is.null(ids)) {
-    idx <- pr$subjid %in% unique(pr$subjid)[1:max_ids]
+    idx <- pr[[x$names$z]] %in% unique(pr[[x$names$z]])[1:max_ids]
   } else {
-    idx <- pr$subjid %in% ids
+    idx <- pr[[x$names$z]] %in% ids
   }
-  idx <- idx & pr$x >= x_trim[1] & pr$x <= x_trim[2]
+  idx <- idx & pr[[x$names$x]] >= x_trim[1] & pr[[x$names$x]] <= x_trim[2]
   data <- pr[idx, , drop = FALSE]
 
   plot_trajectory(x = x, data = data, ...)
@@ -94,7 +93,7 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
     pr <- predict(object = x, y = py, x = px, ...)
   }
 
-  idx <- pr$x >= x_trim[1] & pr$x <= x_trim[2]
+  idx <- pr[[x$names$x]] >= x_trim[1] & pr[[x$names$x]] <= x_trim[2]
   data <- pr[idx, , drop = FALSE]
   plot_trajectory(x = x, data = data, ...)
 }
@@ -124,7 +123,7 @@ plot.brokenstick_export <- function(x, py, px, ids = NULL,
 #' @examples
 #' smc <- brokenstick::smocc_200
 #' knots <- 0:2
-#' fit <- brokenstick(y = smc$hgt.z, x = smc$age, subjid = smc$subjid, knots = knots)
+#' fit <- fit_brokenstick(smc, hgt.z ~ age | id, knots = knots)
 #'
 #' # plot first three cases
 #' plot(fit)
@@ -142,7 +141,8 @@ plot_trajectory  <- function(x, data,
                              xlim = NULL,
                              ylim = NULL,
                              theme = ggplot2::theme_light()) {
-  g <- ggplot(data, aes_string(x = "x", y = "y")) +
+
+  g <- ggplot(data, aes_string(x = x$names$x, y = x$names$y)) +
     xlab(xlab) +
     ylab(ylab)
 
@@ -155,7 +155,7 @@ plot_trajectory  <- function(x, data,
     if (!is.null(xlim)) {
       zband_range <- xlim
     } else {
-      zband_range <- range(data$x, na.rm = TRUE)
+      zband_range <- range(data[[x$names$x]], na.rm = TRUE)
     }
   }
   if (zband) {
@@ -189,7 +189,7 @@ plot_trajectory  <- function(x, data,
   }
 
   # split out according to subjid
-  g <- g + facet_wrap(~subjid, ncol = ncol)
+  g <- g + facet_wrap(as.formula(paste("~", x$names$z)), ncol = ncol)
 
   # set theme
   g <- g + theme

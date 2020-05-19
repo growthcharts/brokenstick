@@ -5,7 +5,7 @@ context("predict.brokenstick()")
 obj <- fit_200
 data <- get_data(obj)
 n <- nrow(data)
-m <- length(unique(data$subjid))
+m <- length(unique(data$id))
 k <- length(get_knots(obj))
 
 test_that("returns proper number of rows", {
@@ -68,3 +68,4 @@ test_that("output = 'vector' and output = 'long' are consistent", {
     predict(obj, x = NA, y = 10, at = "both", output = "vector")
   )
 })
+

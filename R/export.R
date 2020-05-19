@@ -24,7 +24,7 @@ export <- function(object) {
   # extract estimates from merMod object
   beta <- lme4::fixef(model)
   # get variance of RE, Q*Q
-  omega <- as.matrix(as.data.frame(VarCorr(model)$subjid))
+  omega <- as.matrix(as.data.frame(VarCorr(model)[[object$names$z]]))
   df <- as.data.frame(VarCorr(model))
   sigma2 <- df[df$grp == "Residual", "vcov"]
 
