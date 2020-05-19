@@ -12,6 +12,7 @@
 #' @param warn a logical indicating whether warnings from \code{splines::bs()}
 #' should be given.
 #' @param knotnames Should the column names be the knots?
+#' @param x_name Name of the variable, for labelling
 #' @return A matrix with \code{length(x)} rows and \code{length(breaks)}
 #' columns, with some extra attributes described by \code{bs()}.
 #' @author Stef van Buuren, 2017
@@ -23,7 +24,8 @@ make_basis <- function(x,
                        boundary = range(x),
                        degree = 1,
                        warn = TRUE,
-                       knotnames = FALSE) {
+                       knotnames = FALSE,
+                       x_name = "x") {
 
   # safety check: remove lower boundary knot from knots to be compatiable
   # with models fitted prior to version 0.53
@@ -51,7 +53,10 @@ make_basis <- function(x,
     )
   }
   if (!knotnames) colnames(X) <- paste0("x", 1:ncol(X))
-  else colnames(X) <- as.character(sort(unique(c(boundary, knots))))
+  else {
+    colnames(X) <- as.character(sort(unique(c(boundary, knots))))
+    colnames(X) <- paste(x_name, colnames(X), sep = "_")
+  }
 
   # restore original if padded
   if (padx) X <- X[-1L, , drop = FALSE]

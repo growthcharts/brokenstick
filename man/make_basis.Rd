@@ -10,7 +10,8 @@ make_basis(
   boundary = range(x),
   degree = 1,
   warn = TRUE,
-  knotnames = FALSE
+  knotnames = FALSE,
+  x_name = "x"
 )
 }
 \arguments{
@@ -27,6 +28,8 @@ requires linear splines, so the default is \code{degree = 1}.}
 should be given.}
 
 \item{knotnames}{Should the column names be the knots?}
+
+\item{x_name}{Name of the variable, for labelling}
 }
 \value{
 A matrix with \code{length(x)} rows and \code{length(breaks)}
