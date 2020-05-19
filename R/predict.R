@@ -210,7 +210,6 @@ predict.brokenstick_export <- function(object, y, x,
     boundary = object$boundary,
     degree = object$degree, warn = FALSE
   )
-  colnames(X) <- paste("x", 1:ncol(X), sep = "")
 
   # calculate random effect through empirical Bayes (BLUP) predictor
   bs.z <- EB(object, y = y, X)
