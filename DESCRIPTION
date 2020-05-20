@@ -16,6 +16,7 @@ Depends:
 Imports:
     ggplot2,
     growthstandards,
+    hardhat,
     lme4,
     splines
 Suggests:

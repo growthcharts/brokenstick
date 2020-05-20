@@ -1,65 +1,185 @@
-#' Fit a broken stick model to irregular data
+#' Fit a `brokenstick` model to irregular data
 #'
-#' The broken stick model models an irregularly observed series
-#' of measurement by scaling them onto a user-specified set of
-#' 'ideal' ages. The model codes age by a series of linear B-splines.
-#' Differences between persons are expressed by a random effect
-#' pertaining to each knot. On the individual level, each
-#' modeled growth curve connect straight lines that join at the
-#' chosen break ages, and hence look like a 'broken stick'.
+#' `brokenstick()` fits an irregularly observed series
+#' of measurements onto a user-specified grid of points.
+#' The model codes de grid by a series of linear B-splines.
+#' Differences between observations are expressed by one random
+#' effect per grid point. When multiple set of series are modelled,
+#' each modeled trajectory consists of straight lines that join at the
+#' chosen grid points, and hence look like a 'broken stick'.
 #'
-#' @details
-#' Relations over time are modeled by the variance-covariance
-#' parameters of the random effects. Currently, this matrix is estimated
-#' as unstructured by \code{lmer()} from the \code{lme4} package.
-#' This estimate may be unstable if
-#' the number of children is small relative to the number of specified
-#' knots.
+#' @param x Predictor variables. Depending on the context:
 #'
-#' This function can be time consuming for data sets with thousands of
-#' children.
-#' @aliases brokenstick
-#' @param y a vector containing the measurements to be analyzed
-#' @param x a vector of length \code{length(y)} with the explanatory variable on which
-#' the break points should be defined. In longitudinal data, this is usually age.
-#' @param subjid a vector length \code{length(y)} containing the subject identification
-#' @param k optional, scalar indicating the number of internal knots. If specified, then
-#' \code{k} internal knots are placed at equidense quantiles of \code{x}. For example,
-#' specifying \code{k = 1} puts a knot at the 50th quantile (median), specifying \code{k = 3} puts knots
-#' at the 25th, 50th and 75th quantiles of \code{x}, and so on. If both \code{k} and
-#' \code{knots} are specified, then \code{k} take precendence. Note that knots specified
-#' via \code{k} are data-dependent and do not transfer well to other data sets. Use \code{knots}
-#' to specify knots that are independent of the data \code{x}.
+#'   * A __data frame__ of predictors.
+#'   * A __matrix__ of predictors.
+#'   * A __recipe__ specifying a set of preprocessing steps
+#'     created from [recipes::recipe()].
+#'
+#' The current model accepts only one predictor (by
+#' default the first column in __data frame__ or __matrix__) and only
+#' one group variable (by default the last column in
+#' __data frame__ or __matrix__).
+#'
+#' @param y Outcome variable. When `x` is a __data frame__ or __matrix__,
+#' `y` is specified as:
+#'
+#'   * A __data frame__ with 1 numeric column.
+#'   * A __matrix__ with 1 numeric column.
+#'   * A numeric __vector__.
+#'
+#' @param data When a __recipe__ or __formula__ is used, `data` is specified as:
+#'
+#'   * A __data frame__ containing predictor, group and outcome variables.
+#'
+#' @param formula A formula specifying the outcome terms on the
+#' left-hand side, the predictor term on the right-hand side and
+#' the group variable after the `|` sign, e.g `formula = hgt ~ age | id`.
+#'
 #' @param knots optional, numerical vector with the locations of the breaks to be
-#' placed on the values of \code{x}. Be careful with values outside the range
-#' of the data since this extends the \code{boundary} knots (see below) beyond
-#' the data range.
-#' @param boundary optional, but recommended. Numerical vector of length 2 with the minimum and maximum
-#' knot. This \code{boundary} setting is passed to \code{splines::bs()} as the
-#' \code{Boundary.knots} argument. If not specified, then the range of \code{x}
-#' is taken. If \code{knots} is specified, then the boundary range is extended
-#' to include at least \code{range{knots}}.
-#' @param method Either \code{"kr"} or \code{"lmer"}
-#' @param control A list with argument that can be used to control the
+#' placed on the values of the predictor. Values outside the range of the data
+#' will extend the `boundary` knots (see below) beyond the data range.
+#'
+#' @param boundary optional, numerical vector of length 2 with the left and
+#' right boundary knots. The `boundary` setting is passed to
+#' __splines::bs()__ as the `Boundary.knots` argument. If not specified,
+#' then the range of predictor variable is taken. Since the range
+#' depends on the data, it is recommended to specify `boundary` explicitly.
+#' Note the the `boundary` range is internally expanded to include at
+#' least `range(knots)`.
+#'
+#' @param k optional, a convenience parameter giving the number of
+#' internal knots. If specified, then `k` internal knots are placed
+#' at equidense quantiles of the predictor. For example,
+#' specifying `k = 1` puts a knot at the 50th quantile (median),
+#' setting `k = 3` puts knots at the 25th, 50th and 75th quantiles,
+#' and so on. Note that knots specified via `k` are data-dependent
+#' and do not transfer well to other data sets. We therefore recommend
+#' using `knots` and `boundary` over `k`. If both `k`` and
+#' `knots` are specified, then `k` take precendence. This is likely
+#' to change in the future.
+#'
+#' @param method Either `"kr"` (for the Kasim-Raudenbush sampler)
+#' or `"lmer"` (for __lme4::lmer__).
+#'
+#' @param control A list with arguments that can be used to control the
 #' fitting of \code{lmer()}. The default
 #' is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 #' fatal errors with respect the number of parameters into warnings.
+#'
 #' @param na.action The function to call for the \code{na.action} argument
 #' in \code{lmer()}. The default is \code{na.exclude}.
-#' @param \dots Additional arguments passed down to \code{lmer()}
-#' (e.g. to specify additional \code{lmer()} options.
-#' @return A fitted model of class \code{brokenstick}, which extends the
-#'  class \code{lmerMod}
+#'
+#' @param ... Not currently used, but required for extensibility.
+#'
+#' @details
+#' The variance-covariance matrix of the random effects absorbs the
+#' relations over time. Currently, this matrix is estimated
+#' as unstructured by \code{lmer()} from the \code{lme4} package.
+
+#' This estimate may be unstable if
+#' the number of children is small relative to the number of specified
+#' knots. The function can be time consuming for data sets with thousands of
+#' children.
+#'
+#' @return
+#'
+#' A `brokenstick` object.
+#'
 #' @examples
-#' #data <- brokenstick::smocc_200
+#' # data <- brokenstick::smocc_200
 #'
 #' # fit with implicit boundary c(0, 3)
 #' # fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = id, knots = 0:3))
-#' @note
-#' The \code{storeX} and \code{degree} arguments have been deprecated in
-#' version 0.54.
+#'
+#' \dontrun{
+#' predictors <- mtcars[, -1]
+#' outcome <- mtcars[, 1]
+#'
+#' # XY interface
+#' mod <- brokenstick(predictors, outcome)
+#'
+#' # Formula interface
+#' mod2 <- brokenstick(mpg ~ ., mtcars)
+#'
+#' # Recipes interface
+#' library(recipes)
+#' rec <- recipe(mpg ~ ., mtcars)
+#' rec <- step_log(rec, disp)
+#' mod3 <- brokenstick(rec, mtcars)
+#' }
 #' @export
-brokenstick <- function(y, x, subjid,
+brokenstick <- function(x, ...) {
+  UseMethod("brokenstick")
+}
+
+#' @export
+#' @rdname brokenstick
+brokenstick.default <- function(x, ...) {
+  stop("`brokenstick()` is not defined for a '", class(x)[1], "'.", call. = FALSE)
+}
+
+# XY method - data frame
+
+#' @export
+#' @rdname brokenstick
+brokenstick.data.frame <- function(x, y, ...) {
+  processed <- hardhat::mold(x, y)
+  brokenstick_bridge(processed, ...)
+}
+
+# XY method - matrix
+
+#' @export
+#' @rdname brokenstick
+brokenstick.matrix <- function(x, y, ...) {
+  processed <- hardhat::mold(x, y)
+  brokenstick_bridge(processed, ...)
+}
+
+# Formula method
+
+#' @export
+#' @rdname brokenstick
+brokenstick.formula <- function(formula, data, ...) {
+  processed <- hardhat::mold(formula, data)
+  brokenstick_bridge(processed, ...)
+}
+
+# Recipe method
+
+#' @export
+#' @rdname brokenstick
+brokenstick.recipe <- function(x, data, ...) {
+  processed <- hardhat::mold(x, data)
+  brokenstick_bridge(processed, ...)
+}
+
+# ------------------------------------------------------------------------------
+# Bridge
+
+brokenstick_bridge <- function(processed, ...) {
+  predictors <- processed$predictors
+  outcome <- processed$outcomes[[1]]
+
+  fit <- brokenstick_impl(predictors, outcome)
+
+  new_brokenstick(
+    data = dplyr::bind_cols(outcome, predictors),
+    model = fit,
+    blueprint = processed$blueprint
+  )
+}
+
+
+# ------------------------------------------------------------------------------
+# Implementation
+
+brokenstick_impl <- function(predictors, outcome) {
+  list(coefs = 1)
+}
+
+
+calc_brokenstick <- function(y, x, subjid,
                         k = NULL,
                         knots = NULL,
                         boundary = NULL,
@@ -129,4 +249,5 @@ print.brokenstick <- function(x, ...) {
   print(summary(x))
   invisible(x)
 }
+
 

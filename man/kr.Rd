@@ -2,31 +2,45 @@
 % Please edit documentation in R/kr.R
 \name{kr}
 \alias{kr}
-\title{Imputation by a two-level normal model}
+\title{Kasim-Raudenbush sampler for two-level normal model}
 \usage{
-kr(y, ry, x, type, wy = NULL, intercept = TRUE, ...)
+kr(
+  data,
+  formula,
+  control = list(run_in = 100),
+  subset,
+  weights,
+  na.action = na.action,
+  ...
+)
 }
 \arguments{
-\item{y}{Vector to be imputed}
+\item{data}{an optional data frame, list or environment (or object
+    coercible by \code{\link{as.data.frame}} to a data frame) containing
+    the variables in the model.  If not found in \code{data}, the
+    variables are taken from \code{environment(formula)},
+    typically the environment from which \code{lm} is called.}
 
-\item{ry}{Logical vector of length \code{length(y)} indicating the 
-the subset \code{y[ry]} of elements in \code{y} to which the imputation 
-model is fitted. The \code{ry} generally distinguishes the observed 
-(\code{TRUE}) and missing values (\code{FALSE}) in \code{y}.}
+\item{formula}{an object of class \code{"\link[stats]{formula}"} (or one that
+    can be coerced to that class): a symbolic description of the
+    model to be fitted.  The details of model specification are given
+    under \sQuote{Details}.}
 
-\item{x}{Numeric design matrix with \code{length(y)} rows with predictors for 
-\code{y}. Matrix \code{x} may have no missing values.}
+\item{subset}{an optional vector specifying a subset of observations
+    to be used in the fitting process.}
 
-\item{type}{Vector of length \code{ncol(x)} identifying random and class
-variables.  Random variables are identified by a '2'. The class variable
-(only one is allowed) is coded as '-2'. Random variables also include the
-fixed effect.}
+\item{weights}{an optional vector of weights to be used in the fitting
+    process.  Should be \code{NULL} or a numeric vector.
+    If non-NULL, weighted least squares is used with weights
+    \code{weights} (that is, minimizing \code{sum(w*e^2)}); otherwise
+    ordinary least squares is used.  See also \sQuote{Details},}
 
-\item{wy}{Logical vector of length \code{length(y)}. A \code{TRUE} value 
-indicates locations in \code{y} for which imputations are created.}
-
-\item{intercept}{Logical determining whether the intercept is automatically
-added.}
+\item{na.action}{a function which indicates what should happen
+    when the data contain \code{NA}s.  The default is set by
+    the \code{na.action} setting of \code{\link{options}}, and is
+    \code{\link[stats]{na.fail}} if that is unset.  The \sQuote{factory-fresh}
+    default is \code{\link[stats]{na.omit}}.  Another possible value is
+    \code{NULL}, no action.  Value \code{\link[stats]{na.exclude}} can be useful.}
 
 \item{...}{Other named arguments.}
 }
@@ -35,17 +49,10 @@ Vector with imputed data, same type as \code{y}, and of length
 \code{sum(wy)}
 }
 \description{
-Imputes univariate missing data using a two-level normal model
-}
-\details{
-Implements the Gibbs sampler for the linear multilevel model with
-heterogeneous with-class variance (Kasim and Raudenbush, 1998). Imputations
-are drawn as an extra step to the algorithm. For simulation work see Van
-Buuren (2011).
-
-The random intercept is automatically added in \code{mice.impute.2L.norm()}.
-A model within a random intercept can be specified by \code{mice(...,
-intercept = FALSE)}.
+Simulates posterior distributions of parameters from a two-level
+normal model with heterogeneous within-cluster variances
+(Kasim and Raudenbush, 1998). Imputations can be drawn as an
+extra step to the algorithm.
 }
 \note{
 Added June 25, 2012: The currently implemented algorithm does not
@@ -61,10 +68,6 @@ Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested
 variance components models with heterogeneous within-group variance. Journal
 of Educational and Behavioral Statistics, 23(2), 93--116.
 
-Van Buuren, S., Groothuis-Oudshoorn, K. (2011). \code{mice}: Multivariate
-Imputation by Chained Equations in \code{R}. \emph{Journal of Statistical
-Software}, \bold{45}(3), 1-67. \url{https://www.jstatsoft.org/v45/i03/}
-
 Van Buuren, S. (2011) Multiple imputation of multilevel data. In Hox, J.J.
 and and Roberts, J.K. (Eds.), \emph{The Handbook of Advanced Multilevel
 Analysis}, Chapter 10, pp. 173--196. Milton Park, UK: Routledge.
@@ -72,5 +75,3 @@ Analysis}, Chapter 10, pp. 173--196. Milton Park, UK: Routledge.
 \author{
 Roel de Jong, 2008
 }
-\concept{univariate-2l}
-\keyword{datagen}
