@@ -118,8 +118,9 @@ fit_brokenstick <- function(data,
       model = model,
       beta = lme4::fixef(model),
       omega = as.matrix(as.data.frame(VarCorr(model)[[z_name]])),
-      sigma2j = NA,
-      sigma2 = df[df$grp == "Residual", "vcov"]
+      sigma2j = numeric(),
+      sigma2 = df[df$grp == "Residual", "vcov"],
+      imp = numeric()
     )
     class(fit) <- c("brokenstick")
   }
@@ -142,7 +143,8 @@ fit_brokenstick <- function(data,
       beta = model$mu,
       omega = solve(model$inv.psi),
       sigma2j = 1/model$inv.sigma2m,
-      sigma2 = mean(1/model$inv.sigma2)
+      sigma2 = mean(1/model$inv.sigma2),
+      imp = numeric()
       )
     class(fit) <- "brokenstick"
   }

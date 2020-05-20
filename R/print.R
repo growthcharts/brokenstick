@@ -8,7 +8,7 @@ print.brokenstick <- function(x, ..., digits = 2L) {
   upper[upper.tri(upper)] <- ""
   upper <- as.data.frame(upper)
   print(upper)
-  if (!is.na(x$sigma2j)) cat("Cluster residuals: ", x$sigma2j, "\n")
+  if (length(x$sigma2j)) cat("Cluster residuals: ", x$sigma2j, "\n")
   cat("Residual variance: ", x$sigma2, "\n")
   invisible(x)
 }
@@ -24,7 +24,7 @@ print.brokenstick_export <- function(x, ..., digits = 2L) {
   upper[upper.tri(upper)] <- ""
   upper <- as.data.frame(upper)
   print(upper)
-  if (!is.na(x$sigma2j)) cat("Cluster residuals: ", x$sigma2j, "\n")
+  if (length(x$sigma2j)) cat("Cluster residuals: ", x$sigma2j, "\n")
   cat("Residual variance: ", x$sigma2, "\n")
   invisible(x)
 }
