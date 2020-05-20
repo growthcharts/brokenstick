@@ -28,10 +28,7 @@
 #' Analysis}, Chapter 10, pp. 173--196. Milton Park, UK: Routledge.
 kr <- function(data,
                formula,
-               control = list(run_in = 100),
-               subset,
-               weights,
-               na.action = na.action,
+               # control = list(run_in = 100),
                ...) {
   new_brokenstick(data = data, formula = formula)
 }

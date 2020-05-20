@@ -4,15 +4,7 @@
 \alias{kr}
 \title{Kasim-Raudenbush sampler for two-level normal model}
 \usage{
-kr(
-  data,
-  formula,
-  control = list(run_in = 100),
-  subset,
-  weights,
-  na.action = na.action,
-  ...
-)
+kr(data, formula, ...)
 }
 \arguments{
 \item{data}{an optional data frame, list or environment (or object
@@ -25,22 +17,6 @@ kr(
     can be coerced to that class): a symbolic description of the
     model to be fitted.  The details of model specification are given
     under \sQuote{Details}.}
-
-\item{subset}{an optional vector specifying a subset of observations
-    to be used in the fitting process.}
-
-\item{weights}{an optional vector of weights to be used in the fitting
-    process.  Should be \code{NULL} or a numeric vector.
-    If non-NULL, weighted least squares is used with weights
-    \code{weights} (that is, minimizing \code{sum(w*e^2)}); otherwise
-    ordinary least squares is used.  See also \sQuote{Details},}
-
-\item{na.action}{a function which indicates what should happen
-    when the data contain \code{NA}s.  The default is set by
-    the \code{na.action} setting of \code{\link{options}}, and is
-    \code{\link[stats]{na.fail}} if that is unset.  The \sQuote{factory-fresh}
-    default is \code{\link[stats]{na.omit}}.  Another possible value is
-    \code{NULL}, no action.  Value \code{\link[stats]{na.exclude}} can be useful.}
 
 \item{...}{Other named arguments.}
 }

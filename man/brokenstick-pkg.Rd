@@ -26,9 +26,9 @@ program of the Bill & Melinda Gates Foundation.
 
 The main functions are:
 \tabular{ll}{
-  \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
-  \code{predict()} \tab Obtain predictions from fitted model\cr
-  }
+\code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
+\code{predict()} \tab Obtain predictions from fitted model\cr
+}
 }
 
 \references{

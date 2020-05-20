@@ -7,89 +7,150 @@
 \alias{brokenstick.matrix}
 \alias{brokenstick.formula}
 \alias{brokenstick.recipe}
-\title{Fit a `brokenstick` model to irregular data}
+\title{Fit a \code{brokenstick} model to irregular data}
 \usage{
 brokenstick(x, ...)
 
-\method{brokenstick}{default}(x, ...)
+\method{brokenstick}{default}(
+  x,
+  ...,
+  knots = NULL,
+  boundary = NULL,
+  k = NULL,
+  subset = NULL,
+  weights = NULL,
+  na.action = na.exclude,
+  method = c("lmer", "kr", "model.frame"),
+  control = list()
+)
 
-\method{brokenstick}{data.frame}(x, y, ...)
+\method{brokenstick}{data.frame}(
+  x,
+  y,
+  ...,
+  knots = NULL,
+  boundary = NULL,
+  k = NULL,
+  subset = NULL,
+  weights = NULL,
+  na.action = na.exclude,
+  method = c("lmer", "kr", "model.frame"),
+  control = list()
+)
 
-\method{brokenstick}{matrix}(x, y, ...)
+\method{brokenstick}{matrix}(
+  x,
+  y,
+  ...,
+  knots = NULL,
+  boundary = NULL,
+  k = NULL,
+  subset = NULL,
+  weights = NULL,
+  na.action = na.exclude,
+  method = c("lmer", "kr", "model.frame"),
+  control = list()
+)
 
-\method{brokenstick}{formula}(formula, data, ...)
+\method{brokenstick}{formula}(
+  formula,
+  data,
+  ...,
+  knots = NULL,
+  boundary = NULL,
+  k = NULL,
+  subset = NULL,
+  weights = NULL,
+  na.action = na.exclude,
+  method = c("lmer", "kr", "model.frame"),
+  control = list()
+)
 
-\method{brokenstick}{recipe}(x, data, ...)
+\method{brokenstick}{recipe}(
+  x,
+  data,
+  ...,
+  knots = NULL,
+  boundary = NULL,
+  k = NULL,
+  subset = NULL,
+  weights = NULL,
+  na.action = na.exclude,
+  method = c("lmer", "kr", "model.frame"),
+  control = list()
+)
 }
 \arguments{
 \item{x}{Predictor variables. Depending on the context:
-
-  * A __data frame__ of predictors.
-  * A __matrix__ of predictors.
-  * A __recipe__ specifying a set of preprocessing steps
-    created from [recipes::recipe()].
+\itemize{
+\item A \strong{data frame} of predictors.
+\item A \strong{matrix} of predictors.
+\item A \strong{recipe} specifying a set of preprocessing steps
+created from \code{\link[recipes:recipe]{recipes::recipe()}}.
+}
 
 The current model accepts only one predictor (by
-default the first column in __data frame__ or __matrix__) and only
+default the first column in \strong{data frame} or \strong{matrix}) and only
 one group variable (by default the last column in
-__data frame__ or __matrix__).}
+\strong{data frame} or \strong{matrix}).}
 
 \item{...}{Not currently used, but required for extensibility.}
 
-\item{y}{Outcome variable. When `x` is a __data frame__ or __matrix__,
-`y` is specified as:
-
-  * A __data frame__ with 1 numeric column.
-  * A __matrix__ with 1 numeric column.
-  * A numeric __vector__.}
-
-\item{formula}{A formula specifying the outcome terms on the
-left-hand side, the predictor term on the right-hand side and
-the group variable after the `|` sign, e.g `formula = hgt ~ age | id`.}
-
-\item{data}{When a __recipe__ or __formula__ is used, `data` is specified as:
-
-  * A __data frame__ containing predictor, group and outcome variables.}
-
 \item{knots}{optional, numerical vector with the locations of the breaks to be
 placed on the values of the predictor. Values outside the range of the data
-will extend the `boundary` knots (see below) beyond the data range.}
+will extend the \code{boundary} knots (see below) beyond the data range.}
 
 \item{boundary}{optional, numerical vector of length 2 with the left and
-right boundary knots. The `boundary` setting is passed to
-__splines::bs()__ as the `Boundary.knots` argument. If not specified,
+right boundary knots. The \code{boundary} setting is passed to
+\strong{splines::bs()} as the \code{Boundary.knots} argument. If not specified,
 then the range of predictor variable is taken. Since the range
-depends on the data, it is recommended to specify `boundary` explicitly.
-Note the the `boundary` range is internally expanded to include at
-least `range(knots)`.}
+depends on the data, it is recommended to specify \code{boundary} explicitly.
+Note the the \code{boundary} range is internally expanded to include at
+least \code{range(knots)}.}
 
 \item{k}{optional, a convenience parameter giving the number of
-internal knots. If specified, then `k` internal knots are placed
+internal knots. If specified, then \code{k} internal knots are placed
 at equidense quantiles of the predictor. For example,
-specifying `k = 1` puts a knot at the 50th quantile (median),
-setting `k = 3` puts knots at the 25th, 50th and 75th quantiles,
-and so on. Note that knots specified via `k` are data-dependent
+specifying \code{k = 1} puts a knot at the 50th quantile (median),
+setting \code{k = 3} puts knots at the 25th, 50th and 75th quantiles,
+and so on. Note that knots specified via \code{k} are data-dependent
 and do not transfer well to other data sets. We therefore recommend
-using `knots` and `boundary` over `k`. If both `k`` and
-`knots` are specified, then `k` take precendence. This is likely
+using \code{knots} and \code{boundary} over \code{k}. If both \verb{k`` and }knots\verb{are specified, then}k` take precendence. This is likely
 to change in the future.}
-
-\item{method}{Either `"kr"` (for the Kasim-Raudenbush sampler)
-or `"lmer"` (for __lme4::lmer__).}
-
-\item{control}{A list with arguments that can be used to control the
-fitting of \code{lmer()}. The default
-is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
-fatal errors with respect the number of parameters into warnings.}
 
 \item{na.action}{The function to call for the \code{na.action} argument
 in \code{lmer()}. The default is \code{na.exclude}.}
+
+\item{method}{Either \code{"kr"} (for the Kasim-Raudenbush sampler)
+or \code{"lmer"} (for \strong{lme4::lmer}).}
+
+\item{control}{A list with arguments that can be used to control the
+fitting of \strong{lme4::lmer()}. The default
+is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
+fatal errors with respect the number of parameters into warnings.}
+
+\item{y}{Outcome variable. When \code{x} is a \strong{data frame} or \strong{matrix},
+\code{y} is specified as:
+\itemize{
+\item A \strong{data frame} with 1 numeric column.
+\item A \strong{matrix} with 1 numeric column.
+\item A numeric \strong{vector}.
+}}
+
+\item{formula}{A formula specifying the outcome terms on the
+left-hand side, the predictor term on the right-hand side and
+the group variable after the \code{|} sign, e.g \code{formula = hgt ~ age | id}.}
+
+\item{data}{When a \strong{recipe} or \strong{formula} is used, \code{data} is specified as:
+\itemize{
+\item A \strong{data frame} containing predictor, group and outcome variables.
+}}
 }
 \value{
-A `brokenstick` object.
+A \code{brokenstick} object.
 }
 \description{
-`brokenstick()` fits an irregularly observed series
+\code{brokenstick()} fits an irregularly observed series
 of measurements onto a user-specified grid of points.
 The model codes de grid by a series of linear B-splines.
 Differences between observations are expressed by one random

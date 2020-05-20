@@ -62,19 +62,19 @@
 #' or `"lmer"` (for __lme4::lmer__).
 #'
 #' @param control A list with arguments that can be used to control the
-#' fitting of \code{lmer()}. The default
-#' is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
+#' fitting of __lme4::lmer()__. The default
+#' is set to `lmerControl(check.nobs.vs.nRE = "warning")`, which turn
 #' fatal errors with respect the number of parameters into warnings.
 #'
-#' @param na.action The function to call for the \code{na.action} argument
-#' in \code{lmer()}. The default is \code{na.exclude}.
+#' @param na.action The function to call for the `na.action` argument
+#' in `lmer()`. The default is `na.exclude`.
 #'
 #' @param ... Not currently used, but required for extensibility.
 #'
 #' @details
 #' The variance-covariance matrix of the random effects absorbs the
 #' relations over time. Currently, this matrix is estimated
-#' as unstructured by \code{lmer()} from the \code{lme4} package.
+#' as unstructured by `lmer()` from the `lme4` package.
 
 #' This estimate may be unstable if
 #' the number of children is small relative to the number of specified
@@ -114,7 +114,16 @@ brokenstick <- function(x, ...) {
 
 #' @export
 #' @rdname brokenstick
-brokenstick.default <- function(x, ...) {
+brokenstick.default <- function(x,
+                                ...,
+                                knots = NULL,
+                                boundary = NULL,
+                                k = NULL,
+                                subset = NULL,
+                                weights = NULL,
+                                na.action = na.exclude,
+                                method = c("lmer", "kr", "model.frame"),
+                                control = list()) {
   stop("`brokenstick()` is not defined for a '", class(x)[1], "'.", call. = FALSE)
 }
 
@@ -122,7 +131,15 @@ brokenstick.default <- function(x, ...) {
 
 #' @export
 #' @rdname brokenstick
-brokenstick.data.frame <- function(x, y, ...) {
+brokenstick.data.frame <- function(x, y, ...,
+                                   knots = NULL,
+                                   boundary = NULL,
+                                   k = NULL,
+                                   subset = NULL,
+                                   weights = NULL,
+                                   na.action = na.exclude,
+                                   method = c("lmer", "kr", "model.frame"),
+                                   control = list()) {
   processed <- hardhat::mold(x, y)
   brokenstick_bridge(processed, ...)
 }
@@ -131,7 +148,15 @@ brokenstick.data.frame <- function(x, y, ...) {
 
 #' @export
 #' @rdname brokenstick
-brokenstick.matrix <- function(x, y, ...) {
+brokenstick.matrix <- function(x, y, ...,
+                               knots = NULL,
+                               boundary = NULL,
+                               k = NULL,
+                               subset = NULL,
+                               weights = NULL,
+                               na.action = na.exclude,
+                               method = c("lmer", "kr", "model.frame"),
+                               control = list()) {
   processed <- hardhat::mold(x, y)
   brokenstick_bridge(processed, ...)
 }
@@ -140,7 +165,15 @@ brokenstick.matrix <- function(x, y, ...) {
 
 #' @export
 #' @rdname brokenstick
-brokenstick.formula <- function(formula, data, ...) {
+brokenstick.formula <- function(formula, data, ...,
+                                knots = NULL,
+                                boundary = NULL,
+                                k = NULL,
+                                subset = NULL,
+                                weights = NULL,
+                                na.action = na.exclude,
+                                method = c("lmer", "kr", "model.frame"),
+                                control = list()) {
   processed <- hardhat::mold(formula, data)
   brokenstick_bridge(processed, ...)
 }
@@ -149,7 +182,15 @@ brokenstick.formula <- function(formula, data, ...) {
 
 #' @export
 #' @rdname brokenstick
-brokenstick.recipe <- function(x, data, ...) {
+brokenstick.recipe <- function(x, data, ...,
+                               knots = NULL,
+                               boundary = NULL,
+                               k = NULL,
+                               subset = NULL,
+                               weights = NULL,
+                               na.action = na.exclude,
+                               method = c("lmer", "kr", "model.frame"),
+                               control = list()) {
   processed <- hardhat::mold(x, data)
   brokenstick_bridge(processed, ...)
 }

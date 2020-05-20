@@ -69,7 +69,7 @@ fatal errors with respect the number of parameters into warnings.}
 }
 \value{
 A fitted model of class \code{brokenstick}, which extends the
- class \code{lmerMod}
+class \code{lmerMod}
 }
 \description{
 The broken stick model models an irregularly observed series

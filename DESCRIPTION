@@ -40,3 +40,4 @@ VignetteBuilder: knitr
 Acknowledgement: Development of this package was kindly supported by the ki
     program of the Bill & Melinda Gates Foundation
 RoxygenNote: 7.1.0
+Roxygen: list(markdown = TRUE)
