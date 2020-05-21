@@ -11,28 +11,16 @@
 \usage{
 brokenstick(x, ...)
 
-\method{brokenstick}{default}(
-  x,
-  ...,
-  knots = NULL,
-  boundary = NULL,
-  k = NULL,
-  subset = NULL,
-  weights = NULL,
-  na.action = na.exclude,
-  method = c("lmer", "kr", "model.frame"),
-  control = list()
-)
+\method{brokenstick}{default}(x, ...)
 
 \method{brokenstick}{data.frame}(
   x,
   y,
+  z,
   ...,
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  subset = NULL,
-  weights = NULL,
   na.action = na.exclude,
   method = c("lmer", "kr", "model.frame"),
   control = list()
@@ -41,12 +29,11 @@ brokenstick(x, ...)
 \method{brokenstick}{matrix}(
   x,
   y,
+  z,
   ...,
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  subset = NULL,
-  weights = NULL,
   na.action = na.exclude,
   method = c("lmer", "kr", "model.frame"),
   control = list()
@@ -59,8 +46,6 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  subset = NULL,
-  weights = NULL,
   na.action = na.exclude,
   method = c("lmer", "kr", "model.frame"),
   control = list()
@@ -73,8 +58,6 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  subset = NULL,
-  weights = NULL,
   na.action = na.exclude,
   method = c("lmer", "kr", "model.frame"),
   control = list()
@@ -89,45 +72,10 @@ brokenstick(x, ...)
 created from \code{\link[recipes:recipe]{recipes::recipe()}}.
 }
 
-The current model accepts only one predictor (by
-default the first column in \strong{data frame} or \strong{matrix}) and only
-one group variable (by default the last column in
-\strong{data frame} or \strong{matrix}).}
+If \code{x} has one column, then also specify \code{y} and \code{z}. If \code{x} has multiple
+columns, then specify the model by a \code{formula} argument.}
 
 \item{...}{Not currently used, but required for extensibility.}
-
-\item{knots}{optional, numerical vector with the locations of the breaks to be
-placed on the values of the predictor. Values outside the range of the data
-will extend the \code{boundary} knots (see below) beyond the data range.}
-
-\item{boundary}{optional, numerical vector of length 2 with the left and
-right boundary knots. The \code{boundary} setting is passed to
-\strong{splines::bs()} as the \code{Boundary.knots} argument. If not specified,
-then the range of predictor variable is taken. Since the range
-depends on the data, it is recommended to specify \code{boundary} explicitly.
-Note the the \code{boundary} range is internally expanded to include at
-least \code{range(knots)}.}
-
-\item{k}{optional, a convenience parameter giving the number of
-internal knots. If specified, then \code{k} internal knots are placed
-at equidense quantiles of the predictor. For example,
-specifying \code{k = 1} puts a knot at the 50th quantile (median),
-setting \code{k = 3} puts knots at the 25th, 50th and 75th quantiles,
-and so on. Note that knots specified via \code{k} are data-dependent
-and do not transfer well to other data sets. We therefore recommend
-using \code{knots} and \code{boundary} over \code{k}. If both \verb{k`` and }knots\verb{are specified, then}k` take precendence. This is likely
-to change in the future.}
-
-\item{na.action}{The function to call for the \code{na.action} argument
-in \code{lmer()}. The default is \code{na.exclude}.}
-
-\item{method}{Either \code{"kr"} (for the Kasim-Raudenbush sampler)
-or \code{"lmer"} (for \strong{lme4::lmer}).}
-
-\item{control}{A list with arguments that can be used to control the
-fitting of \strong{lme4::lmer()}. The default
-is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
-fatal errors with respect the number of parameters into warnings.}
 
 \item{y}{Outcome variable. When \code{x} is a \strong{data frame} or \strong{matrix},
 \code{y} is specified as:
@@ -136,6 +84,49 @@ fatal errors with respect the number of parameters into warnings.}
 \item A \strong{matrix} with 1 numeric column.
 \item A numeric \strong{vector}.
 }}
+
+\item{z}{Grouping variable. When \code{x} is a \strong{data frame} or \strong{matrix},
+\code{z} is specified as:
+\itemize{
+\item A \strong{data frame} with 1 column.
+\item A \strong{matrix} with 1 column.
+\item A numeric \strong{vector}.
+}}
+
+\item{knots}{Optional, but recommended. Numerical vector with the
+locations of the breaks to be placed on the values of the predictor.
+Values outside the range of the data will extend the \code{boundary}
+knots (see below) beyond the data range.}
+
+\item{boundary}{Optional, but recommended. Numerical vector of
+length 2 with the left and right boundary knots. The \code{boundary}
+setting is passed to \code{\link[splines:bs]{splines::bs()}} as the \code{Boundary.knots} argument.
+If not specified, then the range of predictor variable is taken. Since
+the range depends on the data, it is recommended to specify \code{boundary}
+explicitly. Note the the \code{boundary} range is internally expanded
+to include at least \code{range(knots)}.}
+
+\item{k}{optional, a convenience parameter giving the number of
+internal knots. If specified, then \code{k} internal knots are placed
+at equidense quantiles of the predictor. For example,
+specifying \code{k = 1} puts a knot at the 50th quantile (median),
+setting \code{k = 3} puts knots at the 25th, 50th and 75th quantiles,
+and so on. Note that knots specified via \code{k} are data-dependent
+and do not transfer well to other data sets. We therefore recommend
+using \code{knots} and \code{boundary} over \code{k}. If both \code{k} and
+\code{knots} are specified, then \code{k} take precendence. This is likely
+to change in the future.}
+
+\item{na.action}{The function to call for the \code{na.action} argument
+in \code{lmer()}. The default is \code{na.exclude}.}
+
+\item{method}{Either \code{"kr"} (for the Kasim-Raudenbush sampler)
+or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}).}
+
+\item{control}{A list with arguments that can be used to control the
+fitting of \code{\link[lme4:lmer]{lme4::lmer()}}. The default
+is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
+fatal errors with respect the number of parameters into warnings.}
 
 \item{formula}{A formula specifying the outcome terms on the
 left-hand side, the predictor term on the right-hand side and
@@ -150,7 +141,7 @@ the group variable after the \code{|} sign, e.g \code{formula = hgt ~ age | id}.
 A \code{brokenstick} object.
 }
 \description{
-\code{brokenstick()} fits an irregularly observed series
+The \code{brokenstick()} function fits an irregularly observed series
 of measurements onto a user-specified grid of points.
 The model codes de grid by a series of linear B-splines.
 Differences between observations are expressed by one random
@@ -161,7 +152,7 @@ chosen grid points, and hence look like a 'broken stick'.
 \details{
 The variance-covariance matrix of the random effects absorbs the
 relations over time. Currently, this matrix is estimated
-as unstructured by \code{lmer()} from the \code{lme4} package.
+as unstructured by \code{\link[lme4:lmer]{lme4::lmer()}}.
 This estimate may be unstable if
 the number of children is small relative to the number of specified
 knots. The function can be time consuming for data sets with thousands of
@@ -173,7 +164,6 @@ children.
 # fit with implicit boundary c(0, 3)
 # fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = id, knots = 0:3))
 
-\dontrun{
 predictors <- mtcars[, -1]
 outcome <- mtcars[, 1]
 
@@ -188,5 +178,4 @@ library(recipes)
 rec <- recipe(mpg ~ ., mtcars)
 rec <- step_log(rec, disp)
 mod3 <- brokenstick(rec, mtcars)
-}
 }

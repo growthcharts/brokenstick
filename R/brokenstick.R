@@ -1,6 +1,6 @@
 #' Fit a `brokenstick` model to irregular data
 #'
-#' `brokenstick()` fits an irregularly observed series
+#' The `brokenstick()` function fits an irregularly observed series
 #' of measurements onto a user-specified grid of points.
 #' The model codes de grid by a series of linear B-splines.
 #' Differences between observations are expressed by one random
@@ -15,16 +15,21 @@
 #'   * A __recipe__ specifying a set of preprocessing steps
 #'     created from [recipes::recipe()].
 #'
-#' The current model accepts only one predictor (by
-#' default the first column in __data frame__ or __matrix__) and only
-#' one group variable (by default the last column in
-#' __data frame__ or __matrix__).
+#' If `x` has one column, then also specify `y` and `z`. If `x` has multiple
+#' columns, then specify the model by a `formula` argument.
 #'
 #' @param y Outcome variable. When `x` is a __data frame__ or __matrix__,
 #' `y` is specified as:
 #'
 #'   * A __data frame__ with 1 numeric column.
 #'   * A __matrix__ with 1 numeric column.
+#'   * A numeric __vector__.
+#'
+#' @param z Grouping variable. When `x` is a __data frame__ or __matrix__,
+#' `z` is specified as:
+#'
+#'   * A __data frame__ with 1 column.
+#'   * A __matrix__ with 1 column.
 #'   * A numeric __vector__.
 #'
 #' @param data When a __recipe__ or __formula__ is used, `data` is specified as:
@@ -35,17 +40,18 @@
 #' left-hand side, the predictor term on the right-hand side and
 #' the group variable after the `|` sign, e.g `formula = hgt ~ age | id`.
 #'
-#' @param knots optional, numerical vector with the locations of the breaks to be
-#' placed on the values of the predictor. Values outside the range of the data
-#' will extend the `boundary` knots (see below) beyond the data range.
+#' @param knots Optional, but recommended. Numerical vector with the
+#' locations of the breaks to be placed on the values of the predictor.
+#' Values outside the range of the data will extend the `boundary`
+#' knots (see below) beyond the data range.
 #'
-#' @param boundary optional, numerical vector of length 2 with the left and
-#' right boundary knots. The `boundary` setting is passed to
-#' __splines::bs()__ as the `Boundary.knots` argument. If not specified,
-#' then the range of predictor variable is taken. Since the range
-#' depends on the data, it is recommended to specify `boundary` explicitly.
-#' Note the the `boundary` range is internally expanded to include at
-#' least `range(knots)`.
+#' @param boundary Optional, but recommended. Numerical vector of
+#' length 2 with the left and right boundary knots. The `boundary`
+#' setting is passed to [splines::bs()] as the `Boundary.knots` argument.
+#' If not specified, then the range of predictor variable is taken. Since
+#' the range depends on the data, it is recommended to specify `boundary`
+#' explicitly. Note the the `boundary` range is internally expanded
+#' to include at least `range(knots)`.
 #'
 #' @param k optional, a convenience parameter giving the number of
 #' internal knots. If specified, then `k` internal knots are placed
@@ -54,15 +60,15 @@
 #' setting `k = 3` puts knots at the 25th, 50th and 75th quantiles,
 #' and so on. Note that knots specified via `k` are data-dependent
 #' and do not transfer well to other data sets. We therefore recommend
-#' using `knots` and `boundary` over `k`. If both `k`` and
+#' using `knots` and `boundary` over `k`. If both `k` and
 #' `knots` are specified, then `k` take precendence. This is likely
 #' to change in the future.
 #'
 #' @param method Either `"kr"` (for the Kasim-Raudenbush sampler)
-#' or `"lmer"` (for __lme4::lmer__).
+#' or `"lmer"` (for [lme4::lmer()]).
 #'
 #' @param control A list with arguments that can be used to control the
-#' fitting of __lme4::lmer()__. The default
+#' fitting of [lme4::lmer()]. The default
 #' is set to `lmerControl(check.nobs.vs.nRE = "warning")`, which turn
 #' fatal errors with respect the number of parameters into warnings.
 #'
@@ -74,7 +80,7 @@
 #' @details
 #' The variance-covariance matrix of the random effects absorbs the
 #' relations over time. Currently, this matrix is estimated
-#' as unstructured by `lmer()` from the `lme4` package.
+#' as unstructured by [lme4::lmer()].
 
 #' This estimate may be unstable if
 #' the number of children is small relative to the number of specified
@@ -91,7 +97,6 @@
 #' # fit with implicit boundary c(0, 3)
 #' # fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = id, knots = 0:3))
 #'
-#' \dontrun{
 #' predictors <- mtcars[, -1]
 #' outcome <- mtcars[, 1]
 #'
@@ -106,7 +111,6 @@
 #' rec <- recipe(mpg ~ ., mtcars)
 #' rec <- step_log(rec, disp)
 #' mod3 <- brokenstick(rec, mtcars)
-#' }
 #' @export
 brokenstick <- function(x, ...) {
   UseMethod("brokenstick")
@@ -114,16 +118,7 @@ brokenstick <- function(x, ...) {
 
 #' @export
 #' @rdname brokenstick
-brokenstick.default <- function(x,
-                                ...,
-                                knots = NULL,
-                                boundary = NULL,
-                                k = NULL,
-                                subset = NULL,
-                                weights = NULL,
-                                na.action = na.exclude,
-                                method = c("lmer", "kr", "model.frame"),
-                                control = list()) {
+brokenstick.default <- function(x, ...) {
   stop("`brokenstick()` is not defined for a '", class(x)[1], "'.", call. = FALSE)
 }
 
@@ -131,12 +126,10 @@ brokenstick.default <- function(x,
 
 #' @export
 #' @rdname brokenstick
-brokenstick.data.frame <- function(x, y, ...,
+brokenstick.data.frame <- function(x, y, z, ...,
                                    knots = NULL,
                                    boundary = NULL,
                                    k = NULL,
-                                   subset = NULL,
-                                   weights = NULL,
                                    na.action = na.exclude,
                                    method = c("lmer", "kr", "model.frame"),
                                    control = list()) {
@@ -148,12 +141,10 @@ brokenstick.data.frame <- function(x, y, ...,
 
 #' @export
 #' @rdname brokenstick
-brokenstick.matrix <- function(x, y, ...,
+brokenstick.matrix <- function(x, y, z, ...,
                                knots = NULL,
                                boundary = NULL,
                                k = NULL,
-                               subset = NULL,
-                               weights = NULL,
                                na.action = na.exclude,
                                method = c("lmer", "kr", "model.frame"),
                                control = list()) {
@@ -169,8 +160,6 @@ brokenstick.formula <- function(formula, data, ...,
                                 knots = NULL,
                                 boundary = NULL,
                                 k = NULL,
-                                subset = NULL,
-                                weights = NULL,
                                 na.action = na.exclude,
                                 method = c("lmer", "kr", "model.frame"),
                                 control = list()) {
@@ -186,8 +175,6 @@ brokenstick.recipe <- function(x, data, ...,
                                knots = NULL,
                                boundary = NULL,
                                k = NULL,
-                               subset = NULL,
-                               weights = NULL,
                                na.action = na.exclude,
                                method = c("lmer", "kr", "model.frame"),
                                control = list()) {
@@ -200,13 +187,14 @@ brokenstick.recipe <- function(x, data, ...,
 
 brokenstick_bridge <- function(processed, ...) {
   predictors <- processed$predictors
-  outcome <- processed$outcomes[[1]]
+  outcome <- processed$outcomes[1]
 
   fit <- brokenstick_impl(predictors, outcome)
 
   new_brokenstick(
     data = dplyr::bind_cols(outcome, predictors),
-    model = fit,
+    npred = fit$npred,
+    nout = fit$nout,
     blueprint = processed$blueprint
   )
 }
@@ -216,7 +204,9 @@ brokenstick_bridge <- function(processed, ...) {
 # Implementation
 
 brokenstick_impl <- function(predictors, outcome) {
-  list(coefs = 1)
+  kr(predictors, outcome)
+  #list(npred = ncol(predictors),
+  #     nout = ncol(outcome))
 }
 
 

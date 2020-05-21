@@ -18,7 +18,8 @@ Imports:
     growthstandards,
     hardhat,
     lme4,
-    splines
+    splines,
+    stats
 Suggests:
     dplyr,
     knitr,
@@ -26,6 +27,7 @@ Suggests:
     mvtnorm,
     plyr,
     rbokeh,
+    recipes,
     svglite,
     testthat,
     tidyr

@@ -4,19 +4,12 @@
 \alias{kr}
 \title{Kasim-Raudenbush sampler for two-level normal model}
 \usage{
-kr(data, formula, ...)
+kr(predictors, outcome, ...)
 }
 \arguments{
-\item{data}{an optional data frame, list or environment (or object
-    coercible by \code{\link{as.data.frame}} to a data frame) containing
-    the variables in the model.  If not found in \code{data}, the
-    variables are taken from \code{environment(formula)},
-    typically the environment from which \code{lm} is called.}
+\item{predictors}{A data frame, multiple columns}
 
-\item{formula}{an object of class \code{"\link[stats]{formula}"} (or one that
-    can be coerced to that class): a symbolic description of the
-    model to be fitted.  The details of model specification are given
-    under \sQuote{Details}.}
+\item{outcome}{A tibble, one column}
 
 \item{...}{Other named arguments.}
 }
@@ -35,9 +28,6 @@ Added June 25, 2012: The currently implemented algorithm does not
 handle predictors that are specified as fixed effects (type=1). When using
 \code{mice.impute.2l.norm()}, the current advice is to specify all predictors
 as random effects (type=2).
-
-Warning: The assumption of heterogeneous variances requires that in every
-class at least one observation has a response in \code{y}.
 }
 \references{
 Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested
@@ -47,7 +37,4 @@ of Educational and Behavioral Statistics, 23(2), 93--116.
 Van Buuren, S. (2011) Multiple imputation of multilevel data. In Hox, J.J.
 and and Roberts, J.K. (Eds.), \emph{The Handbook of Advanced Multilevel
 Analysis}, Chapter 10, pp. 173--196. Milton Park, UK: Routledge.
-}
-\author{
-Roel de Jong, 2008
 }
