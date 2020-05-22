@@ -7,7 +7,7 @@
 #' @importFrom stats           approx as.formula fitted model.frame
 #'                             model.matrix na.exclude na.omit
 #'                             predict quantile rgamma rnorm
-#'                             rWishart var
+#'                             rWishart setNames var
 NULL
 
 #' \pkg{brokenstick}: A package for irregular longitudinal data.

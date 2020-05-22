@@ -104,13 +104,16 @@
 #' mod <- brokenstick(predictors, outcome)
 #'
 #' # Formula interface
-#' mod2 <- brokenstick(mpg ~ ., mtcars)
+#' mod2 <- brokenstick(mpg ~ disp | cyl, mtcars)
 #'
-#' # Recipes interface
+#' # Recipes data.frame interface
 #' library(recipes)
-#' rec <- recipe(mpg ~ ., mtcars)
-#' rec <- step_log(rec, disp)
+#' rec <- recipe(mtcars,
+#'               vars = c("mpg", "disp", "cyl"),
+#'               roles = c("outcome", "predictor", "group"))
 #' mod3 <- brokenstick(rec, mtcars)
+#'
+#'
 #' @export
 brokenstick <- function(x, ...) {
   UseMethod("brokenstick")
@@ -148,8 +151,15 @@ brokenstick.matrix <- function(x, y, z, ...,
                                na.action = na.exclude,
                                method = c("lmer", "kr", "model.frame"),
                                control = list()) {
+
+  y_name <- ifelse(is.null(names(y)), deparse(substitute(y)), names(y)[1L])
+  x_name <- names(x)[1L]
+  z_name <- ifelse(is.null(names(z)), deparse(substitute(z)), names(z)[1L])
+  x <- dplyr::bind_cols(x[, 1L, drop = FALSE], z)
+  setNames(x, c(x_name, z_name))
+
   processed <- hardhat::mold(x, y)
-  brokenstick_bridge(processed, ...)
+  brokenstick_bridge(processed, z_name, ...)
 }
 
 # Formula method
@@ -163,7 +173,22 @@ brokenstick.formula <- function(formula, data, ...,
                                 na.action = na.exclude,
                                 method = c("lmer", "kr", "model.frame"),
                                 control = list()) {
-  processed <- hardhat::mold(formula, data)
+  # intercept formula to evade mold() formula limitations
+  nms <- parse_formula(formula)
+
+  # Solution below is simple, but needs recipes dependency
+  # rec <- recipes::recipe(data,
+  #              vars = c(nms$y, nms$x, nms$z),
+  #              roles = c("outcome", "predictor", "group"))
+  # processed <- hardhat::mold(rec, data)
+
+  # Let's stick to the flattened formula for now
+  f2 <- as.formula(paste(nms$y, "~", nms$x, "+", nms$z))
+  processed <- hardhat::mold(f2, data)
+
+  # signal special role of group variable
+
+
   brokenstick_bridge(processed, ...)
 }
 
@@ -178,6 +203,7 @@ brokenstick.recipe <- function(x, data, ...,
                                na.action = na.exclude,
                                method = c("lmer", "kr", "model.frame"),
                                control = list()) {
+
   processed <- hardhat::mold(x, data)
   brokenstick_bridge(processed, ...)
 }
@@ -211,13 +237,13 @@ brokenstick_impl <- function(predictors, outcome) {
 
 
 calc_brokenstick <- function(y, x, subjid,
-                        k = NULL,
-                        knots = NULL,
-                        boundary = NULL,
-                        method = c("lmer", "kr"),
-                        control = lmerControl(check.nobs.vs.nRE = "warning"),
-                        na.action = na.exclude,
-                        ...) {
+                             k = NULL,
+                             knots = NULL,
+                             boundary = NULL,
+                             method = c("lmer", "kr"),
+                             control = lmerControl(check.nobs.vs.nRE = "warning"),
+                             na.action = na.exclude,
+                             ...) {
   .Deprecated("fit_brokenstick")
 
   call <- match.call()

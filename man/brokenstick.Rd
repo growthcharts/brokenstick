@@ -171,11 +171,14 @@ outcome <- mtcars[, 1]
 mod <- brokenstick(predictors, outcome)
 
 # Formula interface
-mod2 <- brokenstick(mpg ~ ., mtcars)
+mod2 <- brokenstick(mpg ~ disp | cyl, mtcars)
 
-# Recipes interface
+# Recipes data.frame interface
 library(recipes)
-rec <- recipe(mpg ~ ., mtcars)
-rec <- step_log(rec, disp)
+rec <- recipe(mtcars,
+              vars = c("mpg", "disp", "cyl"),
+              roles = c("outcome", "predictor", "group"))
 mod3 <- brokenstick(rec, mtcars)
+
+
 }
