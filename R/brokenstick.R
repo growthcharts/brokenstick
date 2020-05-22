@@ -108,17 +108,23 @@
 #' # Formula interface
 #' mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
 #'
-#' # XY interface
-#' mod2 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
-#' identical(mod1, mod2)
-#'
 #' # Recipes data.frame interface
 #' library(recipes)
 #' rec <- recipe(mtcars,
 #'               vars = c("mpg", "disp", "cyl"),
 #'               roles = c("outcome", "predictor", "group"))
-#' mod3 <- brokenstick(rec, mtcars)
+#' mod2 <- brokenstick(rec, mtcars)
+#' identical(mod1, mod2)
+#'
+#' # XY interface - data.frame
+#' mod3 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
 #' identical(mod1, mod3)
+#'
+#' # XY interface - matrix
+#' mt <- as.matrix(mtcars)
+#' mod4 <- brokenstick(mt[, "disp", drop = FALSE],
+#'                     mt[, "mpg", drop = FALSE],
+#'                     mt[, "cyl", drop = FALSE])
 #'
 #' @export
 brokenstick <- function(x, ...) {
@@ -130,6 +136,46 @@ brokenstick <- function(x, ...) {
 brokenstick.default <- function(x, ...) {
   stop("`brokenstick()` is not defined for a '", class(x)[1], "'.", call. = FALSE)
 }
+
+
+# Formula method
+
+#' @export
+#' @rdname brokenstick
+brokenstick.formula <- function(formula, data, ...,
+                                knots = NULL,
+                                boundary = NULL,
+                                k = NULL,
+                                na.action = na.exclude,
+                                method = c("lmer", "kr", "model.frame"),
+                                control = list()) {
+  # pre-process formula to get around mold()'s formula limitations
+  nms <- parse_formula(formula)
+  rec <- recipes::recipe(data,
+                         vars = c(nms$y, nms$x, nms$z),
+                         roles = c("outcome", "predictor", "group"))
+  processed <- hardhat::mold(rec, data)
+
+  brokenstick_bridge(processed, ...)
+}
+
+
+# Recipe method
+
+#' @export
+#' @rdname brokenstick
+brokenstick.recipe <- function(x, data, ...,
+                               knots = NULL,
+                               boundary = NULL,
+                               k = NULL,
+                               na.action = na.exclude,
+                               method = c("lmer", "kr", "model.frame"),
+                               control = list()) {
+
+  processed <- hardhat::mold(x, data)
+  brokenstick_bridge(processed, ...)
+}
+
 
 # XY method - data frame
 
@@ -162,6 +208,7 @@ brokenstick.data.frame <- function(x, y, group, ...,
   brokenstick_bridge(processed, ...)
 }
 
+
 # XY method - matrix
 
 #' @export
@@ -173,47 +220,26 @@ brokenstick.matrix <- function(x, y, group, ...,
                                na.action = na.exclude,
                                method = c("lmer", "kr", "model.frame"),
                                control = list()) {
+  nms <- list(
+    y = ifelse(is.null(colnames(y)),
+               deparse(substitute(y)),
+               colnames(y)[1L]),
+    x = colnames(x)[1L],
+    g = ifelse(is.null(colnames(group)),
+               deparse(substitute(group)),
+               colnames(group)[1L]))
 
-  processed <- hardhat::mold(x, y)
-  brokenstick_bridge(processed, ...)
-}
+  data <- dplyr::bind_cols(data.frame(x[, 1L, drop = FALSE]), y, group)
+  data <- setNames(data, as.character(c(nms$x, nms$y, nms$g)))
 
-# Formula method
-
-#' @export
-#' @rdname brokenstick
-brokenstick.formula <- function(formula, data, ...,
-                                knots = NULL,
-                                boundary = NULL,
-                                k = NULL,
-                                na.action = na.exclude,
-                                method = c("lmer", "kr", "model.frame"),
-                                control = list()) {
-  # pre-process formula to get around mold()'s formula limitations
-  nms <- parse_formula(formula)
   rec <- recipes::recipe(data,
-               vars = c(nms$y, nms$x, nms$z),
-               roles = c("outcome", "predictor", "group"))
+                         vars = c(nms$y, nms$x, nms$g),
+                         roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
   brokenstick_bridge(processed, ...)
 }
 
-# Recipe method
-
-#' @export
-#' @rdname brokenstick
-brokenstick.recipe <- function(x, data, ...,
-                               knots = NULL,
-                               boundary = NULL,
-                               k = NULL,
-                               na.action = na.exclude,
-                               method = c("lmer", "kr", "model.frame"),
-                               control = list()) {
-
-  processed <- hardhat::mold(x, data)
-  brokenstick_bridge(processed, ...)
-}
 
 # ------------------------------------------------------------------------------
 # Bridge

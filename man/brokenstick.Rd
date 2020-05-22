@@ -3,15 +3,39 @@
 \name{brokenstick}
 \alias{brokenstick}
 \alias{brokenstick.default}
-\alias{brokenstick.data.frame}
-\alias{brokenstick.matrix}
 \alias{brokenstick.formula}
 \alias{brokenstick.recipe}
+\alias{brokenstick.data.frame}
+\alias{brokenstick.matrix}
 \title{Fit a \code{brokenstick} model to irregular data}
 \usage{
 brokenstick(x, ...)
 
 \method{brokenstick}{default}(x, ...)
+
+\method{brokenstick}{formula}(
+  formula,
+  data,
+  ...,
+  knots = NULL,
+  boundary = NULL,
+  k = NULL,
+  na.action = na.exclude,
+  method = c("lmer", "kr", "model.frame"),
+  control = list()
+)
+
+\method{brokenstick}{recipe}(
+  x,
+  data,
+  ...,
+  knots = NULL,
+  boundary = NULL,
+  k = NULL,
+  na.action = na.exclude,
+  method = c("lmer", "kr", "model.frame"),
+  control = list()
+)
 
 \method{brokenstick}{data.frame}(
   x,
@@ -38,30 +62,6 @@ brokenstick(x, ...)
   method = c("lmer", "kr", "model.frame"),
   control = list()
 )
-
-\method{brokenstick}{formula}(
-  formula,
-  data,
-  ...,
-  knots = NULL,
-  boundary = NULL,
-  k = NULL,
-  na.action = na.exclude,
-  method = c("lmer", "kr", "model.frame"),
-  control = list()
-)
-
-\method{brokenstick}{recipe}(
-  x,
-  data,
-  ...,
-  knots = NULL,
-  boundary = NULL,
-  k = NULL,
-  na.action = na.exclude,
-  method = c("lmer", "kr", "model.frame"),
-  control = list()
-)
 }
 \arguments{
 \item{x}{Predictor variables. Depending on the context:
@@ -77,20 +77,20 @@ columns, then specify the model by a \code{formula} argument.}
 
 \item{...}{Not currently used, but required for extensibility.}
 
-\item{y}{Outcome variable. When \code{x} is a \strong{data frame} or \strong{matrix},
-\code{y} is specified as:
-\itemize{
-\item A \strong{data frame} with 1 numeric column.
-\item A \strong{matrix} with 1 numeric column.
-\item A numeric \strong{vector}.
-}}
+\item{formula}{A formula specifying the outcome terms on the
+left-hand side, the predictor term on the right-hand side and
+the group variable after the \code{|} sign, e.g \code{formula = hgt ~ age | id}.
+One may specify additional variables, but the \code{brokenstick} model
+will ignored them.
 
-\item{group}{Grouping variable. When \code{x} is a \strong{data frame} or \strong{matrix},
-\code{group} is specified as:
+Note: This formula specification is specific to the \code{brokenstick()}
+function, and generates the error
+\verb{No in-line functions should be used here} if passed directly to
+\code{recipes::recipe()}. See examples.}
+
+\item{data}{When a \strong{recipe} or \strong{formula} is used, \code{data} is specified as:
 \itemize{
-\item A \strong{data frame} with 1 column.
-\item A \strong{matrix} with 1 column.
-\item A numeric \strong{vector}.
+\item A \strong{data frame} containing predictor, group and outcome variables.
 }}
 
 \item{knots}{Optional, but recommended. Numerical vector with the
@@ -129,20 +129,20 @@ fitting of \code{\link[lme4:lmer]{lme4::lmer()}}. The default
 is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
 fatal errors with respect the number of parameters into warnings.}
 
-\item{formula}{A formula specifying the outcome terms on the
-left-hand side, the predictor term on the right-hand side and
-the group variable after the \code{|} sign, e.g \code{formula = hgt ~ age | id}.
-One may specify additional variables, but the \code{brokenstick} model
-will ignored them.
-
-Note: This formula specification is specific to the \code{brokenstick()}
-function, and generates the error
-\verb{No in-line functions should be used here} if passed directly to
-\code{recipes::recipe()}. See examples.}
-
-\item{data}{When a \strong{recipe} or \strong{formula} is used, \code{data} is specified as:
+\item{y}{Outcome variable. When \code{x} is a \strong{data frame} or \strong{matrix},
+\code{y} is specified as:
 \itemize{
-\item A \strong{data frame} containing predictor, group and outcome variables.
+\item A \strong{data frame} with 1 numeric column.
+\item A \strong{matrix} with 1 numeric column.
+\item A numeric \strong{vector}.
+}}
+
+\item{group}{Grouping variable. When \code{x} is a \strong{data frame} or \strong{matrix},
+\code{group} is specified as:
+\itemize{
+\item A \strong{data frame} with 1 column.
+\item A \strong{matrix} with 1 column.
+\item A numeric \strong{vector}.
 }}
 }
 \value{
@@ -175,16 +175,22 @@ children.
 # Formula interface
 mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
 
-# XY interface
-mod2 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
-identical(mod1, mod2)
-
 # Recipes data.frame interface
 library(recipes)
 rec <- recipe(mtcars,
               vars = c("mpg", "disp", "cyl"),
               roles = c("outcome", "predictor", "group"))
-mod3 <- brokenstick(rec, mtcars)
+mod2 <- brokenstick(rec, mtcars)
+identical(mod1, mod2)
+
+# XY interface - data.frame
+mod3 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
 identical(mod1, mod3)
+
+# XY interface - matrix
+mt <- as.matrix(mtcars)
+mod4 <- brokenstick(mt[, "disp", drop = FALSE],
+                    mt[, "mpg", drop = FALSE],
+                    mt[, "cyl", drop = FALSE])
 
 }
