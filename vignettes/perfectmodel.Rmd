@@ -1,0 +1,106 @@
+---
+title: "Check perfect model"
+author: "Stef van Buuren"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Check perfect model}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Objective
+
+In general, the broken stick model smoothes the observed growth trajectory. What happens of all observations are already aligned to the break ages? Does the model perfectly represent the data? Is the covariance matrix of the random effects ($\Omega)$ equal to the covariance between the measurements? Is $\sigma^2$ equal to zero?
+
+## Data generation
+
+We adapt code from http://www.davekleinschmidt.com/sst-mixed-effects-simulation/simulations_slides.pdf to generate test data:
+
+```{r}
+library("plyr")
+library("mvtnorm")
+make_data_generator <- function(resid_var = 1,
+                                ranef_covar = diag(c(1, 1)), n = 100
+                                ) {
+  ni <- nrow(ranef_covar)
+  generate_data <- function() {
+    # sample data set under mixed effects model with random slope/intercepts 
+    simulated_data <- rdply(n, {
+      b <- t(rmvnorm(n = 1, sigma = ranef_covar))
+      epsilon <- rnorm(n = length(b), mean = 0, sd = sqrt(resid_var))
+      b + epsilon
+    })
+  data.frame(
+    subject = rep(1:n, each = ni),
+    age = rep(1:ni, n),
+    simulated_data)
+  }
+}
+```
+
+Let us first model the perfect situation where $\sigma^2 = 0$ (so we set `resid_var` to zero) and where the ages align perfectly.
+
+```{r}
+set.seed(77711)
+covar <- matrix(c(1, 0.7, 0.5, 0.3,
+                  0.7, 1, 0.8, 0.5,
+                  0.5, 0.8, 1, 0.6,
+                  0.3, 0.5, 0.6, 1), nrow = 4)
+gen_dat <- make_data_generator(n = 10000, 
+                               ranef_covar = covar,
+                               resid_var = 1)
+data <- gen_dat()
+head(data)
+```
+
+Check the correlation matrix of the $y$'s.
+
+```{r}
+library("tidyr")
+library("dplyr")
+d <- as_data_frame(data[,-3])
+broad <- t(spread(d, subject, X1))[-1,]
+cor(broad)
+```
+
+## Fit model
+
+Fit broken stick model, with knots specified at ages `1:4`.
+
+```{r}
+library("brokenstick")
+knots <- 1:3
+boundary <- c(1, 4)
+fit <- with(data, 
+            brokenstick(y = X1, x = age, subjid = subject, 
+                        knots = knots, boundary = boundary))
+omega <- export(fit)$omega
+beta <- export(fit)$beta
+sigma2 <- export(fit)$sigma2
+round(beta, 2)
+round(sigma2, 4)
+
+# correlation random effects
+round(covar, 3)
+round(omega, 2)
+
+# covariances measured data
+round(omega + diag(sigma2, 4), 3)
+round(cov(broad), 3)
+
+# convert to time-to-time correlation matrix
+round(cov2cor(omega + diag(sigma2, 4)), 3)
+round(cor(broad), 3)
+```
+
+## Conclusions
+
+1. If $\sigma^2=0$, then $\Omega$ reproduces correlations between $y$'s correctly. However, the estimate of $\sigma^2$ is too high. 
+2. If $\sigma^2 > 0$, then $\Omega$ overestimates the correlations between $y$'s, but correctly estimates the covariance among the random effects.
+3. If $\sigma^2 > 0$, then $\Omega + \hat\sigma^2 I(n_i)$ correctly estimates the covariances between $y$'s. This can be converted by `cov2cor()` to the time-to-time correlation matrix.
+
