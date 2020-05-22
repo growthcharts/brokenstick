@@ -19,8 +19,13 @@ formulas of \code{y ~ x | z}. It return the name of
 the first variable mentioned in each formula component.
 }
 \examples{
+\dontrun{
 # examples that yield identical result
-parse_formula(y ~ x | z)
-parse_formula(y + a ~ x + x1 | z + b)
-parse_formula(y + a + log(b) ~ x + x1 * c | z + d)
+brokenstick:::parse_formula(y ~ x | z)
+brokenstick:::parse_formula(y + a ~ x + x1 | z + b)
+brokenstick:::parse_formula(y + a + log(b) ~ x + x1 * c | z + d)
+}
+}
+\author{
+Stef van Buuren, 2020
 }

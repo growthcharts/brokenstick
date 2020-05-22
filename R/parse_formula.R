@@ -6,12 +6,14 @@
 #' @param f formula object
 #' @return A `list` with elements `y`, `x` and `z`.
 #' Each element has length 1.
+#' @author Stef van Buuren, 2020
 #' @examples
+#' \dontrun{
 #' # examples that yield identical result
-#' parse_formula(y ~ x | z)
-#' parse_formula(y + a ~ x + x1 | z + b)
-#' parse_formula(y + a + log(b) ~ x + x1 * c | z + d)
-#' @export
+#' brokenstick:::parse_formula(y ~ x | z)
+#' brokenstick:::parse_formula(y + a ~ x + x1 | z + b)
+#' brokenstick:::parse_formula(y + a + log(b) ~ x + x1 * c | z + d)
+#' }
 parse_formula <- function(f) {
 
   if (!inherits(f, "formula"))
