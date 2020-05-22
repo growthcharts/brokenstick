@@ -6,7 +6,7 @@
 #' Differences between observations are expressed by one random
 #' effect per grid point. When multiple set of series are modelled,
 #' each modeled trajectory consists of straight lines that join at the
-#' chosen grid points, and hence look like a 'broken stick'.
+#' chosen grid points, and hence look like a broken stick.
 #'
 #' @param x Predictor variables. Depending on the context:
 #'
@@ -15,7 +15,7 @@
 #'   * A __recipe__ specifying a set of preprocessing steps
 #'     created from [recipes::recipe()].
 #'
-#' If `x` has one column, then also specify `y` and `z`. If `x` has multiple
+#' If `x` has one column, then also specify `y` and `group`. If `x` has multiple
 #' columns, then specify the model by a `formula` argument.
 #'
 #' @param y Outcome variable. When `x` is a __data frame__ or __matrix__,
@@ -25,8 +25,8 @@
 #'   * A __matrix__ with 1 numeric column.
 #'   * A numeric __vector__.
 #'
-#' @param z Grouping variable. When `x` is a __data frame__ or __matrix__,
-#' `z` is specified as:
+#' @param group Grouping variable. When `x` is a __data frame__ or __matrix__,
+#' `group` is specified as:
 #'
 #'   * A __data frame__ with 1 column.
 #'   * A __matrix__ with 1 column.
@@ -39,6 +39,13 @@
 #' @param formula A formula specifying the outcome terms on the
 #' left-hand side, the predictor term on the right-hand side and
 #' the group variable after the `|` sign, e.g `formula = hgt ~ age | id`.
+#' One may specify additional variables, but the `brokenstick` model
+#' will ignored them.
+#'
+#'  Note: This formula specification is specific to the `brokenstick()`
+#'  function, and generates the error
+#'  `No in-line functions should be used here` if passed directly to
+#' `recipes::recipe()`. See examples.
 #'
 #' @param knots Optional, but recommended. Numerical vector with the
 #' locations of the breaks to be placed on the values of the predictor.
@@ -53,16 +60,17 @@
 #' explicitly. Note the the `boundary` range is internally expanded
 #' to include at least `range(knots)`.
 #'
-#' @param k optional, a convenience parameter giving the number of
+#' @param k Optional, a convenience parameter for the number of
 #' internal knots. If specified, then `k` internal knots are placed
 #' at equidense quantiles of the predictor. For example,
 #' specifying `k = 1` puts a knot at the 50th quantile (median),
 #' setting `k = 3` puts knots at the 25th, 50th and 75th quantiles,
-#' and so on. Note that knots specified via `k` are data-dependent
-#' and do not transfer well to other data sets. We therefore recommend
+#' and so on.
+#'
+#' Note: Knots specified via `k` are data-dependent
+#' and do not transfer to other data sets. We recommend
 #' using `knots` and `boundary` over `k`. If both `k` and
-#' `knots` are specified, then `k` take precendence. This is likely
-#' to change in the future.
+#' `knots` are specified, then `k` takes precendence.
 #'
 #' @param method Either `"kr"` (for the Kasim-Raudenbush sampler)
 #' or `"lmer"` (for [lme4::lmer()]).
@@ -97,14 +105,12 @@
 #' # fit with implicit boundary c(0, 3)
 #' # fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = id, knots = 0:3))
 #'
-#' predictors <- mtcars[, -1]
-#' outcome <- mtcars[, 1]
+#' # Formula interface
+#' mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
 #'
 #' # XY interface
-#' mod <- brokenstick(predictors, outcome)
-#'
-#' # Formula interface
-#' mod2 <- brokenstick(mpg ~ disp | cyl, mtcars)
+#' mod2 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
+#' identical(mod1, mod2)
 #'
 #' # Recipes data.frame interface
 #' library(recipes)
@@ -112,7 +118,7 @@
 #'               vars = c("mpg", "disp", "cyl"),
 #'               roles = c("outcome", "predictor", "group"))
 #' mod3 <- brokenstick(rec, mtcars)
-#'
+#' identical(mod1, mod3)
 #'
 #' @export
 brokenstick <- function(x, ...) {
@@ -129,14 +135,30 @@ brokenstick.default <- function(x, ...) {
 
 #' @export
 #' @rdname brokenstick
-brokenstick.data.frame <- function(x, y, z, ...,
+brokenstick.data.frame <- function(x, y, group, ...,
                                    knots = NULL,
                                    boundary = NULL,
                                    k = NULL,
                                    na.action = na.exclude,
                                    method = c("lmer", "kr", "model.frame"),
                                    control = list()) {
-  processed <- hardhat::mold(x, y)
+  nms <- list(
+    y = ifelse(is.null(names(y)),
+               deparse(substitute(y)),
+               names(y)[1L]),
+    x = names(x)[1L],
+    g = ifelse(is.null(names(group)),
+               deparse(substitute(group)),
+               names(group)[1L]))
+
+  data <- dplyr::bind_cols(x[, 1L, drop = FALSE], y, group)
+  data <- setNames(data, c(nms$x, nms$y, nms$g))
+
+  rec <- recipes::recipe(data,
+                         vars = c(nms$y, nms$x, nms$g),
+                         roles = c("outcome", "predictor", "group"))
+  processed <- hardhat::mold(rec, data)
+
   brokenstick_bridge(processed, ...)
 }
 
@@ -144,7 +166,7 @@ brokenstick.data.frame <- function(x, y, z, ...,
 
 #' @export
 #' @rdname brokenstick
-brokenstick.matrix <- function(x, y, z, ...,
+brokenstick.matrix <- function(x, y, group, ...,
                                knots = NULL,
                                boundary = NULL,
                                k = NULL,
@@ -152,14 +174,8 @@ brokenstick.matrix <- function(x, y, z, ...,
                                method = c("lmer", "kr", "model.frame"),
                                control = list()) {
 
-  y_name <- ifelse(is.null(names(y)), deparse(substitute(y)), names(y)[1L])
-  x_name <- names(x)[1L]
-  z_name <- ifelse(is.null(names(z)), deparse(substitute(z)), names(z)[1L])
-  x <- dplyr::bind_cols(x[, 1L, drop = FALSE], z)
-  setNames(x, c(x_name, z_name))
-
   processed <- hardhat::mold(x, y)
-  brokenstick_bridge(processed, z_name, ...)
+  brokenstick_bridge(processed, ...)
 }
 
 # Formula method

@@ -16,7 +16,7 @@ brokenstick(x, ...)
 \method{brokenstick}{data.frame}(
   x,
   y,
-  z,
+  group,
   ...,
   knots = NULL,
   boundary = NULL,
@@ -29,7 +29,7 @@ brokenstick(x, ...)
 \method{brokenstick}{matrix}(
   x,
   y,
-  z,
+  group,
   ...,
   knots = NULL,
   boundary = NULL,
@@ -72,7 +72,7 @@ brokenstick(x, ...)
 created from \code{\link[recipes:recipe]{recipes::recipe()}}.
 }
 
-If \code{x} has one column, then also specify \code{y} and \code{z}. If \code{x} has multiple
+If \code{x} has one column, then also specify \code{y} and \code{group}. If \code{x} has multiple
 columns, then specify the model by a \code{formula} argument.}
 
 \item{...}{Not currently used, but required for extensibility.}
@@ -85,8 +85,8 @@ columns, then specify the model by a \code{formula} argument.}
 \item A numeric \strong{vector}.
 }}
 
-\item{z}{Grouping variable. When \code{x} is a \strong{data frame} or \strong{matrix},
-\code{z} is specified as:
+\item{group}{Grouping variable. When \code{x} is a \strong{data frame} or \strong{matrix},
+\code{group} is specified as:
 \itemize{
 \item A \strong{data frame} with 1 column.
 \item A \strong{matrix} with 1 column.
@@ -106,16 +106,17 @@ the range depends on the data, it is recommended to specify \code{boundary}
 explicitly. Note the the \code{boundary} range is internally expanded
 to include at least \code{range(knots)}.}
 
-\item{k}{optional, a convenience parameter giving the number of
+\item{k}{Optional, a convenience parameter for the number of
 internal knots. If specified, then \code{k} internal knots are placed
 at equidense quantiles of the predictor. For example,
 specifying \code{k = 1} puts a knot at the 50th quantile (median),
 setting \code{k = 3} puts knots at the 25th, 50th and 75th quantiles,
-and so on. Note that knots specified via \code{k} are data-dependent
-and do not transfer well to other data sets. We therefore recommend
+and so on.
+
+Note: Knots specified via \code{k} are data-dependent
+and do not transfer to other data sets. We recommend
 using \code{knots} and \code{boundary} over \code{k}. If both \code{k} and
-\code{knots} are specified, then \code{k} take precendence. This is likely
-to change in the future.}
+\code{knots} are specified, then \code{k} takes precendence.}
 
 \item{na.action}{The function to call for the \code{na.action} argument
 in \code{lmer()}. The default is \code{na.exclude}.}
@@ -130,7 +131,14 @@ fatal errors with respect the number of parameters into warnings.}
 
 \item{formula}{A formula specifying the outcome terms on the
 left-hand side, the predictor term on the right-hand side and
-the group variable after the \code{|} sign, e.g \code{formula = hgt ~ age | id}.}
+the group variable after the \code{|} sign, e.g \code{formula = hgt ~ age | id}.
+One may specify additional variables, but the \code{brokenstick} model
+will ignored them.
+
+Note: This formula specification is specific to the \code{brokenstick()}
+function, and generates the error
+\verb{No in-line functions should be used here} if passed directly to
+\code{recipes::recipe()}. See examples.}
 
 \item{data}{When a \strong{recipe} or \strong{formula} is used, \code{data} is specified as:
 \itemize{
@@ -147,7 +155,7 @@ The model codes de grid by a series of linear B-splines.
 Differences between observations are expressed by one random
 effect per grid point. When multiple set of series are modelled,
 each modeled trajectory consists of straight lines that join at the
-chosen grid points, and hence look like a 'broken stick'.
+chosen grid points, and hence look like a broken stick.
 }
 \details{
 The variance-covariance matrix of the random effects absorbs the
@@ -164,14 +172,12 @@ children.
 # fit with implicit boundary c(0, 3)
 # fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = id, knots = 0:3))
 
-predictors <- mtcars[, -1]
-outcome <- mtcars[, 1]
+# Formula interface
+mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
 
 # XY interface
-mod <- brokenstick(predictors, outcome)
-
-# Formula interface
-mod2 <- brokenstick(mpg ~ disp | cyl, mtcars)
+mod2 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
+identical(mod1, mod2)
 
 # Recipes data.frame interface
 library(recipes)
@@ -179,6 +185,6 @@ rec <- recipe(mtcars,
               vars = c("mpg", "disp", "cyl"),
               roles = c("outcome", "predictor", "group"))
 mod3 <- brokenstick(rec, mtcars)
-
+identical(mod1, mod3)
 
 }
