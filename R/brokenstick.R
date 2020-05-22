@@ -173,21 +173,12 @@ brokenstick.formula <- function(formula, data, ...,
                                 na.action = na.exclude,
                                 method = c("lmer", "kr", "model.frame"),
                                 control = list()) {
-  # intercept formula to evade mold() formula limitations
+  # pre-process formula to get around mold()'s formula limitations
   nms <- parse_formula(formula)
-
-  # Solution below is simple, but needs recipes dependency
-  # rec <- recipes::recipe(data,
-  #              vars = c(nms$y, nms$x, nms$z),
-  #              roles = c("outcome", "predictor", "group"))
-  # processed <- hardhat::mold(rec, data)
-
-  # Let's stick to the flattened formula for now
-  f2 <- as.formula(paste(nms$y, "~", nms$x, "+", nms$z))
-  processed <- hardhat::mold(f2, data)
-
-  # signal special role of group variable
-
+  rec <- recipes::recipe(data,
+               vars = c(nms$y, nms$x, nms$z),
+               roles = c("outcome", "predictor", "group"))
+  processed <- hardhat::mold(rec, data)
 
   brokenstick_bridge(processed, ...)
 }

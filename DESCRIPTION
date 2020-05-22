@@ -18,6 +18,7 @@ Imports:
     growthstandards,
     hardhat,
     lme4,
+    recipes,
     splines,
     stats
 Suggests:
@@ -27,7 +28,6 @@ Suggests:
     mvtnorm,
     plyr,
     rbokeh,
-    recipes,
     svglite,
     testthat,
     tidyr
