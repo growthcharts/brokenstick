@@ -92,11 +92,8 @@
 #' A `brokenstick` object.
 #'
 #' @examples
-#' data <- brokenstick::smocc_200
-#'
 #' # fit with implicit boundary c(0, 3)
-#' # fit <- with(data, brokenstick(x = data.frame(age), y = hgt.z, group = id, knots = 0:3))
-#' fit <- brokenstick(hgt.z ~ age | id, data = data, knots = 0:3)
+#' fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3)
 #'
 #' # Formula interface
 #' mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
@@ -263,7 +260,8 @@ brokenstick_bridge <- function(processed, knots, boundary, k, control, ...) {
     knots = l$knots,
     boundary = l$boundary,
     degree = 1L,
-    beta = beta,
+    model = fit$model,
+    beta = fit$beta,
     omega = fit$omega,
     sigma2j = fit$sigma2j,
     sigma2 = fit$sigma2,
@@ -283,16 +281,13 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
                 na.action = na.action)
 
   df <- as.data.frame(VarCorr(model))
-  fit <- list(
+  list(
     model = model,
     beta = lme4::fixef(model),
     omega = as.matrix(as.data.frame(VarCorr(model)[[names(data)[3L]]])),
     sigma2j = numeric(),
     sigma2 = df[df$grp == "Residual", "vcov"],
-    imp = numeric()
-  )
-  class(fit) <- c("brokenstick")
-  fit
+    draws = numeric())
 }
 
 brokenstick_impl_kr <- function(data, formula, control, na.action) {

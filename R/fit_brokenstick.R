@@ -47,7 +47,6 @@
 #' (e.g. to specify additional \code{lmer()} options.
 #' @return A fitted model of class \code{brokenstick}, which extends the
 #'  class \code{lmerMod}
-#' @examples
 #' @export
 fit_brokenstick <- function(data,
                             formula,

@@ -151,11 +151,8 @@ knots. The function can be time consuming for data sets with thousands of
 children.
 }
 \examples{
-data <- brokenstick::smocc_200
-
 # fit with implicit boundary c(0, 3)
-# fit <- with(data, brokenstick(x = data.frame(age), y = hgt.z, group = id, knots = 0:3))
-fit <- brokenstick(hgt.z ~ age | id, data = data, knots = 0:3)
+fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3)
 
 # Formula interface
 mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
