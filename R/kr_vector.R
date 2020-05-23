@@ -18,7 +18,9 @@
 #' fixed effect.
 #' @param intercept Logical determining whether the intercept is automatically
 #' added.
-#' @param ... Other named arguments.
+#' @param runin Number of run-in iterations
+#' @param ndraw Number of draws
+#' @param skip Interval between successive draws
 #' @return Vector with imputed data, same type as \code{y}, and of length
 #' \code{sum(wy)}
 #' @note Added June 25, 2012: The currently implemented algorithm does not
@@ -38,8 +40,9 @@
 #' Van Buuren, S. (2011) Multiple imputation of multilevel data. In Hox, J.J.
 #' and and Roberts, J.K. (Eds.), \emph{The Handbook of Advanced Multilevel
 #' Analysis}, Chapter 10, pp. 173--196. Milton Park, UK: Routledge.
-kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE, ...) {
-  symridge <- function(x, ridge = 0.0001, ...) {
+kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
+                      runin = 100L, ndraw = 10L, skip = 10L) {
+  symridge <- function(x, ridge = 0.0001) {
     x <- (x + t(x)) / 2
     if (nrow(x) == 1L) {
       return(x)
@@ -54,7 +57,9 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE, ...) {
   }
 
   ## Initialize
-  n.iter <- 100
+  n.iter <- runin + ndraw * skip
+  draw <- c(rep(FALSE, runin), rep(c(rep(FALSE, skip - 1L), TRUE), ndraw))
+
   if (is.null(wy)) wy <- !ry
   n.class <- length(unique(x[, type == -2]))
   if (n.class == 0) stop("No class variable")
@@ -74,27 +79,34 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE, ...) {
   sigma2.0 <- 1
   theta <- 1
 
+  store_beta <- matrix(NA, nrow = ndraw, ncol = n.rc)
+  store_omega <- array(NA, c(ndraw, n.rc, n.rc))
+  store_sigma2j <- matrix(NA, nrow = ndraw, ncol = n.class)
+  store_sigma2 <- matrix(NA, nrow = ndraw, ncol = 1L)
+  store_draws <- matrix(NA, nrow = ndraw, ncol = sum(wy))
+  count <- 0L
+
   ## Execute Gibbs sampler
   for (iter in seq_len(n.iter)) {
     ## Draw bees
     for (class in seq_len(n.class)) {
-      vv <- symridge(inv.sigma2[class] * X.SS[[class]] + inv.psi, ...)
+      vv <- symridge(inv.sigma2[class] * X.SS[[class]] + inv.psi)
       bees.var <- chol2inv(chol(vv))
       bees[class, ] <- drop(bees.var %*% (crossprod(inv.sigma2[class] * XG[[class]], yg[[class]]) + inv.psi %*% mu)) +
-        drop(rnorm(n = n.rc) %*% chol(symridge(bees.var, ...)))
+        drop(rnorm(n = n.rc) %*% chol(symridge(bees.var)))
       ss[class] <- crossprod(yg[[class]] - XG[[class]] %*% bees[class, ])
     }
 
     ## Draw mu
     mu <- colMeans(bees) + drop(rnorm(n = n.rc) %*%
-      chol(chol2inv(chol(symridge(inv.psi, ...))) / n.class))
+                                  chol(chol2inv(chol(symridge(inv.psi))) / n.class))
 
     ## Draw psi
     # inv.psi <- rwishart(df = n.class - n.rc - 1,
     #                    SqrtSigma = chol(chol2inv(chol(symridge(crossprod(t(t(bees) - mu)), ...)))))
     inv.psi <- rWishart(
       n = 1, df = n.class - n.rc - 1,
-      Sigma = chol2inv(chol(symridge(crossprod(t(t(bees) - mu)), ...)))
+      Sigma = chol2inv(chol(symridge(crossprod(t(t(bees) - mu)))))
     )[, , 1L]
 
     ## Draw sigma2
@@ -107,11 +119,28 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE, ...) {
     ## Draw theta
     G <- exp(mean(log(1 / inv.sigma2))) # Geometric mean
     theta <- 1 / rgamma(1, n.class / 2 - 1, scale = 2 / (n.class * (sigma2.0 / H - log(sigma2.0) + log(G) - 1)))
+
+    # Save draws
+    if (draw[iter]) {
+      count <- count + 1L
+      store_beta[count, ] <- mu
+      store_omega[count, , ] <- solve(inv.psi)
+      store_sigma2j[count, ] <- 1/inv.sigma2
+      store_sigma2[count, ] <- mean(store_sigma2j[count, ])
+
+      imps <- rnorm(n = sum(wy), sd = sqrt(1 / inv.sigma2[gf.full[wy]])) + rowSums(as.matrix(x[wy, type == 2, drop = FALSE]) * bees[gf.full[wy], ])
+      store_draws[count, ] <- imps
+    }
   }
 
-  imps <- rnorm(n = sum(wy), sd = sqrt(1 / inv.sigma2[gf.full[wy]])) + rowSums(as.matrix(x[wy, type == 2, drop = FALSE]) * bees[gf.full[wy], ])
+  # post-process estimates
+  beta <- colMeans(store_beta)
+  omega <- apply(store_omega, c(2L, 3L), mean)
+  sigma2j <- colMeans(store_sigma2j)
+  sigma2 <- colMeans(store_sigma2)
+  draws <- t(store_draws)
 
-  list(
+  obj <- list(
     y = y,
     ry = ry,
     x = x,
@@ -127,6 +156,13 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE, ...) {
     inv.sigma2 = inv.sigma2,
     sigma2.0 = sigma2.0,
     theta = theta,
-    imps = imps
+    imps = imps,
+    beta = beta,
+    omega = omega,
+    sigma2j = sigma2j,
+    sigma2 = sigma2,
+    draws = draws
   )
+  class(obj) <- "kr_vector"
+  obj
 }

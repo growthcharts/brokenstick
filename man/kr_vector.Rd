@@ -4,7 +4,17 @@
 \alias{kr_vector}
 \title{Imputation by a two-level normal model}
 \usage{
-kr_vector(y, ry, x, type, wy = NULL, intercept = TRUE, ...)
+kr_vector(
+  y,
+  ry,
+  x,
+  type,
+  wy = NULL,
+  intercept = TRUE,
+  runin = 100L,
+  ndraw = 10L,
+  skip = 10L
+)
 }
 \arguments{
 \item{y}{Vector to be imputed}
@@ -28,7 +38,11 @@ indicates locations in \code{y} for which imputations are created.}
 \item{intercept}{Logical determining whether the intercept is automatically
 added.}
 
-\item{...}{Other named arguments.}
+\item{runin}{Number of run-in iterations}
+
+\item{ndraw}{Number of draws}
+
+\item{skip}{Interval between successive draws}
 }
 \value{
 Vector with imputed data, same type as \code{y}, and of length

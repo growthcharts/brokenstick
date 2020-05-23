@@ -4,30 +4,27 @@
 \alias{kr}
 \title{Kasim-Raudenbush sampler for two-level normal model}
 \usage{
-kr(predictors, outcome, ...)
+kr(y, x, g, control, na.action)
 }
 \arguments{
-\item{predictors}{A data frame, multiple columns}
+\item{y}{Vector with outcome value}
 
-\item{outcome}{A tibble, one column}
+\item{x}{Matrix with predictor value}
 
-\item{...}{Other named arguments.}
+\item{g}{Vector with ID values}
+
+\item{control}{A list with elements \code{runin}, \code{ndraws} and \code{skip}}
+
+\item{na.action}{Not really used here}
 }
 \value{
-Vector with imputed data, same type as \code{y}, and of length
-\code{sum(wy)}
+A list with results. see kr_vector
 }
 \description{
 Simulates posterior distributions of parameters from a two-level
 normal model with heterogeneous within-cluster variances
 (Kasim and Raudenbush, 1998). Imputations can be drawn as an
 extra step to the algorithm.
-}
-\note{
-Added June 25, 2012: The currently implemented algorithm does not
-handle predictors that are specified as fixed effects (type=1). When using
-\code{mice.impute.2l.norm()}, the current advice is to specify all predictors
-as random effects (type=2).
 }
 \references{
 Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested

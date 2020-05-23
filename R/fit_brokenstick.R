@@ -119,28 +119,5 @@ fit_brokenstick <- function(data,
     class(fit) <- c("brokenstick")
   }
 
-  if (method == "kr") {
-    model <- kr(data = data_pad,
-                formula = fm,
-                control = control,
-                na.action = na.action,
-                ...)
-    fit <- list(
-      call = cl,
-      data = lmod$fr,
-      formula = lmod$formula,
-      names = list(y = y_name, x = x_name, z = z_name),
-      knots = as.numeric(l$knots),
-      boundary = as.numeric(l$boundary),
-      degree = 1L,
-      model = NA,
-      beta = model$mu,
-      omega = solve(model$inv.psi),
-      sigma2j = 1/model$inv.sigma2m,
-      sigma2 = mean(1/model$inv.sigma2),
-      imp = numeric()
-      )
-    class(fit) <- "brokenstick"
-  }
   fit
 }

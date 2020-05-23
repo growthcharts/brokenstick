@@ -1,5 +1,4 @@
 new_brokenstick <- function(data = NULL,
-                            formula = NULL,
                             names = list(x = character(),
                                          y = character(),
                                          z = character()),
@@ -14,7 +13,6 @@ new_brokenstick <- function(data = NULL,
                             draws = numeric(0),
                             blueprint = NULL) {
   hardhat::new_model(data = data,
-                     formula = formula,
                      names = names,
                      knots = knots,
                      boundary = boundary,
@@ -28,14 +26,3 @@ new_brokenstick <- function(data = NULL,
                      blueprint = blueprint,
                      class = "brokenstick")
 }
-# new_brokenstick <- function(data = NULL,
-#                             npred = NULL,
-#                             nout = NULL,
-#                             blueprint = hardhat::default_xy_blueprint())
-# {
-#   hardhat::new_model(data = data,
-#                      npred = npred,
-#                      nout = nout,
-#                      blueprint = blueprint,
-#                      class = "brokenstick")
-#}

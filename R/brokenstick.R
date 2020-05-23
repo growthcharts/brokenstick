@@ -232,34 +232,34 @@ brokenstick_bridge <- function(processed, knots, boundary, k, control, ...) {
   y <- processed$outcome
   g <- processed$extras$roles$group
   nms <- list(x = names(x), y = names(y), g = names(g))
+  data <- data.frame(x, y, g, stringsAsFactors = FALSE)
 
-  # pad data with the B-splines
   l <- calculate_knots(x, k, knots, boundary)
   X <- make_basis(x, knots = l$knots, boundary = l$boundary)
-  data <- data.frame(x, y, g, X,
-                     stringsAsFactors = FALSE)
-  names(data) <- c(nms$x, nms$y, nms$g, colnames(X))
 
   if (control$method == "lmer") {
-    # lmer() needs the formula
+    data_pad <- data.frame(data, X, stringsAsFactors = FALSE)
+    names(data_pad) <- c(names(data), colnames(X))
     pred <- paste("0 +", paste(colnames(X), collapse = " + "))
     fm <- as.formula(paste(nms$y, "~", pred, "+ (", pred, "|", nms$g, ")"))
-    fit <- brokenstick_impl_lmer(data = data,
+    fit <- brokenstick_impl_lmer(data = data_pad,
                                  formula = fm,
                                  control = control$lmer,
                                  na.action = control$na.action)
   }
   if (control$method == "kr") {
-    fit <- brokenstick_impl_kr(data, fm, control$kr)
+    fit <- kr(y = y,
+              x = X,
+              g = g,
+              control = control$kr,
+              na.action = control$na.action)
   }
 
   new_brokenstick(
     data = data,
-    formula = fm,
     names = nms,
     knots = l$knots,
     boundary = l$boundary,
-    degree = 1L,
     model = fit$model,
     beta = fit$beta,
     omega = fit$omega,
@@ -275,8 +275,9 @@ brokenstick_bridge <- function(processed, knots, boundary, k, control, ...) {
 
 brokenstick_impl_lmer <- function(data, formula, control, na.action) {
 
-  model <- lmer(data = data,
-                formula = formula,
+  # Bates et al, linear mixed-effects model
+  model <- lmer(formula = formula,
+                data = data,
                 control = control,
                 na.action = na.action)
 
@@ -290,8 +291,13 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
     draws = numeric())
 }
 
-brokenstick_impl_kr <- function(data, formula, control, na.action) {
-  NULL
-}
+brokenstick_impl_kr <- function(y, x, g, control, na.action) {
 
+  # Kasim-Raudenbush sampler
+  kr(y = y,
+     x = x,
+     g = g,
+     control = control,
+     na.action = na.action)
+}
 
