@@ -8,7 +8,5 @@ model.matrix.brokenstick <- function(object, ...) {
   x_name <- object$names$x[1L]
   make_basis(x = object$data[[x_name]],
              knots = object$knots,
-             boundary = object$boundary,
-             knotnames = TRUE,
-             x_name = x_name)
+             boundary = object$boundary)
 }

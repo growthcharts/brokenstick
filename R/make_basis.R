@@ -4,7 +4,7 @@
 #' at a user-specific set of break points. The default knots
 #' code the age range 0-3 years.
 #' @aliases make_basis
-#' @param x a vector of ages at which the basis function are needed
+#' @param x a \code{data.frame} with one column
 #' @param knots a vector of internal knots, excluding boundary knots
 #' @param boundary vector of external knots
 #' @param degree the degree of the spline. The broken stick model
@@ -12,20 +12,20 @@
 #' @param warn a logical indicating whether warnings from \code{splines::bs()}
 #' should be given.
 #' @param knotnames Should the column names be the knots?
-#' @param x_name Name of the variable, for labelling
 #' @return A matrix with \code{length(x)} rows and \code{length(breaks)}
 #' columns, with some extra attributes described by \code{bs()}.
 #' @author Stef van Buuren, 2017
 #' @note Before version 0.54, it was standard practice that the \code{knots}
-#' array always included \code{boundary[1]}.
+#' array always included \code{boundary[1L]}.
 #' @export
 make_basis <- function(x,
                        knots = NULL,
                        boundary = range(x),
-                       degree = 1,
+                       degree = 1L,
                        warn = TRUE,
-                       knotnames = FALSE,
-                       x_name = "x") {
+                       knotnames = TRUE) {
+
+  pull.numeric <- function(.data, ...) as.vector(.data)
 
   # safety check: remove lower boundary knot from knots to be compatiable
   # with models fitted prior to version 0.53
@@ -35,24 +35,26 @@ make_basis <- function(x,
   padx <- all(is.na(x))
   if (padx) x <- c(0, x)
 
+  x_name <- names(x)
   if (warn) {
     X <- splines::bs(
-      x = x,
-      knots = c(boundary[1], knots),
+      x = pull(x, x_name),
+      knots = c(boundary[1L], knots),
       Boundary.knots = boundary,
       degree = degree
     )
   } else {
-    suppressWarnings(
+    suppressWarnings({
       X <- splines::bs(
-        x = x,
+        x = pull(x, x_name),
         knots = c(boundary[1L], knots),
         Boundary.knots = boundary,
         degree = degree
       )
+    }
     )
   }
-  if (!knotnames) colnames(X) <- paste0("x", 1:ncol(X))
+  if (!knotnames) colnames(X) <- paste0("x", 1L:ncol(X))
   else {
     colnames(X) <- as.character(sort(unique(c(boundary, knots))))
     colnames(X) <- paste(x_name, colnames(X), sep = "_")

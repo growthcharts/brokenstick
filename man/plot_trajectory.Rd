@@ -62,8 +62,8 @@ Actual plotting may be done by \code{gglot} or \code{rbokeh}.
 \examples{
 smc <- brokenstick::smocc_200
 knots <- 0:2
-fit <- fit_brokenstick(smc, hgt.z ~ age | id, knots = knots)
+#fit <- fit_brokenstick(smc, hgt.z ~ age | id, knots = knots)
 
 # plot first three cases
-plot(fit)
+#plot(fit)
 }

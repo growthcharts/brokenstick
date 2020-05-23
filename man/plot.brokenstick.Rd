@@ -51,20 +51,20 @@ fitted trajectories of one or more individuals.
 library("brokenstick")
 dat <- smocc_200
 # fit one line model for data exploration
-fit <- fit_brokenstick(dat, hgt ~ age | id)
+fit <- brokenstick(hgt ~ age | id, dat)
 
 # plot measurements for first three cases
-plot(fit, zband = FALSE, est = FALSE)
+#plot(fit, zband = FALSE, est = FALSE)
 
 # fit model with knots at 1 and 2 years
-fit <- fit_brokenstick(dat, hgt.z ~ age | id, knots = 1:2)
+#fit <- fit_brokenstick(dat, hgt.z ~ age | id, knots = 1:2)
 
-plot(fit, xlim = c(0, 2.2), ylim = c(-3, 3))
-plot(fit, ids = c(10005, 10012), xlim = c(0, 2.2))
+#plot(fit, xlim = c(0, 2.2), ylim = c(-3, 3))
+#plot(fit, ids = c(10005, 10012), xlim = c(0, 2.2))
 
 # bokeh plots with xlim and ylim
-plot(fit, xlim = c(0, 2), ylim = c(-3, 3))
-plot(fit, ids = 10005)
+#plot(fit, xlim = c(0, 2), ylim = c(-3, 3))
+#plot(fit, ids = 10005)
 }
 \author{
 Stef van Buuren 2020

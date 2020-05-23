@@ -72,16 +72,8 @@
 #' using `knots` and `boundary` over `k`. If both `k` and
 #' `knots` are specified, then `k` takes precendence.
 #'
-#' @param method Either `"kr"` (for the Kasim-Raudenbush sampler)
-#' or `"lmer"` (for [lme4::lmer()]).
-#'
-#' @param control A list with arguments that can be used to control the
-#' fitting of [lme4::lmer()]. The default
-#' is set to `lmerControl(check.nobs.vs.nRE = "warning")`, which turn
-#' fatal errors with respect the number of parameters into warnings.
-#'
-#' @param na.action The function to call for the `na.action` argument
-#' in `lmer()`. The default is `na.exclude`.
+#' @param control A list with parameters. Use `control_brokenstick()`
+#' to generate.
 #'
 #' @param ... Not currently used, but required for extensibility.
 #'
@@ -100,10 +92,11 @@
 #' A `brokenstick` object.
 #'
 #' @examples
-#' # data <- brokenstick::smocc_200
+#' data <- brokenstick::smocc_200
 #'
 #' # fit with implicit boundary c(0, 3)
-#' # fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = id, knots = 0:3))
+#' # fit <- with(data, brokenstick(x = data.frame(age), y = hgt.z, group = id, knots = 0:3))
+#' fit <- brokenstick(hgt.z ~ age | id, data = data, knots = 0:3)
 #'
 #' # Formula interface
 #' mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
@@ -146,9 +139,7 @@ brokenstick.formula <- function(formula, data, ...,
                                 knots = NULL,
                                 boundary = NULL,
                                 k = NULL,
-                                na.action = na.exclude,
-                                method = c("lmer", "kr", "model.frame"),
-                                control = list()) {
+                                control = control_brokenstick()) {
   # pre-process formula to get around mold()'s formula limitations
   nms <- parse_formula(formula)
   rec <- recipes::recipe(data,
@@ -156,7 +147,7 @@ brokenstick.formula <- function(formula, data, ...,
                          roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
-  brokenstick_bridge(processed, ...)
+  brokenstick_bridge(processed, knots, boundary, k, control, ...)
 }
 
 
@@ -168,12 +159,10 @@ brokenstick.recipe <- function(x, data, ...,
                                knots = NULL,
                                boundary = NULL,
                                k = NULL,
-                               na.action = na.exclude,
-                               method = c("lmer", "kr", "model.frame"),
-                               control = list()) {
+                               control = control_brokenstick()) {
 
   processed <- hardhat::mold(x, data)
-  brokenstick_bridge(processed, ...)
+  brokenstick_bridge(processed, knots, boundary, k, control, ...)
 }
 
 
@@ -185,9 +174,7 @@ brokenstick.data.frame <- function(x, y, group, ...,
                                    knots = NULL,
                                    boundary = NULL,
                                    k = NULL,
-                                   na.action = na.exclude,
-                                   method = c("lmer", "kr", "model.frame"),
-                                   control = list()) {
+                                   control = control_brokenstick()) {
   nms <- list(
     y = ifelse(is.null(names(y)),
                deparse(substitute(y)),
@@ -205,7 +192,7 @@ brokenstick.data.frame <- function(x, y, group, ...,
                          roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
-  brokenstick_bridge(processed, ...)
+  brokenstick_bridge(processed, knots, boundary, k, control, ...)
 }
 
 
@@ -217,9 +204,7 @@ brokenstick.matrix <- function(x, y, group, ...,
                                knots = NULL,
                                boundary = NULL,
                                k = NULL,
-                               na.action = na.exclude,
-                               method = c("lmer", "kr", "model.frame"),
-                               control = list()) {
+                               control = control_brokenstick()) {
   nms <- list(
     y = ifelse(is.null(colnames(y)),
                deparse(substitute(y)),
@@ -237,107 +222,81 @@ brokenstick.matrix <- function(x, y, group, ...,
                          roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
-  brokenstick_bridge(processed, ...)
+  brokenstick_bridge(processed, knots, boundary, k, control, ...)
 }
 
 
 # ------------------------------------------------------------------------------
 # Bridge
 
-brokenstick_bridge <- function(processed, ...) {
-  predictors <- processed$predictors
-  outcome <- processed$outcomes[1]
+brokenstick_bridge <- function(processed, knots, boundary, k, control, ...) {
 
-  fit <- brokenstick_impl(predictors, outcome)
+  x <- processed$predictor
+  y <- processed$outcome
+  g <- processed$extras$roles$group
+  nms <- list(x = names(x), y = names(y), g = names(g))
+
+  # pad data with the B-splines
+  l <- calculate_knots(x, k, knots, boundary)
+  X <- make_basis(x, knots = l$knots, boundary = l$boundary)
+  data <- data.frame(x, y, g, X,
+                     stringsAsFactors = FALSE)
+  names(data) <- c(nms$x, nms$y, nms$g, colnames(X))
+
+  if (control$method == "lmer") {
+    # lmer() needs the formula
+    pred <- paste("0 +", paste(colnames(X), collapse = " + "))
+    fm <- as.formula(paste(nms$y, "~", pred, "+ (", pred, "|", nms$g, ")"))
+    fit <- brokenstick_impl_lmer(data = data,
+                                 formula = fm,
+                                 control = control$lmer,
+                                 na.action = control$na.action)
+  }
+  if (control$method == "kr") {
+    fit <- brokenstick_impl_kr(data, fm, control$kr)
+  }
 
   new_brokenstick(
-    data = dplyr::bind_cols(outcome, predictors),
-    npred = fit$npred,
-    nout = fit$nout,
-    blueprint = processed$blueprint
-  )
+    data = data,
+    formula = fm,
+    names = nms,
+    knots = l$knots,
+    boundary = l$boundary,
+    degree = 1L,
+    beta = beta,
+    omega = fit$omega,
+    sigma2j = fit$sigma2j,
+    sigma2 = fit$sigma2,
+    draws = fit$draws,
+    blueprint = processed$blueprint)
 }
 
 
 # ------------------------------------------------------------------------------
 # Implementation
 
-brokenstick_impl <- function(predictors, outcome) {
-  kr(predictors, outcome)
-  #list(npred = ncol(predictors),
-  #     nout = ncol(outcome))
-}
+brokenstick_impl_lmer <- function(data, formula, control, na.action) {
 
+  model <- lmer(data = data,
+                formula = formula,
+                control = control,
+                na.action = na.action)
 
-calc_brokenstick <- function(y, x, subjid,
-                             k = NULL,
-                             knots = NULL,
-                             boundary = NULL,
-                             method = c("lmer", "kr"),
-                             control = lmerControl(check.nobs.vs.nRE = "warning"),
-                             na.action = na.exclude,
-                             ...) {
-  .Deprecated("fit_brokenstick")
-
-  call <- match.call()
-  method <- match.arg(method)
-
-  l <- calculate_knots(x, k, knots, boundary)
-  X <- make_basis(x = x, knots = l$knots, boundary = l$boundary)
-  data <- data.frame(subjid = subjid, x = x, y = y, X)
-
-  if (method == "lmer") {
-    pred <- paste("0 +", paste(colnames(X), collapse = " + "))
-    f <- as.formula(paste(
-      "y", "~", pred,
-      "+ (", pred, "| subjid)"
-    ))
-    model <- lmer(f,
-                  data = data,
-                  control = control,
-                  na.action = na.action,
-                  ...
-    )
-
-    fit <- list(
-      model = model,
-      knots = as.numeric(l$knots),
-      boundary = as.numeric(l$boundary),
-      degree = 1,
-      bs.call = call,
-      xy = data[, 1:3]
-    )
-    class(fit) <- c("brokenstick")
-  }
-  else
-  {# kr sampler
-    model <- kr(y = data$y,
-                ry = !is.na(data$y),
-                x = data[, c("group", colnames(X))],
-                type = c(-2, rep(2, ncol(X))),
-                intercept = FALSE,
-                ...)
-    fit <- list(
-      model = NA,
-      beta = model$mu,
-      omega = solve(model$inv.psi),
-      sigma2 = mean(1/model$inv.sigma2),
-      sigma2j = 1/model$inv.sigma2,
-      knots = as.numeric(l$knots),
-      boundary = as.numeric(l$boundary),
-      degree = 1,
-      bs.call = call,
-      xy = data[, 1:3])
-    class(fit) <- "brokenstick"
-  }
+  df <- as.data.frame(VarCorr(model))
+  fit <- list(
+    model = model,
+    beta = lme4::fixef(model),
+    omega = as.matrix(as.data.frame(VarCorr(model)[[names(data)[3L]]])),
+    sigma2j = numeric(),
+    sigma2 = df[df$grp == "Residual", "vcov"],
+    imp = numeric()
+  )
+  class(fit) <- c("brokenstick")
   fit
 }
 
-print.brokenstick <- function(x, ...) {
-  cat("broken stick model \n")
-  cat("knots: ", get_knots(x), "\n")
-  print(summary(x))
-  invisible(x)
+brokenstick_impl_kr <- function(data, formula, control, na.action) {
+  NULL
 }
 
 

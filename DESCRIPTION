@@ -14,6 +14,7 @@ Description: The broken stick model describes a set of individual curves by a
 Depends:
     R (>= 3.5.0)
 Imports:
+    dplyr,
     ggplot2,
     growthstandards,
     hardhat,
@@ -22,7 +23,6 @@ Imports:
     splines,
     stats
 Suggests:
-    dplyr,
     knitr,
     MASS,
     mvtnorm,

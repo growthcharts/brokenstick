@@ -91,9 +91,3 @@ knots.
 This function can be time consuming for data sets with thousands of
 children.
 }
-\examples{
-data <- brokenstick::smocc_200
-# fit <- fit_brokenstick(data, hgt.z ~ age | subjid, 0:2)
-fit <- fit_brokenstick(smocc_200, hgt.z ~ age | id, knots = 0:2)
-
-}

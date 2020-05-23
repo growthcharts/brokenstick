@@ -20,9 +20,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  na.action = na.exclude,
-  method = c("lmer", "kr", "model.frame"),
-  control = list()
+  control = control_brokenstick()
 )
 
 \method{brokenstick}{recipe}(
@@ -32,9 +30,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  na.action = na.exclude,
-  method = c("lmer", "kr", "model.frame"),
-  control = list()
+  control = control_brokenstick()
 )
 
 \method{brokenstick}{data.frame}(
@@ -45,9 +41,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  na.action = na.exclude,
-  method = c("lmer", "kr", "model.frame"),
-  control = list()
+  control = control_brokenstick()
 )
 
 \method{brokenstick}{matrix}(
@@ -58,9 +52,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  na.action = na.exclude,
-  method = c("lmer", "kr", "model.frame"),
-  control = list()
+  control = control_brokenstick()
 )
 }
 \arguments{
@@ -118,16 +110,8 @@ and do not transfer to other data sets. We recommend
 using \code{knots} and \code{boundary} over \code{k}. If both \code{k} and
 \code{knots} are specified, then \code{k} takes precendence.}
 
-\item{na.action}{The function to call for the \code{na.action} argument
-in \code{lmer()}. The default is \code{na.exclude}.}
-
-\item{method}{Either \code{"kr"} (for the Kasim-Raudenbush sampler)
-or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}).}
-
-\item{control}{A list with arguments that can be used to control the
-fitting of \code{\link[lme4:lmer]{lme4::lmer()}}. The default
-is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turn
-fatal errors with respect the number of parameters into warnings.}
+\item{control}{A list with parameters. Use \code{control_brokenstick()}
+to generate.}
 
 \item{y}{Outcome variable. When \code{x} is a \strong{data frame} or \strong{matrix},
 \code{y} is specified as:
@@ -167,10 +151,11 @@ knots. The function can be time consuming for data sets with thousands of
 children.
 }
 \examples{
-# data <- brokenstick::smocc_200
+data <- brokenstick::smocc_200
 
 # fit with implicit boundary c(0, 3)
-# fit <- with(data, brokenstick(y = hgt.z, x = age, subjid = id, knots = 0:3))
+# fit <- with(data, brokenstick(x = data.frame(age), y = hgt.z, group = id, knots = 0:3))
+fit <- brokenstick(hgt.z ~ age | id, data = data, knots = 0:3)
 
 # Formula interface
 mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)

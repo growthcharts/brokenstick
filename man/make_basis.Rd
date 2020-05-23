@@ -8,14 +8,13 @@ make_basis(
   x,
   knots = NULL,
   boundary = range(x),
-  degree = 1,
+  degree = 1L,
   warn = TRUE,
-  knotnames = FALSE,
-  x_name = "x"
+  knotnames = TRUE
 )
 }
 \arguments{
-\item{x}{a vector of ages at which the basis function are needed}
+\item{x}{a \code{data.frame} with one column}
 
 \item{knots}{a vector of internal knots, excluding boundary knots}
 
@@ -28,8 +27,6 @@ requires linear splines, so the default is \code{degree = 1}.}
 should be given.}
 
 \item{knotnames}{Should the column names be the knots?}
-
-\item{x_name}{Name of the variable, for labelling}
 }
 \value{
 A matrix with \code{length(x)} rows and \code{length(breaks)}
@@ -42,7 +39,7 @@ code the age range 0-3 years.
 }
 \note{
 Before version 0.54, it was standard practice that the \code{knots}
-array always included \code{boundary[1]}.
+array always included \code{boundary[1L]}.
 }
 \author{
 Stef van Buuren, 2017

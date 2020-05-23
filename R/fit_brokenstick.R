@@ -48,10 +48,6 @@
 #' @return A fitted model of class \code{brokenstick}, which extends the
 #'  class \code{lmerMod}
 #' @examples
-#' data <- brokenstick::smocc_200
-#' # fit <- fit_brokenstick(data, hgt.z ~ age | subjid, 0:2)
-#' fit <- fit_brokenstick(smocc_200, hgt.z ~ age | id, knots = 0:2)
-#'
 #' @export
 fit_brokenstick <- function(data,
                             formula,
@@ -84,8 +80,7 @@ fit_brokenstick <- function(data,
   # pad data with the B-splines
   x <- lmod$fr[, x_name, drop = TRUE]
   l <- calculate_knots(x, k, knots, boundary)
-  X <- make_basis(x = x, knots = l$knots, boundary = l$boundary,
-                  knotnames = TRUE, x_name = x_name)
+  X <- make_basis(x = x, knots = l$knots, boundary = l$boundary)
   data_pad <- data.frame(lmod$fr[, c(y_name, x_name, z_name)],
                          X,
                          stringsAsFactors = FALSE)
