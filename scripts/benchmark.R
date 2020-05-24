@@ -12,9 +12,9 @@ kr2 <- microbenchmark(brokenstick(hgt.z ~ age | id, data = smocc_200, knots = se
 kr3 <- microbenchmark(brokenstick(hgt.z ~ age | id, data = smocc_200, knots = seq(0, 2, 0.25), control = control), times = 10)
 kr4 <- microbenchmark(brokenstick(hgt.z ~ age | id, data = smocc_200, knots = seq(0, 2, 0.1), control = control), times = 10)
 
-control <-  control_brokenstick(method = "kr", kr = list(runin = 100L, ndraw = 50L, skip = 10L))
+control <-  control_brokenstick(method = "kr", kr = list(runin = 100L, ndraw = 50L, par_skip = 10L))
 Rprof("test.out")
-fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = seq(0, 2, 0.5), control = control)
+fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = seq(0, 2, 0.25), control = control)
 Rprof(NULL)
 summaryRprof("test.out")
 

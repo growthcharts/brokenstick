@@ -1,41 +1,6 @@
-#' Imputation by a two-level normal model
-#'
-#' Imputes univariate missing data using a two-level normal model
-#'
-#' Implements the Gibbs sampler for the linear multilevel model with
-#' heterogeneous with-class variance (Kasim and Raudenbush, 1998). Imputations
-#' are drawn as an extra step to the algorithm. For simulation work see Van
-#' Buuren (2011).
-#'
-#' The random intercept is automatically added in \code{mice.impute.2L.norm()}.
-#' A model within a random intercept can be specified by \code{mice(...,
-#' intercept = FALSE)}.
-#'
-#' @inheritParams mice::mice.impute.pmm
-#' @param type Vector of length \code{ncol(x)} identifying random and class
-#' variables.  Random variables are identified by a '2'. The class variable
-#' (only one is allowed) is coded as '-2'. Random variables also include the
-#' fixed effect.
-#' @param intercept Logical determining whether the intercept is automatically
-#' added.
-#' @param runin Number of run-in iterations
-#' @param ndraw Number of draws
-#' @param skip Interval between successive draws
-#' @return Vector with imputed data, same type as \code{y}, and of length
-#' \code{sum(wy)}
-#' Warning: The assumption of heterogeneous variances requires that in every
-#' class at least one observation has a response in \code{y}.
-#' @author Stef van Buuren, based on [mice::mice.impute.2l.norm()]
-#' @references
-#' Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested
-#' variance components models with heterogeneous within-group variance. Journal
-#' of Educational and Behavioral Statistics, 23(2), 93--116.
-#'
-#' Van Buuren, S. (2011) Multiple imputation of multilevel data. In Hox, J.J.
-#' and and Roberts, J.K. (Eds.), \emph{The Handbook of Advanced Multilevel
-#' Analysis}, Chapter 10, pp. 173--196. Milton Park, UK: Routledge.
 kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
-                      runin = 100L, ndraw = 10L, skip = 10L) {
+                      runin = 100L, ndraw = 10L, par_skip = 10L,
+                      imp_skip = Inf) {
 
   ## append intercept
   if (intercept) {
@@ -44,8 +9,12 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   }
 
   ## Initialize
-  n.iter <- runin + ndraw * skip
-  draw <- c(rep(FALSE, runin), rep(c(rep(FALSE, skip - 1L), TRUE), ndraw))
+  n.iter <- runin + ndraw * par_skip
+  draw <- c(rep(FALSE, runin), rep(c(rep(FALSE, par_skip - 1L), TRUE), ndraw))
+
+  nimp <- floor(ndraw / imp_skip)
+  impute <- c(rep(FALSE, runin),
+              rep(c(rep(FALSE, min(imp_skip, ndraw) - 1), TRUE), nimp))
 
   if (is.null(wy)) wy <- !ry
   n.class <- length(unique(x[, type == -2]))
@@ -70,8 +39,8 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   store_omega <- array(NA, c(ndraw, n.rc, n.rc))
   store_sigma2j <- matrix(NA, nrow = ndraw, ncol = n.class)
   store_sigma2 <- matrix(NA, nrow = ndraw, ncol = 1L)
-  store_draws <- matrix(NA, nrow = ndraw, ncol = sum(wy))
-  count <- 0L
+  store_draws <- matrix(NA, nrow = nimp, ncol = sum(wy))
+  count_par <- count_imp <- 0L
 
   ## Execute Gibbs sampler
   for (iter in seq_len(n.iter)) {
@@ -79,18 +48,15 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     for (class in seq_len(n.class)) {
       vv <- inv.sigma2[class] * X.SS[[class]] + inv.psi
       bees.var <- chol2inv(chol.default(vv))
-      bees[class, ] <- drop(bees.var %*% (crossprod(inv.sigma2[class] * XG[[class]], yg[[class]]) + inv.psi %*% mu)) +
-        drop(rnorm(n = n.rc) %*% chol.default(bees.var))
+      bees[class, ] <- bees.var %*% (crossprod(inv.sigma2[class] * XG[[class]], yg[[class]]) + inv.psi %*% mu) +
+        rnorm(n = n.rc) %*% chol.default(bees.var)
       ss[class] <- crossprod(yg[[class]] - XG[[class]] %*% bees[class, ])
     }
 
     ## Draw mu
-    mu <- colMeans(bees) + drop(rnorm(n = n.rc) %*%
-                                  chol.default(chol2inv(chol.default(inv.psi)) / n.class))
+    mu <- colMeans(bees) + rnorm(n = n.rc) %*% chol.default(chol2inv(chol.default(inv.psi)) / n.class)
 
     ## Draw psi
-    # inv.psi <- rwishart(df = n.class - n.rc - 1,
-    #                    SqrtSigma = chol(chol2inv(chol(crossprod(t(t(bees) - mu)), ...))))
     inv.psi <- rWishart(
       n = 1, df = n.class - n.rc - 1,
       Sigma = chol2inv(chol.default(crossprod(t(t(bees) - mu))))
@@ -105,18 +71,23 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
 
     ## Draw theta
     G <- exp(mean(log(1 / inv.sigma2))) # Geometric mean
-    theta <- 1 / rgamma(1, n.class / 2 - 1, scale = 2 / (n.class * (sigma2.0 / H - log(sigma2.0) + log(G) - 1)))
+    theta <- 1 / rgamma(1, n.class / 2 - 1, scale = 2 /
+                          (n.class * (sigma2.0 / H - log(sigma2.0) + log(G) - 1)))
 
     # Save draws
     if (draw[iter]) {
-      count <- count + 1L
-      store_beta[count, ] <- mu
-      store_omega[count, , ] <- solve(inv.psi)
-      store_sigma2j[count, ] <- 1/inv.sigma2
-      store_sigma2[count, ] <- mean(store_sigma2j[count, ])
+      count_par <- count_par + 1L
+      store_beta[count_par, ] <- mu
+      store_omega[count_par, , ] <- solve(inv.psi)
+      store_sigma2j[count_par, ] <- 1/inv.sigma2
+      store_sigma2[count_par, ] <- mean(store_sigma2j[count_par, ])
+    }
 
-      imps <- rnorm(n = sum(wy), sd = sqrt(1 / inv.sigma2[gf.full[wy]])) + rowSums(as.matrix(x[wy, type == 2, drop = FALSE]) * bees[gf.full[wy], ])
-      store_draws[count, ] <- imps
+    if (impute[iter]) {
+      count_imp <- count_imp + 1L
+      imps <- rnorm(n = sum(wy), sd = sqrt(1 / inv.sigma2[gf.full[wy]])) +
+        rowSums(as.matrix(x[wy, type == 2, drop = FALSE]) * bees[gf.full[wy], ])
+      store_draws[count_imp, ] <- imps
     }
   }
 

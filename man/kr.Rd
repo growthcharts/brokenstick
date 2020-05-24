@@ -11,14 +11,25 @@ kr(y, x, g, control, na.action)
 
 \item{x}{Matrix with predictor value}
 
-\item{g}{Vector with ID values}
+\item{g}{Vector with group values}
 
-\item{control}{A list with elements \code{runin}, \code{ndraws} and \code{skip}}
+\item{control}{A list with elements:
+\itemize{
+\item \code{runin}: Number of run-in iterations
+\item \code{ndraws}: Number of parameter draws
+\item \code{par_skip}: Number of iterations to next parameter draw
+\item \code{imp_skip}: Number of iterations to next outcome draw
+}}
 
 \item{na.action}{Not really used here}
 }
 \value{
-A list with results. see kr_vector
+A list with components:\preformatted{* `beta`  Fixed effects
+* `omega` Variance-covariance of random effects
+* `sigma2_j` Residual variance per group
+* `sigma2` Average residual variance
+* `draws` A matrix with `ndraw` columns with draws for missing data
+}
 }
 \description{
 Simulates posterior distributions of parameters from a two-level
@@ -26,12 +37,37 @@ normal model with heterogeneous within-cluster variances
 (Kasim and Raudenbush, 1998). Imputations can be drawn as an
 extra step to the algorithm.
 }
+\details{
+The calculation time of \code{\link[lme4:lmer]{lme4::lmer()}} rapidly increases with the
+number of random effects. More than 10 random effects (knots)
+takes significant time, and beyond 15 knots generally impossible
+to fit.
+
+In contrast, the speed of the Kasim-Raudenbush sampler is almost
+independent of the number of random effect, and foremost depends
+on the \emph{total number of iterations}: \code{runin} + \code{ndraws} * \code{par_skip}.
+
+The defaults \code{ndraws = 200} and \code{par_skip = 1} provides a \emph{good}
+approximation to the variance-covariance matrix of the random
+effects. Increase \code{par_skip} to \code{10} (\emph{better}) or \code{20} (\emph{best}) to
+obtain closer approximations at the expense of a linear
+increase in calculation time. Setting \code{ndraws = 50} (or lower)
+will reduce computation time, but the result should be treated as
+\emph{indicative}.
+
+It is possible to subsample the parameter draws at every
+\code{imp_skip} iteration, and draw one or more synthetic outcome values
+from the posterior distribution of the outcome. The number of
+multiple imputations is equal to \code{floor(ndraws / imp_skip)}. Thus,
+setting \code{imp_skip = 20L} returns 200 / 20 = 10 multiple
+imputations for each missing value in the outcome. The default does
+not produce imputations.
+}
 \references{
 Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested
 variance components models with heterogeneous within-group variance. Journal
 of Educational and Behavioral Statistics, 23(2), 93--116.
-
-Van Buuren, S. (2011) Multiple imputation of multilevel data. In Hox, J.J.
-and and Roberts, J.K. (Eds.), \emph{The Handbook of Advanced Multilevel
-Analysis}, Chapter 10, pp. 173--196. Milton Park, UK: Routledge.
+}
+\author{
+Stef van Buuren, based on \code{\link[mice:mice.impute.2l.norm]{mice::mice.impute.2l.norm()}}
 }

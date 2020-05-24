@@ -7,7 +7,7 @@
 control_brokenstick(
   method = c("lmer", "kr"),
   lmer = lmerControl(check.nobs.vs.nRE = "warning"),
-  kr = list(runin = 100L, ndraw = 10L, skip = 10L),
+  kr = list(runin = 100L, ndraw = 200L, par_skip = 1L, imp_skip = Inf),
   na.action = na.exclude
 )
 }
@@ -23,8 +23,9 @@ fatal errors with respect the number of parameters into warnings. Use
 \item{kr}{A list with the following components:
 \itemize{
 \item \code{runin}: Number of run-in iterations
-\item \code{ndraw}: Number of multiple imputations
-\item \code{skip}: Number of iterations between draws
+\item \code{ndraw}: Number of parameter draws
+\item \code{par_skip}: Number of iterations to next parameter draw
+\item \code{imp_skip}: Number of iterations to next outcome draw
 }}
 
 \item{na.action}{The function to call for the \code{na.action} argument.

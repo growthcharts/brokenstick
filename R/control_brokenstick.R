@@ -9,18 +9,23 @@
 #' @param kr A list with the following components:
 #'
 #'    * `runin`: Number of run-in iterations
-#'    * `ndraw`: Number of multiple imputations
-#'    * `skip`: Number of iterations between draws
+#'    * `ndraw`: Number of parameter draws
+#'    * `par_skip`: Number of iterations to next parameter draw
+#'    * `imp_skip`: Number of iterations to next outcome draw
+#'
 #' @param na.action The function to call for the `na.action` argument.
 #' The default is `na.exclude`.
+#'
 #' @export
-control_brokenstick <- function(method = c("lmer", "kr"),
-                                lmer = lmerControl(check.nobs.vs.nRE = "warning"),
-                                kr = list(runin = 100L, ndraw = 10L, skip = 10L),
-                                na.action = na.exclude) {
-  method <- match.arg(method)
-  list(method = method,
-       lmer = lmer,
-       kr = kr,
-       na.action = na.action)
-}
+control_brokenstick <-
+  function(method = c("lmer", "kr"),
+           lmer = lmerControl(check.nobs.vs.nRE = "warning"),
+           kr = list(runin = 100L, ndraw = 200L,
+                     par_skip = 1L, imp_skip = Inf),
+           na.action = na.exclude) {
+    method <- match.arg(method)
+    list(method = method,
+         lmer = lmer,
+         kr = kr,
+         na.action = na.action)
+  }
