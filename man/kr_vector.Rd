@@ -47,6 +47,8 @@ added.}
 \value{
 Vector with imputed data, same type as \code{y}, and of length
 \code{sum(wy)}
+Warning: The assumption of heterogeneous variances requires that in every
+class at least one observation has a response in \code{y}.
 }
 \description{
 Imputes univariate missing data using a two-level normal model
@@ -61,15 +63,6 @@ The random intercept is automatically added in \code{mice.impute.2L.norm()}.
 A model within a random intercept can be specified by \code{mice(...,
 intercept = FALSE)}.
 }
-\note{
-Added June 25, 2012: The currently implemented algorithm does not
-handle predictors that are specified as fixed effects (type=1). When using
-\code{mice.impute.2l.norm()}, the current advice is to specify all predictors
-as random effects (type=2).
-
-Warning: The assumption of heterogeneous variances requires that in every
-class at least one observation has a response in \code{y}.
-}
 \references{
 Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested
 variance components models with heterogeneous within-group variance. Journal
@@ -80,5 +73,5 @@ and and Roberts, J.K. (Eds.), \emph{The Handbook of Advanced Multilevel
 Analysis}, Chapter 10, pp. 173--196. Milton Park, UK: Routledge.
 }
 \author{
-Roel de Jong, 2008
+Stef van Buuren, based on \code{\link[mice:mice.impute.2l.norm]{mice::mice.impute.2l.norm()}}
 }
