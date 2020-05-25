@@ -67,17 +67,17 @@ kr <- function(y,
   xg <- cbind(x, g)
   type <- c(rep(2L, ncol(x)), -2L)
 
-  f <- kr_vector(y, ry, xg, type, intercept = FALSE,
+  res <- kr_vector(y, ry, xg, type, intercept = FALSE,
                  runin = control$runin,
                  ndraw = control$ndraw,
                  par_skip = control$par_skip,
                  imp_skip = control$imp_skip)
 
-  obj <- list(beta = f$beta,
-              omega = f$omega,
-              sigma2j = f$sigma2j,
-              sigma2 = f$sigma2,
-              draws = f$draws
-  )
+  obj <- list(beta = res$beta,
+              omega = res$omega,
+              sigma2j = res$sigma2j,
+              sigma2 = res$sigma2,
+              draws = res$draws)
   class(obj) <- "kr"
+  obj
 }

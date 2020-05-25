@@ -48,13 +48,13 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     for (class in seq_len(n.class)) {
       vv <- inv.sigma2[class] * X.SS[[class]] + inv.psi
       bees.var <- chol2inv(chol.default(vv))
-      bees[class, ] <- bees.var %*% (crossprod(inv.sigma2[class] * XG[[class]], yg[[class]]) + inv.psi %*% mu) +
-        rnorm(n = n.rc) %*% chol.default(bees.var)
+      bees[class, ] <- drop(bees.var %*% (crossprod(inv.sigma2[class] * XG[[class]], yg[[class]]) + inv.psi %*% mu)) +
+        drop(rnorm(n = n.rc) %*% chol.default(bees.var))
       ss[class] <- crossprod(yg[[class]] - XG[[class]] %*% bees[class, ])
     }
 
     ## Draw mu
-    mu <- colMeans(bees) + rnorm(n = n.rc) %*% chol.default(chol2inv(chol.default(inv.psi)) / n.class)
+    mu <- colMeans(bees) + drop(rnorm(n = n.rc) %*% chol.default(chol2inv(chol.default(inv.psi)) / n.class))
 
     ## Draw psi
     inv.psi <- rWishart(
