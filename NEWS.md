@@ -1,3 +1,17 @@
+# brokenstick 0.70.0
+
+* The version jump illustrates two big changes:
+
+1. `brokenstick` adopted the `tidymodels` philosophy, and now includes
+a dependency on `hardhat`. Multiple calls to the `brokenstick()` are now
+supported.
+
+2. This version introduces a new estimation method, the Kasim-Raudenbush
+sampler. I took extended code from `mice::mice.impute.2l.norm()`, 
+and with steps to calculate expected values. The new method
+is much better suited to work with a large number of knots than 
+`lme4::lmer()`.
+
 # brokenstick 0.62.0
 
 * This version simplifies the plotting functions
