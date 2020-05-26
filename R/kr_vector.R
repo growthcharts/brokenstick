@@ -2,6 +2,13 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
                       runin = 100L, ndraw = 10L, par_skip = 10L,
                       imp_skip = Inf) {
 
+  ## hack to get knots, assumes that g is last
+  kn <- as.numeric(sub(".*[_]", "", colnames(x)[-ncol(x)]))
+
+  # structure for var-cov model
+  grid <- expand.grid(t2 = kn, t1 = kn)
+  grid <- data.frame(grid[grid$t1 < grid$t2, ], r = NA)
+
   ## append intercept
   if (intercept) {
     x <- cbind(1, as.matrix(x))
@@ -55,6 +62,14 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
 
     ## Draw mu
     mu <- colMeans(bees) + drop(rnorm(n = n.rc) %*% chol.default(chol2inv(chol.default(inv.psi)) / n.class))
+
+    # Enforce simple structure on psi
+    # this isn't right yet, need to enter something like
+    # Sigma = chol2inv(chol.default(crossprod(t(t(bees) - mu))))
+    # and then adapt Sigma in "Draw psi"
+    #psi <- chol2inv(chol.default(inv.psi))
+    #psi <- smooth_covariance(grid, psi)
+    #inv.psi <- chol2inv(chol.default(psi))
 
     ## Draw psi
     inv.psi <- rWishart(
