@@ -72,7 +72,7 @@ kr <- function(y,
                  ndraw = control$ndraw,
                  par_skip = control$par_skip,
                  imp_skip = control$imp_skip)
-
+  dimnames(res$omega) <- list(colnames(x), colnames(x))
   obj <- list(beta = res$beta,
               omega = res$omega,
               sigma2j = res$sigma2j,
