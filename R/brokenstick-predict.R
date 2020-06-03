@@ -17,14 +17,14 @@
 #' to be the same as the number of rows in `new_data`.
 #'
 #' @examples
-#' train <- mtcars[1:20,]
-#' test <- mtcars[21:32, -1]
+#' train <- smocc_200[1:1198, ]
+#' test <- smocc_200[1199:1940, ]
 #'
 #' # Fit
-#' mod <- brokenstick(mpg ~ disp | cyl, train)
+#' fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
 #'
 #' # Predict, with preprocessing
-#' predict_new(mod, test)
+#' predict_new(fit, test)
 #'
 #' @export
 predict_new <- function(object, new_data, type = "numeric", ...) {
