@@ -22,7 +22,8 @@ Imports:
     matrixsampling,
     recipes,
     splines,
-    stats
+    stats,
+    rlang
 Suggests:
     knitr,
     MASS,

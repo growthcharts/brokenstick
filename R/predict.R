@@ -7,7 +7,7 @@
 #' \code{brokenstick}, and returns predictions in one of several formats. We may
 #' calculate predictions for new persons, i.e., for persons who are not part of
 #' the fitted model, by specifying the \code{x} and \code{y} arguments.
-#' @aliases predict.brokenstick
+#'
 #' @param object An object of class \code{brokenstick} or of class
 #'   \code{brokenstick_export}.
 #' @param y      A vector with measurements using the same response scale as the
