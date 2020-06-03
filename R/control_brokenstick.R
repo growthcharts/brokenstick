@@ -30,8 +30,6 @@ control_brokenstick <- function(
 #' @param ndraw Number of parameter draws
 #' @param par_skip Number of iterations to next parameter draw
 #' @param imp_skip Number of iterations to next outcome draw
-#' @param seed Seed number for [base::set.seed()]. Use `NA` to bypass
-#' seed setting.
 #' @return A list with five components
 #'
 #' @export
@@ -40,8 +38,7 @@ control_kr <- function(
   runin = 100L,
   ndraw = 200L,
   par_skip = 1L,
-  imp_skip = Inf,
-  seed = NA) {
+  imp_skip = Inf) {
 
   model <- match.arg(model)
   list(
@@ -49,7 +46,6 @@ control_kr <- function(
     runin = runin,
     ndraw = ndraw,
     par_skip = par_skip,
-    imp_skip = imp_skip,
-    seed = seed
+    imp_skip = imp_skip
   )
 }

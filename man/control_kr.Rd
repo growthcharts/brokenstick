@@ -9,8 +9,7 @@ control_kr(
   runin = 100L,
   ndraw = 200L,
   par_skip = 1L,
-  imp_skip = Inf,
-  seed = NA
+  imp_skip = Inf
 )
 }
 \arguments{
@@ -23,9 +22,6 @@ control_kr(
 \item{par_skip}{Number of iterations to next parameter draw}
 
 \item{imp_skip}{Number of iterations to next outcome draw}
-
-\item{seed}{Seed number for \code{\link[base:set.seed]{base::set.seed()}}. Use \code{NA} to bypass
-seed setting.}
 }
 \value{
 A list with five components

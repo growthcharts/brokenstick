@@ -20,7 +20,8 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  control = control_brokenstick()
+  control = control_brokenstick(),
+  seed = NA
 )
 
 \method{brokenstick}{recipe}(
@@ -30,7 +31,8 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  control = control_brokenstick()
+  control = control_brokenstick(),
+  seed = NA
 )
 
 \method{brokenstick}{data.frame}(
@@ -41,7 +43,8 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  control = control_brokenstick()
+  control = control_brokenstick(),
+  seed = NA
 )
 
 \method{brokenstick}{matrix}(
@@ -52,7 +55,8 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
-  control = control_brokenstick()
+  control = control_brokenstick(),
+  seed = NA
 )
 }
 \arguments{
@@ -112,6 +116,9 @@ using \code{knots} and \code{boundary} over \code{k}. If both \code{k} and
 
 \item{control}{A list with parameters. Use \code{control_brokenstick()}
 to generate.}
+
+\item{seed}{Seed number for \code{\link[base:set.seed]{base::set.seed()}}. Use \code{NA} to bypass
+seed setting.}
 
 \item{y}{Outcome variable. When \code{x} is a \strong{data frame} or \strong{matrix},
 \code{y} is specified as:

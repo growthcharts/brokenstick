@@ -17,6 +17,8 @@
 #'    * `imp_skip`: Number of iterations to next outcome draw
 #'    * `seed`: Seed number (use `NA` to continue) for [base::set.seed()]
 #'
+#' @param seed Seed number for [base::set.seed()]. Use `NA` to bypass
+#' seed setting.
 #' @param na.action Not really used here
 #' @return A list with components:
 #'
@@ -63,9 +65,10 @@ kr <- function(y,
                x,
                g,
                control,
-               na.action) {
+               na.action,
+               seed) {
 
-  if (!is.na(control$seed)) set.seed(control$seed)
+  if (!is.na(seed)) set.seed(seed)
 
   ry <- !is.na(y)
   xg <- cbind(x, g)

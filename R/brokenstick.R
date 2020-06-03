@@ -77,6 +77,9 @@
 #'
 #' @param ... Not currently used, but required for extensibility.
 #'
+#' @param seed Seed number for [base::set.seed()]. Use `NA` to bypass
+#' seed setting.
+#'
 #' @details
 #' The variance-covariance matrix of the random effects absorbs the
 #' relations over time. Currently, this matrix is estimated
@@ -150,7 +153,8 @@ brokenstick.formula <- function(formula, data, ...,
                                 knots = NULL,
                                 boundary = NULL,
                                 k = NULL,
-                                control = control_brokenstick()) {
+                                control = control_brokenstick(),
+                                seed = NA) {
   # pre-process formula to get around mold()'s formula limitations
   nms <- parse_formula(formula)
   rec <- recipes::recipe(data,
@@ -158,7 +162,7 @@ brokenstick.formula <- function(formula, data, ...,
                          roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
-  brokenstick_bridge(processed, knots, boundary, k, control, ...)
+  brokenstick_bridge(processed, knots, boundary, k, control, seed, ...)
 }
 
 
@@ -170,10 +174,11 @@ brokenstick.recipe <- function(x, data, ...,
                                knots = NULL,
                                boundary = NULL,
                                k = NULL,
-                               control = control_brokenstick()) {
+                               control = control_brokenstick(),
+                               seed = NA) {
 
   processed <- hardhat::mold(x, data)
-  brokenstick_bridge(processed, knots, boundary, k, control, ...)
+  brokenstick_bridge(processed, knots, boundary, k, control, seed, ...)
 }
 
 
@@ -185,7 +190,8 @@ brokenstick.data.frame <- function(x, y, group, ...,
                                    knots = NULL,
                                    boundary = NULL,
                                    k = NULL,
-                                   control = control_brokenstick()) {
+                                   control = control_brokenstick(),
+                                   seed = NA) {
   nms <- list(
     y = ifelse(is.null(names(y)),
                deparse(substitute(y)),
@@ -203,7 +209,7 @@ brokenstick.data.frame <- function(x, y, group, ...,
                          roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
-  brokenstick_bridge(processed, knots, boundary, k, control, ...)
+  brokenstick_bridge(processed, knots, boundary, k, control, seed, ...)
 }
 
 
@@ -215,7 +221,8 @@ brokenstick.matrix <- function(x, y, group, ...,
                                knots = NULL,
                                boundary = NULL,
                                k = NULL,
-                               control = control_brokenstick()) {
+                               control = control_brokenstick(),
+                               seed = NA) {
   nms <- list(
     y = ifelse(is.null(colnames(y)),
                deparse(substitute(y)),
@@ -233,14 +240,14 @@ brokenstick.matrix <- function(x, y, group, ...,
                          roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
-  brokenstick_bridge(processed, knots, boundary, k, control, ...)
+  brokenstick_bridge(processed, knots, boundary, k, control, seed, ...)
 }
 
 
 # ------------------------------------------------------------------------------
 # Bridge
 
-brokenstick_bridge <- function(processed, knots, boundary, k, control, ...) {
+brokenstick_bridge <- function(processed, knots, boundary, k, control, seed, ...) {
 
   x <- processed$predictor
   y <- processed$outcome
@@ -266,6 +273,7 @@ brokenstick_bridge <- function(processed, knots, boundary, k, control, ...) {
               x = X,
               g = g,
               control = control$kr,
+              seed = seed,
               na.action = control$na.action)
   }
 
