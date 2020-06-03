@@ -7,6 +7,7 @@
 \alias{brokenstick.recipe}
 \alias{brokenstick.data.frame}
 \alias{brokenstick.matrix}
+\alias{brokenstick.numeric}
 \title{Fit a \code{brokenstick} model to irregular data}
 \usage{
 brokenstick(x, ...)
@@ -48,6 +49,18 @@ brokenstick(x, ...)
 )
 
 \method{brokenstick}{matrix}(
+  x,
+  y,
+  group,
+  ...,
+  knots = NULL,
+  boundary = NULL,
+  k = NULL,
+  control = control_brokenstick(),
+  seed = NA
+)
+
+\method{brokenstick}{numeric}(
   x,
   y,
   group,
@@ -175,25 +188,29 @@ fit_lmer <- brokenstick(hgt.z ~ age | id, data = smocc_200,
                         knots = knots, boundary = boundary)
 }
 
+# Five ways to specify the same model
 # Formula interface
 mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
+
+# XY interface - numeric vector
+mod2 <- with(mtcars, brokenstick(disp, mpg, cyl))
+identical(mod1, mod2)
 
 # Recipes data.frame interface
 library(recipes)
 rec <- recipe(mtcars,
               vars = c("mpg", "disp", "cyl"),
               roles = c("outcome", "predictor", "group"))
-mod2 <- brokenstick(rec, mtcars)
-identical(mod1, mod2)
+mod3 <- brokenstick(rec, mtcars)
+identical(mod1, mod3)
 
 # XY interface - data.frame
-mod3 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
-identical(mod1, mod3)
+mod4 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
+identical(mod1, mod4)
 
 # XY interface - matrix
 mt <- as.matrix(mtcars)
-mod4 <- brokenstick(mt[, "disp", drop = FALSE],
+mod5 <- brokenstick(mt[, "disp", drop = FALSE],
                     mt[, "mpg", drop = FALSE],
                     mt[, "cyl", drop = FALSE])
-
 }

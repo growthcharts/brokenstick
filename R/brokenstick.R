@@ -112,27 +112,31 @@
 #'                         knots = knots, boundary = boundary)
 #'}
 #'
+#' # Five ways to specify the same model
 #' # Formula interface
 #' mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
+#'
+#' # XY interface - numeric vector
+#' mod2 <- with(mtcars, brokenstick(disp, mpg, cyl))
+#' identical(mod1, mod2)
 #'
 #' # Recipes data.frame interface
 #' library(recipes)
 #' rec <- recipe(mtcars,
 #'               vars = c("mpg", "disp", "cyl"),
 #'               roles = c("outcome", "predictor", "group"))
-#' mod2 <- brokenstick(rec, mtcars)
-#' identical(mod1, mod2)
+#' mod3 <- brokenstick(rec, mtcars)
+#' identical(mod1, mod3)
 #'
 #' # XY interface - data.frame
-#' mod3 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
-#' identical(mod1, mod3)
+#' mod4 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
+#' identical(mod1, mod4)
 #'
 #' # XY interface - matrix
 #' mt <- as.matrix(mtcars)
-#' mod4 <- brokenstick(mt[, "disp", drop = FALSE],
+#' mod5 <- brokenstick(mt[, "disp", drop = FALSE],
 #'                     mt[, "mpg", drop = FALSE],
 #'                     mt[, "cyl", drop = FALSE])
-#'
 #' @export
 brokenstick <- function(x, ...) {
   UseMethod("brokenstick")
@@ -233,6 +237,38 @@ brokenstick.matrix <- function(x, y, group, ...,
                colnames(group)[1L]))
 
   data <- dplyr::bind_cols(data.frame(x[, 1L, drop = FALSE]), y, group)
+  data <- setNames(data, as.character(c(nms$x, nms$y, nms$g)))
+
+  rec <- recipes::recipe(data,
+                         vars = c(nms$y, nms$x, nms$g),
+                         roles = c("outcome", "predictor", "group"))
+  processed <- hardhat::mold(rec, data)
+
+  brokenstick_bridge(processed, knots, boundary, k, control, seed, ...)
+}
+
+# XY method - numeric vector
+
+#' @export
+#' @rdname brokenstick
+brokenstick.numeric <- function(x, y, group, ...,
+                               knots = NULL,
+                               boundary = NULL,
+                               k = NULL,
+                               control = control_brokenstick(),
+                               seed = NA) {
+  nms <- list(
+    y = ifelse(is.null(colnames(y)),
+               deparse(substitute(y)),
+               colnames(y)[1L]),
+    x = ifelse(is.null(colnames(x)),
+               deparse(substitute(x)),
+               colnames(x)[1L]),
+    g = ifelse(is.null(colnames(group)),
+               deparse(substitute(group)),
+               colnames(group)[1L]))
+
+  data <- dplyr::bind_cols(x, y, group)
   data <- setNames(data, as.character(c(nms$x, nms$y, nms$g)))
 
   rec <- recipes::recipe(data,
