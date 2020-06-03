@@ -8,7 +8,7 @@ print.brokenstick <- function(x, ..., digits = 2L) {
   upper[upper.tri(upper)] <- ""
   upper <- as.data.frame(upper)
   print(upper)
-  if (length(x$sigma2j)) cat("Cluster residuals: ", x$sigma2j, "\n")
+  if (length(x$sigma2j)) cat("Cluster residuals: ", summary(x$sigma2j)[c(1:3, 5, 6)], "\n")
   cat("Residual variance: ", x$sigma2, "\n")
   invisible(x)
 }
