@@ -95,8 +95,21 @@
 #' # fit with implicit boundary c(0, 3)
 #' fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3)
 #'
-#' control <- control_brokenstick(method = "kr", kr = list(runin = 100L, ndraw = 200L, par_skip = 1L, imp_skip = 20L))
-#' fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3, control = control)
+#' control <- control_brokenstick(method = "kr",
+#'                                kr = list(runin = 100L, ndraw = 200L,
+#'                                          par_skip = 1L, imp_skip = 20L))
+#' fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3,
+#'                    control = control)
+#'
+#' knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4)
+#' boundary <- c(0, 3)
+#' fit_kr <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = knots,
+#'                       boundary = boundary, control = control)
+#'
+#' \dontrun{
+#' fit_lmer <- brokenstick(hgt.z ~ age | id, data = smocc_200,
+#'                         knots = knots, boundary = boundary)
+#'}
 #'
 #' # Formula interface
 #' mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
