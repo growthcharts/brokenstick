@@ -100,7 +100,7 @@
 #'
 #' control <- control_brokenstick(method = "kr")
 #' fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3,
-#'                    control = control)
+#'                    control = control, seed = 1)
 #'
 #' knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4)
 #' boundary <- c(0, 3)
@@ -348,13 +348,14 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
     draws = numeric())
 }
 
-brokenstick_impl_kr <- function(y, x, g, control, na.action) {
+brokenstick_impl_kr <- function(y, x, g, control, seed, na.action) {
 
   # Kasim-Raudenbush sampler
   kr(y = y,
      x = x,
      g = g,
      control = control,
+     seed = seed,
      na.action = na.action)
 }
 

@@ -4,7 +4,7 @@
 \alias{kr}
 \title{Kasim-Raudenbush sampler for two-level normal model}
 \usage{
-kr(y, x, g, control, na.action, seed)
+kr(y, x, g, control, seed, na.action)
 }
 \arguments{
 \item{y}{Vector with outcome value}
@@ -15,18 +15,17 @@ kr(y, x, g, control, na.action, seed)
 
 \item{control}{A list with elements:
 \itemize{
-\item \code{model}: Correlation model: \code{"argyle"} or \code{"cole"}
+\item \code{model}: Correlation model: \code{"argyle"}, \code{"cole"} or \code{"none"}
 \item \code{runin}: Number of run-in iterations
 \item \code{ndraws}: Number of parameter draws
 \item \code{par_skip}: Number of iterations to next parameter draw
 \item \code{imp_skip}: Number of iterations to next outcome draw
-\item \code{seed}: Seed number (use \code{NA} to continue) for \code{\link[base:set.seed]{base::set.seed()}}
 }}
-
-\item{na.action}{Not really used here}
 
 \item{seed}{Seed number for \code{\link[base:set.seed]{base::set.seed()}}. Use \code{NA} to bypass
 seed setting.}
+
+\item{na.action}{Not really used here}
 }
 \value{
 A list with components:\preformatted{* `beta`  Fixed effects

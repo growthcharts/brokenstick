@@ -176,7 +176,7 @@ fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3)
 
 control <- control_brokenstick(method = "kr")
 fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3,
-                   control = control)
+                   control = control, seed = 1)
 
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4)
 boundary <- c(0, 3)

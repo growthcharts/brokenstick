@@ -10,12 +10,11 @@
 #' @param g Vector with group values
 #' @param control A list with elements:
 #'
-#'    * `model`: Correlation model: `"argyle"` or `"cole"`
+#'    * `model`: Correlation model: `"argyle"`, `"cole"` or `"none"`
 #'    * `runin`: Number of run-in iterations
 #'    * `ndraws`: Number of parameter draws
 #'    * `par_skip`: Number of iterations to next parameter draw
 #'    * `imp_skip`: Number of iterations to next outcome draw
-#'    * `seed`: Seed number (use `NA` to continue) for [base::set.seed()]
 #'
 #' @param seed Seed number for [base::set.seed()]. Use `NA` to bypass
 #' seed setting.
@@ -65,8 +64,8 @@ kr <- function(y,
                x,
                g,
                control,
-               na.action,
-               seed) {
+               seed,
+               na.action) {
 
   if (!is.na(seed)) set.seed(seed)
 
