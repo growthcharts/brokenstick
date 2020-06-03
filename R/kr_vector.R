@@ -1,4 +1,5 @@
 kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
+                      model = "argyle",
                       runin = 100L, ndraw = 10L, par_skip = 10L,
                       imp_skip = Inf) {
 
@@ -74,7 +75,7 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     mu <- colMeans(bees) + drop(rnorm(n = n.rc) %*% chol.default(chol2inv(chol.default(symridge(inv.psi))) / n.class))
 
     # Enforce simple structure on psi
-    method <- ifelse(n.iter <= runin, "none", "argyle")
+    method <- ifelse(n.iter <= runin, model, model)
     psi <- crossprod(t(t(bees) - mu))
     psi_smoothed <- smooth_covariance(grid, psi, method = method)
 

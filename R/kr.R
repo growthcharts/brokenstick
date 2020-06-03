@@ -10,10 +10,12 @@
 #' @param g Vector with group values
 #' @param control A list with elements:
 #'
+#'    * `model`: Correlation model: `"argyle"` or `"cole"`
 #'    * `runin`: Number of run-in iterations
 #'    * `ndraws`: Number of parameter draws
 #'    * `par_skip`: Number of iterations to next parameter draw
 #'    * `imp_skip`: Number of iterations to next outcome draw
+#'    * `seed`: Seed number (use `NA` to continue) for [base::set.seed()]
 #'
 #' @param na.action Not really used here
 #' @return A list with components:
@@ -63,15 +65,18 @@ kr <- function(y,
                control,
                na.action) {
 
+  if (!is.na(control$seed)) set.seed(control$seed)
+
   ry <- !is.na(y)
   xg <- cbind(x, g)
   type <- c(rep(2L, ncol(x)), -2L)
 
   res <- kr_vector(y, ry, xg, type, intercept = FALSE,
-                 runin = control$runin,
-                 ndraw = control$ndraw,
-                 par_skip = control$par_skip,
-                 imp_skip = control$imp_skip)
+                   model = control$model,
+                   runin = control$runin,
+                   ndraw = control$ndraw,
+                   par_skip = control$par_skip,
+                   imp_skip = control$imp_skip)
   dimnames(res$omega) <- list(colnames(x), colnames(x))
   obj <- list(beta = res$beta,
               omega = res$omega,

@@ -15,10 +15,12 @@ kr(y, x, g, control, na.action)
 
 \item{control}{A list with elements:
 \itemize{
+\item \code{model}: Correlation model: \code{"argyle"} or \code{"cole"}
 \item \code{runin}: Number of run-in iterations
 \item \code{ndraws}: Number of parameter draws
 \item \code{par_skip}: Number of iterations to next parameter draw
 \item \code{imp_skip}: Number of iterations to next outcome draw
+\item \code{seed}: Seed number (use \code{NA} to continue) for \code{\link[base:set.seed]{base::set.seed()}}
 }}
 
 \item{na.action}{Not really used here}

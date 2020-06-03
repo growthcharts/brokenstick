@@ -154,9 +154,7 @@ children.
 # fit with implicit boundary c(0, 3)
 fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3)
 
-control <- control_brokenstick(method = "kr",
-                               kr = list(runin = 100L, ndraw = 200L,
-                                         par_skip = 1L, imp_skip = 20L))
+control <- control_brokenstick(method = "kr")
 fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3,
                    control = control)
 
