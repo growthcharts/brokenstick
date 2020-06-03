@@ -4,12 +4,15 @@
 #' @importFrom growthstandards geom_zband ly_zband
 #' @importFrom hardhat         mold new_model default_xy_blueprint
 #' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
+#' @importFrom matrixsampling  rwishart
 #' @importFrom recipes         recipe
 #' @importFrom splines         bs
-#' @importFrom stats           approx as.formula fitted model.frame
+#' @importFrom stats           approx as.formula cov2cor
+#'                             fitted model.frame lm
 #'                             model.matrix na.exclude na.omit
+#'                             optim
 #'                             predict quantile rgamma rnorm
-#'                             rWishart setNames var
+#'                             rWishart setNames smooth var
 NULL
 
 #' \pkg{brokenstick}: A package for irregular longitudinal data.

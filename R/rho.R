@@ -25,29 +25,28 @@ vec2cov <- function(vec, sd) {
 
 cov2vec <- function(cov) {
   cor <- cov2cor(cov)
-  list(vec = cor[upper.tri(cor)], sd = sqrt(diag(cov)))
+  list(vec = cor[lower.tri(cor)], sd = sqrt(diag(cov)))
 }
 
-smooth_covariance <- function(grid, cov) {
-  # apply Argyle-Markov correlation model
+smooth_covariance <- function(grid, cov, method = c("none", "argyle", "cole")) {
+  if (method == "none") return(cov)
   d <- cov2vec(cov)
   grid$r <- d$vec
+
+  # Argyle-Markov correlation model
+  if (method == "argyle") {
   opt <- optim(c(1.3, 0.5), fn, data = grid)
   rhat <- with(grid, rho(t1, t2, tau = opt$par[1], lambda = opt$par[2]))
+  }
+
+  # Cole correlation model
+  if (method == "cole") {
+    grid$y <- log((1 + grid$r)/(1 - grid$r)) / 2
+    fit <- lm(y ~ I(log((t1+t2)/2)) + I(log(t2-t1)) + I(1/(t2-t1)) + I(log((t1+t2)/2)*log(t2-t1)) + I(log((t1+t2)/2)^2),
+              data = grid)
+    yhat <- predict(fit)
+    rhat <- (exp(2 * yhat) - 1) / (exp(2 * yhat) + 1)
+  }
+
   vec2cov(rhat, sd = smooth(d$sd))
 }
-
-# data <- expand.grid(t2 = c(0, 6, 13, 26, 39, 52, 78),
-#                     t1 = c(0, 6, 13, 26, 39, 52, 78))
-# data <- data[data$t1 < data$t2, ]
-# data <- data.frame(data, r = c(0.724, 0.605, 0.487, 0.452, 0.439, 0.442,
-#                                0.885, 0.734, 0.644, 0.622, 0.578,
-#                                0.863, 0.779, 0.742, 0.672,
-#                                0.909, 0.865, 0.775,
-#                                0.935, 0.849,
-#                                0.898))
-#
-# opt <- optim(c(1.3, 0.5), fn, data = data)
-# rhat <- with(data, rho(t1, t2, tau = opt$par[1], lambda = opt$par[2]))
-# vec2cov(rhat, sd = rep(1, 7))
-
