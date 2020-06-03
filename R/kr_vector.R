@@ -2,6 +2,12 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
                       runin = 100L, ndraw = 10L, par_skip = 10L,
                       imp_skip = Inf) {
 
+  symridge <- function(x, ridge = 0.0001, ...) {
+    x <- (x + t(x))/2
+    if (nrow(x) == 1L) return(x)
+    x + diag(diag(x) * ridge)
+  }
+
   ## hack to get knots, assumes that g is last
   kn <- as.numeric(sub(".*[_]", "", colnames(x)[-ncol(x)]))
 
@@ -20,8 +26,11 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   draw <- c(rep(FALSE, runin), rep(c(rep(FALSE, par_skip - 1L), TRUE), ndraw))
 
   nimp <- floor(ndraw / imp_skip)
-  impute <- c(rep(FALSE, runin),
-              rep(c(rep(FALSE, min(imp_skip, ndraw) - 1), TRUE), nimp))
+  if (nimp)
+    impute <- c(rep(FALSE, runin),
+                rep(c(rep(FALSE, min(imp_skip, ndraw) - 1), TRUE), nimp))
+  else
+    impute <- rep(FALSE, n.iter)
 
   if (is.null(wy)) wy <- !ry
   n.class <- length(unique(x[, type == -2]))
@@ -38,6 +47,7 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   ss <- vector(mode = "numeric", length = n.class)
   mu <- rep.int(0, n.rc)
   inv.psi <- diag(1, n.rc, n.rc)
+  ridge <- diag(0.0001, n.rc, n.rc)
   inv.sigma2 <- rep.int(1, n.class)
   sigma2.0 <- 1
   theta <- 1
@@ -54,28 +64,29 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     ## Draw bees
     for (class in seq_len(n.class)) {
       vv <- inv.sigma2[class] * X.SS[[class]] + inv.psi
-      bees.var <- chol2inv(chol.default(vv))
+      bees.var <- chol2inv(chol.default(symridge(vv)))
       bees[class, ] <- drop(bees.var %*% (crossprod(inv.sigma2[class] * XG[[class]], yg[[class]]) + inv.psi %*% mu)) +
         drop(rnorm(n = n.rc) %*% chol.default(bees.var))
       ss[class] <- crossprod(yg[[class]] - XG[[class]] %*% bees[class, ])
     }
 
-    ## Draw mu
-    mu <- colMeans(bees) + drop(rnorm(n = n.rc) %*% chol.default(chol2inv(chol.default(inv.psi)) / n.class))
+    # Draw mu
+    mu <- colMeans(bees) + drop(rnorm(n = n.rc) %*% chol.default(chol2inv(chol.default(symridge(inv.psi))) / n.class))
 
     # Enforce simple structure on psi
-    # this isn't right yet, need to enter something like
-    # Sigma = chol2inv(chol.default(crossprod(t(t(bees) - mu))))
-    # and then adapt Sigma in "Draw psi"
-    #psi <- chol2inv(chol.default(inv.psi))
-    #psi <- smooth_covariance(grid, psi)
-    #inv.psi <- chol2inv(chol.default(psi))
+    method <- ifelse(n.iter <= runin, "none", "argyle")
+    psi <- crossprod(t(t(bees) - mu))
+    psi_smoothed <- smooth_covariance(grid, psi, method = method)
 
-    ## Draw psi
-    inv.psi <- rWishart(
-      n = 1, df = n.class - n.rc - 1,
-      Sigma = chol2inv(chol.default(crossprod(t(t(bees) - mu))))
-    )[, , 1L]
+    # Draw psi
+    # Add ridge to prevent inversion error with semi-definite psi_smoothed
+    #inv.psi <- rWishart(
+    #  n = 1, df = n.class - n.rc - 1,
+    #  Sigma = chol2inv(chol.default(psi_smoothed + ridge))
+    #)[, , 1L]
+    inv.psi <- matrixsampling::rwishart(
+      n = 1L, nu = n.class - n.rc - 1L,
+      Sigma = chol2inv(chol.default(symridge(psi_smoothed))))[, , 1L]
 
     ## Draw sigma2
     inv.sigma2 <- rgamma(n.class, n.g / 2 + 1 / (2 * theta), scale = 2 * theta / (ss * theta + sigma2.0))
@@ -93,7 +104,7 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     if (draw[iter]) {
       count_par <- count_par + 1L
       store_beta[count_par, ] <- mu
-      store_omega[count_par, , ] <- solve(inv.psi)
+      store_omega[count_par, , ] <- chol2inv(chol.default(symridge(inv.psi)))
       store_sigma2j[count_par, ] <- 1/inv.sigma2
       store_sigma2[count_par, ] <- mean(store_sigma2j[count_par, ])
     }
@@ -129,7 +140,7 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     inv.sigma2 = inv.sigma2,
     sigma2.0 = sigma2.0,
     theta = theta,
-    imps = imps,
+    imps = draws,
     beta = beta,
     omega = omega,
     sigma2j = sigma2j,
