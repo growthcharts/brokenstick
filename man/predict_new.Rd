@@ -7,7 +7,16 @@
 \usage{
 predict_new(object, new_data, type = "numeric", ...)
 
-\method{predict_new}{brokenstick}(object, new_data, type = "numeric", ...)
+\method{predict_new}{brokenstick}(
+  object,
+  new_data,
+  type = "numeric",
+  ...,
+  x = NULL,
+  y = NULL,
+  group = NULL,
+  strip_data = TRUE
+)
 }
 \arguments{
 \item{object}{A \code{brokenstick} object.}
@@ -21,6 +30,19 @@ Valid options are:
 }}
 
 \item{...}{Not used, but required for extensibility.}
+
+\item{x}{Optional. A numeric vector with values of the predictor. It could
+also be the special keyword \code{x = "knots"} replaces \code{x} by the
+positions of the knots.}
+
+\item{y}{Optional. A numeric vector with measurements.}
+
+\item{group}{A vector with group identifications}
+
+\item{strip_data}{A logical indicating whether the row with the
+observed data from \code{new_data} should be stripped from the
+return. The default is \code{TRUE}. Set to \code{FALSE} to infer which data
+points are extracted from \code{new_data}.}
 }
 \value{
 A tibble of predictions. The number of rows in the tibble is guaranteed
@@ -30,13 +52,28 @@ to be the same as the number of rows in \code{new_data}.
 Predict from a \code{brokenstick}
 }
 \examples{
-train <- mtcars[1:20,]
-test <- mtcars[21:32, -1]
+train <- smocc_200[1:1198, ]
+test <- smocc_200[1199:1940, ]
 
 # Fit
-mod <- brokenstick(mpg ~ disp | cyl, train)
+fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
 
 # Predict, with preprocessing
-predict_new(mod, test)
+predict_new(fit, test)
+
+# case 1: x as knots
+z <- predict_new(fit, test, x = "knots")
+
+# case 2: x and y, one group
+predict_new(fit, test, x = "knots", y = c(1, 1, 0.5, 0))
+
+# case 3: only group
+predict_new(fit, test, group = c(11045, 11120, 999))
+
+# case 4:
+predict_new(fit, test, x = c(0.5, 1, 1.25), group = c(11045, 11120, 999))
+
+# case 5:
+predict_new(fit, test, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 
 }

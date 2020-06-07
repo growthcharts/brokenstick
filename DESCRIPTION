@@ -21,9 +21,9 @@ Imports:
     lme4,
     matrixsampling,
     recipes,
+    rlang,
     splines,
-    stats,
-    rlang
+    stats
 Suggests:
     knitr,
     MASS,
