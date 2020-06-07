@@ -35,7 +35,7 @@ make_basis <- function(x,
   padx <- all(is.na(x))
   if (padx) x <- c(0, x)
 
-  x_name <- names(x)
+  x_name <- colnames(x)[1]
   if (warn) {
     X <- splines::bs(
       x = pull(x, x_name),
