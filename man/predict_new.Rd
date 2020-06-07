@@ -51,6 +51,33 @@ to be the same as the number of rows in \code{new_data}.
 \description{
 Predict from a \code{brokenstick}
 }
+\details{
+By default, \code{predict()} will find predictions for every row in
+\code{new_data}. It is possible to tailor the behavior through the
+\code{x}, \code{y} and \code{group} arguments. What exactly happens depends on
+which of these arguments is specified:
+\enumerate{
+\item If the user specifies \code{x}, but no \code{y} and \code{group}, the function
+returns - for every group in \code{new_data} - predictions at \code{x}
+values. This method will use the data from \code{new_data}.
+\item If the user specifies \code{x} and \code{y} but no \code{group}, the function
+forms a hypothetical new group with the \code{x} and \code{y} values. This
+method uses no information from \code{new_data}.
+\item If the user specifies \code{group}, but no \code{x} or \code{y}, the function
+searches for the relevant data in \code{new_data} and limits its
+predictions to the specified groups. This is useful if prediction
+for only one or a few groups is needed.
+\item If the user specifies \code{x} and \code{group}, but no \code{y}, the function
+will create new values for \code{x} in each group, search for the relevant
+data in \code{new_data} and limit prediction to locations \code{x} in those
+groups.
+\item If the user specifies \code{x}, \code{y} and \code{group}, the functions
+assumes that these vectors form a data frame. The lengths of \code{x},
+\code{y} and \code{group} must be the same. This procedure uses only
+information from \code{newdata} for groups with \code{group} values that match
+those on \code{newdata}.
+}
+}
 \examples{
 train <- smocc_200[1:1198, ]
 test <- smocc_200[1199:1940, ]

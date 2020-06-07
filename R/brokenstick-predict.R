@@ -24,6 +24,33 @@
 #'  return. The default is `TRUE`. Set to `FALSE` to infer which data
 #'  points are extracted from `new_data`.
 #'
+#' @details
+#'
+#' By default, `predict()` will find predictions for every row in
+#' `new_data`. It is possible to tailor the behavior through the
+#' `x`, `y` and `group` arguments. What exactly happens depends on
+#' which of these arguments is specified:
+#'
+#' 1. If the user specifies `x`, but no `y` and `group`, the function
+#' returns - for every group in `new_data` - predictions at `x`
+#' values. This method will use the data from `new_data`.
+#' 2. If the user specifies `x` and `y` but no `group`, the function
+#' forms a hypothetical new group with the `x` and `y` values. This
+#' method uses no information from `new_data`.
+#' 3. If the user specifies `group`, but no `x` or `y`, the function
+#' searches for the relevant data in `new_data` and limits its
+#' predictions to the specified groups. This is useful if prediction
+#' for only one or a few groups is needed.
+#' 4. If the user specifies `x` and `group`, but no `y`, the function
+#' will create new values for `x` in each group, search for the relevant
+#' data in `new_data` and limit prediction to locations `x` in those
+#' groups.
+#' 5. If the user specifies `x`, `y` and `group`, the functions
+#' assumes that these vectors form a data frame. The lengths of `x`,
+#' `y` and `group` must be the same. This procedure uses only
+#' information from `newdata` for groups with `group` values that match
+#' those on `newdata`.
+#'
 #' @return
 #'
 #' A tibble of predictions. The number of rows in the tibble is guaranteed
@@ -80,17 +107,6 @@ predict_new.brokenstick <- function(object, new_data, type = "numeric",
     reset <- FALSE
 
   } else {
-
-    # 1. If user specified x, but no y and group, append predictions to
-    # specified x values for every group
-    # 2. If user specified x and y but no group, append predictions to
-    # a hypothetical new group with specified x and y values
-    # 3. If user specified group, but no x or y, limit predictions to
-    # just those groups
-    # 4. If user specified x and group, but no y, limit predictions to
-    # those groups at locations x
-    # 5. If user specified x, y and group, assume these are vectors
-    # that form a data frame
 
     new_data <- reset_data(new_data, object$names, x = x, y = y, group = group)
     reset <- TRUE
