@@ -315,7 +315,6 @@ brokenstick_bridge <- function(processed, knots, boundary, k, control, seed, ...
   }
 
   new_brokenstick(
-    data = data,
     names = nms,
     knots = l$knots,
     boundary = l$boundary,
