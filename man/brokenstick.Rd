@@ -213,4 +213,5 @@ mt <- as.matrix(mtcars)
 mod5 <- brokenstick(mt[, "disp", drop = FALSE],
                     mt[, "mpg", drop = FALSE],
                     mt[, "cyl", drop = FALSE])
+identical(mod1, mod5)
 }
