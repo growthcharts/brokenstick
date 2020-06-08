@@ -205,7 +205,7 @@ brokenstick.data.frame <- function(x, y, group, ...,
                deparse(substitute(group)),
                names(group)[1L]))
 
-  data <- dplyr::bind_cols(x[, 1L, drop = FALSE], y, group)
+  data <- bind_cols(x[, 1L, drop = FALSE], y, group)
   data <- setNames(data, c(nms$x, nms$y, nms$g))
 
   rec <- recipes::recipe(data,
@@ -236,7 +236,7 @@ brokenstick.matrix <- function(x, y, group, ...,
                deparse(substitute(group)),
                colnames(group)[1L]))
 
-  data <- dplyr::bind_cols(data.frame(x[, 1L, drop = FALSE]), y, group)
+  data <- bind_cols(data.frame(x[, 1L, drop = FALSE]), y, group)
   data <- setNames(data, as.character(c(nms$x, nms$y, nms$g)))
 
   rec <- recipes::recipe(data,
@@ -268,7 +268,7 @@ brokenstick.numeric <- function(x, y, group, ...,
                deparse(substitute(group)),
                colnames(group)[1L]))
 
-  data <- dplyr::bind_cols(x, y, group)
+  data <- bind_cols(x, y, group)
   data <- setNames(data, as.character(c(nms$x, nms$y, nms$g)))
 
   rec <- recipes::recipe(data,

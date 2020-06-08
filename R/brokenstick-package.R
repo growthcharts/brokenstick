@@ -1,5 +1,5 @@
 #' @importFrom dplyr           bind_rows bind_cols filter group_by
-#'                             mutate pull select ungroup `%>%`
+#'                             mutate pull relocate select ungroup `%>%`
 #' @importFrom ggplot2         aes_string facet_wrap geom_line geom_point
 #'                             ggplot xlab xlim ylab ylim
 #' @importFrom growthstandards geom_zband ly_zband

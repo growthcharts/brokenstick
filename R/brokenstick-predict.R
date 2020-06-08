@@ -132,11 +132,11 @@ predict_new.brokenstick <- function(object, new_data = NULL, type = "numeric",
                                   forged$extras$roles$group)
   if (!reset) return(p)
 
-  ret <- dplyr::bind_cols(new_data, p)
+  ret <- bind_cols(new_data, p)
   if (strip_data) {
     ret <- ret %>%
-      dplyr::filter(.data[[".source"]] == "added") %>%
-      dplyr::select(-".source")
+      filter(.data[[".source"]] == "added") %>%
+      select(-".source")
   }
   ret
 }
@@ -204,7 +204,7 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
     yhat = NA,
     knot = FALSE
   )
-  long <- dplyr::bind_rows(long1, long2)
+  long <- bind_rows(long1, long2)
 
   pred <- long %>%
     group_by(.data$group) %>%

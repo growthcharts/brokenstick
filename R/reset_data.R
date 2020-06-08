@@ -15,7 +15,7 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
       g = unique(data[[names$g]])
     )
     colnames(reset) <- c(names$x, names$y, names$g)
-    reset <- dplyr::bind_rows(data = data, added = reset, .id = ".source")
+    reset <- bind_rows(data = data, added = reset, .id = ".source")
     # message("Reset new_data: predict at `x` in every group.")
   }
 
@@ -37,7 +37,7 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
     if (is.null(data))
       stop("Expected argument `new_data` not found.", call. = FALSE)
     reset <- data[data[[names$g]] %in% group, , drop = FALSE]
-    reset <- dplyr::bind_cols(.source = "added", reset)
+    reset <- bind_cols(.source = "added", reset)
     # message("Reset new_data: subset of groups.")
   }
 
@@ -53,9 +53,9 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
       g = groups
     )
     colnames(reset) <- c(".source", names$x, names$y, names$g)
-    reset <- dplyr::bind_rows(data = data[data[[names$g]] %in% groups, , drop = FALSE],
-                              added = reset, .id = ".source") %>%
-      dplyr::relocate(".source")
+    reset <- bind_rows(data = data[data[[names$g]] %in% groups, , drop = FALSE],
+                       added = reset, .id = ".source") %>%
+      relocate(".source")
     # message("Reset new_data: predict at `x` in subset of groups.")
   }
 
@@ -71,9 +71,9 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
       y = y,
       g = group)
     colnames(reset) <- c(names$x, names$y, names$g)
-    reset <- dplyr::bind_rows(data = data[data[[names$g]] %in% groups, , drop = FALSE],
-                              added = reset, .id = ".source") %>%
-      dplyr::relocate(".source")
+    reset <- bind_rows(data = data[data[[names$g]] %in% groups, , drop = FALSE],
+                       added = reset, .id = ".source") %>%
+      relocate(".source")
     # message("Reset new_data: predict from vectors `x`, `y` and `group`.")
   }
 
