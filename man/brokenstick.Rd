@@ -171,47 +171,48 @@ knots. The function can be time consuming for data sets with thousands of
 children.
 }
 \examples{
-# fit with implicit boundary c(0, 3)
-fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3)
+train <- smocc_200[1:1198, ]
 
+# fit with implicit boundary c(0, 3)
+fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
+
+\dontrun{
 control <- control_brokenstick(method = "kr")
-fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 0:3,
+fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3,
                    control = control, seed = 1)
 
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4)
 boundary <- c(0, 3)
-fit_kr <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = knots,
-                      boundary = boundary, control = control)
-
-\dontrun{
-fit_lmer <- brokenstick(hgt.z ~ age | id, data = smocc_200,
+fit_lmer <- brokenstick(hgt.z ~ age | id, data = train,
                         knots = knots, boundary = boundary)
+fit_kr <- brokenstick(hgt.z ~ age | id, data = train, knots = knots,
+                      boundary = boundary, control = control)
 }
 
 # Five ways to specify the same model
 # Formula interface
-mod1 <- brokenstick(mpg ~ disp | cyl, mtcars)
+mod1 <- brokenstick(hgt.z ~ age | id, train)
 
 # XY interface - numeric vector
-mod2 <- with(mtcars, brokenstick(disp, mpg, cyl))
+mod2 <- with(train, brokenstick(age, hgt.z, id))
 identical(mod1, mod2)
 
 # Recipes data.frame interface
 library(recipes)
-rec <- recipe(mtcars,
-              vars = c("mpg", "disp", "cyl"),
+rec <- recipe(train,
+              vars = c("hgt.z", "age", "id"),
               roles = c("outcome", "predictor", "group"))
-mod3 <- brokenstick(rec, mtcars)
+mod3 <- brokenstick(rec, train)
 identical(mod1, mod3)
 
 # XY interface - data.frame
-mod4 <- with(mtcars, brokenstick(data.frame(disp), mpg, cyl))
+mod4 <- with(train, brokenstick(data.frame(age), hgt.z, id))
 identical(mod1, mod4)
 
 # XY interface - matrix
-mt <- as.matrix(mtcars)
-mod5 <- brokenstick(mt[, "disp", drop = FALSE],
-                    mt[, "mpg", drop = FALSE],
-                    mt[, "cyl", drop = FALSE])
+tt <- as.matrix(train[, c(1, 2, 7)])
+mod5 <- brokenstick(tt[, "age", drop = FALSE],
+                    tt[, "hgt.z", drop = FALSE],
+                    tt[, "id", drop = FALSE])
 identical(mod1, mod5)
 }
