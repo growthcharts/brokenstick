@@ -3,13 +3,13 @@
 \name{predict_new}
 \alias{predict_new}
 \alias{predict_new.brokenstick}
-\title{Predict from a \code{brokenstick}}
+\title{Predict from a \code{brokenstick} model}
 \usage{
 predict_new(object, new_data, type = "numeric", ...)
 
 \method{predict_new}{brokenstick}(
   object,
-  new_data,
+  new_data = NULL,
   type = "numeric",
   ...,
   x = NULL,
@@ -49,7 +49,12 @@ A tibble of predictions. The number of rows in the tibble is guaranteed
 to be the same as the number of rows in \code{new_data}.
 }
 \description{
-Predict from a \code{brokenstick}
+The predictions from a broken stick model coincide with the
+group-conditional means of the random effects. This function takes
+an object of class \code{brokenstick}, and returns predictions
+in one of several formats. The user can calculate predictions
+for new persons, i.e., for persons who are not part of
+the fitted model, through the \code{x} and \code{y} arguments.
 }
 \details{
 By default, \code{predict()} will find predictions for every row in
@@ -91,16 +96,21 @@ predict_new(fit, test)
 # case 1: x as knots
 z <- predict_new(fit, test, x = "knots")
 
-# case 2: x and y, one group
+# case 2: x and y, one new group
 predict_new(fit, test, x = "knots", y = c(1, 1, 0.5, 0))
+
+# case 2: x and y, one new group, we need not specify new_data
+predict_new(fit, x = "knots", y = c(1, 1, 0.5, 0))
 
 # case 3: only group
 predict_new(fit, test, group = c(11045, 11120, 999))
 
-# case 4:
+# case 4: predict at x in selected groups
 predict_new(fit, test, x = c(0.5, 1, 1.25), group = c(11045, 11120, 999))
 
-# case 5:
+# case 5: vectorized
 predict_new(fit, test, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 
+# case 5: vectorized, without new_data, results are different for 11045 and 11120
+predict_new(fit, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 }
