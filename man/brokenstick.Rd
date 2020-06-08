@@ -21,6 +21,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
+  method = c("lmer", "kr"),
   control = control_brokenstick(),
   seed = NA
 )
@@ -32,6 +33,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
+  method = c("lmer", "kr"),
   control = control_brokenstick(),
   seed = NA
 )
@@ -44,6 +46,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
+  method = c("lmer", "kr"),
   control = control_brokenstick(),
   seed = NA
 )
@@ -56,6 +59,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
+  method = c("lmer", "kr"),
   control = control_brokenstick(),
   seed = NA
 )
@@ -68,6 +72,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
+  method = c("lmer", "kr"),
   control = control_brokenstick(),
   seed = NA
 )
@@ -127,6 +132,9 @@ and do not transfer to other data sets. We recommend
 using \code{knots} and \code{boundary} over \code{k}. If both \code{k} and
 \code{knots} are specified, then \code{k} takes precendence.}
 
+\item{method}{Estimation method. Either \code{"kr"} (for the
+Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}) (default).}
+
 \item{control}{A list with parameters. Use \code{control_brokenstick()}
 to generate.}
 
@@ -177,16 +185,16 @@ train <- smocc_200[1:1198, ]
 fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
 
 \dontrun{
-control <- control_brokenstick(method = "kr")
+# using KR sampler
 fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3,
-                   control = control, seed = 1)
+                   method = "kr", seed = 1)
 
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4)
 boundary <- c(0, 3)
 fit_lmer <- brokenstick(hgt.z ~ age | id, data = train,
                         knots = knots, boundary = boundary)
 fit_kr <- brokenstick(hgt.z ~ age | id, data = train, knots = knots,
-                      boundary = boundary, control = control)
+                      boundary = boundary, method = "kr")
 }
 
 # Five ways to specify the same model
