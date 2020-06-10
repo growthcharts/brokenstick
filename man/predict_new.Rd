@@ -45,8 +45,9 @@ return. The default is \code{TRUE}. Set to \code{FALSE} to infer which data
 points are extracted from \code{new_data}.}
 }
 \value{
-A tibble of predictions. The number of rows in the tibble is guaranteed
-to be the same as the number of rows in \code{new_data}.
+A tibble of predictions. If \code{x}, \code{y} and \code{group} are not specified,
+the number of rows in the tibble is guaranteed to be the same as
+the number of rows in \code{new_data}.
 }
 \description{
 The predictions from a broken stick model coincide with the

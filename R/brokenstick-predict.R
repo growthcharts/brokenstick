@@ -2,10 +2,10 @@
 #'
 #' The predictions from a broken stick model coincide with the
 #' group-conditional means of the random effects. This function takes
-#' an object of class \code{brokenstick}, and returns predictions
+#' an object of class `brokenstick`, and returns predictions
 #' in one of several formats. The user can calculate predictions
 #' for new persons, i.e., for persons who are not part of
-#' the fitted model, through the \code{x} and \code{y} arguments.
+#' the fitted model, through the `x` and `y` arguments.
 #'
 #' @param object A `brokenstick` object.
 #'
@@ -60,8 +60,9 @@
 #'
 #' @return
 #'
-#' A tibble of predictions. The number of rows in the tibble is guaranteed
-#' to be the same as the number of rows in `new_data`.
+#' A tibble of predictions. If `x`, `y` and `group` are not specified,
+#' the number of rows in the tibble is guaranteed to be the same as
+#' the number of rows in `new_data`.
 #'
 #' @examples
 #' train <- smocc_200[1:1198, ]
