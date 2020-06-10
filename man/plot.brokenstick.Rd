@@ -2,50 +2,50 @@
 % Please edit documentation in R/plot.R
 \name{plot.brokenstick}
 \alias{plot.brokenstick}
-\title{Plot observed and fitted trajectories}
+\title{Plot observed and fitted trajectories by group}
 \usage{
 \method{plot}{brokenstick}(
   x,
-  py,
-  px,
-  ids = NULL,
-  max_ids = 3,
+  new_data,
+  ...,
+  .x = NULL,
+  group = NULL,
+  n_plot = 3,
   x_trim = c(-Inf, Inf),
-  measurements = TRUE,
-  estimates = NULL,
-  ...
+  show = c(TRUE, TRUE)
 )
 }
 \arguments{
-\item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
+\item{x}{An object of class \code{brokenstick}.}
 
-\item{py}{A vector with measurements using the same response scale as the
-fitted model. Used as \code{y} in \code{\link{predict.brokenstick}}.}
+\item{new_data}{A data frame or matrix of new predictors.}
 
-\item{px}{A vector with decimal ages of length \code{length(py)}.
-fitted model. Used as \code{x} in \code{\link{predict.brokenstick}}.}
+\item{...}{Extra arguments passed down to \code{\link[=predict_new.brokenstick]{predict_new.brokenstick()}}
+and \code{\link[=plot_trajectory]{plot_trajectory()}}.}
 
-\item{ids}{A vector with one or more subject identification codes.}
+\item{.x}{The \code{x} argument of the \code{\link[=predict_new.brokenstick]{predict_new.brokenstick()}} function.}
 
-\item{max_ids}{A scalar indicating the number of individual plots. The default is 3, which plots the trajectories of the first three persons. The \code{max_ids} is a safety measure to prevent unintended plots of the entire data set.}
+\item{group}{A vector with group identifications}
 
-\item{x_trim}{A range on the x-axis that can be used to subset values that are
-displayed}
+\item{n_plot}{A integer indicating the number of individual plots.
+The default is 3, which plots the trajectories of the first three
+groups. The \code{n_plot} is a safety measure to prevent unintended
+plots of the entire data set.}
 
-\item{measurements}{A logical indicating whether the measurements should be plotted. The default is \code{TRUE}.}
+\item{x_trim}{A range on the x-axis that can be used to subset values
+that are plotted.}
 
-\item{estimates}{A logical indicating whether the broken stick estimates should be plotted.
-By default, it is \code{TRUE} if there are internal knots, and \code{FALSE} if there are
-only boundary knots.}
-
-\item{...}{Extra arguments.}
+\item{show}{A logical vector of length 2. The first element specifies
+whether the observed data are plotted, the second element specifies
+whether the added data (e.g. knots) are plotted. The default is
+\code{c(TRUE, TRUE)}.}
 }
 \value{
-An object of class \code{ggplot}.
+An object of class \link[ggplot2:ggplot]{ggplot2::ggplot}.
 }
 \description{
 The \code{plot} method for a \code{brokenstick} object plots the observed and
-fitted trajectories of one or more individuals.
+fitted trajectories of one or more groups.
 }
 \examples{
 library("brokenstick")
@@ -65,6 +65,9 @@ fit <- brokenstick(hgt ~ age | id, dat)
 # bokeh plots with xlim and ylim
 #plot(fit, xlim = c(0, 2), ylim = c(-3, 3))
 #plot(fit, ids = 10005)
+}
+\seealso{
+\link{predict_new.brokenstick}, \link{plot_trajectory}.
 }
 \author{
 Stef van Buuren 2020

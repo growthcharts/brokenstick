@@ -7,11 +7,11 @@
 plot_trajectory(
   x,
   data,
-  color.y = c("blue", "grey"),
-  size.y = 2,
-  color.yhat = c("red", "grey"),
-  size.yhat = 2,
-  ncol = 3,
+  color_y = c("blue", "grey"),
+  size_y = 2,
+  color_yhat = c("red", "grey"),
+  size_yhat = 2,
+  ncol = 3L,
   xlab = "Age (years)",
   ylab = "Length (SDS)",
   zband = TRUE,
@@ -22,17 +22,18 @@ plot_trajectory(
 )
 }
 \arguments{
-\item{x}{An object of class \code{brokenstick} or \code{brokenstick_export}}
+\item{x}{An object of class \code{brokenstick}.}
 
-\item{data}{A list of data frames produced by \code{predict.brokenstick} and \code{predict.brokenstick_export}}
+\item{data}{A \code{data.frame} with columns names \code{x$names}, \code{".source"}
+and \code{".pred"}.}
 
-\item{color.y}{A character vector with two elements specifying the symbol and line color of the measured data points}
+\item{color_y}{A character vector with two elements specifying the symbol and line color of the measured data points}
 
-\item{size.y}{Dot size of measured data points}
+\item{size_y}{Dot size of measured data points}
 
-\item{color.yhat}{A character vector with two elements specifying the symbol and line color of the predicted data points}
+\item{color_yhat}{A character vector with two elements specifying the symbol and line color of the predicted data points}
 
-\item{size.yhat}{Dot size of predicted data points}
+\item{size_yhat}{Dot size of predicted data points}
 
 \item{ncol}{Number of columns in plot}
 
@@ -57,13 +58,12 @@ An object of class \code{ggplot}
 }
 \description{
 This function plot the observed and fitted trajectories from brokenstick model.
-Actual plotting may be done by \code{gglot} or \code{rbokeh}.
+Actual plotting may be done by \code{gglot}.
 }
 \examples{
-smc <- brokenstick::smocc_200
-knots <- 0:2
-#fit <- fit_brokenstick(smc, hgt.z ~ age | id, knots = knots)
-
 # plot first three cases
-#plot(fit)
+# plot(fit_200, brokenstick::smocc_200)
+}
+\seealso{
+\link{plot.brokenstick}
 }
