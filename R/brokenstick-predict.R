@@ -136,8 +136,7 @@ predict_new.brokenstick <- function(object, new_data = NULL, type = "numeric",
   ret <- bind_cols(new_data, p)
   if (strip_data) {
     ret <- ret %>%
-      filter(.data[[".source"]] == "added") %>%
-      select(-".source")
+      filter(.data[[".source"]] == "added")
   }
   ret
 }
