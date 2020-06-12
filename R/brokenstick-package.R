@@ -9,7 +9,7 @@
 #' @importFrom recipes         recipe
 #' @importFrom rlang           .data
 #' @importFrom splines         bs
-#' @importFrom stats           approx as.formula cov2cor
+#' @importFrom stats           approx as.formula cor cov2cor
 #'                             fitted model.frame lm
 #'                             model.matrix na.exclude na.omit
 #'                             optim

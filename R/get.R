@@ -86,14 +86,20 @@ get_X <- function(object, ids = NULL) {
 #' Obtain proportion of explained variance from a broken stick model
 #'
 #' @param object An object of class \code{brokenstick}
+#' @param new_data Data on which `r.squared` must be calculated
 #' @return Proportion of explained variance
 #' @examples
-#' # get_pev(fit_200)
+#' get_r2(fit_200, smocc_200)
 #' @export
-get_pev <- function(object) {
+get_r2 <- function(object, new_data) {
   if (!inherits(object, "brokenstick")) {
-    return(NULL)
+    stop("object not of class brokenstick")
   }
-  p <- predict(object)
-  return(var(p$yhat, na.rm = TRUE) / var(p$y, na.rm = TRUE))
+
+  p <- predict_new(object, new_data)
+  new_data <- new_data %>%
+    select(object$names$y) %>%
+    bind_cols(p) %>%
+    tidyr::drop_na()
+  cor(new_data[[".pred"]], new_data[[object$names$y]])^2
 }
