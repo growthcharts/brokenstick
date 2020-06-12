@@ -54,7 +54,7 @@ dat <- smocc_200
 fit <- brokenstick(hgt ~ age | id, dat)
 
 # plot measurements for first three cases
-#plot(fit, zband = FALSE, est = FALSE)
+# plot(fit_200, smocc_200, zband = FALSE, show = c(TRUE, FALSE))
 
 # fit model with knots at 1 and 2 years
 #fit <- fit_brokenstick(dat, hgt.z ~ age | id, knots = 1:2)

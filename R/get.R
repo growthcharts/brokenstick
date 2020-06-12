@@ -69,7 +69,7 @@ get_data <- function(object, ids = NULL) {
 #' knots. The result is \code{NULL} if \code{object} is not of class
 #' \code{brokenstick}.
 #' @examples
-#' get_X(fit_200, ids = c(10001, 10002))
+#' # get_X(fit_200, ids = c(10001, 10002))
 #' @export
 get_X <- function(object, ids = NULL) {
   if (!inherits(object, "brokenstick")) {
@@ -88,7 +88,7 @@ get_X <- function(object, ids = NULL) {
 #' @param object An object of class \code{brokenstick}
 #' @return Proportion of explained variance
 #' @examples
-#' get_pev(fit_200)
+#' # get_pev(fit_200)
 #' @export
 get_pev <- function(object) {
   if (!inherits(object, "brokenstick")) {

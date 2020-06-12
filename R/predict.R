@@ -63,6 +63,7 @@
 #' @family brokenstick
 #' @examples
 #' # Estimates at each measured age for all persons in fitted model
+#' \dontrun{
 #' class(fit_200)
 #' p <- predict(fit_200)
 #' head(p)
@@ -85,6 +86,7 @@
 #'
 #' head(predict(fit_200, at = "knots", output = "broad"), 3)
 #' predict(fit_200, id = c(10001, 10003), at = "knots", output = "broad")
+#' }
 #' @export
 predict.brokenstick <- function(object, y, x, ids = NULL,
                                 at = "x", output = "long",
