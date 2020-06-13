@@ -23,7 +23,8 @@ Imports:
     recipes,
     rlang,
     splines,
-    stats
+    stats,
+    tidyr
 Suggests:
     knitr,
     MASS,
@@ -31,8 +32,7 @@ Suggests:
     plyr,
     rbokeh,
     svglite,
-    testthat,
-    tidyr
+    testthat
 Remotes:
     ki-tools/growthstandards
 URL: https://github.com/stefvanbuuren/brokenstick, https://stefvanbuuren.name/brokenstick/

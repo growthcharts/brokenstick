@@ -15,6 +15,7 @@
 #'                             optim
 #'                             predict quantile rgamma rnorm
 #'                             rWishart setNames smooth var
+#' @importFrom tidyr           pivot_wider
 NULL
 
 #' \pkg{brokenstick}: A package for irregular longitudinal data.

@@ -15,7 +15,8 @@ predict_new(object, new_data, type = "numeric", ...)
   x = NULL,
   y = NULL,
   group = NULL,
-  strip_data = TRUE
+  strip_data = TRUE,
+  shape = c("long", "broad", "vector")
 )
 }
 \arguments{
@@ -43,6 +44,11 @@ positions of the knots.}
 observed data from \code{new_data} should be stripped from the
 return. The default is \code{TRUE}. Set to \code{FALSE} to infer which data
 points are extracted from \code{new_data}.}
+
+\item{shape}{A string: \code{"long"} (default), \code{"broad"} or \code{"vector"}
+specifying the shape of the return value. Note that use of \code{"broad"}
+with many unique values in \code{x} creates an unwieldy, large
+and sparse matrix.}
 }
 \value{
 A tibble of predictions. If \code{x}, \code{y} and \code{group} are not specified,

@@ -31,6 +31,10 @@
 #'  return. The default is `TRUE`. Set to `FALSE` to infer which data
 #'  points are extracted from `new_data`.
 #'
+#' @param shape A string: `"long"` (default), `"wide"` or `"vector"`
+#' specifying the shape of the return value. Note that use of `"wide"`
+#' with many unique values in `x` creates an unwieldy, large
+#' and sparse matrix.
 #' @details
 #'
 #' By default, `predict()` will find predictions for every row in
@@ -104,8 +108,11 @@ predict_new <- function(object, new_data, type = "numeric", ...) {
 predict_new.brokenstick <- function(object, new_data = NULL, type = "numeric",
                                     ...,
                                     x = NULL, y = NULL, group = NULL,
-                                    strip_data = TRUE) {
+                                    strip_data = TRUE,
+                                    shape = c("long", "wide", "vector")) {
+  shape <- match.arg(shape)
 
+  # handle special case: x = "knots"
   if (length(x)) {
     if (x[1L] == "knots")
       x <- get_knots(object)
@@ -131,14 +138,30 @@ predict_new.brokenstick <- function(object, new_data = NULL, type = "numeric",
                                   forged$predictors,
                                   forged$outcomes,
                                   forged$extras$roles$group)
-  if (!reset) return(p)
+  if (!reset) {
+    if (shape == "long") return(p)
+    if (shape == "vector") return(pull(p))
+    if (shape == "wide") {
+      return(bind_cols(new_data, p) %>%
+               pivot_wider(id_cols = object$names$g,
+                           names_from = object$names$x,
+                           values_from = ".pred"))
+    }
+  }
 
   ret <- bind_cols(new_data, p)
   if (strip_data) {
-    ret <- ret %>%
-      filter(.data[[".source"]] == "added")
+    ret <- filter(ret, .data[[".source"]] == "added")
   }
-  ret
+
+  if (shape == "long") return(ret)
+  if (shape == "vector") return(pull(ret, ".pred"))
+  if (shape == "wide") {
+    return(pivot_wider(ret, id_cols = object$names$g,
+                       names_from = object$names$x,
+                       values_from = ".pred"))
+  }
+  stop("Internal error")
 }
 
 valid_predict_types <- function() {
