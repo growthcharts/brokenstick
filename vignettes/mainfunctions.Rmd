@@ -19,6 +19,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       fig.width = 10, fig.height = 4,
                       dev = "svglite")
 ```
+
 ```{css echo = FALSE}
 img {
   border: 0px;
@@ -46,95 +47,150 @@ data <- brokenstick::smocc_200
 head(data, 3)
 ```
 
-We fit a trivial broken stick model and then plot the trajectories of three selected children as follows: 
+
+```{r plotcm, echo = FALSE}
+ggplot(data[1:500, ], aes(x = age, y = hgt, group = id, color = as.factor(id))) +
+  geom_line(size = 0.1) + 
+  geom_point(size = 0.7) +
+  scale_colour_viridis_d(option = "cividis") +
+  xlab("Age (years)") +
+  ylab("Length (cm)") +
+  theme_light() +
+  theme(legend.position = "none")
+```
+
+Figure 1 dispays the data from the first 500 rows as a set of growth curves of Dutch children. Curves are steeper during the first few months, so child grpwth is faster for young infants. Note also there are more cross-overs during the first half year, whereas fewer occur later. This means that the relative positions have been settled by the age of 2 years, or - put differently - that the correlation between time points at those ages is high.
+
+```{r plotsds}
+ggplot(data[1:500, ], aes(x = age, y = hgt.z, group = id, color = as.factor(id))) +
+  geom_line(size = 0.1) + 
+  geom_point(size = 0.7) +
+  scale_colour_viridis_d(option = "cividis") +
+  xlab("Age (years)") +
+  ylab("Length SDS") +
+  theme_light() +
+  theme(legend.position = "none")
+```
+
+Figure 2 dispays the same data, but with the vertical axis changed to Standard Deviation Scores (SDS), or $Z$-score. The $Z$-score is the height corrected for age relative to the Dutch height reference from the Fourth Dutch Growth Study. The $Z$-score transformation takes away the major time trend, so all curves are more or less flat. This allows us to see a more detailed assessment of individual growth.
+
+The plots also show how the measurements are clustered around ten ages: birth, 1, 2, 3, 6, 9, 12, 15, 18 and 24 months. While the design was followed rigorously in the study, some variation in timing is inevitable because of weekends, holidays, sickness, and other events. The timing variation poses a problem because we cannot directly compare the measurement between different children (especially for figure 1). Also, we cannot easily construct the "broad" matrix with 10 time point per child. 
+
+Of course, we can divide the time axis into ten age groups, and treat all point within the same age group as being measured at the same point. This is probably a good strategy for nicely looking data - as we have here -, but this approach is problematic in data with irregular time intervals, of there are multiple measurement per age group, if the measurement schedules vary by child, or in data combined from studies that employed different designs. 
+
+The `brokenstick` package contains tools to approximate the observed data by a series of connecting straight lines. When these lines closely follow the data, we may replace each trajectory by its values at the breakpoints. The statistical analysis can then be done on the regularised trajectories, which is easier than working with the observed data.
+
+## Fit broken stick model with one line
+
+We fit a trivial broken stick model with just one line anchored at the minimum and maximum age, and plot the trajectories of three selected children as follows: 
 
 ```{r figure1, warning = FALSE}
-fit <- brokenstick(y = data$hgt, x = data$age, subjid = data$subjid)
+fit <- brokenstick(hgt ~ age | id, data)
 ids <- c(10001, 10005, 10022)
-plot(fit, ids = ids, zband = FALSE, ylab = "Length (cm)")
+plot(fit, new_data = data, group = ids, zband = FALSE, ylab = "Length (cm)")
 ```
 
-The following plot displays the same data, but in standardised units, the Standard Deviation Scores (SDS) or $Z$-score, taken from column `hgt.z`. 
+The following plot displays the same data, but in standardised units so as to increase the analytic resolution:
 
 ```{r zscore, warning = FALSE}
-fit0 <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid)
-plot(fit0, ids = ids)
+fit0 <- brokenstick(hgt.z ~ age | id, data)
+plot(fit0, new_data = data, group = ids)
 ```
 
-The $Z$-score is the height corrected for age relative to the Dutch height reference from the Fourth Dutch Growth Study. Not that this plot has substantially more resolution. In addition, the data distribution follows an approximate standard normal distribution with zero mean and unit variance. That property facilitates modelling of the height.
+Note that both approximations are quite bad. 
 
 ## Fit broken stick model with two lines
 
-The *broken stick model* describes a trajectory by a series of connected straight lines. We first calculate a rough approximation in the above trajectories using just two lines. The first line starts at birth and end at the age of exactly 1 years. The second line spans the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate this model as follows:
+The *broken stick model* describes a trajectory by a series of connected straight lines. We first calculate a model with two connected lines. The first line starts at birth and end at the age of exactly 1 years. The second line spans the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate and plot the model as follows:
 
 ```{r fit2, cache = TRUE}
-fit2 <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid, knots = 1:2)
+fit2 <- brokenstick(hgt.z ~ age | id, data = data, knots = 0:3)
+plot(fit2, data, group = ids, x_trim = c(0, 2.2))
 ```
 
-The fitted model can now be plotted by 
+The `fit2` object holds the parameter estimates of the model:
 
-```{r plotfit2, warning = FALSE}
-plot(fit2, ids = ids, x_trim = c(0, 2.2))
+```{r}
+fit2
 ```
 
-The fixed effects correspond to the mean of sample of children in the data, whereas the correlation between ages is modelled by the random effects. The interpretation of the estimates is discussed in the [vignette for prediction](prediction.html).
+The console output lists the knots of the model, including the left and right boundary knots at 0 and 3. The row of `means` correspond to the fixed effect estimates of the linear mixed model. We may interpret these as the global means. Next, the output lists the variance-covariance matrix of the random effects. The model contains 4 random effects (3 visits + 1 end knot). Finally, the residual variance is the model error at the subject level. These three set of parameters are enough to reconstruct the broken stick model.
 
 ## Extend to nine lines
 
-The plot shows that the two-line model is fairly crude. We now refine the model in the first two years by adding a knot for each age at which a visit was scheduled. This model can be run as
+The plot shows that the two-line model is still fairly crude. We refine the model in the first two years by adding a knot for each age at which a visit was scheduled. This model can be run as
 
 ```{r fit9, cache = TRUE, warning = FALSE, eval = FALSE}
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-fit9 <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid, knots = knots)
+fit9 <- brokenstick(hgt.z ~ age | id, data = data, 
+                    knots = knots, boundary = c(0, 3))
 ```
 
 ```{r echo = FALSE}
 fit9 <- brokenstick::fit_200
 ```
 
-The model contains 11 random effects (10 visits + 1 end knot). This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. In general, these warnings do not affect the quality of the solution.
-
-```{r plotfit9, echo = FALSE, warning = FALSE}
-plot(fit9, ids = ids, x_trim = c(0, 2.2))
+```{r}
+fit9
 ```
 
-The nine-line broken stick model fits the observed data quite close.
+
+This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. While these may appear a little discomforting, we have found that the warnings are generally somewhat at the conservative side, so the parameter estimates are probably still OK.
+
+```{r plotfit9, echo = FALSE, warning = FALSE}
+plot(fit9, data, group = ids, x_trim = c(0, 2.2))
+```
+
+The nine-line broken stick model fits the observed data very well.
 
 ## Obtain predicted values
 
-The `predict()` function allows us to obtain various types of predictions from the broken stick model. The simplest call
+The `predict_new()` function allows us to obtain various types of predictions from the broken stick model. The simplest call
 
 ```{r}
-p1 <- predict(fit2)
-head(p1, 4)
+p1 <- predict_new(fit2, data)
+head(p1)
+identical(nrow(data), nrow(p1))
 ```
 
-produces the predicted value (in `yhat`) for each measured data point for all children used to fit the model in the `long` output format. The observed $Z$-score is stored in column called `y`, and the corresponding broken stick estimates are stored in the column called `yhat`. The column `knot` is set to `FALSE` if `y` is actually observed. 
+produces a `tibble` with the one column called `.pred` for each row in `data`. We can bind column `.pred` to `data` for further processing.
 
-We can obtain the locations at which the lines connect (i.e. at the knots) by specifying the `at = "knots"` argument, e.g.
+Sometimes, we also want the prediction at the knot values, for example, to create graphs that contain observed and modelled trajectories. We obtain  predictions at the knots by the special `x = "knots"` argument, e.g.
 
 ```{r}
-p2 <- predict(fit2, at = "knots")
-head(p2, 4)
+p2 <- predict_new(fit2, data, x = "knots")
+head(p2)
+nrow(p2)
 ```
 
-Note that the column `knot` is now `TRUE`. Note there are also knots at ages 0.00 and 2.68 years. These are boundary knots, and added by the `brokenstick()` function. By default, the boundary knots span the age range in the data. The estimate for the knot at the maximum age has no useful interpretation. We may obtain estimates at both knots and observed ages by setting `at = "both"`. 
+The output is more verbose and includes the grid of knots for each child (`id`, `age`). The column `.source` is equal to `added` as rows are added to the data.
+
+Note there are also knots at ages 0.00 and 3.00 years. These are boundary knots, and added by the `brokenstick()` function. By default, the boundary knots span the age range in the data. The estimate for the knot at the maximum age has no useful interpretation, and should be ignored. 
+
+If we wish to obtain estimates at both the knots and the observed data use:
+
+```{r}
+p3 <- predict_new(fit2, data, x = "knots", strip_data = FALSE)
+table(p3$.source)
+```
+
+This return 1940 rows for the data and 800 rows for the knots.
 
 ## Explained variance
 
 The proportion of the variance of the outcome explained by the two-line model is
 
 ```{r}
-get_pev(fit2)
+get_r2(fit2, data)
 ```
 
 For the second model we get
 
 ```{r}
-get_pev(fit9)
+get_r2(fit9, data)
 ```
 
-so the nine-line broken stick model explains about `r round(100 * get_pev(fit9))` percent of the variance of the height SDS.
+so the nine-line broken stick model explains about `r round(100 * get_r2(fit9, data))` percent of the variance of the height SDS.
 
 
 ## Subject level analysis
@@ -143,20 +199,23 @@ Suppose we are interest in knowing the effect of sex, gestational age and birth 
 
 ```{r subjleveldata}
 subj <- data %>%
-  select(subjid, sex, ga, bw) %>% 
-  group_by(subjid) %>% 
-  slice(1L)
+  select(id, sex, ga, bw) %>% 
+  group_by(id) %>% 
+  slice(1)
 head(subj, 3)
 ```
 
 We also need the outcome variable. We take it from the broken stick estimates from the nine line solution and append it to the subject level data.
 
 ```{r predictatknots}
-bs <- as.data.frame(predict(fit9, at = "knots", output = "broad"))
-data <- cbind(subj, bs)
+bs <- predict_new(fit9, data, x = "knots", shape = "wide")
+data <- bind_cols(subj, select(bs, -id))
+head(data, 3)
 ```
 
-The names of the columns in `bs` correspond to the ages at which the knots are placed. The effect of the subject's sex, gestational age and birth weight on the height SDS at the age of 2 years (here denoted by the variable named `2`) can be estimated as 
+The names of the columns in `bs` correspond to the knot values. 
+
+The effect of the subject's sex, gestational age and birth weight on the height SDS at the age of 2 years (here denoted by the variable named `2`) can be estimated as 
 
 ```{r lm1}
 fit1_lm <- lm(`2` ~ sex + ga + I(bw / 1000), data = data)
