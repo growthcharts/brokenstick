@@ -1,5 +1,5 @@
 ---
-title: "Getting started with `brokenstick`"
+title: "Getting started"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >

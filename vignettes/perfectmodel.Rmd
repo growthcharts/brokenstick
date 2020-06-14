@@ -63,7 +63,7 @@ Check the correlation matrix of the $y$'s.
 ```{r}
 library("tidyr")
 library("dplyr")
-d <- as_data_frame(data[,-3])
+d <- as_tibble(data[,-3])
 broad <- t(spread(d, subject, X1))[-1,]
 cor(broad)
 ```
@@ -76,9 +76,8 @@ Fit broken stick model, with knots specified at ages `1:4`.
 library("brokenstick")
 knots <- 1:3
 boundary <- c(1, 4)
-fit <- with(data, 
-            brokenstick(y = X1, x = age, subjid = subject, 
-                        knots = knots, boundary = boundary))
+fit <- brokenstick(X1 ~ age | subject, data, 
+                   knots = knots, boundary = boundary)
 omega <- export(fit)$omega
 beta <- export(fit)$beta
 sigma2 <- export(fit)$sigma2
