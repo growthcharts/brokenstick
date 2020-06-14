@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Plot observed and fitted trajectories — plot.brokenstick • brokenstick</title>
+<title>Plot observed and fitted trajectories by group — plot.brokenstick • brokenstick</title>
 
 
 <!-- jquery -->
@@ -39,9 +39,9 @@
 
 
 
-<meta property="og:title" content="Plot observed and fitted trajectories — plot.brokenstick" />
+<meta property="og:title" content="Plot observed and fitted trajectories by group — plot.brokenstick" />
 <meta property="og:description" content="The plot method for a brokenstick object plots the observed and
-fitted trajectories of one or more individuals." />
+fitted trajectories of one or more groups." />
 
 
 
@@ -73,7 +73,7 @@ fitted trajectories of one or more individuals." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@ fitted trajectories of one or more individuals." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/gettingstarted.html">Getting started with `brokenstick`</a>
+      <a href="../articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
       <a href="../articles/knotplacement.html">Knot placement</a>
@@ -139,27 +139,26 @@ fitted trajectories of one or more individuals." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Plot observed and fitted trajectories</h1>
+    <h1>Plot observed and fitted trajectories by group</h1>
     <small class="dont-index">Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/R/plot.R'><code>R/plot.R</code></a></small>
     <div class="hidden name"><code>plot.brokenstick.Rd</code></div>
     </div>
 
     <div class="ref-description">
     <p>The <code>plot</code> method for a <code>brokenstick</code> object plots the observed and
-fitted trajectories of one or more individuals.</p>
+fitted trajectories of one or more groups.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for brokenstick</span>
 <span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(
   <span class='no'>x</span>,
-  <span class='no'>py</span>,
-  <span class='no'>px</span>,
-  <span class='kw'>ids</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>max_ids</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='no'>new_data</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>.x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>n_plot</span> <span class='kw'>=</span> <span class='fl'>3</span>,
   <span class='kw'>x_trim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>Inf</span>, <span class='fl'>Inf</span>),
-  <span class='kw'>measurements</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>estimates</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='no'>...</span>
+  <span class='kw'>show</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>TRUE</span>)
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -167,66 +166,71 @@ fitted trajectories of one or more individuals.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An object of class <code>brokenstick</code> or <code>brokenstick_export</code></p></td>
+      <td><p>An object of class <code>brokenstick</code>.</p></td>
     </tr>
     <tr>
-      <th>py</th>
-      <td><p>A vector with measurements using the same response scale as the
-fitted model. Used as <code>y</code> in <code><a href='predict.brokenstick.html'>predict.brokenstick</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>px</th>
-      <td><p>A vector with decimal ages of length <code><a href='https://rdrr.io/r/base/length.html'>length(py)</a></code>.
-fitted model. Used as <code>x</code> in <code><a href='predict.brokenstick.html'>predict.brokenstick</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>ids</th>
-      <td><p>A vector with one or more subject identification codes.</p></td>
-    </tr>
-    <tr>
-      <th>max_ids</th>
-      <td><p>A scalar indicating the number of individual plots. The default is 3, which plots the trajectories of the first three persons. The <code>max_ids</code> is a safety measure to prevent unintended plots of the entire data set.</p></td>
-    </tr>
-    <tr>
-      <th>x_trim</th>
-      <td><p>A range on the x-axis that can be used to subset values that are
-displayed</p></td>
-    </tr>
-    <tr>
-      <th>measurements</th>
-      <td><p>A logical indicating whether the measurements should be plotted. The default is <code>TRUE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>estimates</th>
-      <td><p>A logical indicating whether the broken stick estimates should be plotted.
-By default, it is <code>TRUE</code> if there are internal knots, and <code>FALSE</code> if there are
-only boundary knots.</p></td>
+      <th>new_data</th>
+      <td><p>A data frame or matrix of new predictors.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Extra arguments.</p></td>
+      <td><p>Extra arguments passed down to <code><a href='predict_new.html'>predict_new.brokenstick()</a></code>
+and <code><a href='plot_trajectory.html'>plot_trajectory()</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>.x</th>
+      <td><p>The <code>x</code> argument of the <code><a href='predict_new.html'>predict_new.brokenstick()</a></code> function.</p></td>
+    </tr>
+    <tr>
+      <th>group</th>
+      <td><p>A vector with group identifications</p></td>
+    </tr>
+    <tr>
+      <th>n_plot</th>
+      <td><p>A integer indicating the number of individual plots.
+The default is 3, which plots the trajectories of the first three
+groups. The <code>n_plot</code> is a safety measure to prevent unintended
+plots of the entire data set.</p></td>
+    </tr>
+    <tr>
+      <th>x_trim</th>
+      <td><p>A range on the x-axis that can be used to subset values
+that are plotted.</p></td>
+    </tr>
+    <tr>
+      <th>show</th>
+      <td><p>A logical vector of length 2. The first element specifies
+whether the observed data are plotted, the second element specifies
+whether the added data (e.g. knots) are plotted. The default is
+<code><a href='https://rdrr.io/r/base/c.html'>c(TRUE, TRUE)</a></code>.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>ggplot</code>.</p>
+    <p>An object of class <a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot2::ggplot</a>.</p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='predict_new.html'>predict_new.brokenstick</a>, <a href='plot_trajectory.html'>plot_trajectory</a>.</p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='st'>"brokenstick"</span>)
 <span class='no'>dat</span> <span class='kw'>&lt;-</span> <span class='no'>smocc_200</span>
 <span class='co'># fit one line model for data exploration</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>hgt</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>age</span>, <span class='kw'>subj</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>subjid</span>)
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span>(<span class='no'>hgt</span> ~ <span class='no'>age</span> <span class='kw'>|</span> <span class='no'>id</span>, <span class='no'>dat</span>)
 
 <span class='co'># plot measurements for first three cases</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fit</span>, <span class='kw'>zband</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>est</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='plot.brokenstick-1.svg' alt='' width='700' height='1133' /></div><div class='input'>
-<span class='co'># fit model with knots at 1 and 2 years</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>hgt.z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>age</span>, <span class='kw'>subj</span> <span class='kw'>=</span> <span class='no'>dat</span>$<span class='no'>subjid</span>,
-  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>)
+<span class='co'># plot(fit_200, smocc_200, zband = FALSE, show = c(TRUE, FALSE))</span>
 
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fit</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2.2</span>), <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>3</span>, <span class='fl'>3</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 3 rows containing missing values (geom_point).</span></div><div class='img'><img src='plot.brokenstick-2.svg' alt='' width='700' height='1133' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fit</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10005</span>, <span class='fl'>10012</span>), <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2.2</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_point).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 2 rows containing missing values (geom_point).</span></div><div class='img'><img src='plot.brokenstick-3.svg' alt='' width='700' height='1133' /></div><div class='input'>
+<span class='co'># fit model with knots at 1 and 2 years</span>
+<span class='co'>#fit &lt;- fit_brokenstick(dat, hgt.z ~ age | id, knots = 1:2)</span>
+
+<span class='co'>#plot(fit, xlim = c(0, 2.2), ylim = c(-3, 3))</span>
+<span class='co'>#plot(fit, ids = c(10005, 10012), xlim = c(0, 2.2))</span>
+
 <span class='co'># bokeh plots with xlim and ylim</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fit</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2</span>), <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(-<span class='fl'>3</span>, <span class='fl'>3</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 2 rows containing missing values (geom_point).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 3 rows containing missing values (geom_point).</span></div><div class='img'><img src='plot.brokenstick-4.svg' alt='' width='700' height='1133' /></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fit</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fl'>10005</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 row(s) containing missing values (geom_path).</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_point).</span></div><div class='img'><img src='plot.brokenstick-5.svg' alt='' width='700' height='1133' /></div></pre>
+<span class='co'>#plot(fit, xlim = c(0, 2), ylim = c(-3, 3))</span>
+<span class='co'>#plot(fit, ids = 10005)</span></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

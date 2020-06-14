@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/gettingstarted.html">Getting started with `brokenstick`</a>
+      <a href="../articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
       <a href="../articles/knotplacement.html">Knot placement</a>
@@ -177,13 +177,19 @@
         <td>
           <p><code><a href="brokenstick.html">brokenstick()</a></code> </p>
         </td>
-        <td><p>Fit a broken stick model to irregular data</p></td>
+        <td><p>Fit a <code>brokenstick</code> model to irregular data</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="export.html">export()</a></code> </p>
+          <p><code><a href="control_brokenstick.html">control_brokenstick()</a></code> </p>
         </td>
-        <td><p>Export the estimates of a fitted brokenstick model</p></td>
+        <td><p>Set controls to steer calculations</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="control_kr.html">control_kr()</a></code> </p>
+        </td>
+        <td><p>Set controls for Kasim-Raudenbush sampler</p></td>
       </tr><tr>
         
         <td>
@@ -199,27 +205,21 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="get_X.html">get_X()</a></code> </p>
-        </td>
-        <td><p>Obtain the X model matrix from a broken stick model</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="get_knots.html">get_knots()</a></code> </p>
         </td>
         <td><p>Obtain the knots from a broken stick model</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="get_pev.html">get_pev()</a></code> </p>
+          <p><code><a href="get_r2.html">get_r2()</a></code> </p>
         </td>
         <td><p>Obtain proportion of explained variance from a broken stick model</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="get_xy.html">get_xy()</a></code> </p>
+          <p><code><a href="kr.html">kr()</a></code> </p>
         </td>
-        <td><p>Obtain the x and y data from a broken stick model</p></td>
+        <td><p>Kasim-Raudenbush sampler for two-level normal model</p></td>
       </tr><tr>
         
         <td>
@@ -229,9 +229,15 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="parse_formula.html">parse_formula()</a></code> </p>
+        </td>
+        <td><p>Parse formula for brokenstick model</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="plot.brokenstick.html">plot(<i>&lt;brokenstick&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Plot observed and fitted trajectories</p></td>
+        <td><p>Plot observed and fitted trajectories by group</p></td>
       </tr><tr>
         
         <td>
@@ -241,15 +247,15 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="predict.brokenstick.html">predict(<i>&lt;brokenstick&gt;</i>)</a></code> </p>
+          <p><code><a href="predict_new.html">predict_new()</a></code> </p>
         </td>
-        <td><p>Predict growth curve according to the broken stick model</p></td>
+        <td><p>Predict from a <code>brokenstick</code> model</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="predict.brokenstick_export.html">predict(<i>&lt;brokenstick_export&gt;</i>)</a></code> </p>
+          <p><code><a href="residuals.brokenstick.html">residuals(<i>&lt;brokenstick&gt;</i>)</a></code> </p>
         </td>
-        <td><p>Predict growth curve according to the broken stick model</p></td>
+        <td><p>Extract residuals from brokenstick model</p></td>
       </tr><tr>
         
         <td>

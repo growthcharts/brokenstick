@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
       </span>
     </div>
 
@@ -94,7 +94,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/gettingstarted.html">Getting started with `brokenstick`</a>
+      <a href="../articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
       <a href="../articles/knotplacement.html">Knot placement</a>
@@ -141,6 +141,24 @@
       <small>Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="brokenstick-0-70-0" class="section level1">
+<h1 class="page-header" data-toc-text="0.70.0">
+<a href="#brokenstick-0-70-0" class="anchor"></a>brokenstick 0.70.0</h1>
+<ul>
+<li>This version jump illustrates big and breaking changes:</li>
+</ul>
+<ol>
+<li><p><code>brokenstick</code> adopted the <code>tidymodels</code> philosophy, and now includes a dependency on <code>hardhat</code>. It is now possible to fit a model using five different interfaces. There is no need anymore the hardcode variable names in the source data.</p></li>
+<li><p>This version introduces a new estimation method, the Kasim-Raudenbush sampler. The new method is more flexible and faster than <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lme4::lmer()</a></code> when the number of knots is large.</p></li>
+<li><p>This version introduces two simple correlation models that may be used to smooth out the variance-covariance matrix of the random effects.</p></li>
+<li><p>The definition of the <code>brokenstick</code> class has changed. Objects of class <code>brokenstick</code> do no longer store the training data.</p></li>
+<li><p>The <code>brokenstick_export</code> class is retired.</p></li>
+<li><p>The <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function is fully rewritten as has now a new interface. Since the <code>brokenstick</code> class does not store the training data anymore, the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function now obtains a <code>new_data</code> argument. Syntax that worked for <code>brokenstick</code> package before <code>0.70.0</code> does not work anymore and should be updated. The <code>shape</code> argument replaces the <code>output</code> argument.</p></li>
+<li><p>The <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> function is rewritten, and now requires a <code>new_data</code> specification.</p></li>
+<li><p>Retired functions: <code><a href="../reference/brokenstick.html">brokenstick()</a></code> replaces <code>fit_brokenstick()</code>, <code>predict.brokenstick()</code> replaces <code>predict.brokenstick_export()</code>, <code><a href="../reference/get_r2.html">get_r2()</a></code> replaces <code>get_pev()</code></p></li>
+<li><p>Removed functions: <code>get_data()</code>, <code>get_X()</code>, <code>export()</code></p></li>
+</ol>
+</div>
     <div id="brokenstick-0-62-0" class="section level1">
 <h1 class="page-header" data-toc-text="0.62.0">
 <a href="#brokenstick-0-62-0" class="anchor"></a>brokenstick 0.62.0</h1>
@@ -179,7 +197,7 @@
 <h1 class="page-header" data-toc-text="0.55">
 <a href="#brokenstick-0-55" class="anchor"></a>brokenstick 0.55</h1>
 <ul>
-<li>Added new utility function <code><a href="../reference/get_pev.html">get_pev()</a></code> for proportion explained variance</li>
+<li>Added new utility function <code>get_pev()</code> for proportion explained variance</li>
 <li>
 <code><a href="../reference/get_knots.html">get_knots()</a></code> gets a <code>what</code> argument</li>
 <li>Now using smarter defaults for <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>

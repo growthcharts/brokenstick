@@ -17,9 +17,8 @@
     is to align irregularly observed data to a user-specified grid of break ages.
     All fitting can done in the Z-score scale, so nonlinearities and irregular data
     can be treated as separate problems. This package contains functions for fitting
-    a broken stick model to data, for exporting the parameters of the model for
-    independent use outside this package, and for predicting broken stick curves for
-    new data.">
+    a broken stick model to data, for predicting broken stick curves in new data,
+    and for plotting the estimates.">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
@@ -38,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
       </span>
     </div>
 
@@ -61,7 +60,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="articles/gettingstarted.html">Getting started with `brokenstick`</a>
+      <a href="articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
       <a href="articles/knotplacement.html">Knot placement</a>
@@ -147,8 +146,7 @@
 <ul>
 <li>Fitting the broken stick model to data,</li>
 <li>Plotting individual trajectories,</li>
-<li>Predicting broken stick estimates for new data,</li>
-<li>Exporting the parameters of the model for independent use outside this package.</li>
+<li>Predicting broken stick estimates for new data.</li>
 </ul>
 </div>
 <div id="main-functions" class="section level2">
@@ -172,10 +170,6 @@
 <tr class="odd">
 <td><code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code></td>
 <td>Predict broken stick estimates</td>
-</tr>
-<tr class="even">
-<td><code><a href="reference/export.html">export()</a></code></td>
-<td>Export minimal broken stick model for publication</td>
 </tr>
 </tbody>
 </table>

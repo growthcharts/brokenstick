@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fit a broken stick model to irregular data — brokenstick • brokenstick</title>
+<title>Fit a <code>brokenstick</code> model to irregular data — brokenstick • brokenstick</title>
 
 
 <!-- jquery -->
@@ -39,14 +39,14 @@
 
 
 
-<meta property="og:title" content="Fit a broken stick model to irregular data — brokenstick" />
-<meta property="og:description" content="The broken stick model models an irregularly observed series
-of measurement by scaling them onto a user-specified set of
-'ideal' ages. The model codes age by a series of linear B-splines.
-Differences between persons are expressed by a random effect
-pertaining to each knot. On the individual level, each
-modeled growth curve connect straight lines that join at the
-chosen break ages, and hence look like a 'broken stick'." />
+<meta property="og:title" content="Fit a <code>brokenstick</code> model to irregular data — brokenstick" />
+<meta property="og:description" content="The brokenstick() function fits an irregularly observed series
+of measurements onto a user-specified grid of points.
+The model codes de grid by a series of linear B-splines.
+Differences between observations are expressed by one random
+effect per grid point. When multiple set of series are modelled,
+each modeled trajectory consists of straight lines that join at the
+chosen grid points, and hence look like a broken stick." />
 
 
 
@@ -78,7 +78,7 @@ chosen break ages, and hence look like a 'broken stick'." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
       </span>
     </div>
 
@@ -101,7 +101,7 @@ chosen break ages, and hence look like a 'broken stick'." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/gettingstarted.html">Getting started with `brokenstick`</a>
+      <a href="../articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
       <a href="../articles/knotplacement.html">Knot placement</a>
@@ -144,115 +144,264 @@ chosen break ages, and hence look like a 'broken stick'." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Fit a broken stick model to irregular data</h1>
+    <h1>Fit a <code>brokenstick</code> model to irregular data</h1>
     <small class="dont-index">Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/R/brokenstick.R'><code>R/brokenstick.R</code></a></small>
     <div class="hidden name"><code>brokenstick.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The broken stick model models an irregularly observed series
-of measurement by scaling them onto a user-specified set of
-'ideal' ages. The model codes age by a series of linear B-splines.
-Differences between persons are expressed by a random effect
-pertaining to each knot. On the individual level, each
-modeled growth curve connect straight lines that join at the
-chosen break ages, and hence look like a 'broken stick'.</p>
+    <p>The <code>brokenstick()</code> function fits an irregularly observed series
+of measurements onto a user-specified grid of points.
+The model codes de grid by a series of linear B-splines.
+Differences between observations are expressed by one random
+effect per grid point. When multiple set of series are modelled,
+each modeled trajectory consists of straight lines that join at the
+chosen grid points, and hence look like a broken stick.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>brokenstick</span>(
-  <span class='no'>y</span>,
-  <span class='no'>x</span>,
-  <span class='no'>subjid</span>,
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>brokenstick</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for default</span>
+<span class='fu'>brokenstick</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for formula</span>
+<span class='fu'>brokenstick</span>(
+  <span class='no'>formula</span>,
+  <span class='no'>data</span>,
+  <span class='no'>...</span>,
   <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'>lmerControl</span>(<span class='kw'>check.nobs.vs.nRE</span> <span class='kw'>=</span> <span class='st'>"warning"</span>),
-  <span class='kw'>na.action</span> <span class='kw'>=</span> <span class='no'>na.exclude</span>,
-  <span class='no'>...</span>
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
+  <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
+)
+
+<span class='co'># S3 method for recipe</span>
+<span class='fu'>brokenstick</span>(
+  <span class='no'>x</span>,
+  <span class='no'>data</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
+  <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
+)
+
+<span class='co'># S3 method for data.frame</span>
+<span class='fu'>brokenstick</span>(
+  <span class='no'>x</span>,
+  <span class='no'>y</span>,
+  <span class='no'>group</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
+  <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
+)
+
+<span class='co'># S3 method for matrix</span>
+<span class='fu'>brokenstick</span>(
+  <span class='no'>x</span>,
+  <span class='no'>y</span>,
+  <span class='no'>group</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
+  <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
+)
+
+<span class='co'># S3 method for numeric</span>
+<span class='fu'>brokenstick</span>(
+  <span class='no'>x</span>,
+  <span class='no'>y</span>,
+  <span class='no'>group</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
+  <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
+  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
 )</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>y</th>
-      <td><p>a vector containing the measurements to be analyzed</p></td>
-    </tr>
-    <tr>
       <th>x</th>
-      <td><p>a vector of length <code><a href='https://rdrr.io/r/base/length.html'>length(y)</a></code> with the explanatory variable on which
-the break points should be defined. In longitudinal data, this is usually age.</p></td>
-    </tr>
-    <tr>
-      <th>subjid</th>
-      <td><p>a vector length <code><a href='https://rdrr.io/r/base/length.html'>length(y)</a></code> containing the subject identification</p></td>
-    </tr>
-    <tr>
-      <th>k</th>
-      <td><p>optional, scalar indicating the number of internal knots. If specified, then
-<code>k</code> internal knots are placed at equidense quantiles of <code>x</code>. For example,
-specifying <code>k = 1</code> puts a knot at the 50th quantile (median), specifying <code>k = 3</code> puts knots
-at the 25th, 50th and 75th quantiles of <code>x</code>, and so on. If both <code>k</code> and
-<code>knots</code> are specified, then <code>k</code> take precendence. Note that knots specified
-via <code>k</code> are data-dependent and do not transfer well to other data sets. Use <code>knots</code>
-to specify knots that are independent of the data <code>x</code>.</p></td>
-    </tr>
-    <tr>
-      <th>knots</th>
-      <td><p>optional, numerical vector with the locations of the breaks to be
-placed on the values of <code>x</code>. Be careful with values outside the range
-of the data since this extends the <code>boundary</code> knots (see below) beyond
-the data range.</p></td>
-    </tr>
-    <tr>
-      <th>boundary</th>
-      <td><p>optional, but recommended. Numerical vector of length 2 with the minimum and maximum
-knot. This <code>boundary</code> setting is passed to <code><a href='https://rdrr.io/r/splines/bs.html'>splines::bs()</a></code> as the
-<code>Boundary.knots</code> argument. If not specified, then the range of <code>x</code>
-is taken. If <code>knots</code> is specified, then the boundary range is extended
-to include at least <code>range{knots}</code>.</p></td>
-    </tr>
-    <tr>
-      <th>control</th>
-      <td><p>A function to control fitting of <code>lmer()</code>. The default
-is set to <code>lmerControl(check.nobs.vs.nRE = "warning")</code>, which turn
-fatal errors with respect the number of parameters into warnings.</p></td>
-    </tr>
-    <tr>
-      <th>na.action</th>
-      <td><p>The function to call for the <code>na.action</code> argument in <code>lmer()</code>. The default is <code>na.exclude</code>.</p></td>
+      <td><p>Predictor variables. Depending on the context:</p><ul>
+<li><p>A <strong>data frame</strong> of predictors.</p></li>
+<li><p>A <strong>matrix</strong> of predictors.</p></li>
+<li><p>A <strong>recipe</strong> specifying a set of preprocessing steps
+created from <code><a href='https://rdrr.io/pkg/recipes/man/recipe.html'>recipes::recipe()</a></code>.</p></li>
+</ul>
+
+<p>If <code>x</code> has one column, then also specify <code>y</code> and <code>group</code>. If <code>x</code> has multiple
+columns, then specify the model by a <code>formula</code> argument.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed down to <code>lmer()</code>
-(e.g. to specify additional <code>lmer()</code> options.</p></td>
+      <td><p>Not currently used, but required for extensibility.</p></td>
+    </tr>
+    <tr>
+      <th>formula</th>
+      <td><p>A formula specifying the outcome terms on the
+left-hand side, the predictor term on the right-hand side and
+the group variable after the <code>|</code> sign, e.g <code>formula = hgt ~ age | id</code>.
+One may specify additional variables, but the <code>brokenstick</code> model
+will ignored them.</p>
+<p>Note: This formula specification is specific to the <code>brokenstick()</code>
+function, and generates the error
+<code>No in-line functions should be used here</code> if passed directly to
+<code><a href='https://rdrr.io/pkg/recipes/man/recipe.html'>recipes::recipe()</a></code>. See examples.</p></td>
+    </tr>
+    <tr>
+      <th>data</th>
+      <td><p>When a <strong>recipe</strong> or <strong>formula</strong> is used, <code>data</code> is specified as:</p><ul>
+<li><p>A <strong>data frame</strong> containing predictor, group and outcome variables.</p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>knots</th>
+      <td><p>Optional, but recommended. Numerical vector with the
+locations of the breaks to be placed on the values of the predictor.
+Values outside the range of the data will extend the <code>boundary</code>
+knots (see below) beyond the data range.</p></td>
+    </tr>
+    <tr>
+      <th>boundary</th>
+      <td><p>Optional, but recommended. Numerical vector of
+length 2 with the left and right boundary knots. The <code>boundary</code>
+setting is passed to <code><a href='https://rdrr.io/r/splines/bs.html'>splines::bs()</a></code> as the <code>Boundary.knots</code> argument.
+If not specified, then the range of predictor variable is taken. Since
+the range depends on the data, it is recommended to specify <code>boundary</code>
+explicitly. Note the the <code>boundary</code> range is internally expanded
+to include at least <code><a href='https://rdrr.io/r/base/range.html'>range(knots)</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>k</th>
+      <td><p>Optional, a convenience parameter for the number of
+internal knots. If specified, then <code>k</code> internal knots are placed
+at equidense quantiles of the predictor. For example,
+specifying <code>k = 1</code> puts a knot at the 50th quantile (median),
+setting <code>k = 3</code> puts knots at the 25th, 50th and 75th quantiles,
+and so on.</p>
+<p>Note: Knots specified via <code>k</code> are data-dependent
+and do not transfer to other data sets. We recommend
+using <code>knots</code> and <code>boundary</code> over <code>k</code>. If both <code>k</code> and
+<code>knots</code> are specified, then <code>k</code> takes precendence.</p></td>
+    </tr>
+    <tr>
+      <th>method</th>
+      <td><p>Estimation method. Either <code>"kr"</code> (for the
+Kasim-Raudenbush sampler) or <code>"lmer"</code> (for <code><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lme4::lmer()</a></code>) (default).</p></td>
+    </tr>
+    <tr>
+      <th>control</th>
+      <td><p>A list with parameters. Use <code><a href='control_brokenstick.html'>control_brokenstick()</a></code>
+to generate.</p></td>
+    </tr>
+    <tr>
+      <th>seed</th>
+      <td><p>Seed number for <code><a href='https://rdrr.io/r/base/Random.html'>base::set.seed()</a></code>. Use <code>NA</code> to bypass
+seed setting.</p></td>
+    </tr>
+    <tr>
+      <th>y</th>
+      <td><p>Outcome variable. When <code>x</code> is a <strong>data frame</strong> or <strong>matrix</strong>,
+<code>y</code> is specified as:</p><ul>
+<li><p>A <strong>data frame</strong> with 1 numeric column.</p></li>
+<li><p>A <strong>matrix</strong> with 1 numeric column.</p></li>
+<li><p>A numeric <strong>vector</strong>.</p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>group</th>
+      <td><p>Grouping variable. When <code>x</code> is a <strong>data frame</strong> or <strong>matrix</strong>,
+<code>group</code> is specified as:</p><ul>
+<li><p>A <strong>data frame</strong> with 1 column.</p></li>
+<li><p>A <strong>matrix</strong> with 1 column.</p></li>
+<li><p>A numeric <strong>vector</strong>.</p></li>
+</ul></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A fitted model of class <code>brokenstick</code>, which extends the
- class <code>lmerMod</code></p>
+    <p>A <code>brokenstick</code> object.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Relations over time are modeled by the variance-covariance
-parameters of the random effects. Currently, this matrix is estimated
-as unstructured by <code>lmer()</code> from the <code>lme4</code> package.
+    <p>The variance-covariance matrix of the random effects absorbs the
+relations over time. By default, this matrix is estimated
+as unstructured by <code><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lme4::lmer()</a></code>.
 This estimate may be unstable if
 the number of children is small relative to the number of specified
-knots.</p>
-<p>This function can be time consuming for data sets with thousands of
+knots. The function can be time consuming for data sets with thousands of
 children.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>The <code>storeX</code> and <code>degree</code> arguments have been deprecated in
-version 0.54.</p>
+<p>An alternative - often faster for models with many random effects -
+is to use the Bayesian Kasim-Raudenbush sampler (method <code>kr</code>). That
+method also allow for enforcing a simple structure on the
+variance-covariance matrix of the random effects. Currently, there
+are three such models: <code>argyle</code>, <code>cole</code> and <code>none</code>. See <code><a href='kr.html'>kr()</a></code> and
+<code><a href='control_brokenstick.html'>control_brokenstick()</a></code> for more details.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>brokenstick</span><span class='kw ns'>::</span><span class='no'><a href='smocc_200.html'>smocc_200</a></span>
+    <pre class="examples"><div class='input'><span class='no'>train</span> <span class='kw'>&lt;-</span> <span class='no'>smocc_200</span>[<span class='fl'>1</span>:<span class='fl'>1198</span>, ]
 
 <span class='co'># fit with implicit boundary c(0, 3)</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>data</span>, <span class='fu'>brokenstick</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>hgt.z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>age</span>, <span class='kw'>subjid</span> <span class='kw'>=</span> <span class='no'>subjid</span>, <span class='kw'>knots</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>3</span>))</div></pre>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>hgt.z</span> ~ <span class='no'>age</span> <span class='kw'>|</span> <span class='no'>id</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>train</span>, <span class='kw'>knots</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>3</span>)
+
+<span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+<span class='co'># using KR sampler</span>
+<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>hgt.z</span> ~ <span class='no'>age</span> <span class='kw'>|</span> <span class='no'>id</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>train</span>, <span class='kw'>knots</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>3</span>,
+                   <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"kr"</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>1</span>)
+
+<span class='no'>knots</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>9</span>, <span class='fl'>12</span>, <span class='fl'>15</span>, <span class='fl'>18</span>, <span class='fl'>24</span>) / <span class='fl'>12</span>, <span class='fl'>4</span>)
+<span class='no'>boundary</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>3</span>)
+<span class='no'>fit_lmer</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>hgt.z</span> ~ <span class='no'>age</span> <span class='kw'>|</span> <span class='no'>id</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>train</span>,
+                        <span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>knots</span>, <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='no'>boundary</span>)
+<span class='no'>fit_kr</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>hgt.z</span> ~ <span class='no'>age</span> <span class='kw'>|</span> <span class='no'>id</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>train</span>, <span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>knots</span>,
+                      <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='no'>boundary</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"kr"</span>)
+}
+
+<span class='co'># Five ways to specify the same model</span>
+<span class='co'># Formula interface</span>
+<span class='no'>mod1</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>hgt.z</span> ~ <span class='no'>age</span> <span class='kw'>|</span> <span class='no'>id</span>, <span class='no'>train</span>)
+
+<span class='co'># XY interface - numeric vector</span>
+<span class='no'>mod2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>train</span>, <span class='fu'>brokenstick</span>(<span class='no'>age</span>, <span class='no'>hgt.z</span>, <span class='no'>id</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod2</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='co'># Recipes data.frame interface</span>
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>recipes</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: dplyr</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='output co'>#&gt; <span class='message'></span>
+#&gt; <span class='message'>Attaching package: ‘recipes’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:stats’:</span>
+#&gt; <span class='message'></span>
+#&gt; <span class='message'>    step</span></div><div class='input'><span class='no'>rec</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/recipes/man/recipe.html'>recipe</a></span>(<span class='no'>train</span>,
+              <span class='kw'>vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hgt.z"</span>, <span class='st'>"age"</span>, <span class='st'>"id"</span>),
+              <span class='kw'>roles</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"outcome"</span>, <span class='st'>"predictor"</span>, <span class='st'>"group"</span>))
+<span class='no'>mod3</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>rec</span>, <span class='no'>train</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod3</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='co'># XY interface - data.frame</span>
+<span class='no'>mod4</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>train</span>, <span class='fu'>brokenstick</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>age</span>), <span class='no'>hgt.z</span>, <span class='no'>id</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod4</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='co'># XY interface - matrix</span>
+<span class='no'>tt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>train</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>7</span>)])
+<span class='no'>mod5</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>tt</span>[, <span class='st'>"age"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
+                    <span class='no'>tt</span>[, <span class='st'>"hgt.z"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
+                    <span class='no'>tt</span>[, <span class='st'>"id"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>])
+<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod5</span>)</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

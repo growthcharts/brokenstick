@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Broken stick model fitted on 200 children — fit_200 • brokenstick</title>
+<title>Obtain proportion of explained variance from a broken stick model — get_r2 • brokenstick</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Broken stick model fitted on 200 children — fit_200" />
-<meta property="og:description" content="The object fit_200 is an object of class brokenstick that contains the fitted broken stick model. The class brokenstick extend the lmerMod class with additional attributes." />
+<meta property="og:title" content="Obtain proportion of explained variance from a broken stick model — get_r2" />
+<meta property="og:description" content="Obtain proportion of explained variance from a broken stick model" />
 
 
 
@@ -138,35 +138,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Broken stick model fitted on 200 children</h1>
-    <small class="dont-index">Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/R/smocc_200.R'><code>R/smocc_200.R</code></a></small>
-    <div class="hidden name"><code>fit_200.Rd</code></div>
+    <h1>Obtain proportion of explained variance from a broken stick model</h1>
+    <small class="dont-index">Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/R/get.R'><code>R/get.R</code></a></small>
+    <div class="hidden name"><code>get_r2.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The object <code>fit_200</code> is an object of class <code>brokenstick</code> that contains the fitted broken stick model. The class <code>brokenstick</code> extend the <code>lmerMod</code> class with additional attributes.</p>
+    <p>Obtain proportion of explained variance from a broken stick model</p>
     </div>
 
+    <pre class="usage"><span class='fu'>get_r2</span>(<span class='no'>object</span>, <span class='no'>new_data</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>object</th>
+      <td><p>An object of class <code>brokenstick</code></p></td>
+    </tr>
+    <tr>
+      <th>new_data</th>
+      <td><p>Data on which <code>r.squared</code> must be calculated</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>brokenstick</code>, fitted by the
-<code><a href='brokenstick.html'>brokenstick()</a></code>. This is an <code>lmerMod</code> object with additional
-slots:</p><dl'>
-<dt>knots</dt><dd><p>A vector of internal knots used by <code><a href='make_basis.html'>make_basis()</a></code></p></dd>
-<dt>boundary</dt><dd><p>The boundary knots of the linear spline</p></dd>
-<dt>degree</dt><dd><p>The degree of the spline. The brokenstick model corresponds to <code>degree = 1</code>.</p></dd>
-<dt>bs.call</dt><dd><p>An object of class <code>call</code> representing the call that was used to construct the object.</p></dd>
-<dt>xy</dt><dd><p>A data frame with column names <code>subjid</code>, <code>x</code> and <code>y</code> containing the data on which the model was fitted when called by the call in slot <code>bs.call</code>.</p></dd>
+    <p>Proportion of explained variance</p>
 
-</dl>
-
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></code>, <code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>merMod-class</a></code>,
-<code><a href='brokenstick.html'>brokenstick</a></code></p></div>
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>get_r2</span>(<span class='no'>fit_200</span>, <span class='no'>smocc_200</span>)</div><div class='output co'>#&gt; [1] 0.9781865</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

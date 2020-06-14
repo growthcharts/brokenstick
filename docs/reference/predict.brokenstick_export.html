@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
       </span>
     </div>
 
@@ -95,7 +95,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/gettingstarted.html">Getting started with `brokenstick`</a>
+      <a href="../articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
       <a href="../articles/knotplacement.html">Knot placement</a>
@@ -167,23 +167,23 @@ fitted model.</p></td>
       <th>x</th>
       <td><p>A vector with decimal ages of length <code><a href='https://rdrr.io/r/base/length.html'>length(y)</a></code>.
 If both <code>y</code> and <code>x</code> are not specified,
-  the function calculates the predicted values for all persons on which
-  <code>object</code> was fitted. If <code>y</code> is not specified, but <code>x</code> is,
-  then broken stick estimates are obtained at <code>x</code> for all persons in
-  <code>object</code>. Note that the <code>at = "x"</code> argument is needed to make
-  predictions at the <code>x</code> values.</p></td>
+the function calculates the predicted values for all persons on which
+<code>object</code> was fitted. If <code>y</code> is not specified, but <code>x</code> is,
+then broken stick estimates are obtained at <code>x</code> for all persons in
+<code>object</code>. Note that the <code>at = "x"</code> argument is needed to make
+predictions at the <code>x</code> values.</p></td>
     </tr>
     <tr>
       <th>at</th>
       <td><p>If <code>at = "x"</code> (the default) the function returns
 predictions at the <code>x</code> values in the data. Specify <code>at =
-"knots"</code> to obtain predictions at the knots of the model, or
+  "knots"</code> to obtain predictions at the knots of the model, or
 <code>at = "both"</code> to obtain both.</p></td>
     </tr>
     <tr>
       <th>output</th>
       <td><p>A string specifying the desired type of output. If <code>output
-= "long"</code> (the default), the result is cast into a data frame of the long
+  = "long"</code> (the default), the result is cast into a data frame of the long
 format that represents each row represented as an observation. If
 <code>output = "broad"</code>, the result is formed into a broad matrix where
 each row represents a person. This format is useful as input to a secondary

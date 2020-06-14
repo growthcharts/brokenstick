@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
       </span>
     </div>
 
@@ -95,7 +95,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/gettingstarted.html">Getting started with `brokenstick`</a>
+      <a href="../articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
       <a href="../articles/knotplacement.html">Knot placement</a>
@@ -148,36 +148,32 @@
     </div>
 
     <pre class="usage"><span class='co'># S3 method for brokenstick</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/fitted.values.html'>fitted</a></span>(<span class='no'>object</span>, <span class='kw'>predict_NA</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'><a href='https://rdrr.io/r/stats/fitted.values.html'>fitted</a></span>(<span class='no'>object</span>, <span class='kw'>new_data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>An object of class <code>brokenstick</code></p></td>
+      <td><p>A <code>brokenstick</code> object.</p></td>
     </tr>
     <tr>
-      <th>predict_NA</th>
-      <td><p>A logical indicating whether the rows with a missing <code>y</code> value should be predicted. The default is <code>predict_NA = TRUE</code>.</p></td>
+      <th>new_data</th>
+      <td><p>A data frame or matrix of new predictors.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed down to <code>predict.merMod()</code>.</p></td>
+      <td><p>Additional arguments. Ignored.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of predicted values.</p>
-    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
-
-    <p>If <code>x</code> is known and <code>y</code> is <code>NA</code> then <code>lme4:::fitted.medMod()</code> returns <code>NA</code>. The <code>fitted.brokenstick()</code> function intercepts subjects with <code>NA</code>'s in <code>y</code>, and calculates <code>yhat</code> for the relevent rows by calling <code><a href='predict.brokenstick_export.html'>predict.brokenstick_export()</a></code>.</p>
+    <p>See <code><a href='predict_new.html'>predict_new.brokenstick()</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other brokenstick: 
-<code><a href='predict.brokenstick_export.html'>predict.brokenstick_export</a>()</code>,
-<code><a href='predict.brokenstick.html'>predict.brokenstick</a>()</code></p></div>
+<code><a href='residuals.brokenstick.html'>residuals.brokenstick</a>()</code></p></div>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

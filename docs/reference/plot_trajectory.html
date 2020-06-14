@@ -41,7 +41,7 @@
 
 <meta property="og:title" content="Plot observed and fitted trajectories from fitted brokenstick model — plot_trajectory" />
 <meta property="og:description" content="This function plot the observed and fitted trajectories from brokenstick model.
-Actual plotting may be done by gglot or rbokeh." />
+Actual plotting may be done by gglot." />
 
 
 
@@ -73,7 +73,7 @@ Actual plotting may be done by gglot or rbokeh." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
       </span>
     </div>
 
@@ -96,7 +96,7 @@ Actual plotting may be done by gglot or rbokeh." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/gettingstarted.html">Getting started with `brokenstick`</a>
+      <a href="../articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
       <a href="../articles/knotplacement.html">Knot placement</a>
@@ -146,17 +146,17 @@ Actual plotting may be done by gglot or rbokeh." />
 
     <div class="ref-description">
     <p>This function plot the observed and fitted trajectories from brokenstick model.
-Actual plotting may be done by <code>gglot</code> or <code>rbokeh</code>.</p>
+Actual plotting may be done by <code>gglot</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>plot_trajectory</span>(
   <span class='no'>x</span>,
   <span class='no'>data</span>,
-  <span class='kw'>color.y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"blue"</span>, <span class='st'>"grey"</span>),
-  <span class='kw'>size.y</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>color.yhat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"red"</span>, <span class='st'>"grey"</span>),
-  <span class='kw'>size.yhat</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>3</span>,
+  <span class='kw'>color_y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"blue"</span>, <span class='st'>"grey"</span>),
+  <span class='kw'>size_y</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>color_yhat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"red"</span>, <span class='st'>"grey"</span>),
+  <span class='kw'>size_yhat</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Age (years)"</span>,
   <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Length (SDS)"</span>,
   <span class='kw'>zband</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
@@ -171,26 +171,27 @@ Actual plotting may be done by <code>gglot</code> or <code>rbokeh</code>.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>An object of class <code>brokenstick</code> or <code>brokenstick_export</code></p></td>
+      <td><p>An object of class <code>brokenstick</code>.</p></td>
     </tr>
     <tr>
       <th>data</th>
-      <td><p>A list of data frames produced by <code>predict.brokenstick</code> and <code>predict.brokenstick_export</code></p></td>
+      <td><p>A <code>data.frame</code> with columns names <code>x$names</code>, <code>".source"</code>
+and <code>".pred"</code>.</p></td>
     </tr>
     <tr>
-      <th>color.y</th>
+      <th>color_y</th>
       <td><p>A character vector with two elements specifying the symbol and line color of the measured data points</p></td>
     </tr>
     <tr>
-      <th>size.y</th>
+      <th>size_y</th>
       <td><p>Dot size of measured data points</p></td>
     </tr>
     <tr>
-      <th>color.yhat</th>
+      <th>color_yhat</th>
       <td><p>A character vector with two elements specifying the symbol and line color of the predicted data points</p></td>
     </tr>
     <tr>
-      <th>size.yhat</th>
+      <th>size_yhat</th>
       <td><p>Dot size of predicted data points</p></td>
     </tr>
     <tr>
@@ -232,14 +233,14 @@ default is the entire data range.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>An object of class <code>ggplot</code></p>
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><a href='plot.brokenstick.html'>plot.brokenstick</a></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>smc</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>brokenstick</span><span class='kw ns'>::</span><span class='no'><a href='smocc_200.html'>smocc_200</a></span>
-<span class='no'>knots</span> <span class='kw'>&lt;-</span> <span class='fl'>0</span>:<span class='fl'>2</span>
-<span class='no'>fit</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>smc</span>$<span class='no'>hgt.z</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>smc</span>$<span class='no'>age</span>, <span class='kw'>subjid</span> <span class='kw'>=</span> <span class='no'>smc</span>$<span class='no'>subjid</span>, <span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>knots</span>)
-
-<span class='co'># plot first three cases</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fit</span>)</div><div class='img'><img src='plot_trajectory-1.svg' alt='' width='700' height='1133' /></div></pre>
+    <pre class="examples"><div class='input'># plot first three cases
+# plot(fit_200, brokenstick::smocc_200)
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

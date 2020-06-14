@@ -79,7 +79,7 @@ The current implementation does not provide prediction errors." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.62.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@ The current implementation does not provide prediction errors." />
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/gettingstarted.html">Getting started with `brokenstick`</a>
+      <a href="../articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
       <a href="../articles/knotplacement.html">Knot placement</a>
@@ -168,7 +168,7 @@ The current implementation does not provide prediction errors.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>model</th>
-      <td><p>An object of class <code>brokenstick.export</code>.</p></td>
+      <td><p>An object of class <code>brokenstick</code>.</p></td>
     </tr>
     <tr>
       <th>y</th>
@@ -202,14 +202,12 @@ J. R. Statist. Soc. A, 172, 3, 659-687.</p>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'>#</span>
 <span class='co'># EB estimate random effect for child id 10001</span>
-<span class='no'>model</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='export.html'>export</a></span>(<span class='no'>fit_200</span>)
-<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='get_xy.html'>get_xy</a></span>(<span class='no'>fit_200</span>, <span class='kw'>ids</span> <span class='kw'>=</span> <span class='fl'>10001</span>)
-<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='no'>data</span>$<span class='no'>y</span>
-<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='make_basis.html'>make_basis</a></span>(<span class='no'>data</span>$<span class='no'>x</span>,
-  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>model</span>$<span class='no'>knots</span>,
-  <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='no'>model</span>$<span class='no'>boundary</span>
-)
-<span class='fu'>EB</span>(<span class='no'>model</span>, <span class='no'>y</span>, <span class='no'>X</span>)</div><div class='output co'>#&gt;  [1]  0.5705123  0.8863342  0.7263649  0.6299368  0.2946222 -0.2053723
+<span class='no'>data</span> <span class='kw'>&lt;-</span> <span class='no'>smocc_200</span>[<span class='no'>smocc_200</span>$<span class='no'>id</span> <span class='kw'>==</span> <span class='fl'>10001</span>, ]
+<span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='no'>data</span>$<span class='no'>hgt.z</span>
+<span class='no'>X</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='make_basis.html'>make_basis</a></span>(<span class='no'>data</span>$<span class='no'>age</span>,
+  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>fit_200</span>$<span class='no'>knots</span>,
+  <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='no'>fit_200</span>$<span class='no'>boundary</span>)
+<span class='fu'>EB</span>(<span class='no'>fit_200</span>, <span class='no'>y</span>, <span class='no'>X</span>)</div><div class='output co'>#&gt;  [1]  0.5705123  0.8863342  0.7263649  0.6299368  0.2946222 -0.2053723
 #&gt;  [7]  0.1050307  0.1289907 -0.1843961  0.1534859  0.5769778</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

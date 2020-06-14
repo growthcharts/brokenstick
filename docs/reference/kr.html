@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Broken stick model fitted on 200 children — fit_200 • brokenstick</title>
+<title>Kasim-Raudenbush sampler for two-level normal model — kr • brokenstick</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,11 @@
 
 
 
-<meta property="og:title" content="Broken stick model fitted on 200 children — fit_200" />
-<meta property="og:description" content="The object fit_200 is an object of class brokenstick that contains the fitted broken stick model. The class brokenstick extend the lmerMod class with additional attributes." />
+<meta property="og:title" content="Kasim-Raudenbush sampler for two-level normal model — kr" />
+<meta property="og:description" content="Simulates posterior distributions of parameters from a two-level
+normal model with heterogeneous within-cluster variances
+(Kasim and Raudenbush, 1998). Imputations can be drawn as an
+extra step to the algorithm." />
 
 
 
@@ -138,34 +141,93 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Broken stick model fitted on 200 children</h1>
-    <small class="dont-index">Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/R/smocc_200.R'><code>R/smocc_200.R</code></a></small>
-    <div class="hidden name"><code>fit_200.Rd</code></div>
+    <h1>Kasim-Raudenbush sampler for two-level normal model</h1>
+    <small class="dont-index">Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/R/kr.R'><code>R/kr.R</code></a></small>
+    <div class="hidden name"><code>kr.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>The object <code>fit_200</code> is an object of class <code>brokenstick</code> that contains the fitted broken stick model. The class <code>brokenstick</code> extend the <code>lmerMod</code> class with additional attributes.</p>
+    <p>Simulates posterior distributions of parameters from a two-level
+normal model with heterogeneous within-cluster variances
+(Kasim and Raudenbush, 1998). Imputations can be drawn as an
+extra step to the algorithm.</p>
     </div>
 
+    <pre class="usage"><span class='fu'>kr</span>(<span class='no'>y</span>, <span class='no'>x</span>, <span class='no'>g</span>, <span class='no'>control</span>, <span class='no'>seed</span>, <span class='no'>na.action</span>)</pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>y</th>
+      <td><p>Vector with outcome value</p></td>
+    </tr>
+    <tr>
+      <th>x</th>
+      <td><p>Matrix with predictor value</p></td>
+    </tr>
+    <tr>
+      <th>g</th>
+      <td><p>Vector with group values</p></td>
+    </tr>
+    <tr>
+      <th>control</th>
+      <td><p>A list with elements:</p><ul>
+<li><p><code>model</code>: Correlation model: <code>"argyle"</code>, <code>"cole"</code> or <code>"none"</code></p></li>
+<li><p><code>runin</code>: Number of run-in iterations</p></li>
+<li><p><code>ndraws</code>: Number of parameter draws</p></li>
+<li><p><code>par_skip</code>: Number of iterations to next parameter draw</p></li>
+<li><p><code>imp_skip</code>: Number of iterations to next outcome draw</p></li>
+</ul></td>
+    </tr>
+    <tr>
+      <th>seed</th>
+      <td><p>Seed number for <code><a href='https://rdrr.io/r/base/Random.html'>base::set.seed()</a></code>. Use <code>NA</code> to bypass
+seed setting.</p></td>
+    </tr>
+    <tr>
+      <th>na.action</th>
+      <td><p>Not really used here</p></td>
+    </tr>
+    </table>
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>An object of class <code>brokenstick</code>, fitted by the
-<code><a href='brokenstick.html'>brokenstick()</a></code>. This is an <code>lmerMod</code> object with additional
-slots:</p><dl'>
-<dt>knots</dt><dd><p>A vector of internal knots used by <code><a href='make_basis.html'>make_basis()</a></code></p></dd>
-<dt>boundary</dt><dd><p>The boundary knots of the linear spline</p></dd>
-<dt>degree</dt><dd><p>The degree of the spline. The brokenstick model corresponds to <code>degree = 1</code>.</p></dd>
-<dt>bs.call</dt><dd><p>An object of class <code>call</code> representing the call that was used to construct the object.</p></dd>
-<dt>xy</dt><dd><p>A data frame with column names <code>subjid</code>, <code>x</code> and <code>y</code> containing the data on which the model was fitted when called by the call in slot <code>bs.call</code>.</p></dd>
+    <p>A list with components:</p><pre>* `beta`  Fixed effects
+* `omega` Variance-covariance of random effects
+* `sigma2_j` Residual variance per group
+* `sigma2` Average residual variance
+* `draws` A matrix with `ndraw` columns with draws for missing data
+</pre>
 
-</dl>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+    <p>The calculation time of <code><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lme4::lmer()</a></code> rapidly increases with the
+number of random effects. More than 10 random effects (knots)
+takes significant time, and beyond 15 knots generally impossible
+to fit.</p>
+<p>In contrast, the speed of the Kasim-Raudenbush sampler is almost
+independent of the number of random effect, and foremost depends
+on the <em>total number of iterations</em>: <code>runin</code> + <code>ndraws</code> * <code>par_skip</code>.</p>
+<p>The defaults <code>ndraws = 200</code> and <code>par_skip = 1</code> provides a <em>good</em>
+approximation to the variance-covariance matrix of the random
+effects. Increase <code>par_skip</code> to <code>10</code> (<em>better</em>) or <code>20</code> (<em>best</em>) to
+obtain closer approximations at the expense of a linear
+increase in calculation time. Setting <code>ndraws = 50</code> (or lower)
+will reduce computation time, but the result should be treated as
+<em>indicative</em>.</p>
+<p>It is possible to subsample the parameter draws at every
+<code>imp_skip</code> iteration, and draw one or more synthetic outcome values
+from the posterior distribution of the outcome. The number of
+multiple imputations is equal to <code><a href='https://rdrr.io/r/base/Round.html'>floor(ndraws / imp_skip)</a></code>. Thus,
+setting <code>imp_skip = 20L</code> returns 200 / 20 = 10 multiple
+imputations for each missing value in the outcome. The default does
+not produce imputations.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <div class='dont-index'><p><code><a href='https://rdrr.io/pkg/lme4/man/lmer.html'>lmer</a></code>, <code><a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>merMod-class</a></code>,
-<code><a href='brokenstick.html'>brokenstick</a></code></p></div>
+    <p>Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested
+variance components models with heterogeneous within-group variance. Journal
+of Educational and Behavioral Statistics, 23(2), 93--116.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

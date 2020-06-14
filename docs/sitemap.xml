@@ -13,7 +13,10 @@
     <loc>https://stefvanbuuren.name/brokenstick/reference/brokenstick.html</loc>
   </url>
   <url>
-    <loc>https://stefvanbuuren.name/brokenstick/reference/export.html</loc>
+    <loc>https://stefvanbuuren.name/brokenstick/reference/control_brokenstick.html</loc>
+  </url>
+  <url>
+    <loc>https://stefvanbuuren.name/brokenstick/reference/control_kr.html</loc>
   </url>
   <url>
     <loc>https://stefvanbuuren.name/brokenstick/reference/fit_200.html</loc>
@@ -22,19 +25,19 @@
     <loc>https://stefvanbuuren.name/brokenstick/reference/fitted.brokenstick.html</loc>
   </url>
   <url>
-    <loc>https://stefvanbuuren.name/brokenstick/reference/get_X.html</loc>
-  </url>
-  <url>
     <loc>https://stefvanbuuren.name/brokenstick/reference/get_knots.html</loc>
   </url>
   <url>
-    <loc>https://stefvanbuuren.name/brokenstick/reference/get_pev.html</loc>
+    <loc>https://stefvanbuuren.name/brokenstick/reference/get_r2.html</loc>
   </url>
   <url>
-    <loc>https://stefvanbuuren.name/brokenstick/reference/get_xy.html</loc>
+    <loc>https://stefvanbuuren.name/brokenstick/reference/kr.html</loc>
   </url>
   <url>
     <loc>https://stefvanbuuren.name/brokenstick/reference/make_basis.html</loc>
+  </url>
+  <url>
+    <loc>https://stefvanbuuren.name/brokenstick/reference/parse_formula.html</loc>
   </url>
   <url>
     <loc>https://stefvanbuuren.name/brokenstick/reference/plot.brokenstick.html</loc>
@@ -43,10 +46,10 @@
     <loc>https://stefvanbuuren.name/brokenstick/reference/plot_trajectory.html</loc>
   </url>
   <url>
-    <loc>https://stefvanbuuren.name/brokenstick/reference/predict.brokenstick.html</loc>
+    <loc>https://stefvanbuuren.name/brokenstick/reference/predict_new.html</loc>
   </url>
   <url>
-    <loc>https://stefvanbuuren.name/brokenstick/reference/predict.brokenstick_export.html</loc>
+    <loc>https://stefvanbuuren.name/brokenstick/reference/residuals.brokenstick.html</loc>
   </url>
   <url>
     <loc>https://stefvanbuuren.name/brokenstick/reference/smocc_200.html</loc>
