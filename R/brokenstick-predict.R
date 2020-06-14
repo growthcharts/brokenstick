@@ -2,7 +2,7 @@
 #'
 #' The predictions from a broken stick model coincide with the
 #' group-conditional means of the random effects. This function takes
-#' an object of class `brokenstick`, and returns predictions
+#' an object of class `brokenstick` and returns predictions
 #' in one of several formats. The user can calculate predictions
 #' for new persons, i.e., for persons who are not part of
 #' the fitted model, through the `x` and `y` arguments.
@@ -37,7 +37,7 @@
 #' and sparse matrix.
 #' @details
 #'
-#' By default, `predict()` will find predictions for every row in
+#' By default, `predict()` calculates predictions for every row in
 #' `new_data`. It is possible to tailor the behavior through the
 #' `x`, `y` and `group` arguments. What exactly happens depends on
 #' which of these arguments is specified:
@@ -114,7 +114,7 @@ predict_new.brokenstick <- function(object, new_data = NULL, type = "numeric",
 
   # handle special case: x = "knots"
   if (length(x)) {
-    if (x[1L] == "knots")
+    if (!is.na(x[1L]) && x[1L] == "knots")
       x <- get_knots(object)
   }
 
