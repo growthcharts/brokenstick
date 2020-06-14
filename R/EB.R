@@ -10,7 +10,7 @@
 #' The current implementation does not provide prediction errors.
 #'
 #' @aliases EB
-#' @param model An object of class \code{brokenstick.export}.
+#' @param model An object of class \code{brokenstick}.
 #' @param y A vector of new measurements for unit j, scaled in the same metric as the fitted model.
 #' @param X A \code{nj * p} matrix with fixed effects for unit j, typically produced by \code{bs()}.
 #' @param Z A \code{nj * q} matrix with random effects for unit j. The default sets \code{Z} equal to \code{X}.
@@ -18,7 +18,7 @@
 #' returned (\code{BS = TRUE}) or the random effects (\code{BS = FALSE}).
 #' The default is \code{TRUE}.
 #' @return A vector of length q containing the random effect or broken stick  estimates for unit j.
-#' @author Stef van Buuren, 2015
+#' @author Stef van Buuren, 2015/2020
 #' @references
 #' Skrondal, A., Rabe-Hesketh, S. (2009).
 #' Prediction in multilevel generalized linear models.
@@ -26,22 +26,19 @@
 #' @examples
 #' #
 #' # EB estimate random effect for child id 10001
-#' model <- export(fit_200)
-#' data <- get_data(fit_200, ids = 10001)
-#' y <- data$y
-#' X <- make_basis(data$x,
-#'   knots = model$knots,
-#'   boundary = model$boundary
-#' )
-#' EB(model, y, X)
+#' data <- smocc_200[smocc_200$id == 10001, ]
+#' y <- data$hgt.z
+#' X <- make_basis(data$age,
+#'   knots = fit_200$knots,
+#'   boundary = fit_200$boundary)
+#' EB(fit_200, y, X)
 #' @export
 EB <- function(model, y, X, Z = X, BS = TRUE) {
 
+  if (!inherits(model, "brokenstick")) stop("Argument `model` not of class brokenstick.")
+
   # X should be a matrix
   if (!is.matrix(X)) stop("Argument 'X' is not a matrix.")
-
-  # make sure we get the exported model
-  exp <- export(model)
 
   # eliminate missing outcomes
   select <- !(is.na(y) | is.na(X[, 1]))
@@ -49,7 +46,7 @@ EB <- function(model, y, X, Z = X, BS = TRUE) {
   # if there are no valid values left, return the fixed effect
   # as broken stick estimates
   if (!any(select)) {
-    return(exp$beta)
+    return(model$beta)
   }
 
   # get into shape for matrix multiplication
@@ -57,17 +54,17 @@ EB <- function(model, y, X, Z = X, BS = TRUE) {
   y <- matrix(y[select], ncol = 1)
   Z <- matrix(Z[select, ], ncol = dim(Z)[2])
   X <- matrix(X[select, ], ncol = dim(X)[2])
-  beta <- matrix(exp$beta, ncol = 1)
+  beta <- matrix(model$beta, ncol = 1)
 
   # construct appropriate matrices
-  sigma.inv <- solve(Z %*% exp$omega %*% t(Z) +
-    diag(exp$sigma2, nrow(Z)))
+  sigma.inv <- solve(Z %*% model$omega %*% t(Z) +
+    diag(model$sigma2, nrow(Z)))
 
   # calculate random effect by EB estimate
-  re <- exp$omega %*% t(Z) %*% sigma.inv %*% (y - X %*% beta)
+  re <- model$omega %*% t(Z) %*% sigma.inv %*% (y - X %*% beta)
 
   # calculate broken stick estimate by summing fixed and random parts
-  if (BS) re <- exp$beta + re
+  if (BS) re <- model$beta + re
 
   return(as.vector(re))
 }

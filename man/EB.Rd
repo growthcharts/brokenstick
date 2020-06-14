@@ -7,7 +7,7 @@
 EB(model, y, X, Z = X, BS = TRUE)
 }
 \arguments{
-\item{model}{An object of class \code{brokenstick.export}.}
+\item{model}{An object of class \code{brokenstick}.}
 
 \item{y}{A vector of new measurements for unit j, scaled in the same metric as the fitted model.}
 
@@ -35,14 +35,12 @@ The current implementation does not provide prediction errors.
 \examples{
 #
 # EB estimate random effect for child id 10001
-model <- export(fit_200)
-data <- get_data(fit_200, ids = 10001)
-y <- data$y
-X <- make_basis(data$x,
-  knots = model$knots,
-  boundary = model$boundary
-)
-EB(model, y, X)
+data <- smocc_200[smocc_200$id == 10001, ]
+y <- data$hgt.z
+X <- make_basis(data$age,
+  knots = fit_200$knots,
+  boundary = fit_200$boundary)
+EB(fit_200, y, X)
 }
 \references{
 Skrondal, A., Rabe-Hesketh, S. (2009).
@@ -50,5 +48,5 @@ Prediction in multilevel generalized linear models.
 J. R. Statist. Soc. A, 172, 3, 659-687.
 }
 \author{
-Stef van Buuren, 2015
+Stef van Buuren, 2015/2020
 }

@@ -68,18 +68,15 @@ The `brokenstick` package contains functions for
 
 -   Fitting the broken stick model to data,
 -   Plotting individual trajectories,
--   Predicting broken stick estimates for new data,
--   Exporting the parameters of the model for independent use outside
-    this package.
+-   Predicting broken stick estimates for new data.
 
 Main functions
 --------------
 
 The main functions in the `brokenstick` package are:
 
-| Function name   | Description                                       |
-|-----------------|---------------------------------------------------|
-| `brokenstick()` | Fit a broken stick model to irregular data        |
-| `plot()`        | Plot observed and fitted trajectories             |
-| `predict()`     | Predict broken stick estimates                    |
-| `export()`      | Export minimal broken stick model for publication |
+| Function name   | Description                                |
+|-----------------|--------------------------------------------|
+| `brokenstick()` | Fit a broken stick model to irregular data |
+| `plot()`        | Plot observed and fitted trajectories      |
+| `predict()`     | Predict broken stick estimates             |

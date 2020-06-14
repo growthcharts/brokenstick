@@ -53,7 +53,7 @@ fit0 <- with(data, brokenstick(y = hgt.z, x = age,
                                knots = round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4),
                                boundary = c(0, 3)))
 data2 <- fit_200@frame
-exp0 <- export(fit0)
+exp0 <- fit0
 
 ```
 

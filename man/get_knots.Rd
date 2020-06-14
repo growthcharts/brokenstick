@@ -7,8 +7,7 @@
 get_knots(object, what = c("all", "knots", "boundary", "droplast"))
 }
 \arguments{
-\item{object}{An object of class \code{brokenstick} or
-\code{brokenstick.export}}
+\item{object}{An object of class \code{brokenstick}}
 
 \item{what}{A character vector of length 1. Valid values are
 \code{"all"}, \code{"knots"}, \code{"boundary"} or \code{"droplast"}.

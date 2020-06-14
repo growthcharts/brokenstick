@@ -21,8 +21,6 @@ Calculate fitted values
 }
 \seealso{
 Other brokenstick: 
-\code{\link{predict.brokenstick_export}()},
-\code{\link{predict.brokenstick}()},
 \code{\link{residuals.brokenstick}()}
 }
 \concept{brokenstick}

@@ -238,7 +238,6 @@ This vignette illustrated the use of the `brokenstick()`, `plot()` and `predict(
 * [Fit and predict](prediction.html)
     + Data exploration
     + Conversion back and forth to the Z-score scale
-    + Export and publish a broken stick model
     + Predict growth curve of new subjects
     + Assess the quality of the model
  

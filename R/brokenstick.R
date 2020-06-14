@@ -85,13 +85,19 @@
 #'
 #' @details
 #' The variance-covariance matrix of the random effects absorbs the
-#' relations over time. Currently, this matrix is estimated
+#' relations over time. By default, this matrix is estimated
 #' as unstructured by [lme4::lmer()].
-
 #' This estimate may be unstable if
 #' the number of children is small relative to the number of specified
 #' knots. The function can be time consuming for data sets with thousands of
 #' children.
+#'
+#' An alternative - often faster for models with many random effects -
+#' is to use the Bayesian Kasim-Raudenbush sampler (method `kr`). That
+#' method also allow for enforcing a simple structure on the
+#' variance-covariance matrix of the random effects. Currently, there
+#' are three such models: `argyle`, `cole` and `none`. See [kr()] and
+#' [control_brokenstick()] for more details.
 #'
 #' @return
 #'

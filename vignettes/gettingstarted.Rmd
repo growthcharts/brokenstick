@@ -39,14 +39,13 @@ Three unique features of the broken stick model are:
 
 ## What is in the package?
 
-The `brokenstick` package contains functions to fit, predict, plot and export data. The main functions in the `brokenstick` package are:
+The `brokenstick` package contains functions to fit, predict and plot data. The main functions in the `brokenstick` package are:
 
 Function name        | Description
 ---------------------|---------------------------------
 `brokenstick()`      | Fit a broken stick model to irregular data
 `predict()`          | Predict broken stick estimates for new growth data
 `plot()`             | Plot individual trajectories
-`export()`           | Export broken stick model parameters 
 
 ## Further reading
 

@@ -171,12 +171,19 @@ chosen grid points, and hence look like a broken stick.
 }
 \details{
 The variance-covariance matrix of the random effects absorbs the
-relations over time. Currently, this matrix is estimated
+relations over time. By default, this matrix is estimated
 as unstructured by \code{\link[lme4:lmer]{lme4::lmer()}}.
 This estimate may be unstable if
 the number of children is small relative to the number of specified
 knots. The function can be time consuming for data sets with thousands of
 children.
+
+An alternative - often faster for models with many random effects -
+is to use the Bayesian Kasim-Raudenbush sampler (method \code{kr}). That
+method also allow for enforcing a simple structure on the
+variance-covariance matrix of the random effects. Currently, there
+are three such models: \code{argyle}, \code{cole} and \code{none}. See \code{\link[=kr]{kr()}} and
+\code{\link[=control_brokenstick]{control_brokenstick()}} for more details.
 }
 \examples{
 train <- smocc_200[1:1198, ]

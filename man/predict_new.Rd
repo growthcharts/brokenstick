@@ -58,13 +58,13 @@ the number of rows in \code{new_data}.
 \description{
 The predictions from a broken stick model coincide with the
 group-conditional means of the random effects. This function takes
-an object of class \code{brokenstick}, and returns predictions
+an object of class \code{brokenstick} and returns predictions
 in one of several formats. The user can calculate predictions
 for new persons, i.e., for persons who are not part of
 the fitted model, through the \code{x} and \code{y} arguments.
 }
 \details{
-By default, \code{predict()} will find predictions for every row in
+By default, \code{predict()} calculates predictions for every row in
 \code{new_data}. It is possible to tailor the behavior through the
 \code{x}, \code{y} and \code{group} arguments. What exactly happens depends on
 which of these arguments is specified:

@@ -26,10 +26,8 @@ NULL
 #' user-specified grid of break ages.
 #'
 #' The \pkg{brokenstick} package contains functions for
-#' fitting a broken stick
-#' model to data, for exporting the parameters of the model for
-#' independent use outside this package, and for predicting broken
-#' stick curves for new data.
+#' fitting a broken stick model to data, for predicting broken
+#' stick curves for new data, and for plotting the results.
 #'
 #' @section brokenstick functions:
 #' The main functions are:
@@ -40,7 +38,7 @@ NULL
 #' @docType package
 #' @name brokenstick-pkg
 #' @seealso \code{\link{brokenstick}},
-#' \code{\link{EB}}, \code{\link{predict.brokenstick}}
+#' \code{\link{EB}}, \code{\link{predict_new.brokenstick}}
 #' @note
 #' Development of this package was kindly supported under the Healthy
 #' Birth, Growth and Development knowledge integration (HBGDki)

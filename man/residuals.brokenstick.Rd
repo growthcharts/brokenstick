@@ -21,8 +21,6 @@ Extract residuals from brokenstick model
 }
 \seealso{
 Other brokenstick: 
-\code{\link{fitted.brokenstick}()},
-\code{\link{predict.brokenstick_export}()},
-\code{\link{predict.brokenstick}()}
+\code{\link{fitted.brokenstick}()}
 }
 \concept{brokenstick}
