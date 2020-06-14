@@ -1,16 +1,39 @@
 # brokenstick 0.70.0
 
-* The version jump illustrates two big changes:
+* This version jump illustrates big and breaking changes:
 
 1. `brokenstick` adopted the `tidymodels` philosophy, and now includes
-a dependency on `hardhat`. Multiple calls to the `brokenstick()` are now
-supported.
+a dependency on `hardhat`. It is now possible to fit a model using 
+five different interfaces. There is no need anymore the hardcode variable
+names in the source data.
 
 2. This version introduces a new estimation method, the Kasim-Raudenbush
-sampler. I took extended code from `mice::mice.impute.2l.norm()`, 
-and with steps to calculate expected values. The new method
-is much better suited to work with a large number of knots than 
-`lme4::lmer()`.
+sampler. The new method is more flexible and faster than `lme4::lmer()`
+when the number of knots is large.
+
+3. This version introduces two simple correlation models that may be 
+used to smooth out the variance-covariance matrix of the random effects.
+
+4. The definition of the `brokenstick` class has changed. Objects of 
+class `brokenstick` do no longer store the training data. 
+
+5. The `brokenstick_export` class is retired.
+
+6. The `predict()` function is fully rewritten as has now a new interface.
+Since the `brokenstick` class does not store the training data anymore, 
+the `predict()` function now obtains a `new_data` argument. Syntax that 
+worked for `brokenstick` package before `0.70.0` does not work anymore
+and should be updated. The `shape` argument replaces the `output` 
+argument.
+
+7. The `plot()` function is rewritten, and now requires a `new_data` 
+specification.
+
+8. Retired functions: `brokenstick()` replaces `fit_brokenstick()`, 
+`predict.brokenstick()` replaces `predict.brokenstick_export()`, 
+`get_r2()` replaces `get_pev()`
+
+9. Removed functions: `get_data()`, `get_X()`, `export()`
 
 # brokenstick 0.62.0
 
