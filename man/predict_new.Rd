@@ -16,7 +16,7 @@ predict_new(object, new_data, type = "numeric", ...)
   y = NULL,
   group = NULL,
   strip_data = TRUE,
-  shape = c("long", "broad", "vector")
+  shape = c("long", "wide", "vector")
 )
 }
 \arguments{
@@ -45,8 +45,8 @@ observed data from \code{new_data} should be stripped from the
 return. The default is \code{TRUE}. Set to \code{FALSE} to infer which data
 points are extracted from \code{new_data}.}
 
-\item{shape}{A string: \code{"long"} (default), \code{"broad"} or \code{"vector"}
-specifying the shape of the return value. Note that use of \code{"broad"}
+\item{shape}{A string: \code{"long"} (default), \code{"wide"} or \code{"vector"}
+specifying the shape of the return value. Note that use of \code{"wide"}
 with many unique values in \code{x} creates an unwieldy, large
 and sparse matrix.}
 }

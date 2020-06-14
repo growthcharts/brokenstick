@@ -75,6 +75,7 @@ predict(exp,
 \seealso{
 Other brokenstick: 
 \code{\link{fitted.brokenstick}()},
-\code{\link{predict.brokenstick}()}
+\code{\link{predict.brokenstick}()},
+\code{\link{residuals.brokenstick}()}
 }
 \concept{brokenstick}

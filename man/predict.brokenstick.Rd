@@ -106,7 +106,8 @@ predict(fit_200, id = c(10001, 10003), at = "knots", output = "broad")
 \seealso{
 Other brokenstick: 
 \code{\link{fitted.brokenstick}()},
-\code{\link{predict.brokenstick_export}()}
+\code{\link{predict.brokenstick_export}()},
+\code{\link{residuals.brokenstick}()}
 }
 \author{
 Stef van Buuren 2016
