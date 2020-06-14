@@ -14,7 +14,7 @@
 \item{\dots}{Additional arguments. Ignored.}
 }
 \value{
-See \code{\link[=predict_new.brokenstick]{predict_new.brokenstick()}}.
+See \code{\link[=predict.brokenstick]{predict.brokenstick()}}.
 }
 \description{
 Calculate fitted values

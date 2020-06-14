@@ -4,7 +4,7 @@
 #' fitted trajectories of one or more groups.
 #'
 #' @param x An object of class `brokenstick`.
-#' @param .x The `x` argument of the [predict_new.brokenstick()] function.
+#' @param .x The `x` argument of the [predict.brokenstick()] function.
 #' @param n_plot A integer indicating the number of individual plots.
 #' The default is 3, which plots the trajectories of the first three
 #' groups. The `n_plot` is a safety measure to prevent unintended
@@ -15,13 +15,13 @@
 #' whether the observed data are plotted, the second element specifies
 #' whether the added data (e.g. knots) are plotted. The default is
 #' `c(TRUE, TRUE)`.
-#' @param ... Extra arguments passed down to [predict_new.brokenstick()]
+#' @param ... Extra arguments passed down to [predict.brokenstick()]
 #' and [plot_trajectory()].
-#' @inheritParams predict_new.brokenstick
+#' @inheritParams predict.brokenstick
 #' @return An object of class [ggplot2::ggplot].
 #' @author Stef van Buuren 2020
 #' @method plot brokenstick
-#' @seealso [predict_new.brokenstick], [plot_trajectory].
+#' @seealso [predict.brokenstick], [plot_trajectory].
 #' @examples
 #' library("brokenstick")
 #' dat <- smocc_200
@@ -53,7 +53,7 @@ plot.brokenstick <- function(x,
 
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
-  data <- predict_new(object = x, new_data = new_data, x = .x,
+  data <- predict(object = x, new_data = new_data, x = .x,
                       group = group, strip_data = FALSE, ...)
 
   # apply trim

@@ -20,10 +20,10 @@
 
 \item{new_data}{A data frame or matrix of new predictors.}
 
-\item{...}{Extra arguments passed down to \code{\link[=predict_new.brokenstick]{predict_new.brokenstick()}}
+\item{...}{Extra arguments passed down to \code{\link[=predict.brokenstick]{predict.brokenstick()}}
 and \code{\link[=plot_trajectory]{plot_trajectory()}}.}
 
-\item{.x}{The \code{x} argument of the \code{\link[=predict_new.brokenstick]{predict_new.brokenstick()}} function.}
+\item{.x}{The \code{x} argument of the \code{\link[=predict.brokenstick]{predict.brokenstick()}} function.}
 
 \item{group}{A vector with group identifications}
 
@@ -67,7 +67,7 @@ fit <- brokenstick(hgt ~ age | id, dat)
 #plot(fit, ids = 10005)
 }
 \seealso{
-\link{predict_new.brokenstick}, \link{plot_trajectory}.
+\link{predict.brokenstick}, \link{plot_trajectory}.
 }
 \author{
 Stef van Buuren 2020

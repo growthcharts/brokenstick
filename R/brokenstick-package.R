@@ -38,7 +38,7 @@ NULL
 #' @docType package
 #' @name brokenstick-pkg
 #' @seealso \code{\link{brokenstick}},
-#' \code{\link{EB}}, \code{\link{predict_new.brokenstick}}
+#' \code{\link{EB}}, \code{\link{predict.brokenstick}}
 #' @note
 #' Development of this package was kindly supported under the Healthy
 #' Birth, Growth and Development knowledge integration (HBGDki)

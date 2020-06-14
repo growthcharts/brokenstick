@@ -145,10 +145,10 @@ The nine-line broken stick model fits the observed data very well.
 
 ## Obtain predicted values
 
-The `predict_new()` function allows us to obtain various types of predictions from the broken stick model. The simplest call
+The `predict()` function allows us to obtain various types of predictions from the broken stick model. The simplest call
 
 ```{r}
-p1 <- predict_new(fit2, data)
+p1 <- predict(fit2, data)
 head(p1)
 identical(nrow(data), nrow(p1))
 ```
@@ -158,7 +158,7 @@ produces a `tibble` with the one column called `.pred` for each row in `data`. W
 Sometimes, we also want the prediction at the knot values, for example, to create graphs that contain observed and modelled trajectories. We obtain  predictions at the knots by the special `x = "knots"` argument, e.g.
 
 ```{r}
-p2 <- predict_new(fit2, data, x = "knots")
+p2 <- predict(fit2, data, x = "knots")
 head(p2)
 nrow(p2)
 ```
@@ -170,7 +170,7 @@ Note there are also knots at ages 0.00 and 3.00 years. These are boundary knots,
 If we wish to obtain estimates at both the knots and the observed data use:
 
 ```{r}
-p3 <- predict_new(fit2, data, x = "knots", strip_data = FALSE)
+p3 <- predict(fit2, data, x = "knots", strip_data = FALSE)
 table(p3$.source)
 ```
 
@@ -208,7 +208,7 @@ head(subj, 3)
 We also need the outcome variable. We take it from the broken stick estimates from the nine line solution and append it to the subject level data.
 
 ```{r predictatknots}
-bs <- predict_new(fit9, data, x = "knots", shape = "wide")
+bs <- predict(fit9, data, x = "knots", shape = "wide")
 data <- bind_cols(subj, select(bs, -id))
 head(data, 3)
 ```

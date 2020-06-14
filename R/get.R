@@ -48,7 +48,7 @@ get_r2 <- function(object, new_data) {
     stop("object not of class brokenstick")
   }
 
-  p <- predict_new(object, new_data)
+  p <- predict(object, new_data)
   new_data <- new_data %>%
     select(object$names$y) %>%
     bind_cols(p) %>%

@@ -76,36 +76,31 @@
 #' fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
 #'
 #' # Predict, with preprocessing
-#' predict_new(fit, test)
+#' predict(fit, test)
 #'
 #' # case 1: x as knots
-#' z <- predict_new(fit, test, x = "knots")
+#' z <- predict(fit, test, x = "knots")
 #'
 #' # case 2: x and y, one new group
-#' predict_new(fit, test, x = "knots", y = c(1, 1, 0.5, 0))
+#' predict(fit, test, x = "knots", y = c(1, 1, 0.5, 0))
 #'
 #' # case 2: x and y, one new group, we need not specify new_data
-#' predict_new(fit, x = "knots", y = c(1, 1, 0.5, 0))
+#' predict(fit, x = "knots", y = c(1, 1, 0.5, 0))
 #'
 #' # case 3: only group
-#' predict_new(fit, test, group = c(11045, 11120, 999))
+#' predict(fit, test, group = c(11045, 11120, 999))
 #'
 #' # case 4: predict at x in selected groups
-#' predict_new(fit, test, x = c(0.5, 1, 1.25), group = c(11045, 11120, 999))
+#' predict(fit, test, x = c(0.5, 1, 1.25), group = c(11045, 11120, 999))
 #'
 #' # case 5: vectorized
-#' predict_new(fit, test, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
+#' predict(fit, test, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 #'
 #' # case 5: vectorized, without new_data, results are different for 11045 and 11120
-#' predict_new(fit, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
+#' predict(fit, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
+#' @rdname predict
 #' @export
-predict_new <- function(object, new_data, type = "numeric", ...) {
-  UseMethod("predict_new")
-}
-
-#' @rdname predict_new
-#' @export
-predict_new.brokenstick <- function(object, new_data = NULL, type = "numeric",
+predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
                                     ...,
                                     x = NULL, y = NULL, group = NULL,
                                     strip_data = TRUE,

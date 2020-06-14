@@ -235,8 +235,8 @@ img {
 <div id="obtain-predicted-values" class="section level2">
 <h2 class="hasAnchor">
 <a href="#obtain-predicted-values" class="anchor"></a>Obtain predicted values</h2>
-<p>The <code><a href="../reference/predict_new.html">predict_new()</a></code> function allows us to obtain various types of predictions from the broken stick model. The simplest call</p>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/predict_new.html">predict_new</a></span>(<span class="no">fit2</span>, <span class="no">data</span>)
+<p>The <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function allows us to obtain various types of predictions from the broken stick model. The simplest call</p>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit2</span>, <span class="no">data</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">p1</span>)</pre></body></html></div>
 <pre><code>## # A tibble: 6 x 1
 ##   .pred
@@ -251,7 +251,7 @@ img {
 <pre><code>## [1] TRUE</code></pre>
 <p>produces a <code>tibble</code> with the one column called <code>.pred</code> for each row in <code>data</code>. We can bind column <code>.pred</code> to <code>data</code> for further processing.</p>
 <p>Sometimes, we also want the prediction at the knot values, for example, to create graphs that contain observed and modelled trajectories. We obtain predictions at the knots by the special <code>x = "knots"</code> argument, e.g.</p>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">p2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/predict_new.html">predict_new</a></span>(<span class="no">fit2</span>, <span class="no">data</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="st">"knots"</span>)
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="no">p2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit2</span>, <span class="no">data</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="st">"knots"</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">p2</span>)</pre></body></html></div>
 <pre><code>## # A tibble: 6 x 9
 ##   .source    id   age sex      ga    bw   hgt hgt.z   .pred
@@ -267,7 +267,7 @@ img {
 <p>The output is more verbose and includes the grid of knots for each child (<code>id</code>, <code>age</code>). The column <code>.source</code> is equal to <code>added</code> as rows are added to the data.</p>
 <p>Note there are also knots at ages 0.00 and 3.00 years. These are boundary knots, and added by the <code><a href="../reference/brokenstick.html">brokenstick()</a></code> function. By default, the boundary knots span the age range in the data. The estimate for the knot at the maximum age has no useful interpretation, and should be ignored.</p>
 <p>If we wish to obtain estimates at both the knots and the observed data use:</p>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">p3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/predict_new.html">predict_new</a></span>(<span class="no">fit2</span>, <span class="no">data</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="st">"knots"</span>, <span class="kw">strip_data</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="no">p3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit2</span>, <span class="no">data</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="st">"knots"</span>, <span class="kw">strip_data</span> <span class="kw">=</span> <span class="fl">FALSE</span>)
 <span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span>(<span class="no">p3</span>$<span class="no">.source</span>)</pre></body></html></div>
 <pre><code>## 
 ## added  data 
@@ -302,7 +302,7 @@ img {
 ## 2 10002 male      38  3210
 ## 3 10003 female    40  4170</code></pre>
 <p>We also need the outcome variable. We take it from the broken stick estimates from the nine line solution and append it to the subject level data.</p>
-<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="no">bs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/predict_new.html">predict_new</a></span>(<span class="no">fit9</span>, <span class="no">data</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="st">"knots"</span>, <span class="kw">shape</span> <span class="kw">=</span> <span class="st">"wide"</span>)
+<div class="sourceCode" id="cb34"><html><body><pre class="r"><span class="no">bs</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit9</span>, <span class="no">data</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="st">"knots"</span>, <span class="kw">shape</span> <span class="kw">=</span> <span class="st">"wide"</span>)
 <span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html">bind_cols</a></span>(<span class="no">subj</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span>(<span class="no">bs</span>, -<span class="no">id</span>))
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">data</span>, <span class="fl">3</span>)</pre></body></html></div>
 <pre><code>## # A tibble: 3 x 15

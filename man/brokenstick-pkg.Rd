@@ -34,5 +34,5 @@ van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hal
 }
 \seealso{
 \code{\link{brokenstick}},
-\code{\link{EB}}, \code{\link{predict_new.brokenstick}}
+\code{\link{EB}}, \code{\link{predict.brokenstick}}
 }

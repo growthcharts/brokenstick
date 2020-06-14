@@ -157,7 +157,7 @@ The variance of the residuals (within-person error) for this model is of 0.05. T
 The `predict()` function obtains predictions from the broken stick model. The function is extremely flexible, and allows for prediction of new subjects at arbitrary ages in a variety of output formats. The simplest call 
 
 ```{r}
-p1 <- predict_new(fit, data)
+p1 <- predict(fit, data)
 head(p1, 4)
 ```
 
@@ -168,14 +168,14 @@ The predicted values represent a compromise between the person's data values and
 We can obtain the locations at which the lines connect by specifying the `x = "knots"` argument, e.g.
 
 ```{r}
-p2 <- predict_new(fit, data, x = "knots")
+p2 <- predict(fit, data, x = "knots")
 head(p2, 4)
 ```
 
 Note that the output includes additional identifying information. We may also obtain both types of estimates for all children by using the 
 
 ```{r}
-p3 <- predict_new(fit, data, x = "knots", strip_data = FALSE)
+p3 <- predict(fit, data, x = "knots", strip_data = FALSE)
 head(p3, 4)
 ```
 
@@ -191,10 +191,10 @@ plot(fit, data, group = c(10001, 10005, 10022), x_trim = c(0, 2.3))
 Obtaining predicted values for just one subject requires the `group` argument:
 
 ```{r}
-p1 <- predict_new(fit, data, group = 10001)
+p1 <- predict(fit, data, group = 10001)
 ```
 
-The `predict_new()` function can return additional information by altering these arguments. Type `?predict_new.brokenstick` at the console to see the documentation. We can plot the original data and the broken stick estimates for child 10001 jointly by
+The `predict()` function can return additional information by altering these arguments. Type `?predict.brokenstick` at the console to see the documentation. We can plot the original data and the broken stick estimates for child 10001 jointly by
 
 ```{r fig3, eval = FALSE}
 plot(fit, data, group = 10001, x_trim = c(0, 2.3))
@@ -207,7 +207,7 @@ Modeling was done in the $Z$-score scale for the reasons given above. We may plo
 
 ```{r}
 # convert Z-score to CM
-p <- predict_new(fit, data, group = 10001, strip_data = FALSE)
+p <- predict(fit, data, group = 10001, strip_data = FALSE)
 p$ycm <- round(who_zscore2htcm(years2days(p$age), p$hgt.z, sex = "Female"), 1)
 p$yhatcm <- who_zscore2htcm(years2days(p$age), p$.pred, sex = "Female")
 head(p)
@@ -237,7 +237,7 @@ fred <- data.frame(
   age = c(0, 0.12, 0.32, 0.62, 1.1),
   hgt.z = c(-1.2, -1.8, -1.7, -1.9, -2.1),
   id = 1)
-p <- predict_new(fit, fred, x = "knots", strip_data = FALSE)
+p <- predict(fit, fred, x = "knots", strip_data = FALSE)
 p
 ```
 
@@ -255,7 +255,7 @@ Based on the data up to 1.1 year, the model predicts that Fred's growth curve wo
 The `brokenstick` object does not store the training data, so we cannot do `predict(fit)`. However, if we have the data stored in a data frame or matrix called `data`, we can easily obtain predictions as follows:
 
 ```{r}
-p <- predict_new(fit, data)
+p <- predict(fit, data)
 dim(p)
 head(p, 3)
 ```
