@@ -78,9 +78,9 @@ knots <- 1:3
 boundary <- c(1, 4)
 fit <- brokenstick(X1 ~ age | subject, data, 
                    knots = knots, boundary = boundary)
-omega <- export(fit)$omega
-beta <- export(fit)$beta
-sigma2 <- export(fit)$sigma2
+omega <- fit$omega
+beta <- fit$beta
+sigma2 <- fit$sigma2
 round(beta, 2)
 round(sigma2, 4)
 
