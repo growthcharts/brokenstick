@@ -32,7 +32,8 @@ Suggests:
     plyr,
     rbokeh,
     svglite,
-    testthat
+    testthat,
+    rmarkdown
 Remotes:
     ki-tools/growthstandards
 URL: https://github.com/stefvanbuuren/brokenstick, https://stefvanbuuren.name/brokenstick/

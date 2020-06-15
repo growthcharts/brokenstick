@@ -1,0 +1,152 @@
+---
+title: "Help for old friends"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(brokenstick)
+```
+
+# Background
+
+Versions after `brokenstick 0.62.1` (May 2020) have a substantially changed interface. In particular, later versions (starting with `brokenstick 0.70.0`) include the following changes: 
+
+1. `brokenstick` adopts the `tidymodels` philosophy. It is now possible to fit a model using five different interfaces. There is no need anymore the hardcode variable names in the source data.
+
+2. Version `0.70.0` introduces a new estimation method, the Kasim-Raudenbush sampler. The new method is more flexible and faster than `lme4::lmer()` when the number of knots is large.
+
+3. Version `0.70.0` introduces two simple correlation models that may be used to smooth out the variance-covariance matrix of the random effects.
+
+4. The definition of the `brokenstick` class has changed. Objects of class `brokenstick` do no longer store the training data. 
+
+5. The `brokenstick_export` class is retired.
+
+6. The `predict()` function is fully rewritten as has now a new interface. Since the `brokenstick` class does not store the training data anymore, the `predict()` function now obtains a `new_data` argument. Syntax that worked for `brokenstick` package before `0.70.0` does not work anymore and should be updated. The `shape` argument replaces the `output` argument.
+
+7. The `plot()` function is rewritten, and now requires a `new_data` specification.
+
+8. Replaced functions: `brokenstick()` replaces `fit_brokenstick()`, `predict.brokenstick()` replaces `predict.brokenstick_export()`, `get_r2()` replaces `get_pev()`
+
+9. Removed functions: `get_data()`, `get_X()`, `export()`
+
+# Install legacy version
+
+We recommend changing your code to reflect the above changes. If needed, the old version `0.62.1` can be installed as
+
+```{r eval=FALSE}
+library(devtools)
+install_github("stefvanbuuren/brokenstick@V0.62.1")
+```
+
+# Examples
+
+## Example 1: Fit model
+
+Fit model, old version:
+
+```{r fit_old, eval=FALSE}
+data <- brokenstick::smocc_200
+fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid)
+```
+
+Fit model, version `0.70.0` and higher:
+
+```{r fit_new}
+data <- brokenstick::smocc_200
+
+# formula interface
+fit1 <- brokenstick(hgt.z ~ age | id, data)
+
+# XY interface - numeric vector
+fit2 <- with(data, brokenstick(age, hgt.z, id))
+
+# Recipes data.frame interface
+library(recipes)
+rec <- recipe(data,
+              vars = c("hgt.z", "age", "id"),
+              roles = c("outcome", "predictor", "group"))
+fit3 <- brokenstick(rec, data)
+
+# XY interface - data.frame
+fit4 <- with(data, brokenstick(data.frame(age), hgt.z, id))
+
+# XY interface - matrix
+tt <- as.matrix(data[, c(1, 2, 7)])
+fit5 <- brokenstick(tt[, "age", drop = FALSE],
+                    tt[, "hgt.z", drop = FALSE],
+                    tt[, "id", drop = FALSE])
+```
+
+All fitted models are identical.
+
+## Example 2: Predict model
+
+Predict model, old version:
+
+```{r predict_old, eval = FALSE}
+# predict at observed data
+p1 <- predict(fit)
+
+# predict at knots
+p2 <- predict(fit, at = "knots")
+
+# predict at both observed data and knots
+p3 <- predict(fit, at = "both")
+
+# predict knots, broad version
+p4 <- predict(fit, at = "knots", output = "broad")
+```
+
+
+Predict model, new version:
+
+```{r predict_new}
+# predict at observed data
+p1 <- predict(fit1, data)
+
+# predict at knots
+p2 <- predict(fit1, data, x = "knots")
+
+# predict at both observed data and knots
+p3 <- predict(fit1, data, x = "knots", strip_data = FALSE)
+
+# predict knots, broad matrix
+p4 <- predict(fit1, data, x = "knots", shape = "wide")
+```
+
+
+## Example 3: Plot model
+
+Plot trajectories, old version 
+
+```{r plot_old, eval = FALSE}
+ids <- c(10001, 10005, 10022)
+plot(fit, ids = ids, x_trim = c(0, 2.2))
+```
+
+Plot trajectories, new version 
+
+```{r plot_new, fig.height=3.5}
+ids <- c(10001, 10005, 10022)
+plot(fit1, data, group = ids, x_trim = c(0, 2.2))
+```
+
+## Example 4: Explained variance
+
+Proportion explained variance, old version
+
+```{r explain_old, eval=FALSE}
+get_pev(fit)
+```
+
+
+```{r explain_new}
+get_r2(fit1, data)
+```
+
