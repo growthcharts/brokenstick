@@ -6,9 +6,10 @@ articles:
   knotplacement: knotplacement.html
   mainfunctions: mainfunctions.html
   model: model.html
+  oldfriends: oldfriends.html
   perfectmodel: perfectmodel.html
   prediction: prediction.html
-last_built: 2020-06-14T20:50Z
+last_built: 2020-06-15T19:44Z
 urls:
   reference: https://stefvanbuuren.name/brokenstick/reference
   article: https://stefvanbuuren.name/brokenstick/articles
