@@ -73,7 +73,7 @@ Actual plotting may be done by gglot." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.1</span>
       </span>
     </div>
 
@@ -162,10 +162,11 @@ Actual plotting may be done by <code>gglot</code>.</p>
   <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
   <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Age (years)"</span>,
   <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Length (SDS)"</span>,
-  <span class='kw'>zband</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>zband</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>zband_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
   <span class='kw'>theme</span> <span class='kw'>=</span> <span class='kw pkg'>ggplot2</span><span class='kw ns'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_light</a></span>()
 )</pre>
 
@@ -212,7 +213,7 @@ and <code>".pred"</code>.</p></td>
     <tr>
       <th>zband</th>
       <td><p>A logical indicating whether the Z-score band should be
-added to the plot. The default is <code>TRUE</code>.</p></td>
+added to the plot. The default is <code>FALSE</code>.</p></td>
     </tr>
     <tr>
       <th>zband_range</th>
@@ -226,6 +227,10 @@ default is the entire data range.</p></td>
     <tr>
       <th>ylim</th>
       <td><p>Vector of length 2 with range of y-axis</p></td>
+    </tr>
+    <tr>
+      <th>scales</th>
+      <td><p>Axis scaling, e.g. <code>"fixed"</code>, <code>"free"</code>, and so on</p></td>
     </tr>
     <tr>
       <th>theme</th>

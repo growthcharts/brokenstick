@@ -78,7 +78,7 @@ chosen grid points, and hence look like a broken stick." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.1</span>
       </span>
     </div>
 
@@ -175,6 +175,7 @@ chosen grid points, and hence look like a broken stick.</p>
   <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
   <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
@@ -188,6 +189,7 @@ chosen grid points, and hence look like a broken stick.</p>
   <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
   <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
@@ -202,6 +204,7 @@ chosen grid points, and hence look like a broken stick.</p>
   <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
   <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
@@ -216,6 +219,7 @@ chosen grid points, and hence look like a broken stick.</p>
   <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
   <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
@@ -230,6 +234,7 @@ chosen grid points, and hence look like a broken stick.</p>
   <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
   <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
   <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
@@ -301,6 +306,14 @@ and so on.</p>
 and do not transfer to other data sets. We recommend
 using <code>knots</code> and <code>boundary</code> over <code>k</code>. If both <code>k</code> and
 <code>knots</code> are specified, then <code>k</code> takes precendence.</p></td>
+    </tr>
+    <tr>
+      <th>degree</th>
+      <td><p>the degree of the spline. The broken stick model
+requires linear splines, so the default is <code>degree = 1</code>.
+Setting <code>degree = 0</code> yields (crisp) dummy coding, and one
+column less than for <code>degree = 1</code>. Current version only supports
+<code>degree = 1</code>.</p></td>
     </tr>
     <tr>
       <th>method</th>

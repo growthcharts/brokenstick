@@ -74,7 +74,7 @@ code the age range 0-3 years." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.1</span>
       </span>
     </div>
 
@@ -181,7 +181,9 @@ code the age range 0-3 years.</p>
     <tr>
       <th>degree</th>
       <td><p>the degree of the spline. The broken stick model
-requires linear splines, so the default is <code>degree = 1</code>.</p></td>
+requires linear splines, so the default is <code>degree = 1</code>.
+Setting <code>degree = 0</code> yields (crisp) dummy coding, and one
+column less than for <code>degree = 1</code>.</p></td>
     </tr>
     <tr>
       <th>warn</th>
@@ -203,6 +205,10 @@ columns, with some extra attributes described by <code>bs()</code>.</p>
     <p>Before version 0.54, it was standard practice that the <code>knots</code>
 array always included <code>boundary[1L]</code>.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='no'>knots</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>58</span>, <span class='fl'>64</span>, <span class='fl'>68</span>, <span class='fl'>72</span>)
+<span class='no'>d1</span> <span class='kw'>&lt;-</span> <span class='fu'>make_basis</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>hgt</span> <span class='kw'>=</span> <span class='no'>women</span>$<span class='no'>height</span>), <span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>knots</span>)
+<span class='no'>d0</span> <span class='kw'>&lt;-</span> <span class='fu'>make_basis</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>hgt</span> <span class='kw'>=</span> <span class='no'>women</span>$<span class='no'>height</span>), <span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>knots</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
