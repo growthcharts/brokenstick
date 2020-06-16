@@ -101,10 +101,10 @@
 #' @rdname predict
 #' @export
 predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
-                                    ...,
-                                    x = NULL, y = NULL, group = NULL,
-                                    strip_data = TRUE,
-                                    shape = c("long", "wide", "vector")) {
+                                ...,
+                                x = NULL, y = NULL, group = NULL,
+                                strip_data = TRUE,
+                                shape = c("long", "wide", "vector")) {
   shape <- match.arg(shape)
 
   # handle special case: x = "knots"
@@ -191,7 +191,7 @@ get_predict_function <- function(type) {
 
 predict_brokenstick_numeric <- function(object, x, y, g) {
 
-  if (object$degree > 1) stop("Cannot predict for degree > 1")
+  if (object$degree > 1L) stop("Cannot predict for degree > 1")
 
   X <- make_basis(x = x,
                   knots = get_knots(object, "knots"),
@@ -209,9 +209,11 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
                  MoreArgs = list(model = object),
                  SIMPLIFY = TRUE)
 
+  xv <- get_knots(object)
+  if (object$degree == 0L) xv <- xv[-length(xv)]
   long1 <- data.frame(
     group = rep(as.numeric(colnames(blup)), each = nrow(blup)),
-    x = get_knots(object),
+    x = xv,
     y = NA,
     yhat = as.vector(blup),
     knot = TRUE)
@@ -224,12 +226,16 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
   )
   long <- bind_rows(long1, long2)
 
-  pred <- long %>%
-    group_by(.data$group) %>%
-    mutate(yhat = approx(x = .data$x, y = .data$yhat, xout = .data$x)$y) %>%
-    ungroup() %>%
-    filter(!.data$knot) %>%
-    pull("yhat")
+  approx_method <- ifelse(object$degree, "linear", "constant")
+    pred <- long %>%
+      group_by(.data$group) %>%
+      mutate(yhat = approx(x = .data$x,
+                           y = .data$yhat,
+                           xout = .data$x,
+                           method = approx_method)$y) %>%
+      ungroup() %>%
+      filter(!.data$knot) %>%
+      pull("yhat")
 
   hardhat::spruce_numeric(pred)
 }
