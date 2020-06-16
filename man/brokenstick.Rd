@@ -21,6 +21,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
+  degree = 1L,
   method = c("lmer", "kr"),
   control = control_brokenstick(),
   seed = NA
@@ -33,6 +34,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
+  degree = 1L,
   method = c("lmer", "kr"),
   control = control_brokenstick(),
   seed = NA
@@ -46,6 +48,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
+  degree = 1L,
   method = c("lmer", "kr"),
   control = control_brokenstick(),
   seed = NA
@@ -59,6 +62,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
+  degree = 1L,
   method = c("lmer", "kr"),
   control = control_brokenstick(),
   seed = NA
@@ -72,6 +76,7 @@ brokenstick(x, ...)
   knots = NULL,
   boundary = NULL,
   k = NULL,
+  degree = 1L,
   method = c("lmer", "kr"),
   control = control_brokenstick(),
   seed = NA
@@ -131,6 +136,12 @@ Note: Knots specified via \code{k} are data-dependent
 and do not transfer to other data sets. We recommend
 using \code{knots} and \code{boundary} over \code{k}. If both \code{k} and
 \code{knots} are specified, then \code{k} takes precendence.}
+
+\item{degree}{the degree of the spline. The broken stick model
+requires linear splines, so the default is \code{degree = 1}.
+Setting \code{degree = 0} yields (crisp) dummy coding, and one
+column less than for \code{degree = 1}. Current version only supports
+\code{degree = 1}.}
 
 \item{method}{Estimation method. Either \code{"kr"} (for the
 Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}) (default).}

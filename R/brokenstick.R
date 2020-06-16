@@ -72,6 +72,12 @@
 #' using `knots` and `boundary` over `k`. If both `k` and
 #' `knots` are specified, then `k` takes precendence.
 #'
+#' @param degree the degree of the spline. The broken stick model
+#' requires linear splines, so the default is `degree = 1`.
+#' Setting `degree = 0` yields (crisp) dummy coding, and one
+#' column less than for `degree = 1`. Current version only supports
+#' `degree = 1`.
+#'
 #' @param method Estimation method. Either `"kr"` (for the
 #' Kasim-Raudenbush sampler) or `"lmer"` (for [lme4::lmer()]) (default).
 #'
@@ -168,6 +174,7 @@ brokenstick.formula <- function(formula, data, ...,
                                 knots = NULL,
                                 boundary = NULL,
                                 k = NULL,
+                                degree = 1L,
                                 method = c("lmer", "kr"),
                                 control = control_brokenstick(),
                                 seed = NA) {
@@ -180,7 +187,7 @@ brokenstick.formula <- function(formula, data, ...,
                          roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
-  brokenstick_bridge(processed, knots, boundary, k, method, control, seed, ...)
+  brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
 }
 
 
@@ -192,12 +199,13 @@ brokenstick.recipe <- function(x, data, ...,
                                knots = NULL,
                                boundary = NULL,
                                k = NULL,
+                               degree = 1L,
                                method = c("lmer", "kr"),
                                control = control_brokenstick(),
                                seed = NA) {
   method <- match.arg(method)
   processed <- hardhat::mold(x, data)
-  brokenstick_bridge(processed, knots, boundary, k, method, control, seed, ...)
+  brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
 }
 
 
@@ -209,6 +217,7 @@ brokenstick.data.frame <- function(x, y, group, ...,
                                    knots = NULL,
                                    boundary = NULL,
                                    k = NULL,
+                                   degree = 1L,
                                    method = c("lmer", "kr"),
                                    control = control_brokenstick(),
                                    seed = NA) {
@@ -230,7 +239,7 @@ brokenstick.data.frame <- function(x, y, group, ...,
                          roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
-  brokenstick_bridge(processed, knots, boundary, k, method, control, seed, ...)
+  brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
 }
 
 
@@ -242,6 +251,7 @@ brokenstick.matrix <- function(x, y, group, ...,
                                knots = NULL,
                                boundary = NULL,
                                k = NULL,
+                               degree = 1L,
                                method = c("lmer", "kr"),
                                control = control_brokenstick(),
                                seed = NA) {
@@ -263,7 +273,7 @@ brokenstick.matrix <- function(x, y, group, ...,
                          roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
-  brokenstick_bridge(processed, knots, boundary, k, method, control, seed, ...)
+  brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
 }
 
 # XY method - numeric vector
@@ -274,6 +284,7 @@ brokenstick.numeric <- function(x, y, group, ...,
                                 knots = NULL,
                                 boundary = NULL,
                                 k = NULL,
+                                degree = 1L,
                                 method = c("lmer", "kr"),
                                 control = control_brokenstick(),
                                 seed = NA) {
@@ -297,15 +308,15 @@ brokenstick.numeric <- function(x, y, group, ...,
                          roles = c("outcome", "predictor", "group"))
   processed <- hardhat::mold(rec, data)
 
-  brokenstick_bridge(processed, knots, boundary, k, method, control, seed, ...)
+  brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
 }
 
 
 # ------------------------------------------------------------------------------
 # Bridge
 
-brokenstick_bridge <- function(processed, knots, boundary, k, method,
-                               control, seed, ...) {
+brokenstick_bridge <- function(processed, knots, boundary, k, degree,
+                               method, control, seed, ...) {
 
   x <- processed$predictor
   y <- processed$outcome
@@ -314,7 +325,8 @@ brokenstick_bridge <- function(processed, knots, boundary, k, method,
   data <- data.frame(x, y, g, stringsAsFactors = FALSE)
 
   l <- calculate_knots(x, k, knots, boundary)
-  X <- make_basis(x, knots = l$knots, boundary = l$boundary)
+  X <- make_basis(x, knots = l$knots, boundary = l$boundary,
+                  degree = degree)
 
   if (method == "lmer") {
     data_pad <- data.frame(data, X, stringsAsFactors = FALSE)
@@ -339,6 +351,7 @@ brokenstick_bridge <- function(processed, knots, boundary, k, method,
     names = nms,
     knots = l$knots,
     boundary = l$boundary,
+    degree = degree,
     method = method,
     control = control,
     beta = fit$beta,
