@@ -9,14 +9,20 @@
 #' @param boundary vector of external knots
 #' @param degree the degree of the spline. The broken stick model
 #' requires linear splines, so the default is \code{degree = 1}.
+#' Setting \code{degree = 0} yields (crisp) dummy coding, and one
+#' column less than for \code{degree = 1}.
 #' @param warn a logical indicating whether warnings from \code{splines::bs()}
 #' should be given.
 #' @param knotnames Should the column names be the knots?
 #' @return A matrix with \code{length(x)} rows and \code{length(breaks)}
 #' columns, with some extra attributes described by \code{bs()}.
-#' @author Stef van Buuren, 2017
+#' @author Stef van Buuren, 2020
 #' @note Before version 0.54, it was standard practice that the \code{knots}
 #' array always included \code{boundary[1L]}.
+#' @examples
+#' knots <- c(58, 64, 68, 72)
+#' d1 <- make_basis(data.frame(hgt = women$height), knots = knots)
+#' d0 <- make_basis(data.frame(hgt = women$height), knots = knots, degree = 0)
 #' @export
 make_basis <- function(x,
                        knots = NULL,
@@ -36,27 +42,42 @@ make_basis <- function(x,
   if (padx) x <- c(0, x)
 
   x_name <- colnames(x)[1]
-  if (warn) {
-    X <- splines::bs(
-      x = pull(x, x_name),
-      knots = c(boundary[1L], knots),
-      Boundary.knots = boundary,
-      degree = degree
-    )
-  } else {
-    suppressWarnings({
+
+  # dummy coding if degree is zero
+  if (degree == 0L) {
+    df <- data.frame(x = cut(pull(x, x_name),
+                             breaks = c(boundary[1L], knots, boundary[2L]),
+                             right = FALSE, include.lowest = TRUE))
+    X <- model.matrix(as.formula("~ 0 + x"), data = df)
+  }
+
+  # fuzzy coding by linear spline
+  if (degree >= 1L) {
+    if (warn) {
       X <- splines::bs(
         x = pull(x, x_name),
         knots = c(boundary[1L], knots),
         Boundary.knots = boundary,
         degree = degree
       )
+    } else {
+      suppressWarnings({
+        X <- splines::bs(
+          x = pull(x, x_name),
+          knots = c(boundary[1L], knots),
+          Boundary.knots = boundary,
+          degree = degree
+        )
+      }
+      )
     }
-    )
   }
+
   if (!knotnames) colnames(X) <- paste0("x", 1L:ncol(X))
   else {
-    colnames(X) <- as.character(sort(unique(c(boundary, knots))))
+    knots <- sort(unique(c(boundary, knots)))
+    if (degree == 0L) knots <- knots[-length(knots)]
+    colnames(X) <- as.character(knots)
     colnames(X) <- paste(x_name, colnames(X), sep = "_")
   }
 

@@ -21,7 +21,9 @@ make_basis(
 \item{boundary}{vector of external knots}
 
 \item{degree}{the degree of the spline. The broken stick model
-requires linear splines, so the default is \code{degree = 1}.}
+requires linear splines, so the default is \code{degree = 1}.
+Setting \code{degree = 0} yields (crisp) dummy coding, and one
+column less than for \code{degree = 1}.}
 
 \item{warn}{a logical indicating whether warnings from \code{splines::bs()}
 should be given.}
@@ -41,6 +43,11 @@ code the age range 0-3 years.
 Before version 0.54, it was standard practice that the \code{knots}
 array always included \code{boundary[1L]}.
 }
+\examples{
+knots <- c(58, 64, 68, 72)
+d1 <- make_basis(data.frame(hgt = women$height), knots = knots)
+d0 <- make_basis(data.frame(hgt = women$height), knots = knots, degree = 0)
+}
 \author{
-Stef van Buuren, 2017
+Stef van Buuren, 2020
 }
