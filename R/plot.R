@@ -54,7 +54,7 @@ plot.brokenstick <- function(x,
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
   data <- predict(object = x, new_data = new_data, x = .x,
-                      group = group, strip_data = FALSE, ...)
+                  group = group, strip_data = FALSE, ...)
 
   # apply trim
   idx <- data[[x$names$x]] >= x_trim[1L] & data[[x$names$x]] <= x_trim[2L]
@@ -80,9 +80,10 @@ plot.brokenstick <- function(x,
 #' @param ylab The label of the y-axis
 #' @param xlim Vector of length 2 with range of x-axis
 #' @param ylim Vector of length 2 with range of y-axis
+#' @param scales Axis scaling, e.g. `"fixed"`, `"free"`, and so on
 #' @param theme Plotting theme
 #' @param zband A logical indicating whether the Z-score band should be
-#' added to the plot. The default is `TRUE`.
+#' added to the plot. The default is `FALSE`.
 #' @param zband_range a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
 #' default is the entire data range.
 #' @return An object of class \code{ggplot}
@@ -100,10 +101,11 @@ plot_trajectory  <- function(x, data,
                              ncol = 3L,
                              xlab = "Age (years)",
                              ylab = "Length (SDS)",
-                             zband = TRUE,
+                             zband = FALSE,
                              zband_range = NULL,
                              xlim = NULL,
                              ylim = NULL,
+                             scales = "fixed",
                              theme = ggplot2::theme_light()) {
 
   g <- ggplot(data, aes_string(x = x$names$x, y = x$names$y)) +
@@ -141,19 +143,24 @@ plot_trajectory  <- function(x, data,
 
   # add broken stick points and lines
   if (any(k)) {
-    g <- g +
-      geom_line(aes_string(y = ".pred"),
-                data = data[k, ], color = color_yhat[2L]
-      ) +
-      geom_point(aes_string(y = ".pred"),
-                 data = data[k, ], color = color_yhat[1L],
-                 size = size_yhat
-      )
+    if (x$degree == 0L) {
+      g <- g + geom_step(aes_string(y = ".pred"),
+                         data = data[k, ], color = color_yhat[2L])
+    } else {
+      g <- g +
+        geom_line(aes_string(y = ".pred"),
+                  data = data[k, ], color = color_yhat[2L]) +
+        geom_point(aes_string(y = ".pred"),
+                   data = data[k, ], color = color_yhat[1L],
+                   size = size_yhat)
+    }
   }
 
   # split out according to subjid
   g <- g +
-    facet_wrap(as.formula(paste("~", x$names$g)), ncol = ncol) +
+    facet_wrap(as.formula(paste("~", x$names$g)),
+               ncol = ncol,
+               scales = scales) +
     theme
 
   return(g)

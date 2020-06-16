@@ -14,10 +14,11 @@ plot_trajectory(
   ncol = 3L,
   xlab = "Age (years)",
   ylab = "Length (SDS)",
-  zband = TRUE,
+  zband = FALSE,
   zband_range = NULL,
   xlim = NULL,
   ylim = NULL,
+  scales = "fixed",
   theme = ggplot2::theme_light()
 )
 }
@@ -42,7 +43,7 @@ and \code{".pred"}.}
 \item{ylab}{The label of the y-axis}
 
 \item{zband}{A logical indicating whether the Z-score band should be
-added to the plot. The default is \code{TRUE}.}
+added to the plot. The default is \code{FALSE}.}
 
 \item{zband_range}{a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
 default is the entire data range.}
@@ -50,6 +51,8 @@ default is the entire data range.}
 \item{xlim}{Vector of length 2 with range of x-axis}
 
 \item{ylim}{Vector of length 2 with range of y-axis}
+
+\item{scales}{Axis scaling, e.g. \code{"fixed"}, \code{"free"}, and so on}
 
 \item{theme}{Plotting theme}
 }
