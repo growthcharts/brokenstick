@@ -1,3 +1,7 @@
+# brokenstick 0.70.1
+
+- Adds support for brokenstick model with `degree = 0`
+
 # brokenstick 0.70.0
 
 * This version jump illustrates big and breaking changes:
