@@ -16,7 +16,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, 
-                      fig.width = 10, fig.height = 4,
+                      fig.width = 7, fig.height = 3,
                       dev = "svglite")
 ```
 
@@ -48,7 +48,7 @@ head(data, 3)
 ```
 
 
-```{r plotcm, echo = FALSE}
+```{r plotcm, echo = FALSE, fig.height=7, warning=FALSE}
 ggplot(data[1:500, ], aes(x = age, y = hgt, group = id, color = as.factor(id))) +
   geom_line(size = 0.1) + 
   geom_point(size = 0.7) +
@@ -59,9 +59,9 @@ ggplot(data[1:500, ], aes(x = age, y = hgt, group = id, color = as.factor(id))) 
   theme(legend.position = "none")
 ```
 
-Figure 1 dispays the data from the first 500 rows as a set of growth curves of Dutch children. Curves are steeper during the first few months, so child grpwth is faster for young infants. Note also there are more cross-overs during the first half year, whereas fewer occur later. This means that the relative positions have been settled by the age of 2 years, or - put differently - that the correlation between time points at those ages is high.
+Figure 1 dispays the data from the first 500 rows as a set of growth curves of Dutch children. Curves are steeper during the first few months, so child growth is faster for young infants. Note also there are more cross-overs during the first half year, whereas fewer occur later. This means that the relative positions have been settled by the age of 2 years, or - put differently - that the correlation between time points at those ages is high.
 
-```{r plotsds}
+```{r plotsds, fig.height=5, warning=FALSE}
 ggplot(data[1:500, ], aes(x = age, y = hgt.z, group = id, color = as.factor(id))) +
   geom_line(size = 0.1) + 
   geom_point(size = 0.7) +
@@ -87,14 +87,14 @@ We fit a trivial broken stick model with just one line anchored at the minimum a
 ```{r figure1, warning = FALSE}
 fit <- brokenstick(hgt ~ age | id, data)
 ids <- c(10001, 10005, 10022)
-plot(fit, new_data = data, group = ids, zband = FALSE, ylab = "Length (cm)")
+plot(fit, new_data = data, group = ids, xlab = "Age (years)", ylab = "Length (cm)")
 ```
 
 The following plot displays the same data, but in standardised units so as to increase the analytic resolution:
 
 ```{r zscore, warning = FALSE}
 fit0 <- brokenstick(hgt.z ~ age | id, data)
-plot(fit0, new_data = data, group = ids)
+plot(fit0, new_data = data, group = ids, xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
 Note that both approximations are quite bad. 
@@ -105,7 +105,7 @@ The *broken stick model* describes a trajectory by a series of connected straigh
 
 ```{r plotfit2, cache = TRUE}
 fit2 <- brokenstick(hgt.z ~ age | id, data = data, knots = 0:3)
-plot(fit2, data, group = ids, x_trim = c(0, 2.2))
+plot(fit2, data, group = ids, xlim = c(0, 2.1), xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
 The `fit2` object holds the parameter estimates of the model:
@@ -130,15 +130,10 @@ fit9 <- brokenstick(hgt.z ~ age | id, data = data,
 fit9 <- brokenstick::fit_200
 ```
 
-```{r}
-fit9
-```
-
-
 This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. While these may appear a little discomforting, we have found that the warnings are generally somewhat at the conservative side, so the parameter estimates are probably still OK.
 
 ```{r plotfit9, echo = FALSE, warning = FALSE}
-plot(fit9, data, group = ids, x_trim = c(0, 2.2))
+plot(fit9, data, group = ids, xlim = c(0, 2.1), xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
 The nine-line broken stick model fits the observed data very well.

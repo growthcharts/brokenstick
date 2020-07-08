@@ -13,9 +13,9 @@ vignette: >
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE, 
-fig.cap = TRUE, 
-dev = "svglite")
+knitr::opts_chunk$set(echo = TRUE, fig.cap = TRUE,
+                      fig.width = 7, fig.height = 3,
+                      dev = "svglite")
 ```
 
 ```{css echo = FALSE}
@@ -65,7 +65,7 @@ head(data)
 ```
 
 
-```{r hgt_age, echo = FALSE, fig.cap = "Height (cm) by age (years) for 50 children of SMOCC."}
+```{r hgt_age, echo = FALSE, fig.height = 6, fig.width = 6, fig.cap = "Height (cm) by age (years) for 50 children of SMOCC."}
 figure(xlab = "Age (year)", ylab = "Height (cm)") %>%
   ly_points(x = data$age, 
             y = data$hgt, 
@@ -75,7 +75,7 @@ figure(xlab = "Age (year)", ylab = "Height (cm)") %>%
 
 The scatterplot of height against age clearly reveals the expected rising pattern of height. Also obvious will be the pattern of scheduled visits. Apart from birth, there is some variability in the timing of the visit, and this variability increases with age.
 
-```{r z_age, echo = FALSE, fig.cap = "Height SDS by age (years) for 50 children of SMOCC."}
+```{r z_age, echo = FALSE, fig.height = 6, fig.width = 6, fig.cap = "Height SDS by age (years) for 50 children of SMOCC."}
 figure(xlab = "Age (years)", ylab = "Height SDS") %>%
   ly_zband(x = seq(0, 2.2, 0.2), z = -c(2.5,2,1,0)) %>%
   ly_points(data$age, data$hgt.z, hover = c(data$id, data$hgt), size = 6) %>% 
@@ -182,7 +182,7 @@ head(p3, 4)
 The fitted trajectories of three selected children are plotted by
 
 ```{r traj3plot, fig.height = 3, warning=FALSE}
-plot(fit, data, group = c(10001, 10005, 10022), x_trim = c(0, 2.3))
+plot(fit, data, group = c(10001, 10005, 10022), xlim = c(0, 2.1))
 ```
 
 
@@ -196,8 +196,8 @@ p1 <- predict(fit, data, group = 10001)
 
 The `predict()` function can return additional information by altering these arguments. Type `?predict.brokenstick` at the console to see the documentation. We can plot the original data and the broken stick estimates for child 10001 jointly by
 
-```{r fig3, eval = FALSE}
-plot(fit, data, group = 10001, x_trim = c(0, 2.3))
+```{r fig3, fig.height = 4, fig.width = 4, warning=FALSE}
+plot(fit, data, group = 10001, xlim = c(0, 2.1))
 ```
 
 
@@ -216,15 +216,14 @@ head(p)
 The corresponding figure in the cm scale can be produced as
 
 ```{r fig.height=6, fig.width=6}
-idx <- p$.source == "added"
 p <- p[p$age <= 2.5,]
 figure(xlab = "Age (years)", ylab = "Height (cm)") %>%
   ly_who(x = seq(0, 750, by = 30), y_var = "htcm",
          x_trans = days2years, sex = "Female", color = "green",
-         p = 100 * pnorm(-c(2.5,2,1,0))) %>%
+         p = 100 * pnorm(-c(2.5,2,1,0)))%>%
   ly_points(p$age, p$ycm, size = 8) %>%
-  ly_lines(p$age[idx], p$yhatcm[idx], col = "orangered") %>%
-  ly_points(p$age[idx], p$yhatcm[idx], col = "orangered", size = 5)
+  ly_lines(p$age, p$yhatcm, col = "orangered") %>%
+  ly_points(p$age, p$yhatcm, col = "orangered", size = 5)
 ```
 
 ## Predict from the fitted model
@@ -244,7 +243,7 @@ p
 We can plot the trajectories data by
 
 ```{r echo = TRUE, fig.height=4, fig.width=4}
-plot(fit, fred, x_trim = c(0, 2.2))
+plot(fit, fred, xlim = c(0, 2.1))
 ```
 
 Based on the data up to 1.1 year, the model predicts that Fred's growth curve would remain around -2.0 SD until Fred is 1.5 years, and then increase to around -1.8 SD.
