@@ -3,25 +3,24 @@ title: "Fit and predict"
 author: "Stef van Buuren"
 date: "`r Sys.Date()`"
 output: 
-  rmarkdown::html_vignette:
-    fig_width: 6
-    fig_height: 6
+  rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Fit and predict}
   %\VignetteEngine{knitr::rmarkdown}
-  \%\VignetteEncoding{UTF-8}
+  \usepackage[utf8]{inputenc}
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, fig.cap = TRUE,
-                      fig.width = 7, fig.height = 3,
-                      dev = "svglite")
+  fig.width = 7, fig.height = 3,
+  dev = "svglite")
 ```
 
+
 ```{css echo = FALSE}
-img {
-  border: 0px;
-  padding: 10px;
+  img {
+border: 0px;
+padding: 10px;
 }
 ```
 
@@ -34,7 +33,16 @@ This vignette shows a step-by-step introduction of how to
 
 ## Get the data
 
-This vignette assumes the `rbokeh`, `AGD`, `brokenstick` packages are installed. See [getting started with `brokenstick`](gettingstarted.html) for the installation procedure.
+This vignette assumes the `rbokeh`, `brokenstick`, `growthstandard` and `ggcorrplot` packages are installed.
+
+```{r install, eval=FALSE}
+install.packages("rbokeh")
+install.packages("ggcorrplot")
+install.packages("remotes")
+remotes::install_github("ki-tools/growthstandards")
+remotes::install_github("stefvanbuuren/brokenstick")
+```
+
 
 We will use the `smocc_200` demo data that is built-in into the `brokenstick` package.
 
@@ -42,7 +50,6 @@ We will use the `smocc_200` demo data that is built-in into the `brokenstick` pa
 require("brokenstick")
 require("rbokeh")
 require("growthstandards")
-library("MASS")
 library("ggcorrplot")
 ```
 
@@ -125,7 +132,7 @@ round(get_knots(fit), 2)
 
 The fixed effects correspond to the mean of sample of children in the data. The mean development over all 206 children may be plotted as:
 
-```{r meanplot, fig.height=5, fig.width=5, fig.cap = "Mean trajectory over all children"}
+```{r meanplot, fig.height=4, fig.width=4, fig.cap = "Mean trajectory over all children"}
 figure(xlab = "Age (years)", ylab = "Height (SDS)") %>%
   ly_points(get_knots(fit, "droplast"), fit$beta, hover = c(get_knots(fit), fit$beta)) %>%
   ly_lines(get_knots(fit, "droplast"), fit$beta) %>% 
@@ -181,7 +188,7 @@ head(p3, 4)
 
 The fitted trajectories of three selected children are plotted by
 
-```{r traj3plot, fig.height = 3, warning=FALSE}
+```{r traj3plot, fig.height = 3, warning=FALSE, fig.cap="Fitted trajectory of three children."}
 plot(fit, data, group = c(10001, 10005, 10022), xlim = c(0, 2.1))
 ```
 
@@ -196,10 +203,9 @@ p1 <- predict(fit, data, group = 10001)
 
 The `predict()` function can return additional information by altering these arguments. Type `?predict.brokenstick` at the console to see the documentation. We can plot the original data and the broken stick estimates for child 10001 jointly by
 
-```{r fig3, fig.height = 4, fig.width = 4, warning=FALSE}
-plot(fit, data, group = 10001, xlim = c(0, 2.1))
+```{r fig3, fig.height = 5, fig.width = 5, warning=FALSE, fig.cap="Fitted trajectory of one child."}
+plot(fit, data, group = 10001, xlim = c(0, 2.1), ylim = c(-2, 2))
 ```
-
 
 ## Convert to original scale
 
@@ -215,7 +221,7 @@ head(p)
 
 The corresponding figure in the cm scale can be produced as
 
-```{r fig.height=6, fig.width=6}
+```{r fig.height=5, fig.width=5, fig.cap="Trajectories in CM scale."}
 p <- p[p$age <= 2.5,]
 figure(xlab = "Age (years)", ylab = "Height (cm)") %>%
   ly_who(x = seq(0, 750, by = 30), y_var = "htcm",
@@ -242,8 +248,8 @@ p
 
 We can plot the trajectories data by
 
-```{r echo = TRUE, fig.height=4, fig.width=4}
-plot(fit, fred, xlim = c(0, 2.1))
+```{r echo = TRUE, fig.height=5, fig.width=5, fig.cap="Fred's data - raw and fitted."}
+plot(fit, fred, xlim = c(0, 2.1), ylim = c(-2, 2))
 ```
 
 Based on the data up to 1.1 year, the model predicts that Fred's growth curve would remain around -2.0 SD until Fred is 1.5 years, and then increase to around -1.8 SD.
@@ -263,10 +269,10 @@ head(p, 3)
 
 The scatterplot of the observed versus predicted values provides a visual representation of the accuracy of the prediction. 
 
-```{r echo = FALSE, fig.height=6, fig.width=6}
-eqscplot(x = data$hgt.z, xlab = "Height (SDS)", 
-         y = p$.pred, ylab = "Predicted Z-score", 
-         pch = ".", xlim = c(-4, 4), ylim = c(-4, 4))
+```{r echo = FALSE, fig.height=7, fig.width=7, fig.cap="Predicted versus observed values (SDS scale)."}
+MASS::eqscplot(x = data$hgt.z, xlab = "Height (SDS)", 
+               y = p$.pred, ylab = "Predicted Z-score", 
+               pch = ".", xlim = c(-4, 4), ylim = c(-4, 4))
 abline(0, 1, col = "grey")
 ```
 
@@ -276,13 +282,13 @@ The correlation is equal to `r round(cor(p$.pred, data$hgt.z, use = "complete.ob
 
 When back-converted to centimeters, the scatterplot of the observed versus predicted values is even a little tighter.  
 
-```{r echo = FALSE, fig.width=6, fig.height = 6}
+```{r echo = FALSE, fig.width=7, fig.height = 7, fig.cap="Predicted versus observed values (CM scale)."}
 data$sex[data$sex == "male"] <- "Male"
 data$sex[data$sex == "female"] <- "Female"
 y_cm <- who_zscore2htcm(years2days(data$age), data$hgt.z, data$sex)
 yhat_cm <- who_zscore2htcm(years2days(data$age), p$.pred, data$sex)
-eqscplot(x = y_cm, xlab = "Height (cm)",
-         y = yhat_cm, ylab = "Predicted (cm)", pch = ".")
+MASS::eqscplot(x = y_cm, xlab = "Height (cm)",
+               y = yhat_cm, ylab = "Predicted (cm)", pch = ".")
 abline(0, 1, col = "grey")
 ```
 
