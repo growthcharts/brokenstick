@@ -22,7 +22,7 @@ kr(y, x, g, control, seed, na.action)
 \item \code{imp_skip}: Number of iterations to next outcome draw
 }}
 
-\item{seed}{Seed number for \code{\link[base:set.seed]{base::set.seed()}}. Use \code{NA} to bypass
+\item{seed}{Seed number for \code{\link[base:Random]{base::set.seed()}}. Use \code{NA} to bypass
 seed setting.}
 
 \item{na.action}{Not really used here}

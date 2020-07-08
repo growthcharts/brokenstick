@@ -149,7 +149,7 @@ Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lme
 \item{control}{A list with parameters. Use \code{control_brokenstick()}
 to generate.}
 
-\item{seed}{Seed number for \code{\link[base:set.seed]{base::set.seed()}}. Use \code{NA} to bypass
+\item{seed}{Seed number for \code{\link[base:Random]{base::set.seed()}}. Use \code{NA} to bypass
 seed setting.}
 
 \item{y}{Outcome variable. When \code{x} is a \strong{data frame} or \strong{matrix},
