@@ -66,7 +66,13 @@ plot.brokenstick <- function(x,
   if (!is.null(xlim))
     idx <- idx & data[[x$names$x]] >= xlim[1L] & data[[x$names$x]] <= xlim[2L]
   if (!is.null(ylim))
-    idx <- idx & data[[x$names$y]] >= ylim[1L] & data[[x$names$y]] <= ylim[2L]
+    idx <- idx &
+    ((data[[".source"]] == "data" &
+       data[[x$names$y]] >= ylim[1L] &
+       data[[x$names$y]] <= ylim[2L]) |
+    (data[[".source"]] == "added" &
+       data[[".pred"]] >= ylim[1L] &
+       data[[".pred"]] <= ylim[2L]))
 
   # safety measure, restrict to first n_plot cases if no groups are specified
   if (is.null(group)) {
