@@ -1,6 +1,13 @@
 ---
 title: "Help for old friends"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Help for old friends}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
 ---
+
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
@@ -132,7 +139,7 @@ plot(fit, ids = ids)
 
 Plot trajectories, new version 
 
-```{r plot_new, fig.height=3.5}
+```{r plot_new, fig.height=3, fig.width=7}
 ids <- c(10001, 10005, 10022)
 plot(fit1, data, group = ids)
 ```
