@@ -15,7 +15,6 @@ Depends:
 Imports:
     dplyr,
     ggplot2,
-    growthstandards,
     hardhat,
     lme4,
     matrixsampling,
@@ -34,8 +33,6 @@ Suggests:
     svglite,
     testthat,
     rmarkdown
-Remotes:
-    ki-tools/growthstandards
 URL: https://github.com/stefvanbuuren/brokenstick, https://stefvanbuuren.name/brokenstick/
 BugReports: https://github.com/stefvanbuuren/brokenstick/issues
 Encoding: UTF-8

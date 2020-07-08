@@ -37,7 +37,7 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
     if (is.null(data))
       stop("Expected argument `new_data` not found.", call. = FALSE)
     reset <- data[data[[names$g]] %in% group, , drop = FALSE]
-    reset <- bind_cols(.source = "added", reset)
+    reset <- bind_cols(.source = "data", reset)
     # message("Reset new_data: subset of groups.")
   }
 

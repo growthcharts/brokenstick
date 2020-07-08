@@ -7,15 +7,13 @@
 plot_trajectory(
   x,
   data,
-  color_y = c("blue", "grey"),
+  color_y = c(grDevices::hcl(240, 100, 40, 0.7), grDevices::hcl(240, 100, 40, 0.8)),
   size_y = 2,
-  color_yhat = c("red", "grey"),
+  color_yhat = c(grDevices::hcl(0, 100, 40, 0.7), grDevices::hcl(0, 100, 40, 0.8)),
   size_yhat = 2,
   ncol = 3L,
-  xlab = "Age (years)",
-  ylab = "Length (SDS)",
-  zband = FALSE,
-  zband_range = NULL,
+  xlab = NULL,
+  ylab = NULL,
   xlim = NULL,
   ylim = NULL,
   scales = "fixed",
@@ -42,12 +40,6 @@ and \code{".pred"}.}
 
 \item{ylab}{The label of the y-axis}
 
-\item{zband}{A logical indicating whether the Z-score band should be
-added to the plot. The default is \code{FALSE}.}
-
-\item{zband_range}{a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
-default is the entire data range.}
-
 \item{xlim}{Vector of length 2 with range of x-axis}
 
 \item{ylim}{Vector of length 2 with range of y-axis}
@@ -60,12 +52,8 @@ default is the entire data range.}
 An object of class \code{ggplot}
 }
 \description{
-This function plot the observed and fitted trajectories from brokenstick model.
-Actual plotting may be done by \code{gglot}.
-}
-\examples{
-# plot first three cases
-# plot(fit_200, brokenstick::smocc_200)
+This function is called by \code{plot.brokenstick}. Normally we wouldn't
+call \code{plot_trajectory()} directly.
 }
 \seealso{
 \link{plot.brokenstick}

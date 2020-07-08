@@ -10,9 +10,10 @@
   ...,
   .x = NULL,
   group = NULL,
-  n_plot = 3,
-  x_trim = c(-Inf, Inf),
-  show = c(TRUE, TRUE)
+  xlim = NULL,
+  ylim = NULL,
+  show = c(TRUE, TRUE),
+  n_plot = 3L
 )
 }
 \arguments{
@@ -27,18 +28,19 @@ and \code{\link[=plot_trajectory]{plot_trajectory()}}.}
 
 \item{group}{A vector with group identifications}
 
-\item{n_plot}{A integer indicating the number of individual plots.
-The default is 3, which plots the trajectories of the first three
-groups. The \code{n_plot} is a safety measure to prevent unintended
-plots of the entire data set.}
+\item{xlim}{Vector of length 2 with range of x-axis}
 
-\item{x_trim}{A range on the x-axis that can be used to subset values
-that are plotted.}
+\item{ylim}{Vector of length 2 with range of y-axis}
 
 \item{show}{A logical vector of length 2. The first element specifies
 whether the observed data are plotted, the second element specifies
 whether the added data (e.g. knots) are plotted. The default is
 \code{c(TRUE, TRUE)}.}
+
+\item{n_plot}{A integer indicating the number of individual plots.
+The default is 3, which plots the trajectories of the first three
+groups. The \code{n_plot} is a safety measure to prevent unintended
+plots of the entire data set.}
 }
 \value{
 An object of class \link[ggplot2:ggplot]{ggplot2::ggplot}.
@@ -48,23 +50,22 @@ The \code{plot} method for a \code{brokenstick} object plots the observed and
 fitted trajectories of one or more groups.
 }
 \examples{
-library("brokenstick")
-dat <- smocc_200
-# fit one line model for data exploration
-fit <- brokenstick(hgt ~ age | id, dat)
+\dontrun{
+# fit model on raw hgt with knots at 0, 1, 2 and 3 years
+fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:3)
+gp <- c(10001, 10005, 10022)
+plot(fit1, smocc_200, group = gp, xlim = c(0, 2.1),
+     xlab = "Age (years)", ylab = "Length (cm)")
 
-# plot measurements for first three cases
-# plot(fit_200, smocc_200, zband = FALSE, show = c(TRUE, FALSE))
+# fit model on standard deviation score
+fit2 <- brokenstick(hgt.z ~ age | id, smocc_200, knots = 0:3)
+plot(fit2, smocc_200, group = gp, xlim = c(0, 2.1),
+     xlab = "Age (years)", ylab = "Length (SDS)")
 
-# fit model with knots at 1 and 2 years
-#fit <- fit_brokenstick(dat, hgt.z ~ age | id, knots = 1:2)
-
-#plot(fit, xlim = c(0, 2.2), ylim = c(-3, 3))
-#plot(fit, ids = c(10005, 10012), xlim = c(0, 2.2))
-
-# bokeh plots with xlim and ylim
-#plot(fit, xlim = c(0, 2), ylim = c(-3, 3))
-#plot(fit, ids = 10005)
+# model with 11 knots
+plot(fit_200, smocc_200, group = gp, xlim = c(0, 2.1),
+     xlab = "Age (years)", ylab = "Length (SDS)")
+}
 }
 \seealso{
 \link{predict.brokenstick}, \link{plot_trajectory}.

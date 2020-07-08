@@ -5,16 +5,16 @@
 #'
 #' @param x An object of class `brokenstick`.
 #' @param .x The `x` argument of the [predict.brokenstick()] function.
-#' @param n_plot A integer indicating the number of individual plots.
-#' The default is 3, which plots the trajectories of the first three
-#' groups. The `n_plot` is a safety measure to prevent unintended
-#' plots of the entire data set.
-#' @param x_trim A range on the x-axis that can be used to subset values
-#' that are plotted.
+#' @param xlim Vector of length 2 with range of x-axis
+#' @param ylim Vector of length 2 with range of y-axis
 #' @param show A logical vector of length 2. The first element specifies
 #' whether the observed data are plotted, the second element specifies
 #' whether the added data (e.g. knots) are plotted. The default is
 #' `c(TRUE, TRUE)`.
+#' @param n_plot A integer indicating the number of individual plots.
+#' The default is 3, which plots the trajectories of the first three
+#' groups. The `n_plot` is a safety measure to prevent unintended
+#' plots of the entire data set.
 #' @param ... Extra arguments passed down to [predict.brokenstick()]
 #' and [plot_trajectory()].
 #' @inheritParams predict.brokenstick
@@ -23,51 +23,70 @@
 #' @method plot brokenstick
 #' @seealso [predict.brokenstick], [plot_trajectory].
 #' @examples
-#' library("brokenstick")
-#' dat <- smocc_200
-#' # fit one line model for data exploration
-#' fit <- brokenstick(hgt ~ age | id, dat)
+#' \dontrun{
+#' # fit model on raw hgt with knots at 0, 1, 2 and 3 years
+#' fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:3)
+#' gp <- c(10001, 10005, 10022)
+#' plot(fit1, smocc_200, group = gp, xlim = c(0, 2.1),
+#'      xlab = "Age (years)", ylab = "Length (cm)")
 #'
-#' # plot measurements for first three cases
-#' # plot(fit_200, smocc_200, zband = FALSE, show = c(TRUE, FALSE))
+#' # fit model on standard deviation score
+#' fit2 <- brokenstick(hgt.z ~ age | id, smocc_200, knots = 0:3)
+#' plot(fit2, smocc_200, group = gp, xlim = c(0, 2.1),
+#'      xlab = "Age (years)", ylab = "Length (SDS)")
 #'
-#' # fit model with knots at 1 and 2 years
-#' #fit <- fit_brokenstick(dat, hgt.z ~ age | id, knots = 1:2)
-#'
-#' #plot(fit, xlim = c(0, 2.2), ylim = c(-3, 3))
-#' #plot(fit, ids = c(10005, 10012), xlim = c(0, 2.2))
-#'
-#' # bokeh plots with xlim and ylim
-#' #plot(fit, xlim = c(0, 2), ylim = c(-3, 3))
-#' #plot(fit, ids = 10005)
+#' # model with 11 knots
+#' plot(fit_200, smocc_200, group = gp, xlim = c(0, 2.1),
+#'      xlab = "Age (years)", ylab = "Length (SDS)")
+#' }
 #' @export
 plot.brokenstick <- function(x,
                              new_data,
                              ...,
                              .x = NULL,
                              group = NULL,
-                             n_plot = 3,
-                             x_trim = c(-Inf, Inf),
-                             show = c(TRUE, TRUE)) {
+                             xlim = NULL,
+                             ylim = NULL,
+                             show = c(TRUE, TRUE),
+                             n_plot = 3L) {
   if (!inherits(x, "brokenstick")) stop("Argument `x` not of class brokenstick.")
+  if (!any(show)) stop("At least one of `show` should be TRUE.")
 
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
   data <- predict(object = x, new_data = new_data, x = .x,
                   group = group, strip_data = FALSE, ...)
+  if (ncol(data) == 1L) data <- bind_cols(.source = "data", new_data, data)
 
-  # apply trim
-  idx <- data[[x$names$x]] >= x_trim[1L] & data[[x$names$x]] <= x_trim[2L]
+  # apply trims
+  idx <- rep(TRUE, nrow(data))
+  idx <- idx &
+    !is.na(data[[x$names$x]]) &
+    !(is.na(data[[x$names$y]]) & data[[".source"]] == "data")
+  if (!is.null(xlim))
+    idx <- idx & data[[x$names$x]] >= xlim[1L] & data[[x$names$x]] <= xlim[2L]
+  if (!is.null(ylim))
+    idx <- idx & data[[x$names$y]] >= ylim[1L] & data[[x$names$y]] <= ylim[2L]
+
+  # safety measure, restrict to first n_plot cases if no groups are specified
+  if (is.null(group)) {
+    ids <- unique(data[[x$names$g]])
+    idx <- idx & (data[[x$names$g]] %in% ids[1L:min(n_plot, length(ids))])
+  }
+
+  # process show vector
+  if (!show[1L]) idx <- idx & data[[".source"]] != "data"
+  if (!show[2L]) idx <- idx & data[[".source"]] != "added"
+
   data <- data[idx, , drop = FALSE]
-
-  plot_trajectory(x = x, data = data, ...)
+  plot_trajectory(x = x, data = data, xlim = xlim, ylim = ylim, ...)
 }
 
 
 #' Plot observed and fitted trajectories from fitted brokenstick model
 #'
-#' This function plot the observed and fitted trajectories from brokenstick model.
-#' Actual plotting may be done by `gglot`.
+#' This function is called by `plot.brokenstick`. Normally we wouldn't
+#' call `plot_trajectory()` directly.
 #' @param x An object of class `brokenstick`.
 #' @param data A `data.frame` with columns names `x$names`, `".source"`
 #' and `".pred"`.
@@ -82,56 +101,33 @@ plot.brokenstick <- function(x,
 #' @param ylim Vector of length 2 with range of y-axis
 #' @param scales Axis scaling, e.g. `"fixed"`, `"free"`, and so on
 #' @param theme Plotting theme
-#' @param zband A logical indicating whether the Z-score band should be
-#' added to the plot. The default is `FALSE`.
-#' @param zband_range a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
-#' default is the entire data range.
 #' @return An object of class \code{ggplot}
 #' @rdname plot_trajectory
 #' @seealso [plot.brokenstick]
-#' @examples
-#' # plot first three cases
-#' # plot(fit_200, brokenstick::smocc_200)
-#' @export
-plot_trajectory  <- function(x, data,
-                             color_y = c("blue", "grey"),
+plot_trajectory  <- function(x,
+                             data,
+                             color_y = c(grDevices::hcl(240, 100, 40, 0.7),
+                                         grDevices::hcl(240, 100, 40, 0.8)),
                              size_y = 2,
-                             color_yhat = c("red", "grey"),
+                             color_yhat = c(grDevices::hcl(0, 100, 40, 0.7),
+                                            grDevices::hcl(0, 100, 40, 0.8)),
                              size_yhat = 2,
                              ncol = 3L,
-                             xlab = "Age (years)",
-                             ylab = "Length (SDS)",
-                             zband = FALSE,
-                             zband_range = NULL,
+                             xlab = NULL,
+                             ylab = NULL,
                              xlim = NULL,
                              ylim = NULL,
                              scales = "fixed",
                              theme = ggplot2::theme_light()) {
 
+  if (is.null(xlab)) xlab <- x$names$x
+  if (is.null(ylab)) ylab <- x$names$y
   g <- ggplot(data, aes_string(x = x$names$x, y = x$names$y)) +
     xlab(xlab) +
     ylab(ylab)
 
   if (!is.null(xlim)) g <- g + xlim(xlim)
   if (!is.null(ylim)) g <- g + ylim(ylim)
-
-  # zband_color Note color #59a14f is Tableau10 green
-  zband_color <- "#59a14f"
-  if (is.null(zband_range)) {
-    if (!is.null(xlim)) {
-      zband_range <- xlim
-    } else {
-      zband_range <- range(data[[x$names$x]], na.rm = TRUE)
-    }
-  }
-  if (zband) {
-    g <- geom_zband(g,
-                    x = zband_range,
-                    z = -c(2.5, 2, 1, 0),
-                    color = zband_color,
-                    alpha = 0.15
-    )
-  }
 
   # add observed data points and lines
   k <- data$.source == "added"
@@ -163,5 +159,5 @@ plot_trajectory  <- function(x, data,
                scales = scales) +
     theme
 
-  return(g)
+  g
 }

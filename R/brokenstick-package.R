@@ -2,7 +2,6 @@
 #'                             mutate pull relocate select ungroup `%>%`
 #' @importFrom ggplot2         aes_string facet_wrap geom_line geom_point
 #'                             geom_step ggplot xlab xlim ylab ylim
-#' @importFrom growthstandards geom_zband ly_zband
 #' @importFrom hardhat         mold new_model default_xy_blueprint
 #' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
 #' @importFrom matrixsampling  rwishart
