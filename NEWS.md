@@ -1,3 +1,9 @@
+# brokenstick 0.72.0
+
+- Adds badges, resources and references to README
+- Updates license
+- Updates CITATION
+
 # brokenstick 0.71.0
 
 - Removes the dependency on `growthstandards`
