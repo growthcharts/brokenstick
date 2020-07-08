@@ -12,3 +12,4 @@
 ^scripts$
 ^vignettes$
 ^vignettes/articles$
+^LICENSE\.md$
