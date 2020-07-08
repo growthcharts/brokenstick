@@ -5,7 +5,6 @@
 #' @importFrom hardhat         mold new_model default_xy_blueprint
 #' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
 #' @importFrom matrixsampling  rwishart
-#' @importFrom recipes         recipe
 #' @importFrom rlang           .data
 #' @importFrom splines         bs
 #' @importFrom stats           approx as.formula cor cov2cor

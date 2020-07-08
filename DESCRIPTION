@@ -18,7 +18,6 @@ Imports:
     hardhat,
     lme4,
     matrixsampling,
-    recipes,
     rlang,
     splines,
     stats,
@@ -31,6 +30,7 @@ Suggests:
     mvtnorm,
     plyr,
     rbokeh,
+    recipes,
     svglite,
     testthat,
     rmarkdown
@@ -44,5 +44,5 @@ LazyData: TRUE
 VignetteBuilder: knitr
 Acknowledgement: Development of this package was kindly supported by the ki
     program of the Bill & Melinda Gates Foundation
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)
