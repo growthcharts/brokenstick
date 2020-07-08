@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.71.0</span>
       </span>
     </div>
 
@@ -110,10 +110,7 @@
 
     
     
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">brokenstick</span>)
-<span class="co">#&gt; Registered S3 method overwritten by 'pryr':</span>
-<span class="co">#&gt;   method      from</span>
-<span class="co">#&gt;   print.bytes Rcpp</span></pre></body></html></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">brokenstick</span>)</pre></body></html></div>
 <div id="background" class="section level1">
 <h1 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h1>
@@ -171,7 +168,7 @@
 <span class="co">#&gt; The following object is masked from 'package:stats':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     step</span>
-<span class="no">rec</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/recipes/man/recipe.html">recipe</a></span>(<span class="no">data</span>,
+<span class="no">rec</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span>(<span class="no">data</span>,
               <span class="kw">vars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hgt.z"</span>, <span class="st">"age"</span>, <span class="st">"id"</span>),
               <span class="kw">roles</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"outcome"</span>, <span class="st">"predictor"</span>, <span class="st">"group"</span>))
 <span class="no">fit3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="no">rec</span>, <span class="no">data</span>)
@@ -219,17 +216,10 @@
 <a href="#example-3-plot-model" class="anchor"></a>Example 3: Plot model</h2>
 <p>Plot trajectories, old version</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">x_trim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">2.2</span>))</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>, <span class="kw">ids</span> <span class="kw">=</span> <span class="no">ids</span>)</pre></body></html></div>
 <p>Plot trajectories, new version</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit1</span>, <span class="no">data</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">x_trim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">2.2</span>))
-<span class="co">#&gt; Warning: Removed 1 rows containing missing values (geom_point).</span>
-<span class="co">#&gt; geom_path: Each group consists of only one observation. Do you need to adjust</span>
-<span class="co">#&gt; the group aesthetic?</span>
-<span class="co">#&gt; geom_path: Each group consists of only one observation. Do you need to adjust</span>
-<span class="co">#&gt; the group aesthetic?</span>
-<span class="co">#&gt; geom_path: Each group consists of only one observation. Do you need to adjust</span>
-<span class="co">#&gt; the group aesthetic?</span></pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit1</span>, <span class="no">data</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">ids</span>)</pre></body></html></div>
 <p><img src="oldfriends_files/figure-html/plot_new-1.svg" width="700.0000032"></p>
 </div>
 <div id="example-4-explained-variance" class="section level2">

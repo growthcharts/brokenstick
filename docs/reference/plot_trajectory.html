@@ -40,8 +40,8 @@
 
 
 <meta property="og:title" content="Plot observed and fitted trajectories from fitted brokenstick model — plot_trajectory" />
-<meta property="og:description" content="This function plot the observed and fitted trajectories from brokenstick model.
-Actual plotting may be done by gglot." />
+<meta property="og:description" content="This function is called by plot.brokenstick. Normally we wouldn't
+call plot_trajectory() directly." />
 
 
 
@@ -73,7 +73,7 @@ Actual plotting may be done by gglot." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.71.0</span>
       </span>
     </div>
 
@@ -148,22 +148,20 @@ Actual plotting may be done by gglot." />
     </div>
 
     <div class="ref-description">
-    <p>This function plot the observed and fitted trajectories from brokenstick model.
-Actual plotting may be done by <code>gglot</code>.</p>
+    <p>This function is called by <code>plot.brokenstick</code>. Normally we wouldn't
+call <code>plot_trajectory()</code> directly.</p>
     </div>
 
     <pre class="usage"><span class='fu'>plot_trajectory</span>(
   <span class='no'>x</span>,
   <span class='no'>data</span>,
-  <span class='kw'>color_y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"blue"</span>, <span class='st'>"grey"</span>),
+  <span class='kw'>color_y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw pkg'>grDevices</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/hcl.html'>hcl</a></span>(<span class='fl'>240</span>, <span class='fl'>100</span>, <span class='fl'>40</span>, <span class='fl'>0.7</span>), <span class='kw pkg'>grDevices</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/hcl.html'>hcl</a></span>(<span class='fl'>240</span>, <span class='fl'>100</span>, <span class='fl'>40</span>, <span class='fl'>0.8</span>)),
   <span class='kw'>size_y</span> <span class='kw'>=</span> <span class='fl'>2</span>,
-  <span class='kw'>color_yhat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"red"</span>, <span class='st'>"grey"</span>),
+  <span class='kw'>color_yhat</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='kw pkg'>grDevices</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/hcl.html'>hcl</a></span>(<span class='fl'>0</span>, <span class='fl'>100</span>, <span class='fl'>40</span>, <span class='fl'>0.7</span>), <span class='kw pkg'>grDevices</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/hcl.html'>hcl</a></span>(<span class='fl'>0</span>, <span class='fl'>100</span>, <span class='fl'>40</span>, <span class='fl'>0.8</span>)),
   <span class='kw'>size_yhat</span> <span class='kw'>=</span> <span class='fl'>2</span>,
   <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>3L</span>,
-  <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Age (years)"</span>,
-  <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Length (SDS)"</span>,
-  <span class='kw'>zband</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>zband_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>,
@@ -211,16 +209,6 @@ and <code>".pred"</code>.</p></td>
       <td><p>The label of the y-axis</p></td>
     </tr>
     <tr>
-      <th>zband</th>
-      <td><p>A logical indicating whether the Z-score band should be
-added to the plot. The default is <code>FALSE</code>.</p></td>
-    </tr>
-    <tr>
-      <th>zband_range</th>
-      <td><p>a vector specifying the range (min, max) that the superposed growth standard should span on the x-axis. The
-default is the entire data range.</p></td>
-    </tr>
-    <tr>
       <th>xlim</th>
       <td><p>Vector of length 2 with range of x-axis</p></td>
     </tr>
@@ -245,10 +233,6 @@ default is the entire data range.</p></td>
 
     <div class='dont-index'><p><a href='plot.brokenstick.html'>plot.brokenstick</a></p></div>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'># plot first three cases
-# plot(fit_200, brokenstick::smocc_200)
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

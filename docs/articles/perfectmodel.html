@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.70.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.71.0</span>
       </span>
     </div>
 
@@ -103,7 +103,7 @@
       <h1 data-toc-skip>Check perfect model</h1>
                         <h4 class="author">Stef van Buuren</h4>
             
-            <h4 class="date">2020-06-16</h4>
+            <h4 class="date">2020-07-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/stefvanbuuren/brokenstick/blob/master/vignettes/perfectmodel.Rmd"><code>vignettes/perfectmodel.Rmd</code></a></small>
       <div class="hidden name"><code>perfectmodel.Rmd</code></div>
@@ -186,11 +186,8 @@
 <h2 class="hasAnchor">
 <a href="#fit-model" class="anchor"></a>Fit model</h2>
 <p>Fit broken stick model, with knots specified at ages <code>1:4</code>.</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"brokenstick"</span>)</pre></body></html></div>
-<pre><code>## Registered S3 method overwritten by 'pryr':
-##   method      from
-##   print.bytes Rcpp</code></pre>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="no">knots</span> <span class="kw">&lt;-</span> <span class="fl">1</span>:<span class="fl">3</span>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="st">"brokenstick"</span>)
+<span class="no">knots</span> <span class="kw">&lt;-</span> <span class="fl">1</span>:<span class="fl">3</span>
 <span class="no">boundary</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">4</span>)
 <span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="no">X1</span> ~ <span class="no">age</span> <span class="kw">|</span> <span class="no">subject</span>, <span class="no">data</span>,
                    <span class="kw">knots</span> <span class="kw">=</span> <span class="no">knots</span>, <span class="kw">boundary</span> <span class="kw">=</span> <span class="no">boundary</span>)</pre></body></html></div>
@@ -200,48 +197,48 @@
 ## unidentifiable</code></pre>
 <pre><code>## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :
 ## Model failed to converge with max|grad| = 0.00852341 (tol = 0.002, component 1)</code></pre>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="no">omega</span> <span class="kw">&lt;-</span> <span class="no">fit</span>$<span class="no">omega</span>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="no">omega</span> <span class="kw">&lt;-</span> <span class="no">fit</span>$<span class="no">omega</span>
 <span class="no">beta</span> <span class="kw">&lt;-</span> <span class="no">fit</span>$<span class="no">beta</span>
 <span class="no">sigma2</span> <span class="kw">&lt;-</span> <span class="no">fit</span>$<span class="no">sigma2</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">beta</span>, <span class="fl">2</span>)</pre></body></html></div>
 <pre><code>## age_1 age_2 age_3 age_4 
 ## -0.02 -0.02  0.01  0.01</code></pre>
-<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">sigma2</span>, <span class="fl">4</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">sigma2</span>, <span class="fl">4</span>)</pre></body></html></div>
 <pre><code>## [1] 0.8184</code></pre>
-<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="co"># correlation random effects</span>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="co"># correlation random effects</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">covar</span>, <span class="fl">3</span>)</pre></body></html></div>
 <pre><code>##      [,1] [,2] [,3] [,4]
 ## [1,]  1.0  0.7  0.5  0.3
 ## [2,]  0.7  1.0  0.8  0.5
 ## [3,]  0.5  0.8  1.0  0.6
 ## [4,]  0.3  0.5  0.6  1.0</code></pre>
-<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">omega</span>, <span class="fl">2</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">omega</span>, <span class="fl">2</span>)</pre></body></html></div>
 <pre><code>##       age_1 age_2 age_3 age_4
 ## age_1  1.23  0.71  0.52  0.33
 ## age_2  0.71  1.16  0.82  0.49
 ## age_3  0.52  0.82  1.22  0.63
 ## age_4  0.33  0.49  0.63  1.17</code></pre>
-<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="co"># covariances measured data</span>
+<div class="sourceCode" id="cb22"><html><body><pre class="r"><span class="co"># covariances measured data</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="no">omega</span> + <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="no">sigma2</span>, <span class="fl">4</span>), <span class="fl">3</span>)</pre></body></html></div>
 <pre><code>##       age_1 age_2 age_3 age_4
 ## age_1 2.052 0.706 0.521 0.326
 ## age_2 0.706 1.982 0.816 0.489
 ## age_3 0.521 0.816 2.034 0.630
 ## age_4 0.326 0.489 0.630 1.992</code></pre>
-<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span>(<span class="no">broad</span>), <span class="fl">3</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb24"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov</a></span>(<span class="no">broad</span>), <span class="fl">3</span>)</pre></body></html></div>
 <pre><code>##       [,1]  [,2]  [,3]  [,4]
 ## [1,] 2.052 0.706 0.521 0.326
 ## [2,] 0.706 1.982 0.816 0.489
 ## [3,] 0.521 0.816 2.034 0.630
 ## [4,] 0.326 0.489 0.630 1.992</code></pre>
-<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="co"># convert to time-to-time correlation matrix</span>
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="co"># convert to time-to-time correlation matrix</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov2cor</a></span>(<span class="no">omega</span> + <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span>(<span class="no">sigma2</span>, <span class="fl">4</span>)), <span class="fl">3</span>)</pre></body></html></div>
 <pre><code>##       age_1 age_2 age_3 age_4
 ## age_1 1.000 0.350 0.255 0.161
 ## age_2 0.350 1.000 0.406 0.246
 ## age_3 0.255 0.406 1.000 0.313
 ## age_4 0.161 0.246 0.313 1.000</code></pre>
-<div class="sourceCode" id="cb30"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(<span class="no">broad</span>), <span class="fl">3</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span>(<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span>(<span class="no">broad</span>), <span class="fl">3</span>)</pre></body></html></div>
 <pre><code>##       [,1]  [,2]  [,3]  [,4]
 ## [1,] 1.000 0.350 0.255 0.161
 ## [2,] 0.350 1.000 0.406 0.246
