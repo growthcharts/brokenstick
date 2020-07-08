@@ -127,8 +127,8 @@ predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
     reset <- TRUE
   }
 
-  forged <- hardhat::forge(new_data, object$blueprint, outcomes = TRUE)
-  rlang::arg_match(type, valid_predict_types())
+  forged <- forge(new_data, object$blueprint, outcomes = TRUE)
+  arg_match(type, valid_predict_types())
   p <- predict_brokenstick_bridge(type, object,
                                   forged$predictors,
                                   forged$outcomes,
@@ -174,7 +174,7 @@ predict_brokenstick_bridge <- function(type, model, x, y, g) {
   predict_function <- get_predict_function(type)
   yhat <- predict_function(model, x, y, g)
 
-  hardhat::validate_prediction_size(yhat, x)
+  validate_prediction_size(yhat, x)
 
   yhat
 }
@@ -237,5 +237,5 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
       filter(!.data$knot) %>%
       pull("yhat")
 
-  hardhat::spruce_numeric(pred)
+  spruce_numeric(pred)
 }
