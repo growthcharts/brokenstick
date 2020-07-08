@@ -127,14 +127,14 @@ Plot trajectories, old version
 
 ```{r plot_old, eval = FALSE}
 ids <- c(10001, 10005, 10022)
-plot(fit, ids = ids, x_trim = c(0, 2.2))
+plot(fit, ids = ids)
 ```
 
 Plot trajectories, new version 
 
 ```{r plot_new, fig.height=3.5}
 ids <- c(10001, 10005, 10022)
-plot(fit1, data, group = ids, x_trim = c(0, 2.2))
+plot(fit1, data, group = ids)
 ```
 
 ## Example 4: Explained variance
