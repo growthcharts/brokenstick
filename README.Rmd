@@ -1,7 +1,9 @@
 ---
-output:
-  md_document:
-    variant: markdown_github
+output: github_document
+always_allow_html: yes
+bibliography: [vignettes/bibliography.bib]
+biblio-style: apalike
+link-citations: yes
 ---
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
@@ -15,6 +17,11 @@ knitr::opts_chunk$set(
 ```
 
 # brokenstick
+
+<!-- badges: start -->
+[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![](https://img.shields.io/badge/github%20version-0.72.0-orange.svg)](https://github.com/stefvanbuuren/brokenstick)
+<!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear mixed model using first order linear B-splines. The main use of the model is to align irregularly observed data to a user-specified grid of break ages.
 
@@ -69,3 +76,18 @@ Function name        | Description
 `brokenstick()`      | Fit a broken stick model to irregular data
 `predict()`          | Predict broken stick estimates
 `plot()`             | Plot observed and fitted trajectories
+
+## Resources
+
+### Background
+
+1. The name *broken stick* comes from @ruppert2003, page 59-61.
+2. As far as I know, @dekroon2010 is the first publication that uses the broken stick model without the intercept in a mixed modelling context. See [The Terneuzen birth cohort: BMI changes between 2 and 6 years correlate strongest with adult overweight](https://stefvanbuuren.name/publications/2010%20TBC%20Overweight%20-%20PLoS%20ONE.pdf).
+3. The model was formally defined and extended in [Flexible Imputation of Missing Data (second edition)](https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick). See @vanbuuren2018.
+4. The evaluation by @anderson2019 concluded: "We recommend the use of the brokenstick model with standardised Z‐score data. Aside from the accuracy of the fit, another key advantage of the brokenstick model is that it is easier to fit and provides easily interpretable estimates of child growth trajectories."
+
+### Tutorials
+
+The [companion site](https://stefvanbuuren.name/brokenstick/) contains various articles that explain the model and the use of the software.
+
+### References
