@@ -1,3 +1,9 @@
+# brokenstick 0.71.0
+
+- Removes the dependency on `growthstandards`
+- Updates and corrects `plot` examples 
+- Tries to evade `ggplot2` out-of-range/missing messages through better filtering
+
 # brokenstick 0.70.1
 
 - Adds support for brokenstick model with `degree = 0`
