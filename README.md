@@ -20,7 +20,6 @@ The `brokenstick` package can be installed from GitHub as follows:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("ki-tools/growthstandards")
 remotes::install_github("stefvanbuuren/brokenstick")
 ```
 
@@ -78,5 +77,5 @@ The main functions in the `brokenstick` package are:
 | Function name   | Description                                |
 |-----------------|--------------------------------------------|
 | `brokenstick()` | Fit a broken stick model to irregular data |
-| `plot()`        | Plot observed and fitted trajectories      |
 | `predict()`     | Predict broken stick estimates             |
+| `plot()`        | Plot observed and fitted trajectories      |
