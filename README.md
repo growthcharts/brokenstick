@@ -7,7 +7,7 @@
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![](https://img.shields.io/badge/github%20version-0.72.0-orange.svg)](https://github.com/stefvanbuuren/brokenstick)
+[![](https://img.shields.io/badge/github%20version-0.72.1-orange.svg)](https://github.com/stefvanbuuren/brokenstick)
 <!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear
@@ -134,10 +134,10 @@ Edition*. Boca Raton, FL.: CRC Press.
 
 <div id="ref-dekroon2010">
 
-Kroon, M.L.A. de, C.M. Renders, J.P. van Wouwe, S. van Buuren, and R.A.
-Hirasing. 2010. “The Terneuzen Birth Cohort: BMI Changes Between 2 and 6
-Years Correlate Strongest with Adult Overweight.” *PloS ONE* 5 (2):
-e9155.
+Kroon, M. L. A. de, C. M. Renders, J. P. van Wouwe, S. van Buuren, and
+R. A. Hirasing. 2010. “The Terneuzen Birth Cohort: BMI Changes Between 2
+and 6 Years Correlate Strongest with Adult Overweight.” *PloS ONE* 5
+(2): e9155.
 
 </div>
 

@@ -1,3 +1,7 @@
+# brokenstick 0.72.1
+
+- Imports `recipes::recipe()` to inform R package installation process  
+
 # brokenstick 0.72.0
 
 - Adds badges, resources and references to README
