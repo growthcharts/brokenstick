@@ -6,6 +6,7 @@
 #'                             spruce_numeric validate_prediction_size
 #' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
 #' @importFrom matrixsampling  rwishart
+#' @importFrom recipes         recipe
 #' @importFrom rlang           .data arg_match
 #' @importFrom splines         bs
 #' @importFrom stats           approx as.formula cor cov2cor

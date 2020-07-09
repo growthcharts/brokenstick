@@ -18,6 +18,7 @@ Imports:
     hardhat,
     lme4,
     matrixsampling,
+    recipes,
     rlang,
     splines,
     stats,
@@ -31,7 +32,6 @@ Suggests:
     mvtnorm,
     plyr,
     rbokeh,
-    recipes,
     svglite,
     testthat,
     rmarkdown

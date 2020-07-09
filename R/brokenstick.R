@@ -182,10 +182,10 @@ brokenstick.formula <- function(formula, data, ...,
 
   # pre-process formula to get around mold()'s formula limitations
   nms <- parse_formula(formula)
-  rec <- recipes::recipe(data,
-                         vars = c(nms$y, nms$x, nms$z),
-                         roles = c("outcome", "predictor", "group"))
-  processed <- hardhat::mold(rec, data)
+  rec <- recipe(data,
+                vars = c(nms$y, nms$x, nms$z),
+                roles = c("outcome", "predictor", "group"))
+  processed <- mold(rec, data)
 
   brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
 }
@@ -234,10 +234,10 @@ brokenstick.data.frame <- function(x, y, group, ...,
   data <- data.frame(x[, 1L, drop = FALSE], y, group)
   data <- setNames(data, c(nms$x, nms$y, nms$g))
 
-  rec <- recipes::recipe(data,
-                         vars = c(nms$y, nms$x, nms$g),
-                         roles = c("outcome", "predictor", "group"))
-  processed <- hardhat::mold(rec, data)
+  rec <- recipe(data,
+                vars = c(nms$y, nms$x, nms$g),
+                roles = c("outcome", "predictor", "group"))
+  processed <- mold(rec, data)
 
   brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
 }
@@ -268,10 +268,10 @@ brokenstick.matrix <- function(x, y, group, ...,
   data <- data.frame(x[, 1L, drop = FALSE], y, group)
   data <- setNames(data, as.character(c(nms$x, nms$y, nms$g)))
 
-  rec <- recipes::recipe(data,
-                         vars = c(nms$y, nms$x, nms$g),
-                         roles = c("outcome", "predictor", "group"))
-  processed <- hardhat::mold(rec, data)
+  rec <- recipe(data,
+                vars = c(nms$y, nms$x, nms$g),
+                roles = c("outcome", "predictor", "group"))
+  processed <- mold(rec, data)
 
   brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
 }
@@ -303,10 +303,10 @@ brokenstick.numeric <- function(x, y, group, ...,
   data <- data.frame(x, y, group)
   data <- setNames(data, as.character(c(nms$x, nms$y, nms$g)))
 
-  rec <- recipes::recipe(data,
-                         vars = c(nms$y, nms$x, nms$g),
-                         roles = c("outcome", "predictor", "group"))
-  processed <- hardhat::mold(rec, data)
+  rec <- recipe(data,
+                vars = c(nms$y, nms$x, nms$g),
+                roles = c("outcome", "predictor", "group"))
+  processed <- mold(rec, data)
 
   brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
 }
