@@ -2,11 +2,9 @@
 #'                             mutate pull relocate select ungroup `%>%`
 #' @importFrom ggplot2         aes_string facet_wrap geom_line geom_point
 #'                             geom_step ggplot xlab xlim ylab ylim
-#' @importFrom hardhat         default_xy_blueprint forge mold new_model
-#'                             spruce_numeric validate_prediction_size
 #' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
+#' @importFrom methods         slot
 #' @importFrom matrixsampling  rwishart
-#' @importFrom recipes         recipe
 #' @importFrom rlang           .data arg_match
 #' @importFrom splines         bs
 #' @importFrom stats           approx as.formula cor cov2cor

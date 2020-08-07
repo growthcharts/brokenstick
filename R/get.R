@@ -49,9 +49,9 @@ get_r2 <- function(object, new_data) {
   }
 
   p <- predict(object, new_data)
-  new_data <- new_data %>%
+  nd <- new_data %>%
     select(object$names$y) %>%
     bind_cols(p) %>%
     tidyr::drop_na()
-  cor(new_data[[".pred"]], new_data[[object$names$y]])^2
+  cor(nd[[".pred"]], nd[[object$names$y]])^2
 }

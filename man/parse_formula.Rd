@@ -10,12 +10,12 @@ parse_formula(f)
 \item{f}{formula object}
 }
 \value{
-A \code{list} with elements \code{y}, \code{x} and \code{z}.
+A \code{list} with elements \code{x}, \code{y} and \code{g}.
 Each element has length 1.
 }
 \description{
 A bare bones formula parser to extract variables names from
-formulas of \code{y ~ x | z}. It return the name of
+formulas of \code{y ~ x | g}. It return the name of
 the first variable mentioned in each formula component.
 }
 \examples{

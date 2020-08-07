@@ -62,7 +62,7 @@ data <- brokenstick::smocc_200
 fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid)
 ```
 
-Fit model, version `0.70.0` and higher:
+Fit model, version `0.75.0` and higher:
 
 ```{r fit_new}
 data <- brokenstick::smocc_200
@@ -73,19 +73,12 @@ fit1 <- brokenstick(hgt.z ~ age | id, data)
 # XY interface - numeric vector
 fit2 <- with(data, brokenstick(age, hgt.z, id))
 
-# Recipes data.frame interface
-library(recipes)
-rec <- recipe(data,
-              vars = c("hgt.z", "age", "id"),
-              roles = c("outcome", "predictor", "group"))
-fit3 <- brokenstick(rec, data)
-
 # XY interface - data.frame
-fit4 <- with(data, brokenstick(data.frame(age), hgt.z, id))
+fit3 <- with(data, brokenstick(data.frame(age), hgt.z, id))
 
 # XY interface - matrix
 tt <- as.matrix(data[, c(1, 2, 7)])
-fit5 <- brokenstick(tt[, "age", drop = FALSE],
+fit4 <- brokenstick(tt[, "age", drop = FALSE],
                     tt[, "hgt.z", drop = FALSE],
                     tt[, "id", drop = FALSE])
 ```

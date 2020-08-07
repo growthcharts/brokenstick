@@ -15,10 +15,9 @@ Depends:
 Imports:
     dplyr,
     ggplot2,
-    hardhat,
     lme4,
+    methods,
     matrixsampling,
-    recipes,
     rlang,
     splines,
     stats,

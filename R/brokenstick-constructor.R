@@ -11,20 +11,19 @@ new_brokenstick <- function(names = list(x = character(),
                             omega = numeric(0),
                             sigma2j = numeric(0),
                             sigma2 = numeric(0),
-                            draws = numeric(0),
-                            blueprint = NULL) {
-  hardhat::new_model(names = names,
-                     knots = knots,
-                     boundary = boundary,
-                     degree = degree,
-                     model = model,
-                     method = method,
-                     control = control,
-                     beta = beta,
-                     omega = omega,
-                     sigma2j = sigma2j,
-                     sigma2 = sigma2,
-                     draws = draws,
-                     blueprint = blueprint,
-                     class = "brokenstick")
+                            draws = numeric(0)) {
+  result <- list(names = names,
+                 knots = knots,
+                 boundary = boundary,
+                 degree = degree,
+                 model = model,
+                 method = method,
+                 control = control,
+                 beta = beta,
+                 omega = omega,
+                 sigma2j = sigma2j,
+                 sigma2 = sigma2,
+                 draws = draws)
+  class(result) <- "brokenstick"
+  result
 }

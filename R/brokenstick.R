@@ -12,8 +12,6 @@
 #'
 #'   * A __data frame__ of predictors.
 #'   * A __matrix__ of predictors.
-#'   * A __recipe__ specifying a set of preprocessing steps
-#'     created from [recipes::recipe()].
 #'
 #' If `x` has one column, then also specify `y` and `group`. If `x` has multiple
 #' columns, then specify the model by a `formula` argument.
@@ -32,7 +30,7 @@
 #'   * A __matrix__ with 1 column.
 #'   * A numeric __vector__.
 #'
-#' @param data When a __recipe__ or __formula__ is used, `data` is specified as:
+#' @param data When a __formula__ is used, `data` is specified as:
 #'
 #'   * A __data frame__ containing predictor, group and outcome variables.
 #'
@@ -43,9 +41,7 @@
 #' will ignored them.
 #'
 #'  Note: This formula specification is specific to the `brokenstick()`
-#'  function, and generates the error
-#'  `No in-line functions should be used here` if passed directly to
-#' `recipes::recipe()`. See examples.
+#'  function.
 #'
 #' @param knots Optional, but recommended. Numerical vector with the
 #' locations of the breaks to be placed on the values of the predictor.
@@ -128,7 +124,7 @@
 #'                       boundary = boundary, method = "kr")
 #'}
 #'
-#' # Five ways to specify the same model
+#' # Four ways to specify the same model
 #' # Formula interface
 #' mod1 <- brokenstick(hgt.z ~ age | id, train)
 #'
@@ -136,24 +132,16 @@
 #' mod2 <- with(train, brokenstick(age, hgt.z, id))
 #' identical(mod1, mod2)
 #'
-#' # Recipes data.frame interface
-#' library(recipes)
-#' rec <- recipe(train,
-#'               vars = c("hgt.z", "age", "id"),
-#'               roles = c("outcome", "predictor", "group"))
-#' mod3 <- brokenstick(rec, train)
-#' identical(mod1, mod3)
-#'
 #' # XY interface - data.frame
-#' mod4 <- with(train, brokenstick(data.frame(age), hgt.z, id))
-#' identical(mod1, mod4)
+#' mod3 <- with(train, brokenstick(data.frame(age), hgt.z, id))
+#' identical(mod1, mod3)
 #'
 #' # XY interface - matrix
 #' tt <- as.matrix(train[, c(1, 2, 7)])
-#' mod5 <- brokenstick(tt[, "age", drop = FALSE],
+#' mod4 <- brokenstick(tt[, "age", drop = FALSE],
 #'                     tt[, "hgt.z", drop = FALSE],
 #'                     tt[, "id", drop = FALSE])
-#' identical(mod1, mod5)
+#' identical(mod1, mod4)
 #' @export
 brokenstick <- function(x, ...) {
   UseMethod("brokenstick")
@@ -182,30 +170,7 @@ brokenstick.formula <- function(formula, data, ...,
 
   # pre-process formula to get around mold()'s formula limitations
   nms <- parse_formula(formula)
-  rec <- recipe(data,
-                vars = c(nms$y, nms$x, nms$z),
-                roles = c("outcome", "predictor", "group"))
-  processed <- mold(rec, data)
-
-  brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
-}
-
-
-# Recipe method
-
-#' @export
-#' @rdname brokenstick
-brokenstick.recipe <- function(x, data, ...,
-                               knots = NULL,
-                               boundary = NULL,
-                               k = NULL,
-                               degree = 1L,
-                               method = c("lmer", "kr"),
-                               control = control_brokenstick(),
-                               seed = NA) {
-  method <- match.arg(method)
-  processed <- hardhat::mold(x, data)
-  brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
+  brokenstick_bridge(data, nms, knots, boundary, k, degree, method, control, seed, ...)
 }
 
 
@@ -234,12 +199,7 @@ brokenstick.data.frame <- function(x, y, group, ...,
   data <- data.frame(x[, 1L, drop = FALSE], y, group)
   data <- setNames(data, c(nms$x, nms$y, nms$g))
 
-  rec <- recipe(data,
-                vars = c(nms$y, nms$x, nms$g),
-                roles = c("outcome", "predictor", "group"))
-  processed <- mold(rec, data)
-
-  brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
+  brokenstick_bridge(data, nms, knots, boundary, k, degree, method, control, seed, ...)
 }
 
 
@@ -268,12 +228,7 @@ brokenstick.matrix <- function(x, y, group, ...,
   data <- data.frame(x[, 1L, drop = FALSE], y, group)
   data <- setNames(data, as.character(c(nms$x, nms$y, nms$g)))
 
-  rec <- recipe(data,
-                vars = c(nms$y, nms$x, nms$g),
-                roles = c("outcome", "predictor", "group"))
-  processed <- mold(rec, data)
-
-  brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
+  brokenstick_bridge(data, nms, knots, boundary, k, degree, method, control, seed, ...)
 }
 
 # XY method - numeric vector
@@ -303,26 +258,19 @@ brokenstick.numeric <- function(x, y, group, ...,
   data <- data.frame(x, y, group)
   data <- setNames(data, as.character(c(nms$x, nms$y, nms$g)))
 
-  rec <- recipe(data,
-                vars = c(nms$y, nms$x, nms$g),
-                roles = c("outcome", "predictor", "group"))
-  processed <- mold(rec, data)
-
-  brokenstick_bridge(processed, knots, boundary, k, degree, method, control, seed, ...)
+  brokenstick_bridge(data, nms, knots, boundary, k, degree, method, control, seed, ...)
 }
 
 
 # ------------------------------------------------------------------------------
 # Bridge
 
-brokenstick_bridge <- function(processed, knots, boundary, k, degree,
+brokenstick_bridge <- function(data, nms, knots, boundary, k, degree,
                                method, control, seed, ...) {
 
-  x <- processed$predictor
-  y <- processed$outcome
-  g <- processed$extras$roles$group
-  nms <- list(x = names(x), y = names(y), g = names(g))
-  data <- data.frame(x, y, g, stringsAsFactors = FALSE)
+  y <- data[[nms$y]]
+  x <- data[, nms$x, drop = FALSE]
+  g <- data[[nms$g]]
 
   l <- calculate_knots(x, k, knots, boundary)
   X <- make_basis(x, knots = l$knots, boundary = l$boundary,
@@ -358,8 +306,7 @@ brokenstick_bridge <- function(processed, knots, boundary, k, degree,
     omega = fit$omega,
     sigma2j = fit$sigma2j,
     sigma2 = fit$sigma2,
-    draws = fit$draws,
-    blueprint = processed$blueprint)
+    draws = fit$draws)
 }
 
 
@@ -374,11 +321,13 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
                 control = control,
                 na.action = na.action)
 
+  # Here we trust that names(slot(model, "cnms")) gives the name of the
+  # group variable
   df <- as.data.frame(VarCorr(model))
   list(
     model = model,
     beta = lme4::fixef(model),
-    omega = as.matrix(as.data.frame(VarCorr(model)[[names(data)[3L]]])),
+    omega = as.matrix(as.data.frame(VarCorr(model)[[names(slot(model, "cnms"))]])),
     sigma2j = numeric(),
     sigma2 = df[df$grp == "Residual", "vcov"],
     draws = numeric())

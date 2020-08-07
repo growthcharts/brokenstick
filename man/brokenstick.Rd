@@ -4,7 +4,6 @@
 \alias{brokenstick}
 \alias{brokenstick.default}
 \alias{brokenstick.formula}
-\alias{brokenstick.recipe}
 \alias{brokenstick.data.frame}
 \alias{brokenstick.matrix}
 \alias{brokenstick.numeric}
@@ -16,19 +15,6 @@ brokenstick(x, ...)
 
 \method{brokenstick}{formula}(
   formula,
-  data,
-  ...,
-  knots = NULL,
-  boundary = NULL,
-  k = NULL,
-  degree = 1L,
-  method = c("lmer", "kr"),
-  control = control_brokenstick(),
-  seed = NA
-)
-
-\method{brokenstick}{recipe}(
-  x,
   data,
   ...,
   knots = NULL,
@@ -87,8 +73,6 @@ brokenstick(x, ...)
 \itemize{
 \item A \strong{data frame} of predictors.
 \item A \strong{matrix} of predictors.
-\item A \strong{recipe} specifying a set of preprocessing steps
-created from \code{\link[recipes:recipe]{recipes::recipe()}}.
 }
 
 If \code{x} has one column, then also specify \code{y} and \code{group}. If \code{x} has multiple
@@ -103,11 +87,9 @@ One may specify additional variables, but the \code{brokenstick} model
 will ignored them.
 
 Note: This formula specification is specific to the \code{brokenstick()}
-function, and generates the error
-\verb{No in-line functions should be used here} if passed directly to
-\code{recipes::recipe()}. See examples.}
+function.}
 
-\item{data}{When a \strong{recipe} or \strong{formula} is used, \code{data} is specified as:
+\item{data}{When a \strong{formula} is used, \code{data} is specified as:
 \itemize{
 \item A \strong{data frame} containing predictor, group and outcome variables.
 }}
@@ -215,7 +197,7 @@ fit_kr <- brokenstick(hgt.z ~ age | id, data = train, knots = knots,
                       boundary = boundary, method = "kr")
 }
 
-# Five ways to specify the same model
+# Four ways to specify the same model
 # Formula interface
 mod1 <- brokenstick(hgt.z ~ age | id, train)
 
@@ -223,22 +205,14 @@ mod1 <- brokenstick(hgt.z ~ age | id, train)
 mod2 <- with(train, brokenstick(age, hgt.z, id))
 identical(mod1, mod2)
 
-# Recipes data.frame interface
-library(recipes)
-rec <- recipe(train,
-              vars = c("hgt.z", "age", "id"),
-              roles = c("outcome", "predictor", "group"))
-mod3 <- brokenstick(rec, train)
-identical(mod1, mod3)
-
 # XY interface - data.frame
-mod4 <- with(train, brokenstick(data.frame(age), hgt.z, id))
-identical(mod1, mod4)
+mod3 <- with(train, brokenstick(data.frame(age), hgt.z, id))
+identical(mod1, mod3)
 
 # XY interface - matrix
 tt <- as.matrix(train[, c(1, 2, 7)])
-mod5 <- brokenstick(tt[, "age", drop = FALSE],
+mod4 <- brokenstick(tt[, "age", drop = FALSE],
                     tt[, "hgt.z", drop = FALSE],
                     tt[, "id", drop = FALSE])
-identical(mod1, mod5)
+identical(mod1, mod4)
 }

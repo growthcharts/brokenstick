@@ -127,12 +127,11 @@ predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
     reset <- TRUE
   }
 
-  forged <- forge(new_data, object$blueprint, outcomes = TRUE)
-  arg_match(type, valid_predict_types())
-  p <- predict_brokenstick_bridge(type, object,
-                                  forged$predictors,
-                                  forged$outcomes,
-                                  forged$extras$roles$group)
+  x <- as.matrix(new_data[, object$names$x, drop = FALSE])
+  y <- as.matrix(new_data[, object$names$y, drop = FALSE])
+  g <- as.matrix(new_data[, object$names$g, drop = FALSE])
+  p <- predict_brokenstick_bridge(type, object, x, y, g)
+
   if (!reset) {
     if (shape == "long") return(p)
     if (shape == "vector") return(pull(p))
@@ -174,7 +173,8 @@ predict_brokenstick_bridge <- function(type, model, x, y, g) {
   predict_function <- get_predict_function(type)
   yhat <- predict_function(model, x, y, g)
 
-  validate_prediction_size(yhat, x)
+  if (nrow(x) != nrow(yhat))
+    warning("Number of rows differs between between data and prediction.", .call = FALSE)
 
   yhat
 }
@@ -227,15 +227,15 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
   long <- bind_rows(long1, long2)
 
   approx_method <- ifelse(object$degree, "linear", "constant")
-    pred <- long %>%
-      group_by(.data$group) %>%
-      mutate(yhat = approx(x = .data$x,
-                           y = .data$yhat,
-                           xout = .data$x,
-                           method = approx_method)$y) %>%
-      ungroup() %>%
-      filter(!.data$knot) %>%
-      pull("yhat")
+  pred <- long %>%
+    group_by(.data$group) %>%
+    mutate(yhat = approx(x = .data$x,
+                         y = .data$yhat,
+                         xout = .data$x,
+                         method = approx_method)$y) %>%
+    ungroup() %>%
+    filter(!.data$knot) %>%
+    pull("yhat")
 
-  spruce_numeric(pred)
+  data.frame(.pred = pred)
 }
