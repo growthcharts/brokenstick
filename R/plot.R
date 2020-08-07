@@ -130,11 +130,11 @@ plot_trajectory  <- function(x,
   if (is.null(xlab)) xlab <- x$names$x
   if (is.null(ylab)) ylab <- x$names$y
   g <- ggplot2::ggplot(data, ggplot2::aes_string(x = x$names$x, y = x$names$y)) +
-    xlab(xlab) +
-    ylab(ylab)
+    ggplot2::xlab(xlab) +
+    ggplot2::ylab(ylab)
 
-  if (!is.null(xlim)) g <- g + xlim(xlim)
-  if (!is.null(ylim)) g <- g + ylim(ylim)
+  if (!is.null(xlim)) g <- g + ggplot2::xlim(xlim)
+  if (!is.null(ylim)) g <- g + ggplot2::ylim(ylim)
 
   # add observed data points and lines
   k <- data$.source == "added"

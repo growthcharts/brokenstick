@@ -24,7 +24,7 @@ library(brokenstick)
 
 Versions after `brokenstick 0.62.1` (May 2020) have a substantially changed interface. In particular, later versions (starting with `brokenstick 0.70.0`) include the following changes: 
 
-1. `brokenstick` adopts the `tidymodels` philosophy. It is now possible to fit a model using five different interfaces. There is no need anymore the hardcode variable names in the source data.
+1. `brokenstick` adopts the `tidymodels` philosophy. It is now possible to fit a model using four different interfaces. There is no need anymore the hardcode variable names in the source data.
 
 2. Version `0.70.0` introduces a new estimation method, the Kasim-Raudenbush sampler. The new method is more flexible and faster than `lme4::lmer()` when the number of knots is large.
 
