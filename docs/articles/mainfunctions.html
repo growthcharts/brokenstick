@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.72.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.0</span>
       </span>
     </div>
 
@@ -97,13 +97,13 @@
 
       
 
-      </header><div class="row">
+      </header><script src="mainfunctions_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Overview of main functions</h1>
                         <h4 class="author">Stef van Buuren</h4>
             
-            <h4 class="date">2020-07-09</h4>
+            <h4 class="date">2020-08-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/stefvanbuuren/brokenstick/blob/master/vignettes/mainfunctions.Rmd"><code>vignettes/mainfunctions.Rmd</code></a></small>
       <div class="hidden name"><code>mainfunctions.Rmd</code></div>
@@ -206,15 +206,13 @@ img {
 <p>The <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function allows us to obtain various types of predictions from the broken stick model. The simplest call</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="no">p1</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span>(<span class="no">fit2</span>, <span class="no">data</span>)
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">p1</span>)</pre></body></html></div>
-<pre><code>## # A tibble: 6 x 1
-##   .pred
-##   &lt;dbl&gt;
-## 1 0.720
-## 2 0.660
-## 3 0.604
-## 4 0.533
-## 5 0.351
-## 6 0.168</code></pre>
+<pre><code>##       .pred
+## 1 0.7200490
+## 2 0.6598632
+## 3 0.6036360
+## 4 0.5334070
+## 5 0.3507236
+## 6 0.1681135</code></pre>
 <div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">data</span>), <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">p1</span>))</pre></body></html></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>produces a <code>tibble</code> with the one column called <code>.pred</code> for each row in <code>data</code>. We can bind column <code>.pred</code> to <code>data</code> for further processing.</p>

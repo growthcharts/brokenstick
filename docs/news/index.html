@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.72.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.0</span>
       </span>
     </div>
 
@@ -144,18 +144,40 @@
       <small>Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="brokenstick-0-72-0" class="section level1">
+    <div id="brokenstick-0750" class="section level1">
+<h1 class="page-header" data-toc-text="0.75.0">
+<a href="#brokenstick-0750" class="anchor"></a>brokenstick 0.75.0</h1>
+<ul>
+<li>This version trims down the package in various ways</li>
+<li>Removes dependencies of <code>hardhat</code> and <code>recipes</code>
+</li>
+<li>Makes the <code>brokenstick</code> object smaller since no blueprints are stored</li>
+<li>Removes the <code>recipe</code> interface to the <code><a href="../reference/brokenstick.html">brokenstick()</a></code> function</li>
+<li>Moves <code>ggplot2</code> to <code>suggests</code>
+</li>
+<li>Copies over the <code>install.on.demand()</code> function from <code>mice</code>
+</li>
+</ul>
+</div>
+    <div id="brokenstick-0721" class="section level1">
+<h1 class="page-header" data-toc-text="0.72.1">
+<a href="#brokenstick-0721" class="anchor"></a>brokenstick 0.72.1</h1>
+<ul>
+<li>Imports <code><a href="https://recipes.tidymodels.org/reference/recipe.html">recipes::recipe()</a></code> to inform R package installation process</li>
+</ul>
+</div>
+    <div id="brokenstick-0720" class="section level1">
 <h1 class="page-header" data-toc-text="0.72.0">
-<a href="#brokenstick-0-72-0" class="anchor"></a>brokenstick 0.72.0</h1>
+<a href="#brokenstick-0720" class="anchor"></a>brokenstick 0.72.0</h1>
 <ul>
 <li>Adds badges, resources and references to README</li>
 <li>Updates license</li>
 <li>Updates CITATION</li>
 </ul>
 </div>
-    <div id="brokenstick-0-71-0" class="section level1">
+    <div id="brokenstick-0710" class="section level1">
 <h1 class="page-header" data-toc-text="0.71.0">
-<a href="#brokenstick-0-71-0" class="anchor"></a>brokenstick 0.71.0</h1>
+<a href="#brokenstick-0710" class="anchor"></a>brokenstick 0.71.0</h1>
 <ul>
 <li>Removes the dependency on <code>growthstandards</code>
 </li>
@@ -163,17 +185,17 @@
 <li>Tries to evade <code>ggplot2</code> out-of-range/missing messages through better filtering</li>
 </ul>
 </div>
-    <div id="brokenstick-0-70-1" class="section level1">
+    <div id="brokenstick-0701" class="section level1">
 <h1 class="page-header" data-toc-text="0.70.1">
-<a href="#brokenstick-0-70-1" class="anchor"></a>brokenstick 0.70.1</h1>
+<a href="#brokenstick-0701" class="anchor"></a>brokenstick 0.70.1</h1>
 <ul>
 <li>Adds support for brokenstick model with <code>degree = 0</code>
 </li>
 </ul>
 </div>
-    <div id="brokenstick-0-70-0" class="section level1">
+    <div id="brokenstick-0700" class="section level1">
 <h1 class="page-header" data-toc-text="0.70.0">
-<a href="#brokenstick-0-70-0" class="anchor"></a>brokenstick 0.70.0</h1>
+<a href="#brokenstick-0700" class="anchor"></a>brokenstick 0.70.0</h1>
 <ul>
 <li>This version jump illustrates big and breaking changes:</li>
 </ul>
@@ -189,9 +211,9 @@
 <li><p>Removed functions: <code>get_data()</code>, <code>get_X()</code>, <code>export()</code></p></li>
 </ol>
 </div>
-    <div id="brokenstick-0-62-0" class="section level1">
+    <div id="brokenstick-0620" class="section level1">
 <h1 class="page-header" data-toc-text="0.62.0">
-<a href="#brokenstick-0-62-0" class="anchor"></a>brokenstick 0.62.0</h1>
+<a href="#brokenstick-0620" class="anchor"></a>brokenstick 0.62.0</h1>
 <ul>
 <li>This version simplifies the plotting functions</li>
 <li>Renders <code>ggplot</code> objects sharper in vignettes by <code>svglite</code>
@@ -206,9 +228,9 @@
 <li>Added a <code>NEWS.md</code> file to track changes to the package</li>
 </ul>
 </div>
-    <div id="brokenstick-0-61-0" class="section level1">
+    <div id="brokenstick-0610" class="section level1">
 <h1 class="page-header" data-toc-text="0.61.0">
-<a href="#brokenstick-0-61-0" class="anchor"></a>brokenstick 0.61.0</h1>
+<a href="#brokenstick-0610" class="anchor"></a>brokenstick 0.61.0</h1>
 <ul>
 <li>Added <code>smocc_50</code> and <code>fit_50</code> demo data</li>
 <li>Removed <code>smocc.hgtwgt</code>, <code>smocc_hgtwgt</code> and <code>fit_206 datasets</code>
@@ -216,16 +238,16 @@
 <li>Adapt code and vignettes to reflect replacement of demo data</li>
 </ul>
 </div>
-    <div id="brokenstick-0-60-0" class="section level1">
+    <div id="brokenstick-0600" class="section level1">
 <h1 class="page-header" data-toc-text="0.60.0">
-<a href="#brokenstick-0-60-0" class="anchor"></a>brokenstick 0.60.0</h1>
+<a href="#brokenstick-0600" class="anchor"></a>brokenstick 0.60.0</h1>
 <ul>
 <li>Adapted source to R 4.0.0.</li>
 </ul>
 </div>
-    <div id="brokenstick-0-55" class="section level1">
+    <div id="brokenstick-055" class="section level1">
 <h1 class="page-header" data-toc-text="0.55">
-<a href="#brokenstick-0-55" class="anchor"></a>brokenstick 0.55</h1>
+<a href="#brokenstick-055" class="anchor"></a>brokenstick 0.55</h1>
 <ul>
 <li>Added new utility function <code>get_pev()</code> for proportion explained variance</li>
 <li>
@@ -237,9 +259,9 @@
 <li>Simplified vignette “Overview of main functions”</li>
 </ul>
 </div>
-    <div id="brokenstick-0-54" class="section level1">
+    <div id="brokenstick-054" class="section level1">
 <h1 class="page-header" data-toc-text="0.54">
-<a href="#brokenstick-0-54" class="anchor"></a>brokenstick 0.54</h1>
+<a href="#brokenstick-054" class="anchor"></a>brokenstick 0.54</h1>
 <ul>
 <li>Added Support for <code>ggplot2</code>
 </li>
@@ -247,9 +269,9 @@
 <li>Changed default <code>show_references</code> flag to FALSE</li>
 </ul>
 </div>
-    <div id="brokenstick-0-53" class="section level1">
+    <div id="brokenstick-053" class="section level1">
 <h1 class="page-header" data-toc-text="0.53">
-<a href="#brokenstick-0-53" class="anchor"></a>brokenstick 0.53</h1>
+<a href="#brokenstick-053" class="anchor"></a>brokenstick 0.53</h1>
 <ul>
 <li>This is the version announced during my invited lecture at the 7th Channel Network Conference, Hasselt, Belgium.</li>
 </ul>

@@ -78,7 +78,7 @@ chosen grid points, and hence look like a broken stick." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.72.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.0</span>
       </span>
     </div>
 
@@ -181,20 +181,6 @@ chosen grid points, and hence look like a broken stick.</p>
   <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
 )
 
-<span class='co'># S3 method for recipe</span>
-<span class='fu'>brokenstick</span>(
-  <span class='no'>x</span>,
-  <span class='no'>data</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>k</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>method</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"lmer"</span>, <span class='st'>"kr"</span>),
-  <span class='kw'>control</span> <span class='kw'>=</span> <span class='fu'><a href='control_brokenstick.html'>control_brokenstick</a></span>(),
-  <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>NA</span>
-)
-
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'>brokenstick</span>(
   <span class='no'>x</span>,
@@ -248,8 +234,6 @@ chosen grid points, and hence look like a broken stick.</p>
       <td><p>Predictor variables. Depending on the context:</p><ul>
 <li><p>A <strong>data frame</strong> of predictors.</p></li>
 <li><p>A <strong>matrix</strong> of predictors.</p></li>
-<li><p>A <strong>recipe</strong> specifying a set of preprocessing steps
-created from <code><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipes::recipe()</a></code>.</p></li>
 </ul>
 
 <p>If <code>x</code> has one column, then also specify <code>y</code> and <code>group</code>. If <code>x</code> has multiple
@@ -267,13 +251,11 @@ the group variable after the <code>|</code> sign, e.g <code>formula = hgt ~ age 
 One may specify additional variables, but the <code>brokenstick</code> model
 will ignored them.</p>
 <p>Note: This formula specification is specific to the <code>brokenstick()</code>
-function, and generates the error
-<code>No in-line functions should be used here</code> if passed directly to
-<code><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipes::recipe()</a></code>. See examples.</p></td>
+function.</p></td>
     </tr>
     <tr>
       <th>data</th>
-      <td><p>When a <strong>recipe</strong> or <strong>formula</strong> is used, <code>data</code> is specified as:</p><ul>
+      <td><p>When a <strong>formula</strong> is used, <code>data</code> is specified as:</p><ul>
 <li><p>A <strong>data frame</strong> containing predictor, group and outcome variables.</p></li>
 </ul></td>
     </tr>
@@ -388,36 +370,22 @@ are three such models: <code>argyle</code>, <code>cole</code> and <code>none</co
                       <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='no'>boundary</span>, <span class='kw'>method</span> <span class='kw'>=</span> <span class='st'>"kr"</span>)
 }
 
-<span class='co'># Five ways to specify the same model</span>
+<span class='co'># Four ways to specify the same model</span>
 <span class='co'># Formula interface</span>
 <span class='no'>mod1</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>hgt.z</span> ~ <span class='no'>age</span> <span class='kw'>|</span> <span class='no'>id</span>, <span class='no'>train</span>)
 
 <span class='co'># XY interface - numeric vector</span>
 <span class='no'>mod2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>train</span>, <span class='fu'>brokenstick</span>(<span class='no'>age</span>, <span class='no'>hgt.z</span>, <span class='no'>id</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod2</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='co'># Recipes data.frame interface</span>
-<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>recipes</span>)</div><div class='output co'>#&gt; <span class='message'>Loading required package: dplyr</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘dplyr’</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:stats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    filter, lag</span></div><div class='output co'>#&gt; <span class='message'>The following objects are masked from ‘package:base’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    intersect, setdiff, setequal, union</span></div><div class='output co'>#&gt; <span class='message'></span>
-#&gt; <span class='message'>Attaching package: ‘recipes’</span></div><div class='output co'>#&gt; <span class='message'>The following object is masked from ‘package:stats’:</span>
-#&gt; <span class='message'></span>
-#&gt; <span class='message'>    step</span></div><div class='input'><span class='no'>rec</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://recipes.tidymodels.org/reference/recipe.html'>recipe</a></span>(<span class='no'>train</span>,
-              <span class='kw'>vars</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"hgt.z"</span>, <span class='st'>"age"</span>, <span class='st'>"id"</span>),
-              <span class='kw'>roles</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"outcome"</span>, <span class='st'>"predictor"</span>, <span class='st'>"group"</span>))
-<span class='no'>mod3</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>rec</span>, <span class='no'>train</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod3</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod2</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 <span class='co'># XY interface - data.frame</span>
-<span class='no'>mod4</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>train</span>, <span class='fu'>brokenstick</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>age</span>), <span class='no'>hgt.z</span>, <span class='no'>id</span>))
-<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod4</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='no'>mod3</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/with.html'>with</a></span>(<span class='no'>train</span>, <span class='fu'>brokenstick</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='no'>age</span>), <span class='no'>hgt.z</span>, <span class='no'>id</span>))
+<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod3</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
 <span class='co'># XY interface - matrix</span>
 <span class='no'>tt</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/matrix.html'>as.matrix</a></span>(<span class='no'>train</span>[, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>7</span>)])
-<span class='no'>mod5</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>tt</span>[, <span class='st'>"age"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
+<span class='no'>mod4</span> <span class='kw'>&lt;-</span> <span class='fu'>brokenstick</span>(<span class='no'>tt</span>[, <span class='st'>"age"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
                     <span class='no'>tt</span>[, <span class='st'>"hgt.z"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>],
                     <span class='no'>tt</span>[, <span class='st'>"id"</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>])
-<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod5</span>)</div><div class='output co'>#&gt; [1] TRUE</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='no'>mod1</span>, <span class='no'>mod4</span>)</div><div class='output co'>#&gt; [1] FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

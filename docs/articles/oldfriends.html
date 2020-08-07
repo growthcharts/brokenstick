@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.72.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.0</span>
       </span>
     </div>
 
@@ -97,12 +97,12 @@
 
       
 
-      </header><div class="row">
+      </header><script src="oldfriends_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Help for old friends</h1>
             
-            <h4 class="date">2020-07-09</h4>
+            <h4 class="date">2020-08-07</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/stefvanbuuren/brokenstick/blob/master/vignettes/oldfriends.Rmd"><code>vignettes/oldfriends.Rmd</code></a></small>
       <div class="hidden name"><code>oldfriends.Rmd</code></div>
@@ -117,7 +117,7 @@
 <a href="#background" class="anchor"></a>Background</h1>
 <p>Versions after <code>brokenstick 0.62.1</code> (May 2020) have a substantially changed interface. In particular, later versions (starting with <code>brokenstick 0.70.0</code>) include the following changes:</p>
 <ol style="list-style-type: decimal">
-<li><p><code>brokenstick</code> adopts the <code>tidymodels</code> philosophy. It is now possible to fit a model using five different interfaces. There is no need anymore the hardcode variable names in the source data.</p></li>
+<li><p><code>brokenstick</code> adopts the <code>tidymodels</code> philosophy. It is now possible to fit a model using four different interfaces. There is no need anymore the hardcode variable names in the source data.</p></li>
 <li><p>Version <code>0.70.0</code> introduces a new estimation method, the Kasim-Raudenbush sampler. The new method is more flexible and faster than <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lme4::lmer()</a></code> when the number of knots is large.</p></li>
 <li><p>Version <code>0.70.0</code> introduces two simple correlation models that may be used to smooth out the variance-covariance matrix of the random effects.</p></li>
 <li><p>The definition of the <code>brokenstick</code> class has changed. Objects of class <code>brokenstick</code> do no longer store the training data.</p></li>
@@ -144,7 +144,7 @@
 <p>Fit model, old version:</p>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="no">data</span> <span class="kw">&lt;-</span> <span class="kw pkg">brokenstick</span><span class="kw ns">::</span><span class="no"><a href="../reference/smocc_200.html">smocc_200</a></span>
 <span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">hgt.z</span>, <span class="kw">x</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">age</span>, <span class="kw">subjid</span> <span class="kw">=</span> <span class="no">data</span>$<span class="no">subjid</span>)</pre></body></html></div>
-<p>Fit model, version <code>0.70.0</code> and higher:</p>
+<p>Fit model, version <code>0.75.0</code> and higher:</p>
 <div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="no">data</span> <span class="kw">&lt;-</span> <span class="kw pkg">brokenstick</span><span class="kw ns">::</span><span class="no"><a href="../reference/smocc_200.html">smocc_200</a></span>
 
 <span class="co"># formula interface</span>
@@ -153,33 +153,12 @@
 <span class="co"># XY interface - numeric vector</span>
 <span class="no">fit2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">data</span>, <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="no">age</span>, <span class="no">hgt.z</span>, <span class="no">id</span>))
 
-<span class="co"># Recipes data.frame interface</span>
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">recipes</span>)
-<span class="co">#&gt; Loading required package: dplyr</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'dplyr'</span>
-<span class="co">#&gt; The following objects are masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     filter, lag</span>
-<span class="co">#&gt; The following objects are masked from 'package:base':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     intersect, setdiff, setequal, union</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt; Attaching package: 'recipes'</span>
-<span class="co">#&gt; The following object is masked from 'package:stats':</span>
-<span class="co">#&gt; </span>
-<span class="co">#&gt;     step</span>
-<span class="no">rec</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html">recipe</a></span>(<span class="no">data</span>,
-              <span class="kw">vars</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"hgt.z"</span>, <span class="st">"age"</span>, <span class="st">"id"</span>),
-              <span class="kw">roles</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"outcome"</span>, <span class="st">"predictor"</span>, <span class="st">"group"</span>))
-<span class="no">fit3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="no">rec</span>, <span class="no">data</span>)
-
 <span class="co"># XY interface - data.frame</span>
-<span class="no">fit4</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">data</span>, <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">age</span>), <span class="no">hgt.z</span>, <span class="no">id</span>))
+<span class="no">fit3</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span>(<span class="no">data</span>, <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">age</span>), <span class="no">hgt.z</span>, <span class="no">id</span>))
 
 <span class="co"># XY interface - matrix</span>
 <span class="no">tt</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span>(<span class="no">data</span>[, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">7</span>)])
-<span class="no">fit5</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="no">tt</span>[, <span class="st">"age"</span>, <span class="kw">drop</span> <span class="kw">=</span> <span class="fl">FALSE</span>],
+<span class="no">fit4</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="no">tt</span>[, <span class="st">"age"</span>, <span class="kw">drop</span> <span class="kw">=</span> <span class="fl">FALSE</span>],
                     <span class="no">tt</span>[, <span class="st">"hgt.z"</span>, <span class="kw">drop</span> <span class="kw">=</span> <span class="fl">FALSE</span>],
                     <span class="no">tt</span>[, <span class="st">"id"</span>, <span class="kw">drop</span> <span class="kw">=</span> <span class="fl">FALSE</span>])</pre></body></html></div>
 <p>All fitted models are identical.</p>
