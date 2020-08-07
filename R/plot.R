@@ -51,6 +51,7 @@ plot.brokenstick <- function(x,
                              n_plot = 3L) {
   if (!inherits(x, "brokenstick")) stop("Argument `x` not of class brokenstick.")
   if (!any(show)) stop("At least one of `show` should be TRUE.")
+  install.on.demand("ggplot2", ...)
 
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
@@ -68,11 +69,11 @@ plot.brokenstick <- function(x,
   if (!is.null(ylim))
     idx <- idx &
     ((data[[".source"]] == "data" &
-       data[[x$names$y]] >= ylim[1L] &
-       data[[x$names$y]] <= ylim[2L]) |
-    (data[[".source"]] == "added" &
-       data[[".pred"]] >= ylim[1L] &
-       data[[".pred"]] <= ylim[2L]))
+        data[[x$names$y]] >= ylim[1L] &
+        data[[x$names$y]] <= ylim[2L]) |
+       (data[[".source"]] == "added" &
+          data[[".pred"]] >= ylim[1L] &
+          data[[".pred"]] <= ylim[2L]))
 
   # safety measure, restrict to first n_plot cases if no groups are specified
   if (is.null(group)) {
@@ -128,7 +129,7 @@ plot_trajectory  <- function(x,
 
   if (is.null(xlab)) xlab <- x$names$x
   if (is.null(ylab)) ylab <- x$names$y
-  g <- ggplot(data, aes_string(x = x$names$x, y = x$names$y)) +
+  g <- ggplot2::ggplot(data, ggplot2::aes_string(x = x$names$x, y = x$names$y)) +
     xlab(xlab) +
     ylab(ylab)
 
@@ -139,30 +140,30 @@ plot_trajectory  <- function(x,
   k <- data$.source == "added"
   if (any(!k)) {
     g <- g +
-      geom_line(data = data[!k, ], color = color_y[2L]) +
-      geom_point(data = data[!k, ], color = color_y[1L], size = size_y)
+      ggplot2::geom_line(data = data[!k, ], color = color_y[2L]) +
+      ggplot2::geom_point(data = data[!k, ], color = color_y[1L], size = size_y)
   }
 
   # add broken stick points and lines
   if (any(k)) {
     if (x$degree == 0L) {
-      g <- g + geom_step(aes_string(y = ".pred"),
-                         data = data[k, ], color = color_yhat[2L])
+      g <- g + ggplot2::geom_step(ggplot2::aes_string(y = ".pred"),
+                                  data = data[k, ], color = color_yhat[2L])
     } else {
       g <- g +
-        geom_line(aes_string(y = ".pred"),
-                  data = data[k, ], color = color_yhat[2L]) +
-        geom_point(aes_string(y = ".pred"),
-                   data = data[k, ], color = color_yhat[1L],
-                   size = size_yhat)
+        ggplot2::geom_line(ggplot2::aes_string(y = ".pred"),
+                           data = data[k, ], color = color_yhat[2L]) +
+        ggplot2::geom_point(ggplot2::aes_string(y = ".pred"),
+                            data = data[k, ], color = color_yhat[1L],
+                            size = size_yhat)
     }
   }
 
   # split out according to subjid
   g <- g +
-    facet_wrap(as.formula(paste("~", x$names$g)),
-               ncol = ncol,
-               scales = scales) +
+    ggplot2::facet_wrap(as.formula(paste("~", x$names$g)),
+                        ncol = ncol,
+                        scales = scales) +
     theme
 
   g

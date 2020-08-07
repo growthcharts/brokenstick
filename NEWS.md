@@ -1,3 +1,12 @@
+# brokenstick 0.75.0
+
+- This version trims down the package in various ways
+- Removes dependencies of `hardhat` and `recipes`
+- Makes the `brokenstick` object smaller since no blueprints are stored
+- Removes the `recipe` interface to the `brokenstick()` function
+- Moves `ggplot2` to `suggests`
+- Copies over the `install.on.demand()` function from `mice`
+
 # brokenstick 0.72.1
 
 - Imports `recipes::recipe()` to inform R package installation process  

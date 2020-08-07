@@ -30,7 +30,8 @@ The main functions are:
 }
 
 \references{
-van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hall/CRC, 2012. Chapter 9.
+van Buuren, S. (2018). \emph{Flexible Imputation of Missing Data. Second Edition}. Chapman & Hall/CRC. Chapter 11.
+\url{https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick}
 }
 \seealso{
 \code{\link{brokenstick}},

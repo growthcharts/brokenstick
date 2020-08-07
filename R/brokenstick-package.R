@@ -1,7 +1,5 @@
 #' @importFrom dplyr           bind_rows bind_cols filter group_by
 #'                             mutate pull relocate select ungroup `%>%`
-#' @importFrom ggplot2         aes_string facet_wrap geom_line geom_point
-#'                             geom_step ggplot xlab xlim ylab ylim
 #' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
 #' @importFrom methods         slot
 #' @importFrom matrixsampling  rwishart
@@ -14,6 +12,7 @@
 #'                             predict quantile rgamma rnorm
 #'                             rWishart setNames smooth var
 #' @importFrom tidyr           drop_na pivot_wider
+#' @importFrom utils           askYesNo install.packages
 NULL
 
 #' \pkg{brokenstick}: A package for irregular longitudinal data.
@@ -42,5 +41,6 @@ NULL
 #' Birth, Growth and Development knowledge integration (HBGDki)
 #' program of the Bill & Melinda Gates Foundation.
 #' @references
-#' van Buuren, S. (2012). \emph{Flexible Imputation of Missing Data}. Chapman & Hall/CRC, 2012. Chapter 9.
+#' van Buuren, S. (2018). \emph{Flexible Imputation of Missing Data. Second Edition}. Chapman & Hall/CRC. Chapter 11.
+#' \url{https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick}
 NULL
