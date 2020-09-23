@@ -78,7 +78,7 @@ chosen grid points, and hence look like a broken stick." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.1</span>
       </span>
     </div>
 
@@ -268,13 +268,18 @@ knots (see below) beyond the data range.</p></td>
     </tr>
     <tr>
       <th>boundary</th>
-      <td><p>Optional, but recommended. Numerical vector of
+      <td><p>Optional. Numerical vector of
 length 2 with the left and right boundary knots. The <code>boundary</code>
 setting is passed to <code><a href='https://rdrr.io/r/splines/bs.html'>splines::bs()</a></code> as the <code>Boundary.knots</code> argument.
-If not specified, then the range of predictor variable is taken. Since
-the range depends on the data, it is recommended to specify <code>boundary</code>
-explicitly. Note the the <code>boundary</code> range is internally expanded
-to include at least <code><a href='https://rdrr.io/r/base/range.html'>range(knots)</a></code>.</p></td>
+If not specified, the range of predictor variable is taken. Automatic
+model specification is data-dependent. However, if both <code>knots</code> and
+<code>boundary</code> are supplied, the B-spline transformation parameter do not
+depend on the data. If specified, the <code>boundary</code> range is internally
+expanded to include at least <code><a href='https://rdrr.io/r/base/range.html'>range(knots)</a></code>. The warning
+<code>some 'x' values beyond boundary knots may cause ill-conditioned bases</code>
+implies that model fitting ignores any data beyond the (expanded) boundary
+range. It is possible to prevent this warning by pre-filtering rows
+in <code>data</code> to the boundary range.</p></td>
     </tr>
     <tr>
       <th>k</th>
