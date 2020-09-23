@@ -48,7 +48,8 @@ make_basis <- function(x,
     df <- data.frame(x = cut(pull(x, x_name),
                              breaks = c(boundary[1L], knots, boundary[2L]),
                              right = FALSE, include.lowest = TRUE))
-    X <- model.matrix(as.formula("~ 0 + x"), data = df)
+    X <- model.matrix(as.formula("~ 0 + x"),
+                      model.frame(~ ., df, na.action = na.pass))
   }
 
   # fuzzy coding by linear spline
