@@ -4,14 +4,11 @@ calculate_knots <- function(x, k, knots, boundary) {
   knots_orig <- knots
   boundary_orig <- boundary
 
-  # if not specified, define boundary as data range
+  # for NULL or length not 2, set boundary to data range
   range <- range(x, na.rm = TRUE)
-  if (is.null(boundary_orig)) boundary <- range
   if (length(boundary_orig) != 2) boundary <- range
 
-  # if knots is specified
-  #   extend lower boundary to min(knots)
-  #   extend upper boundary to max(knots)
+  # make sure that boundary includes all knots
   if (!is.null(knots_orig)) {
     boundary[1] <- min(min(knots_orig, na.rm = TRUE), boundary[1])
     boundary[2] <- max(max(knots_orig, na.rm = TRUE), boundary[2])

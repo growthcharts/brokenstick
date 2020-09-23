@@ -48,13 +48,18 @@
 #' Values outside the range of the data will extend the `boundary`
 #' knots (see below) beyond the data range.
 #'
-#' @param boundary Optional, but recommended. Numerical vector of
+#' @param boundary Optional. Numerical vector of
 #' length 2 with the left and right boundary knots. The `boundary`
 #' setting is passed to [splines::bs()] as the `Boundary.knots` argument.
-#' If not specified, then the range of predictor variable is taken. Since
-#' the range depends on the data, it is recommended to specify `boundary`
-#' explicitly. Note the the `boundary` range is internally expanded
-#' to include at least `range(knots)`.
+#' If not specified, the range of predictor variable is taken. Automatic
+#' model specification is data-dependent. However, if both `knots` and
+#' `boundary` are supplied, the B-spline transformation parameter do not
+#' depend on the data. If specified, the `boundary` range is internally
+#' expanded to include at least `range(knots)`. The warning
+#' `some 'x' values beyond boundary knots may cause ill-conditioned bases`
+#' implies that model fitting ignores any data beyond the (expanded) boundary
+#' range. It is possible to prevent this warning by pre-filtering rows
+#' in `data` to the boundary range.
 #'
 #' @param k Optional, a convenience parameter for the number of
 #' internal knots. If specified, then `k` internal knots are placed
@@ -71,8 +76,8 @@
 #' @param degree the degree of the spline. The broken stick model
 #' requires linear splines, so the default is `degree = 1`.
 #' Setting `degree = 0` yields (crisp) dummy coding, and one
-#' column less than for `degree = 1`. Current version only supports
-#' `degree = 1`.
+#' column less than for `degree = 1`. The `brokenstick` package supports
+#' only `degree = 0` and `degree = 1`.
 #'
 #' @param method Estimation method. Either `"kr"` (for the
 #' Kasim-Raudenbush sampler) or `"lmer"` (for [lme4::lmer()]) (default).

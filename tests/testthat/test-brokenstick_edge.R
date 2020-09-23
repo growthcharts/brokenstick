@@ -49,3 +49,10 @@ test_that("brokenstick handles low number of cases", {
   }
 )
 
+test_that("warns if right boundary is lower than max(age)", {
+  expect_warning(brokenstick(hgt.z ~ age | id, smocc_200,
+                           knots = 1:2, boundary = c(0, 1)),
+               regexp = "some 'x' values beyond boundary knots may cause ill-conditioned bases",
+               fixed = TRUE)
+})
+

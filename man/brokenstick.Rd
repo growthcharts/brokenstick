@@ -99,13 +99,18 @@ locations of the breaks to be placed on the values of the predictor.
 Values outside the range of the data will extend the \code{boundary}
 knots (see below) beyond the data range.}
 
-\item{boundary}{Optional, but recommended. Numerical vector of
+\item{boundary}{Optional. Numerical vector of
 length 2 with the left and right boundary knots. The \code{boundary}
 setting is passed to \code{\link[splines:bs]{splines::bs()}} as the \code{Boundary.knots} argument.
-If not specified, then the range of predictor variable is taken. Since
-the range depends on the data, it is recommended to specify \code{boundary}
-explicitly. Note the the \code{boundary} range is internally expanded
-to include at least \code{range(knots)}.}
+If not specified, the range of predictor variable is taken. Automatic
+model specification is data-dependent. However, if both \code{knots} and
+\code{boundary} are supplied, the B-spline transformation parameter do not
+depend on the data. If specified, the \code{boundary} range is internally
+expanded to include at least \code{range(knots)}. The warning
+\verb{some 'x' values beyond boundary knots may cause ill-conditioned bases}
+implies that model fitting ignores any data beyond the (expanded) boundary
+range. It is possible to prevent this warning by pre-filtering rows
+in \code{data} to the boundary range.}
 
 \item{k}{Optional, a convenience parameter for the number of
 internal knots. If specified, then \code{k} internal knots are placed
