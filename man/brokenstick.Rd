@@ -127,8 +127,8 @@ using \code{knots} and \code{boundary} over \code{k}. If both \code{k} and
 \item{degree}{the degree of the spline. The broken stick model
 requires linear splines, so the default is \code{degree = 1}.
 Setting \code{degree = 0} yields (crisp) dummy coding, and one
-column less than for \code{degree = 1}. Current version only supports
-\code{degree = 1}.}
+column less than for \code{degree = 1}. The \code{brokenstick} package supports
+only \code{degree = 0} and \code{degree = 1}.}
 
 \item{method}{Estimation method. Either \code{"kr"} (for the
 Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}) (default).}

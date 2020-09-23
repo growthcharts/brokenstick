@@ -8,7 +8,7 @@
 #' @importFrom stats           approx as.formula cor cov2cor
 #'                             fitted model.frame lm
 #'                             model.matrix na.exclude na.omit
-#'                             optim
+#'                             na.pass optim
 #'                             predict quantile rgamma rnorm
 #'                             rWishart setNames smooth var
 #' @importFrom tidyr           drop_na pivot_wider

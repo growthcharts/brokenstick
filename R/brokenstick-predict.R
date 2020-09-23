@@ -212,13 +212,13 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
   xv <- get_knots(object)
   if (object$degree == 0L) xv <- xv[-length(xv)]
   long1 <- data.frame(
-    group = rep(as.numeric(colnames(blup)), each = nrow(blup)),
+    group = rep(colnames(blup), each = nrow(blup)),
     x = xv,
     y = NA,
     yhat = as.vector(blup),
     knot = TRUE)
   long2 <- data.frame(
-    group = as.vector(g),
+    group = as.character(as.vector(g)),
     x = as.vector(x),
     y = as.vector(y),
     yhat = NA,

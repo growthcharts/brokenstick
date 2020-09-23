@@ -85,3 +85,25 @@ test_that("accepts unordered x", {
     round(predict(exp, x = c(2, 3, 1), y = c(1, 0, -1))[3, 5], 5)
   )
 })
+
+context("predict_brokenstick factor")
+
+fit <- fit_200
+dat <- smocc_200
+dat$id <- factor(dat$id)
+
+test_that("works if id in new_data is a factor", {
+  expect_silent(predict(obj, new_data = dat))
+})
+
+# We needed this to solve problem when new_data is a factor
+# obj1 <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 1:2)
+# obj2 <- brokenstick(hgt.z ~ age | id, data = dat, knots = 1:2)
+# test_that("brokenstick doesn't care about factors", {
+#   expect_identical(obj1, obj2)
+# })
+#
+#
+# z1 <- predict(obj1, new_data = dat)
+# z2 <- predict(obj2, new_data = dat)
+# identical(z1, z2)
