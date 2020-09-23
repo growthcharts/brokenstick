@@ -1,3 +1,8 @@
+# brokenstick 0.75.1
+
+- Add a better explanation of the `boundary` parameter
+- Evades that `model.matrix()` removes rows with `NA` if `degree = 0`
+
 # brokenstick 0.75.0
 
 - This version trims down the package in various ways
