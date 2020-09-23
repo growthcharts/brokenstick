@@ -1,3 +1,7 @@
+# brokenstick 0.75.2
+
+- Solves a data combination problem in `predict()` when the group variable is a factor
+
 # brokenstick 0.75.1
 
 - Add a better explanation of the `boundary` parameter
