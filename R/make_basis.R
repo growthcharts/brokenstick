@@ -1,8 +1,7 @@
 #' Create linear splines basis
 #'
 #' This function creates the basis function of a linear first-order splines
-#' at a user-specific set of break points. The default knots
-#' code the age range 0-3 years.
+#' at a user-specific set of break points.
 #' @aliases make_basis
 #' @param x a \code{data.frame} with one column
 #' @param knots a vector of internal knots, excluding boundary knots

@@ -1,3 +1,5 @@
+## author: Stef van Buuren, 2020
+
 kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
                       model = "argyle",
                       runin = 100L, ndraw = 10L, par_skip = 10L,

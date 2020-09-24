@@ -1,20 +1,3 @@
-#' @importFrom dplyr           bind_rows bind_cols filter group_by
-#'                             mutate pull relocate select ungroup `%>%`
-#' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
-#' @importFrom methods         slot
-#' @importFrom matrixsampling  rwishart
-#' @importFrom rlang           .data arg_match
-#' @importFrom splines         bs
-#' @importFrom stats           approx as.formula cor cov2cor
-#'                             fitted model.frame lm
-#'                             model.matrix na.exclude na.omit
-#'                             na.pass optim
-#'                             predict quantile rgamma rnorm
-#'                             rWishart setNames smooth var
-#' @importFrom tidyr           drop_na pivot_wider
-#' @importFrom utils           askYesNo install.packages
-NULL
-
 #' \pkg{brokenstick}: A package for irregular longitudinal data.
 #'
 #' The broken stick model describes a set of individual curves
@@ -30,8 +13,28 @@ NULL
 #' The main functions are:
 #' \tabular{ll}{
 #'   \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
-#'   \code{predict()} \tab Obtain predictions from fitted model\cr
-#'   }
+#'   \code{fitted()} \tab Calculate fitted values\cr
+#'   \code{get_knots()} \tab Obtain the knots from a broken stick model\cr
+#'   \code{get_r2()} \tab Obtain proportion of explained variance \cr
+#'   \code{predict()} \tab Obtain predictions on new data\cr
+#'   \code{plot()} \tab Plot observed and fitted trajectories by group \cr
+#'   \code{residuals()} \tab Extract residuals from broken stick model\cr
+#' }
+#' The following functions are helpers:
+#' \tabular{ll}{
+#'    \code{control_brokenstick()}\tab Set controls to steer calculations\cr
+#'    \code{EB()} \tab Empirical Bayes predictor for random effects\cr
+#'    \code{kr()} \tab Kasim-Raudenbush sampler for two-level normal model \cr
+#'    \code{make_basis()} \tab Create linear splines basis\cr
+#' }
+#'
+#' The package follows the \code{tidymodels} conventions
+#' \url{https://tidymodels.github.io/model-implementation-principles/}.
+#' For example, training data are not stored in the modelling object and
+#' calculated variables are named after the convention. The
+#' package architecture borrows important ideas from the \code{hardhat}
+#' package.(Vaughan, 2020)
+#'
 #' @docType package
 #' @name brokenstick-pkg
 #' @seealso \code{\link{brokenstick}},
@@ -43,4 +46,7 @@ NULL
 #' @references
 #' van Buuren, S. (2018). \emph{Flexible Imputation of Missing Data. Second Edition}. Chapman & Hall/CRC. Chapter 11.
 #' \url{https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick}
+#'
+#' Vaughan, D. and Kuhn, M. (2020). \emph{hardhat: Construct Modeling Packages}.
+#' R package version 0.1.4. \url{https://CRAN.R-project.org/package=hardhat}
 NULL

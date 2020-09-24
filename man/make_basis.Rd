@@ -36,8 +36,7 @@ columns, with some extra attributes described by \code{bs()}.
 }
 \description{
 This function creates the basis function of a linear first-order splines
-at a user-specific set of break points. The default knots
-code the age range 0-3 years.
+at a user-specific set of break points.
 }
 \note{
 Before version 0.54, it was standard practice that the \code{knots}
