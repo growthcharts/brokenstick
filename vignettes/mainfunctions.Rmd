@@ -87,7 +87,8 @@ We fit a trivial broken stick model with just one line anchored at the minimum a
 ```{r figure1, warning = FALSE}
 fit <- brokenstick(hgt ~ age | id, data)
 ids <- c(10001, 10005, 10022)
-plot(fit, new_data = data, group = ids, xlab = "Age (years)", ylab = "Length (cm)")
+plot(fit, new_data = data, group = ids, 
+     xlab = "Age (years)", ylab = "Length (cm)")
 ```
 
 The following plot displays the same data, but in standardised units so as to increase the analytic resolution:
@@ -105,7 +106,8 @@ The *broken stick model* describes a trajectory by a series of connected straigh
 
 ```{r plotfit2, cache = TRUE}
 fit2 <- brokenstick(hgt.z ~ age | id, data = data, knots = 0:3)
-plot(fit2, data, group = ids, xlim = c(0, 2.1), xlab = "Age (years)", ylab = "Length (SDS)")
+plot(fit2, data, group = ids, xlim = c(0, 2.1), 
+     xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
 The `fit2` object holds the parameter estimates of the model:

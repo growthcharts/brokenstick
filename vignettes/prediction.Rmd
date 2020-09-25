@@ -58,14 +58,16 @@ library("ggcorrplot")
 The broken stick model can fit observations in either the raw scale (cm, kg, and so on) or as a standard deviation score (SDS), or $Z$-score. The results from the analysis of the $Z$-score is preferable for several reasons: 
 
 1. for growth curves, a straight line assumption is more plausible in the $Z$-score scale;
-2. the assumption of normality is more plausible in the $Z$-score scale;
-3. fitting the $Z$-score data leads to less convergence issues.
+2. observations in the $Z$-score scale are closer to multivariate normality;
+3. analysis of $Z$-scores highlights the interesting variation within and between children;
+4. fitting $Z$-score data leads to less convergence issues.
 
-It is easy to convert the measurements into the $Z$-score scale, fit the model, and convert back to the raw scale afterwards, if desired. There are several `R` packages that assist in the calculations: [AGD](https://cran.r-project.org/web/packages/AGD/index.html), [anthro](https://cran.r-project.org/web/packages/anthro/index.html), [childsds](https://cran.r-project.org/web/packages/childsds/index.html), [growthstandards](https://github.com/ki-tools/growthstandards) and [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html). 
+It is easy to convert the measurements into the $Z$-score scale, fit the model, and convert back to the raw scale afterwards, if desired. There are several `R` packages that assist in the calculations: [\pkg{AGD}](https://cran.r-project.org/web/packages/AGD/index.html), [anthro](https://cran.r-project.org/web/packages/anthro/index.html), [childsds](https://cran.r-project.org/web/packages/childsds/index.html), [growthstandards](https://github.com/ki-tools/growthstandards) and [zscorer](https://cran.r-project.org/web/packages/zscorer/index.html). 
 
 Here we use 200 children from the SMOCC data [@herngreen1994]. The `smocc_200` data contains the height measurement both in the original scale in cm (`hgt`) and the Z-score scale (`hgt.z`) as calculated against the growth references of the Fourth Dutch Growth study [@fredriks2000].
 
 ```{r zscores}
+hist(smocc_200$hgt.z)
 library(brokenstick)
 data <- smocc_200
 head(data)

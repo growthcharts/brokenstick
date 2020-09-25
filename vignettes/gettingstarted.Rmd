@@ -41,11 +41,30 @@ Three unique features of the broken stick model are:
 
 The `brokenstick` package contains functions to fit, predict and plot data. The main functions in the `brokenstick` package are:
 
+Function name          | Description
+-----------------------|---------------------------------
+`brokenstick()`        | Fit a broken stick model to irregular data
+`predict()`            | Predict broken stick estimates for new data
+`plot()`               | Plot individual trajectories
+
+The following functions are user-oriented helpers:
+
 Function name        | Description
 ---------------------|---------------------------------
-`brokenstick()`      | Fit a broken stick model to irregular data
-`predict()`          | Predict broken stick estimates for new growth data
-`plot()`             | Plot individual trajectories
+`fitted()`           | Calculate fitted values
+`get_knots()`        | Obtain the knots used by model
+`get_r2()`           | Obtain proportion of explained variance
+`residuals()`        | Extract residuals from model
+
+The following functions are responsible for calculations:
+
+Function name          | Description
+-----------------------|---------------------------------
+`control_brokenstick()`| Set controls to steer calculations
+`EB()`                 | Empirical Bayes predictor for random effects
+`kr()`                 | Kasim-Raudenbush sampler for two-level model
+`make_basis()`         | Create linear splines basis
+
 
 ## Further reading
 

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.3</span>
       </span>
     </div>
 
@@ -103,7 +103,7 @@
       <h1 data-toc-skip>Overview of main functions</h1>
                         <h4 class="author">Stef van Buuren</h4>
             
-            <h4 class="date">2020-09-23</h4>
+            <h4 class="date">2020-09-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/stefvanbuuren/brokenstick/blob/master/vignettes/mainfunctions.Rmd"><code>vignettes/mainfunctions.Rmd</code></a></small>
       <div class="hidden name"><code>mainfunctions.Rmd</code></div>
@@ -160,7 +160,8 @@ img {
 <p>We fit a trivial broken stick model with just one line anchored at the minimum and maximum age, and plot the trajectories of three selected children as follows:</p>
 <div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="no">fit</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="no">hgt</span> ~ <span class="no">age</span> <span class="kw">|</span> <span class="no">id</span>, <span class="no">data</span>)
 <span class="no">ids</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>, <span class="kw">new_data</span> <span class="kw">=</span> <span class="no">data</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"Age (years)"</span>, <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"Length (cm)"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit</span>, <span class="kw">new_data</span> <span class="kw">=</span> <span class="no">data</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">ids</span>,
+     <span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"Age (years)"</span>, <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"Length (cm)"</span>)</pre></body></html></div>
 <p><img src="mainfunctions_files/figure-html/figure1-1.svg" width="672"></p>
 <p>The following plot displays the same data, but in standardised units so as to increase the analytic resolution:</p>
 <div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="no">fit0</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="no">hgt.z</span> ~ <span class="no">age</span> <span class="kw">|</span> <span class="no">id</span>, <span class="no">data</span>)
@@ -173,7 +174,8 @@ img {
 <a href="#fit-broken-stick-model-with-two-lines" class="anchor"></a>Fit broken stick model with two lines</h2>
 <p>The <em>broken stick model</em> describes a trajectory by a series of connected straight lines. We first calculate a model with two connected lines. The first line starts at birth and end at the age of exactly 1 years. The second line spans the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate and plot the model as follows:</p>
 <div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">fit2</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span>(<span class="no">hgt.z</span> ~ <span class="no">age</span> <span class="kw">|</span> <span class="no">id</span>, <span class="kw">data</span> <span class="kw">=</span> <span class="no">data</span>, <span class="kw">knots</span> <span class="kw">=</span> <span class="fl">0</span>:<span class="fl">3</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit2</span>, <span class="no">data</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">2.1</span>), <span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"Age (years)"</span>, <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"Length (SDS)"</span>)</pre></body></html></div>
+<span class="fu"><a href="https://rdrr.io/r/base/plot.html">plot</a></span>(<span class="no">fit2</span>, <span class="no">data</span>, <span class="kw">group</span> <span class="kw">=</span> <span class="no">ids</span>, <span class="kw">xlim</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">0</span>, <span class="fl">2.1</span>),
+     <span class="kw">xlab</span> <span class="kw">=</span> <span class="st">"Age (years)"</span>, <span class="kw">ylab</span> <span class="kw">=</span> <span class="st">"Length (SDS)"</span>)</pre></body></html></div>
 <p><img src="mainfunctions_files/figure-html/plotfit2-1.svg" width="672"></p>
 <p>The <code>fit2</code> object holds the parameter estimates of the model:</p>
 <div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">fit2</span></pre></body></html></div>

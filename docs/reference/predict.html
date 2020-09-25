@@ -77,7 +77,7 @@ the fitted model, through the x and y arguments." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.3</span>
       </span>
     </div>
 
@@ -1025,9 +1025,29 @@ those on <code>newdata</code>.</p></li>
 #&gt; 3   added   2   0.5  0 0.5955456
 #&gt; 4   added   3   0.0  0 0.0729350</div><div class='input'>
 <span class='co'># case 3: only group</span>
-<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit</span>, <span class='no'>test</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>999</span>))</div><div class='output co'>#&gt; # A tibble: 0 x 9
-#&gt; # … with 9 variables: .source &lt;chr&gt;, id &lt;dbl&gt;, age &lt;dbl&gt;, sex &lt;chr&gt;, ga &lt;dbl&gt;,
-#&gt; #   bw &lt;dbl&gt;, hgt &lt;dbl&gt;, hgt.z &lt;dbl&gt;, .pred &lt;dbl&gt;</div><div class='input'>
+<span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit</span>, <span class='no'>test</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>999</span>))</div><div class='output co'>#&gt; # A tibble: 20 x 9
+#&gt;    .source    id    age sex       ga    bw   hgt  hgt.z  .pred
+#&gt;    &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
+#&gt;  1 data    11045 0      female    40  3350  NA   NA     -0.261
+#&gt;  2 data    11045 0.0684 female    40  3350  53   -0.167 -0.285
+#&gt;  3 data    11045 0.145  female    40  3350  56   -0.028 -0.313
+#&gt;  4 data    11045 0.241  female    40  3350  58.5 -0.384 -0.347
+#&gt;  5 data    11045 0.548  female    40  3350  65   -1.04  -0.457
+#&gt;  6 data    11045 0.835  female    40  3350  70.5 -0.811 -0.561
+#&gt;  7 data    11045 1.06   female    40  3350  74.5 -0.627 -0.605
+#&gt;  8 data    11045 1.26   female    40  3350  77.5 -0.517 -0.559
+#&gt;  9 data    11045 1.57   female    40  3350  81   -0.626 -0.485
+#&gt; 10 data    11045 2.03   female    40  3350  88    0.073 -0.358
+#&gt; 11 data    11120 0      male      39  2780  NA   NA     -1.79 
+#&gt; 12 data    11120 0.0794 male      39  2780  52   -1.18  -1.80 
+#&gt; 13 data    11120 0.156  male      39  2780  53   -2.08  -1.81 
+#&gt; 14 data    11120 0.233  male      39  2780  55   -2.40  -1.81 
+#&gt; 15 data    11120 0.482  male      39  2780  63   -1.84  -1.84 
+#&gt; 16 data    11120 0.750  male      39  2780  68   -1.77  -1.86 
+#&gt; 17 data    11120 0.980  male      39  2780  72   -1.55  -1.88 
+#&gt; 18 data    11120 1.23   male      39  2780  74.5 -1.82  -1.92 
+#&gt; 19 data    11120 1.54   male      39  2780  76   -2.50  -1.98 
+#&gt; 20 data    11120 1.98   male      39  2780  81   -2.35  -2.05 </div><div class='input'>
 <span class='co'># case 4: predict at x in selected groups</span>
 <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span>(<span class='no'>fit</span>, <span class='no'>test</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.25</span>), <span class='kw'>group</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>999</span>))</div><div class='output co'>#&gt; # A tibble: 6 x 9
 #&gt;   .source    id   age sex      ga    bw   hgt hgt.z  .pred

@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.3</span>
       </span>
     </div>
 
@@ -102,7 +102,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting started</h1>
             
-            <h4 class="date">2020-09-23</h4>
+            <h4 class="date">2020-09-25</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/stefvanbuuren/brokenstick/blob/master/vignettes/gettingstarted.Rmd"><code>vignettes/gettingstarted.Rmd</code></a></small>
       <div class="hidden name"><code>gettingstarted.Rmd</code></div>
@@ -163,11 +163,61 @@
 </tr>
 <tr class="even">
 <td><code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code></td>
-<td>Predict broken stick estimates for new growth data</td>
+<td>Predict broken stick estimates for new data</td>
 </tr>
 <tr class="odd">
 <td><code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code></td>
 <td>Plot individual trajectories</td>
+</tr>
+</tbody>
+</table>
+<p>The following functions are user-oriented helpers:</p>
+<table class="table">
+<thead><tr class="header">
+<th>Function name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="https://rdrr.io/r/stats/fitted.values.html">fitted()</a></code></td>
+<td>Calculate fitted values</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/get_knots.html">get_knots()</a></code></td>
+<td>Obtain the knots used by model</td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/get_r2.html">get_r2()</a></code></td>
+<td>Obtain proportion of explained variance</td>
+</tr>
+<tr class="even">
+<td><code><a href="https://rdrr.io/r/stats/residuals.html">residuals()</a></code></td>
+<td>Extract residuals from model</td>
+</tr>
+</tbody>
+</table>
+<p>The following functions are responsible for calculations:</p>
+<table class="table">
+<thead><tr class="header">
+<th>Function name</th>
+<th>Description</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code><a href="../reference/control_brokenstick.html">control_brokenstick()</a></code></td>
+<td>Set controls to steer calculations</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/EB.html">EB()</a></code></td>
+<td>Empirical Bayes predictor for random effects</td>
+</tr>
+<tr class="odd">
+<td><code><a href="../reference/kr.html">kr()</a></code></td>
+<td>Kasim-Raudenbush sampler for two-level model</td>
+</tr>
+<tr class="even">
+<td><code><a href="../reference/make_basis.html">make_basis()</a></code></td>
+<td>Create linear splines basis</td>
 </tr>
 </tbody>
 </table>
