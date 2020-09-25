@@ -59,8 +59,11 @@
 #' 5. If the user specifies `x`, `y` and `group`, the functions
 #' assumes that these vectors form a data frame. The lengths of `x`,
 #' `y` and `group` must be the same. This procedure uses only
-#' information from `newdata` for groups with `group` values that match
+#' information from `new_data` for groups with `group` values that match
 #' those on `newdata`.
+#' 6. As case 5, but now without a `new_data` argument. All data are
+#' specified through `x`, `y` and `group`. No matching to `new_data`
+#' attempted.
 #'
 #' @return
 #'
@@ -96,7 +99,7 @@
 #' # case 5: vectorized
 #' predict(fit, test, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 #'
-#' # case 5: vectorized, without new_data, results are different for 11045 and 11120
+#' # case 6: vectorized, without new_data, results are different for 11045 and 11120
 #' predict(fit, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 #' @rdname predict
 #' @export

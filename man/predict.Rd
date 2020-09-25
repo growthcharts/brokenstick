@@ -83,8 +83,11 @@ groups.
 \item If the user specifies \code{x}, \code{y} and \code{group}, the functions
 assumes that these vectors form a data frame. The lengths of \code{x},
 \code{y} and \code{group} must be the same. This procedure uses only
-information from \code{newdata} for groups with \code{group} values that match
+information from \code{new_data} for groups with \code{group} values that match
 those on \code{newdata}.
+\item As case 5, but now without a \code{new_data} argument. All data are
+specified through \code{x}, \code{y} and \code{group}. No matching to \code{new_data}
+attempted.
 }
 }
 \examples{
@@ -115,6 +118,6 @@ predict(fit, test, x = c(0.5, 1, 1.25), group = c(11045, 11120, 999))
 # case 5: vectorized
 predict(fit, test, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 
-# case 5: vectorized, without new_data, results are different for 11045 and 11120
+# case 6: vectorized, without new_data, results are different for 11045 and 11120
 predict(fit, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 }
