@@ -1,3 +1,7 @@
+# brokenstick 0.75.3
+
+- Solves a bug that always yielded zero rows for case 3 prediction
+
 # brokenstick 0.75.2
 
 - Solves a data combination problem in `predict()` when the group variable is a factor
