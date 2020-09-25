@@ -127,6 +127,11 @@ predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
     reset <- TRUE
   }
 
+  if (is.null(x) && is.null(y) && !is.null(group)) {
+    # case 3: do not strip the data (else we won't see anything)
+    strip_data <- FALSE
+  }
+
   x <- as.matrix(new_data[, object$names$x, drop = FALSE])
   y <- as.matrix(new_data[, object$names$y, drop = FALSE])
   g <- as.matrix(new_data[, object$names$g, drop = FALSE])
