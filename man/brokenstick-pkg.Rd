@@ -25,14 +25,19 @@ program of the Bill & Melinda Gates Foundation.
 The main functions are:
 \tabular{ll}{
 \code{brokenstick()} \tab Fit a broken stick model to irregular data\cr
+\code{predict()} \tab Obtain predictions on new data\cr
+\code{plot()} \tab Plot observed and fitted trajectories by group \cr
+}
+
+The following functions are user-oriented helpers:
+\tabular{ll}{
 \code{fitted()} \tab Calculate fitted values\cr
 \code{get_knots()} \tab Obtain the knots from a broken stick model\cr
 \code{get_r2()} \tab Obtain proportion of explained variance \cr
-\code{predict()} \tab Obtain predictions on new data\cr
-\code{plot()} \tab Plot observed and fitted trajectories by group \cr
 \code{residuals()} \tab Extract residuals from broken stick model\cr
 }
-The following functions are helpers:
+
+The following functions perform the calculations:
 \tabular{ll}{
 \code{control_brokenstick()}\tab Set controls to steer calculations\cr
 \code{EB()} \tab Empirical Bayes predictor for random effects\cr
