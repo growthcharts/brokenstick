@@ -1,3 +1,7 @@
+# brokenstick 0.76.1
+
+- Adds the `weightloss` data
+
 # brokenstick 0.76.0
 
 - Adds argument `what` to `plot.brokenstick()`
