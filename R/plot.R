@@ -4,6 +4,8 @@
 #' fitted trajectories of one or more groups.
 #'
 #' @param x An object of class `brokenstick`.
+#' @param what Which knots to plot? See [get_knots()]. The default,
+#' `what = "droplast"`, does not plot the right boundary knot.
 #' @param .x The `x` argument of the [predict.brokenstick()] function.
 #' @param xlim Vector of length 2 with range of x-axis
 #' @param ylim Vector of length 2 with range of y-axis
@@ -43,6 +45,7 @@
 plot.brokenstick <- function(x,
                              new_data,
                              ...,
+                             what = "droplast",
                              .x = NULL,
                              group = NULL,
                              xlim = NULL,
@@ -55,8 +58,8 @@ plot.brokenstick <- function(x,
 
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
-  data <- predict(object = x, new_data = new_data, x = .x,
-                  group = group, strip_data = FALSE, ...)
+  data <- predict(object = x, new_data = new_data, what = what, ...,
+                  x = .x, group = group, strip_data = FALSE)
   if (ncol(data) == 1L) data <- bind_cols(.source = "data", new_data, data)
 
   # apply trims

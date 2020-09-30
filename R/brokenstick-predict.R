@@ -113,7 +113,7 @@ predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
   # handle special case: x = "knots"
   if (length(x)) {
     if (!is.na(x[1L]) && x[1L] == "knots")
-      x <- get_knots(object)
+      x <- get_knots(object, ...)
   }
 
   if ((is.null(x) && is.null(y) && is.null(group))

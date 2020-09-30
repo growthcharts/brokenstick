@@ -8,6 +8,7 @@
   x,
   new_data,
   ...,
+  what = "droplast",
   .x = NULL,
   group = NULL,
   xlim = NULL,
@@ -23,6 +24,9 @@
 
 \item{...}{Extra arguments passed down to \code{\link[=predict.brokenstick]{predict.brokenstick()}}
 and \code{\link[=plot_trajectory]{plot_trajectory()}}.}
+
+\item{what}{Which knots to plot? See \code{\link[=get_knots]{get_knots()}}. The default,
+\code{what = "droplast"}, does not plot the right boundary knot.}
 
 \item{.x}{The \code{x} argument of the \code{\link[=predict.brokenstick]{predict.brokenstick()}} function.}
 
