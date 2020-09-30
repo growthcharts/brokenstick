@@ -1,13 +1,8 @@
-# brokenstick 0.75.3
+# brokenstick 0.76.0
 
+- Adds argument `what` to `plot.brokenstick()`
 - Solves a bug that always yielded zero rows for case 3 prediction
-
-# brokenstick 0.75.2
-
 - Solves a data combination problem in `predict()` when the group variable is a factor
-
-# brokenstick 0.75.1
-
 - Add a better explanation of the `boundary` parameter
 - Evades that `model.matrix()` removes rows with `NA` if `degree = 0`
 
