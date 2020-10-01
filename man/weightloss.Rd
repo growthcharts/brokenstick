@@ -11,7 +11,7 @@ A \code{data.frame} with 695 rows and 6 columns:
 \item{day}{Measurement day, 0-62 (integer)}
 \item{sex}{Sex, 1 = male, 0 = female (integer)}
 \item{week}{Week number, 1-9 (integer)}
-\item{condition}{Experimental condition (integer)}
+\item{condition}{Condition (control, diet, activity) (factor)}
 \item{body_weight}{Body weight in kg (numeric)}
 }
 }
@@ -23,5 +23,11 @@ The possibilities of the use of N-of-1 and do-it-yourself trials in nutritional 
 \description{
 Longitudinal weight measurements from 12 individuals with 63 daily
 measurement under three conditions.
+}
+\note{
+Constructed from file \code{pone.0232680.s001.csv}. We renumbered \code{subject}
+to consecutive integers 1-2 (as in the paper), corrected an error in the
+\code{condition} variable for subjects 4 and 12 to match the paper's Figure 4,
+and filtered the records to the ones woth an observed \code{body_weight} variable.
 }
 \keyword{datasets}
