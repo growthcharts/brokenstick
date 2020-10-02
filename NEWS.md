@@ -1,6 +1,7 @@
 # brokenstick 0.76.1
 
 - Adds the `weightloss` data
+- Fail early when user specifies `degree > 1`
 
 # brokenstick 0.76.0
 
