@@ -20,7 +20,7 @@ codes <- as.integer(rep(c(rep(1:3, 3), 1, 3, 2, rep(1:3, 7), 1, 3, 2), each = 21
 weightloss$condition <- factor(codes, labels = c("Control", "Diet", "Activity"))
 
 # keep only useful records
-weightloss <- weightloss[!is.na(weightloss$body_weight), ]
+# weightloss <- weightloss[!is.na(weightloss$body_weight), ]
 
 usethis::use_data(weightloss, overwrite = TRUE)
 
