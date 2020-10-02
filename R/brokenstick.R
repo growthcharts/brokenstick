@@ -273,6 +273,8 @@ brokenstick.numeric <- function(x, y, group, ...,
 brokenstick_bridge <- function(data, nms, knots, boundary, k, degree,
                                method, control, seed, ...) {
 
+  if (degree > 1L) stop("No support for degree > 1")
+
   y <- data[[nms$y]]
   x <- data[, nms$x, drop = FALSE]
   g <- data[[nms$g]]
