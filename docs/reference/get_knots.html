@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.76.2</span>
       </span>
     </div>
 
@@ -86,36 +86,6 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/gettingstarted.html">Getting started</a>
-    </li>
-    <li>
-      <a href="../articles/knotplacement.html">Knot placement</a>
-    </li>
-    <li>
-      <a href="../articles/mainfunctions.html">Overview of main functions</a>
-    </li>
-    <li>
-      <a href="../articles/model.html">Model formulation</a>
-    </li>
-    <li>
-      <a href="../articles/oldfriends.html">Help for old friends</a>
-    </li>
-    <li>
-      <a href="../articles/perfectmodel.html">Check perfect model</a>
-    </li>
-    <li>
-      <a href="../articles/prediction.html">Fit and predict</a>
-    </li>
-  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -150,7 +120,7 @@
     <p>Obtain the knots from a broken stick model</p>
     </div>
 
-    <pre class="usage"><span class='fu'>get_knots</span>(<span class='no'>object</span>, <span class='kw'>what</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"all"</span>, <span class='st'>"knots"</span>, <span class='st'>"boundary"</span>, <span class='st'>"droplast"</span>))</pre>
+    <pre class="usage"><span class='fu'>get_knots</span><span class='op'>(</span><span class='va'>object</span>, what <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"all"</span>, <span class='st'>"knots"</span>, <span class='st'>"boundary"</span>, <span class='st'>"droplast"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,7 +131,11 @@
     </tr>
     <tr>
       <th>what</th>
-      <td><p>A character vector of length 1. Valid values are
+      <td><p>A character vector of length 1. Valid values are</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Not used
 <code>"all"</code>, <code>"knots"</code>, <code>"boundary"</code> or <code>"droplast"</code>.
 The default is <code>what = "all"</code>.</p></td>
     </tr>
@@ -175,7 +149,8 @@ have proper class. The function can return <code><a href='https://rdrr.io/r/base
 there are no internal knots.</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>get_knots</span>(<span class='no'>fit_200</span>, <span class='st'>"knots"</span>)</div><div class='output co'>#&gt; [1] 0.0833 0.1667 0.2500 0.5000 0.7500 1.0000 1.2500 1.5000 2.0000</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>get_knots</span><span class='op'>(</span><span class='va'>fit_200</span>, <span class='st'>"knots"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.0833 0.1667 0.2500 0.5000 0.7500 1.0000 1.2500 1.5000 2.0000</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -191,7 +166,7 @@ there are no internal knots.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

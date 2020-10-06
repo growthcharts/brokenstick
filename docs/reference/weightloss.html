@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Articles • brokenstick</title>
+<title>Weight loss self-measurement data — weightloss • brokenstick</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,9 @@
 
 
 
-<meta property="og:title" content="Articles" />
+<meta property="og:title" content="Weight loss self-measurement data — weightloss" />
+<meta property="og:description" content="Longitudinal weight measurements from 12 individuals with 63 daily
+measurement under three conditions." />
 
 
 
@@ -58,7 +60,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-article-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
@@ -86,36 +88,6 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/gettingstarted.html">Getting started</a>
-    </li>
-    <li>
-      <a href="../articles/knotplacement.html">Knot placement</a>
-    </li>
-    <li>
-      <a href="../articles/mainfunctions.html">Overview of main functions</a>
-    </li>
-    <li>
-      <a href="../articles/model.html">Model formulation</a>
-    </li>
-    <li>
-      <a href="../articles/oldfriends.html">Help for old friends</a>
-    </li>
-    <li>
-      <a href="../articles/perfectmodel.html">Check perfect model</a>
-    </li>
-    <li>
-      <a href="../articles/prediction.html">Fit and predict</a>
-    </li>
-  </ul>
-</li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
@@ -140,30 +112,47 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Articles</h1>
+    <h1>Weight loss self-measurement data</h1>
+    <small class="dont-index">Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/R/weightloss.R'><code>R/weightloss.R</code></a></small>
+    <div class="hidden name"><code>weightloss.Rd</code></div>
     </div>
 
-    <div class="section ">
-      <h3>All vignettes</h3>
-      <p class="section-desc"></p>
-
-      <dl>
-        <dt><a href="gettingstarted.html">Getting started</a></dt>
-        <dd></dt>
-        <dt><a href="knotplacement.html">Knot placement</a></dt>
-        <dd></dt>
-        <dt><a href="mainfunctions.html">Overview of main functions</a></dt>
-        <dd></dt>
-        <dt><a href="model.html">Model formulation</a></dt>
-        <dd></dt>
-        <dt><a href="oldfriends.html">Help for old friends</a></dt>
-        <dd></dt>
-        <dt><a href="perfectmodel.html">Check perfect model</a></dt>
-        <dd></dt>
-        <dt><a href="prediction.html">Fit and predict</a></dt>
-        <dd></dt>
-      </dl>
+    <div class="ref-description">
+    <p>Longitudinal weight measurements from 12 individuals with 63 daily
+measurement under three conditions.</p>
     </div>
+
+
+
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
+
+    <p>A <code>data.frame</code> with 695 rows and 6 columns:</p><dl>
+<dt>subject</dt><dd><p>ID, consecutive person number 1-12 (integer)</p></dd>
+<dt>day</dt><dd><p>Measurement day, 0-62 (integer)</p></dd>
+<dt>sex</dt><dd><p>Sex, 1 = male, 0 = female (integer)</p></dd>
+<dt>week</dt><dd><p>Week number, 1-9 (integer)</p></dd>
+<dt>condition</dt><dd><p>Condition (control, diet, activity) (factor)</p></dd>
+<dt>body_weight</dt><dd><p>Body weight in kg (numeric)</p></dd>
+
+</dl>
+
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p>Krone T, Boessen R, Bijlsma S, van Stokkum R, Clabbers NDS, Pasman WJ (2020).
+The possibilities of the use of N-of-1 and do-it-yourself trials in nutritional research.
+<em>PloS ONE</em>, <b>15</b>, 5, e0232680.</p>
+    <h2 class="hasAnchor" id="note"><a class="anchor" href="#note"></a>Note</h2>
+
+    <p>Constructed from file <code>pone.0232680.s001.csv</code>. We renumbered <code>subject</code>
+to consecutive integers 1-2 (as in the paper), corrected an error in the
+<code>condition</code> variable for subjects 4 and 12 to match the paper's Figure 4,
+and filtered the records to the ones woth an observed <code>body_weight</code> variable.</p>
+
+  </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 

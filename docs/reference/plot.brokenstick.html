@@ -73,7 +73,7 @@ fitted trajectories of one or more groups." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.76.2</span>
       </span>
     </div>
 
@@ -87,36 +87,6 @@ fitted trajectories of one or more groups." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/gettingstarted.html">Getting started</a>
-    </li>
-    <li>
-      <a href="../articles/knotplacement.html">Knot placement</a>
-    </li>
-    <li>
-      <a href="../articles/mainfunctions.html">Overview of main functions</a>
-    </li>
-    <li>
-      <a href="../articles/model.html">Model formulation</a>
-    </li>
-    <li>
-      <a href="../articles/oldfriends.html">Help for old friends</a>
-    </li>
-    <li>
-      <a href="../articles/perfectmodel.html">Check perfect model</a>
-    </li>
-    <li>
-      <a href="../articles/prediction.html">Fit and predict</a>
-    </li>
-  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -153,17 +123,18 @@ fitted trajectories of one or more groups.</p>
     </div>
 
     <pre class="usage"><span class='co'># S3 method for brokenstick</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(
-  <span class='no'>x</span>,
-  <span class='no'>new_data</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>.x</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>group</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>ylim</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>show</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>TRUE</span>, <span class='fl'>TRUE</span>),
-  <span class='kw'>n_plot</span> <span class='kw'>=</span> <span class='fl'>3L</span>
-)</pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  <span class='va'>new_data</span>,
+  <span class='va'>...</span>,
+  what <span class='op'>=</span> <span class='st'>"droplast"</span>,
+  .x <span class='op'>=</span> <span class='cn'>NULL</span>,
+  group <span class='op'>=</span> <span class='cn'>NULL</span>,
+  xlim <span class='op'>=</span> <span class='cn'>NULL</span>,
+  ylim <span class='op'>=</span> <span class='cn'>NULL</span>,
+  show <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>,
+  n_plot <span class='op'>=</span> <span class='fl'>3L</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -178,12 +149,17 @@ fitted trajectories of one or more groups.</p>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Extra arguments passed down to <code><a href='predict.html'>predict.brokenstick()</a></code>
+      <td><p>Extra arguments passed down to <code><a href='predict.brokenstick.html'>predict.brokenstick()</a></code>
 and <code><a href='plot_trajectory.html'>plot_trajectory()</a></code>.</p></td>
     </tr>
     <tr>
+      <th>what</th>
+      <td><p>Which knots to plot? See <code><a href='get_knots.html'>get_knots()</a></code>. The default,
+<code>what = "droplast"</code>, does not plot the right boundary knot.</p></td>
+    </tr>
+    <tr>
       <th>.x</th>
-      <td><p>The <code>x</code> argument of the <code><a href='predict.html'>predict.brokenstick()</a></code> function.</p></td>
+      <td><p>The <code>x</code> argument of the <code><a href='predict.brokenstick.html'>predict.brokenstick()</a></code> function.</p></td>
     </tr>
     <tr>
       <th>group</th>
@@ -199,10 +175,11 @@ and <code><a href='plot_trajectory.html'>plot_trajectory()</a></code>.</p></td>
     </tr>
     <tr>
       <th>show</th>
-      <td><p>A logical vector of length 2. The first element specifies
-whether the observed data are plotted, the second element specifies
-whether the added data (e.g. knots) are plotted. The default is
-<code><a href='https://rdrr.io/r/base/c.html'>c(TRUE, TRUE)</a></code>.</p></td>
+      <td><p>A logical vector of length 3. Element 1 specifies
+whether the observed data are plotted, element 2 specifies
+whether the broken stick are plotted, element 3 specifies
+whether imputations are plotted. The default is
+<code><a href='https://rdrr.io/r/base/c.html'>c(TRUE, TRUE, FALSE)</a></code>.</p></td>
     </tr>
     <tr>
       <th>n_plot</th>
@@ -218,25 +195,35 @@ plots of the entire data set.</p></td>
     <p>An object of class <a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot2::ggplot</a>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='predict.html'>predict.brokenstick</a>, <a href='plot_trajectory.html'>plot_trajectory</a>.</p></div>
+    <div class='dont-index'><p><a href='predict.brokenstick.html'>predict.brokenstick</a>, <a href='plot_trajectory.html'>plot_trajectory</a>.</p></div>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Stef van Buuren 2020</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
+    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
 <span class='co'># fit model on raw hgt with knots at 0, 1, 2 and 3 years</span>
-<span class='no'>fit1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span>(<span class='no'>hgt</span> ~ <span class='no'>age</span> <span class='kw'>|</span> <span class='no'>id</span>, <span class='no'>smocc_200</span>, <span class='kw'>knots</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>3</span>)
-<span class='no'>gp</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10001</span>, <span class='fl'>10005</span>, <span class='fl'>10022</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fit1</span>, <span class='no'>smocc_200</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>gp</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2.1</span>),
-     <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Age (years)"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Length (cm)"</span>)
+<span class='va'>fit1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span><span class='op'>(</span><span class='va'>hgt</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>|</span> <span class='va'>id</span>, <span class='va'>smocc_200</span>, knots <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>
+<span class='va'>gp</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10001</span>, <span class='fl'>10005</span>, <span class='fl'>10022</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>fit1</span>, <span class='va'>smocc_200</span>,
+  group <span class='op'>=</span> <span class='va'>gp</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2.1</span><span class='op'>)</span>,
+  xlab <span class='op'>=</span> <span class='st'>"Age (years)"</span>, ylab <span class='op'>=</span> <span class='st'>"Length (cm)"</span>
+<span class='op'>)</span>
 
 <span class='co'># fit model on standard deviation score</span>
-<span class='no'>fit2</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span>(<span class='no'>hgt.z</span> ~ <span class='no'>age</span> <span class='kw'>|</span> <span class='no'>id</span>, <span class='no'>smocc_200</span>, <span class='kw'>knots</span> <span class='kw'>=</span> <span class='fl'>0</span>:<span class='fl'>3</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fit2</span>, <span class='no'>smocc_200</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>gp</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2.1</span>),
-     <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Age (years)"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Length (SDS)"</span>)
+<span class='va'>fit2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span><span class='op'>(</span><span class='va'>hgt.z</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>|</span> <span class='va'>id</span>, <span class='va'>smocc_200</span>, knots <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>3</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>fit2</span>, <span class='va'>smocc_200</span>,
+  group <span class='op'>=</span> <span class='va'>gp</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2.1</span><span class='op'>)</span>,
+  xlab <span class='op'>=</span> <span class='st'>"Age (years)"</span>, ylab <span class='op'>=</span> <span class='st'>"Length (SDS)"</span>
+<span class='op'>)</span>
 
 <span class='co'># model with 11 knots</span>
-<span class='fu'><a href='https://rdrr.io/r/base/plot.html'>plot</a></span>(<span class='no'>fit_200</span>, <span class='no'>smocc_200</span>, <span class='kw'>group</span> <span class='kw'>=</span> <span class='no'>gp</span>, <span class='kw'>xlim</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>0</span>, <span class='fl'>2.1</span>),
-     <span class='kw'>xlab</span> <span class='kw'>=</span> <span class='st'>"Age (years)"</span>, <span class='kw'>ylab</span> <span class='kw'>=</span> <span class='st'>"Length (SDS)"</span>)
-}</div></pre>
+<span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>fit_200</span>, <span class='va'>smocc_200</span>,
+  group <span class='op'>=</span> <span class='va'>gp</span>, xlim <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>2.1</span><span class='op'>)</span>,
+  xlab <span class='op'>=</span> <span class='st'>"Age (years)"</span>, ylab <span class='op'>=</span> <span class='st'>"Length (SDS)"</span>
+<span class='op'>)</span>
+<span class='op'>}</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -252,7 +239,7 @@ plots of the entire data set.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

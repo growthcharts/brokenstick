@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.76.2</span>
       </span>
     </div>
 
@@ -85,36 +85,6 @@
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/gettingstarted.html">Getting started</a>
-    </li>
-    <li>
-      <a href="../articles/knotplacement.html">Knot placement</a>
-    </li>
-    <li>
-      <a href="../articles/mainfunctions.html">Overview of main functions</a>
-    </li>
-    <li>
-      <a href="../articles/model.html">Model formulation</a>
-    </li>
-    <li>
-      <a href="../articles/oldfriends.html">Help for old friends</a>
-    </li>
-    <li>
-      <a href="../articles/perfectmodel.html">Check perfect model</a>
-    </li>
-    <li>
-      <a href="../articles/prediction.html">Fit and predict</a>
-    </li>
-  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -144,24 +114,30 @@
       <small>Source: <a href='https://github.com/stefvanbuuren/brokenstick/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="brokenstick-0753" class="section level1">
-<h1 class="page-header" data-toc-text="0.75.3">
-<a href="#brokenstick-0753" class="anchor"></a>brokenstick 0.75.3</h1>
+    <div id="brokenstick-0762" class="section level1">
+<h1 class="page-header" data-toc-text="0.76.2">
+<a href="#brokenstick-0762" class="anchor"></a>brokenstick 0.76.2</h1>
 <ul>
+<li>Extend <code><a href="../reference/plot.brokenstick.html">plot.brokenstick()</a></code> with the ability to plot imputed trajectories</li>
+</ul>
+</div>
+    <div id="brokenstick-0761" class="section level1">
+<h1 class="page-header" data-toc-text="0.76.1">
+<a href="#brokenstick-0761" class="anchor"></a>brokenstick 0.76.1</h1>
+<ul>
+<li>Adds the <code>weightloss</code> data</li>
+<li>Fail early when user specifies <code>degree &gt; 1</code>
+</li>
+</ul>
+</div>
+    <div id="brokenstick-0760" class="section level1">
+<h1 class="page-header" data-toc-text="0.76.0">
+<a href="#brokenstick-0760" class="anchor"></a>brokenstick 0.76.0</h1>
+<ul>
+<li>Adds argument <code>what</code> to <code><a href="../reference/plot.brokenstick.html">plot.brokenstick()</a></code>
+</li>
 <li>Solves a bug that always yielded zero rows for case 3 prediction</li>
-</ul>
-</div>
-    <div id="brokenstick-0752" class="section level1">
-<h1 class="page-header" data-toc-text="0.75.2">
-<a href="#brokenstick-0752" class="anchor"></a>brokenstick 0.75.2</h1>
-<ul>
 <li>Solves a data combination problem in <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> when the group variable is a factor</li>
-</ul>
-</div>
-    <div id="brokenstick-0751" class="section level1">
-<h1 class="page-header" data-toc-text="0.75.1">
-<a href="#brokenstick-0751" class="anchor"></a>brokenstick 0.75.1</h1>
-<ul>
 <li>Add a better explanation of the <code>boundary</code> parameter</li>
 <li>Evades that <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code> removes rows with <code>NA</code> if <code>degree = 0</code>
 </li>
@@ -229,8 +205,8 @@
 <li><p>The definition of the <code>brokenstick</code> class has changed. Objects of class <code>brokenstick</code> do no longer store the training data.</p></li>
 <li><p>The <code>brokenstick_export</code> class is retired.</p></li>
 <li><p>The <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function is fully rewritten as has now a new interface. Since the <code>brokenstick</code> class does not store the training data anymore, the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function now obtains a <code>new_data</code> argument. Syntax that worked for <code>brokenstick</code> package before <code>0.70.0</code> does not work anymore and should be updated. The <code>shape</code> argument replaces the <code>output</code> argument.</p></li>
-<li><p>The <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code> function is rewritten, and now requires a <code>new_data</code> specification.</p></li>
-<li><p>Retired functions: <code><a href="../reference/brokenstick.html">brokenstick()</a></code> replaces <code>fit_brokenstick()</code>, <code><a href="../reference/predict.html">predict.brokenstick()</a></code> replaces <code>predict.brokenstick_export()</code>, <code><a href="../reference/get_r2.html">get_r2()</a></code> replaces <code>get_pev()</code></p></li>
+<li><p>The <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function is rewritten, and now requires a <code>new_data</code> specification.</p></li>
+<li><p>Retired functions: <code><a href="../reference/brokenstick.html">brokenstick()</a></code> replaces <code>fit_brokenstick()</code>, <code><a href="../reference/predict.brokenstick.html">predict.brokenstick()</a></code> replaces <code>predict.brokenstick_export()</code>, <code><a href="../reference/get_r2.html">get_r2()</a></code> replaces <code>get_pev()</code></p></li>
 <li><p>Removed functions: <code>get_data()</code>, <code>get_X()</code>, <code>export()</code></p></li>
 </ol>
 </div>
@@ -275,9 +251,9 @@
 <li>Added new utility function <code>get_pev()</code> for proportion explained variance</li>
 <li>
 <code><a href="../reference/get_knots.html">get_knots()</a></code> gets a <code>what</code> argument</li>
-<li>Now using smarter defaults for <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>
+<li>Now using smarter defaults for <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>
 </li>
-<li>Simplified arguments to <code><a href="https://rdrr.io/r/base/plot.html">plot()</a></code>
+<li>Simplified arguments to <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code>
 </li>
 <li>Simplified vignette “Overview of main functions”</li>
 </ul>
@@ -331,7 +307,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -73,7 +73,7 @@ at a user-specific set of break points." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.75.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.76.2</span>
       </span>
     </div>
 
@@ -87,36 +87,6 @@ at a user-specific set of break points." />
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
-</li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/gettingstarted.html">Getting started</a>
-    </li>
-    <li>
-      <a href="../articles/knotplacement.html">Knot placement</a>
-    </li>
-    <li>
-      <a href="../articles/mainfunctions.html">Overview of main functions</a>
-    </li>
-    <li>
-      <a href="../articles/model.html">Model formulation</a>
-    </li>
-    <li>
-      <a href="../articles/oldfriends.html">Help for old friends</a>
-    </li>
-    <li>
-      <a href="../articles/perfectmodel.html">Check perfect model</a>
-    </li>
-    <li>
-      <a href="../articles/prediction.html">Fit and predict</a>
-    </li>
-  </ul>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
@@ -152,14 +122,14 @@ at a user-specific set of break points." />
 at a user-specific set of break points.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>make_basis</span>(
-  <span class='no'>x</span>,
-  <span class='kw'>knots</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>boundary</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span>(<span class='no'>x</span>),
-  <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>1L</span>,
-  <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>knotnames</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
-)</pre>
+    <pre class="usage"><span class='fu'>make_basis</span><span class='op'>(</span>
+  <span class='va'>x</span>,
+  knots <span class='op'>=</span> <span class='cn'>NULL</span>,
+  boundary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/range.html'>range</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>,
+  degree <span class='op'>=</span> <span class='fl'>1L</span>,
+  warn <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  knotnames <span class='op'>=</span> <span class='cn'>TRUE</span>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -202,11 +172,15 @@ columns, with some extra attributes described by <code>bs()</code>.</p>
 
     <p>Before version 0.54, it was standard practice that the <code>knots</code>
 array always included <code>boundary[1L]</code>.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Stef van Buuren, 2020</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>knots</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>58</span>, <span class='fl'>64</span>, <span class='fl'>68</span>, <span class='fl'>72</span>)
-<span class='no'>d1</span> <span class='kw'>&lt;-</span> <span class='fu'>make_basis</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>hgt</span> <span class='kw'>=</span> <span class='no'>women</span>$<span class='no'>height</span>), <span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>knots</span>)
-<span class='no'>d0</span> <span class='kw'>&lt;-</span> <span class='fu'>make_basis</span>(<span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>hgt</span> <span class='kw'>=</span> <span class='no'>women</span>$<span class='no'>height</span>), <span class='kw'>knots</span> <span class='kw'>=</span> <span class='no'>knots</span>, <span class='kw'>degree</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>58</span>, <span class='fl'>64</span>, <span class='fl'>68</span>, <span class='fl'>72</span><span class='op'>)</span>
+<span class='va'>d1</span> <span class='op'>&lt;-</span> <span class='fu'>make_basis</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>hgt <span class='op'>=</span> <span class='va'>women</span><span class='op'>$</span><span class='va'>height</span><span class='op'>)</span>, knots <span class='op'>=</span> <span class='va'>knots</span><span class='op'>)</span>
+<span class='va'>d0</span> <span class='op'>&lt;-</span> <span class='fu'>make_basis</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>hgt <span class='op'>=</span> <span class='va'>women</span><span class='op'>$</span><span class='va'>height</span><span class='op'>)</span>, knots <span class='op'>=</span> <span class='va'>knots</span>, degree <span class='op'>=</span> <span class='fl'>0</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -222,7 +196,7 @@ array always included <code>boundary[1L]</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
