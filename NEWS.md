@@ -1,3 +1,7 @@
+# brokenstick 0.76.2
+
+- Extend `plot.brokenstick()` with the ability to plot imputed trajectories
+
 # brokenstick 0.76.1
 
 - Adds the `weightloss` data
