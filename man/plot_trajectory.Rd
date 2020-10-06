@@ -11,6 +11,8 @@ plot_trajectory(
   size_y = 2,
   color_yhat = c(grDevices::hcl(0, 100, 40, 0.7), grDevices::hcl(0, 100, 40, 0.8)),
   size_yhat = 2,
+  color_imp = c("grey80", "grey80"),
+  size_imp = 2,
   ncol = 3L,
   xlab = NULL,
   ylab = NULL,
@@ -24,7 +26,7 @@ plot_trajectory(
 \item{x}{An object of class \code{brokenstick}.}
 
 \item{data}{A \code{data.frame} with columns names \code{x$names}, \code{".source"}
-and \code{".pred"}.}
+and \code{".pred"}, and possibly \code{".imp"}}
 
 \item{color_y}{A character vector with two elements specifying the symbol and line color of the measured data points}
 
@@ -33,6 +35,10 @@ and \code{".pred"}.}
 \item{color_yhat}{A character vector with two elements specifying the symbol and line color of the predicted data points}
 
 \item{size_yhat}{Dot size of predicted data points}
+
+\item{color_imp}{A character vector with two elements specifying the symbol and line color of the imputed data}
+
+\item{size_imp}{Dot size of imputed data}
 
 \item{ncol}{Number of columns in plot}
 

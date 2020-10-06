@@ -13,7 +13,7 @@
   group = NULL,
   xlim = NULL,
   ylim = NULL,
-  show = c(TRUE, TRUE),
+  show = c(TRUE, TRUE, FALSE),
   n_plot = 3L
 )
 }
@@ -36,10 +36,11 @@ and \code{\link[=plot_trajectory]{plot_trajectory()}}.}
 
 \item{ylim}{Vector of length 2 with range of y-axis}
 
-\item{show}{A logical vector of length 2. The first element specifies
-whether the observed data are plotted, the second element specifies
-whether the added data (e.g. knots) are plotted. The default is
-\code{c(TRUE, TRUE)}.}
+\item{show}{A logical vector of length 3. Element 1 specifies
+whether the observed data are plotted, element 2 specifies
+whether the broken stick are plotted, element 3 specifies
+whether imputations are plotted. The default is
+\code{c(TRUE, TRUE, FALSE)}.}
 
 \item{n_plot}{A integer indicating the number of individual plots.
 The default is 3, which plots the trajectories of the first three
@@ -58,17 +59,23 @@ fitted trajectories of one or more groups.
 # fit model on raw hgt with knots at 0, 1, 2 and 3 years
 fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:3)
 gp <- c(10001, 10005, 10022)
-plot(fit1, smocc_200, group = gp, xlim = c(0, 2.1),
-     xlab = "Age (years)", ylab = "Length (cm)")
+plot(fit1, smocc_200,
+  group = gp, xlim = c(0, 2.1),
+  xlab = "Age (years)", ylab = "Length (cm)"
+)
 
 # fit model on standard deviation score
 fit2 <- brokenstick(hgt.z ~ age | id, smocc_200, knots = 0:3)
-plot(fit2, smocc_200, group = gp, xlim = c(0, 2.1),
-     xlab = "Age (years)", ylab = "Length (SDS)")
+plot(fit2, smocc_200,
+  group = gp, xlim = c(0, 2.1),
+  xlab = "Age (years)", ylab = "Length (SDS)"
+)
 
 # model with 11 knots
-plot(fit_200, smocc_200, group = gp, xlim = c(0, 2.1),
-     xlab = "Age (years)", ylab = "Length (SDS)")
+plot(fit_200, smocc_200,
+  group = gp, xlim = c(0, 2.1),
+  xlab = "Age (years)", ylab = "Length (SDS)"
+)
 }
 }
 \seealso{

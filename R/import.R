@@ -1,5 +1,6 @@
 #' @importFrom dplyr           bind_rows bind_cols filter group_by
-#'                             mutate pull relocate select ungroup `%>%`
+#'                             mutate pull relocate select
+#'                             starts_with ungroup `%>%`
 #' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
 #' @importFrom methods         slot
 #' @importFrom matrixsampling  rwishart
@@ -11,6 +12,6 @@
 #'                             na.pass optim
 #'                             predict quantile rgamma rnorm
 #'                             rWishart setNames smooth var
-#' @importFrom tidyr           drop_na pivot_wider
+#' @importFrom tidyr           drop_na pivot_longer pivot_wider
 #' @importFrom utils           askYesNo install.packages
 NULL
