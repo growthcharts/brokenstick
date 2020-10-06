@@ -72,7 +72,7 @@ cor(broad)
 
 Fit broken stick model, with knots specified at ages `1:4`.
 
-```{r}
+```{r eval=FALSE}
 library("brokenstick")
 knots <- 1:3
 boundary <- c(1, 4)
