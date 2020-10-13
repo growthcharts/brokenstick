@@ -51,3 +51,11 @@ reference:
       - smocc_200
       - fit_200
       - weightloss
+articles:
+- title: Main verbs
+  navbar: ~
+  contents:
+  - mainfunctions
+  - brokenstick-article
+  - perfectmodel
+  - oldfriends

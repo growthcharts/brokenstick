@@ -89,8 +89,9 @@ The main functions in the `brokenstick` package are:
 
 ### Background
 
-1.  The name *broken stick* comes from Ruppert, Wand, and Carroll
-    ([2003](#ref-ruppert2003)), page 59-61.
+1.  I took the name *broken stick* from Ruppert, Wand, and Carroll
+    ([2003](#ref-ruppert2003)), page 59-61, but it is actually much
+    older.
 2.  As far as I know, de Kroon et al. ([2010](#ref-dekroon2010)) is the
     first publication that uses the broken stick model without the
     intercept in a mixed modelling context. See [The Terneuzen birth
@@ -102,16 +103,21 @@ The main functions in the `brokenstick` package are:
     edition)](https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick).
     See van Buuren ([2018](#ref-vanbuuren2018)).
 4.  The evaluation by Anderson et al. ([2019](#ref-anderson2019))
-    concluded: “We recommend the use of the brokenstick model with
-    standardised Z‐score data. Aside from the accuracy of the fit,
-    another key advantage of the brokenstick model is that it is easier
-    to fit and provides easily interpretable estimates of child growth
-    trajectories.”
+    concluded:
 
-### Tutorials
+> > We recommend the use of the brokenstick model with standardised
+> > Z‐score data. Aside from the accuracy of the fit, another key
+> > advantage of the brokenstick model is that it is easier to fit and
+> > provides easily interpretable estimates of child growth
+> > trajectories."
+
+### Instructive materials
 
 The [companion site](https://stefvanbuuren.name/brokenstick/) contains
-various articles that explain the model and the use of the software.
+various vignettes and articles that explain the model and the use of the
+software. The most extensive documentation is the paper [Broken Stick
+Model for Irregular Longitudinal
+Data](https://stefvanbuuren.name/brokenstick/articles/brokenstick-article.html).
 
 ### References
 
