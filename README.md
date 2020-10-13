@@ -7,7 +7,7 @@
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![](https://img.shields.io/badge/github%20version-0.76.2-orange.svg)](https://github.com/stefvanbuuren/brokenstick)
+[![](https://img.shields.io/badge/github%20version-0.77.0-orange.svg)](https://github.com/stefvanbuuren/brokenstick)
 <!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear
@@ -91,7 +91,7 @@ The main functions in the `brokenstick` package are:
 
 1.  The name *broken stick* comes from Ruppert, Wand, and Carroll
     ([2003](#ref-ruppert2003)), page 59-61.
-2.  As far as I know, Kroon et al. ([2010](#ref-dekroon2010)) is the
+2.  As far as I know, de Kroon et al. ([2010](#ref-dekroon2010)) is the
     first publication that uses the broken stick model without the
     intercept in a mixed modelling context. See [The Terneuzen birth
     cohort: BMI changes between 2 and 6 years correlate strongest with
@@ -100,7 +100,7 @@ The main functions in the `brokenstick` package are:
 3.  The model was formally defined and extended in [Flexible Imputation
     of Missing Data (second
     edition)](https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick).
-    See Buuren ([2018](#ref-vanbuuren2018)).
+    See van Buuren ([2018](#ref-vanbuuren2018)).
 4.  The evaluation by Anderson et al. ([2019](#ref-anderson2019))
     concluded: “We recommend the use of the brokenstick model with
     standardised Z‐score data. Aside from the accuracy of the fit,
@@ -125,16 +125,9 @@ Models.” *Statistics in Medicine* 38 (19): 3555–70.
 
 </div>
 
-<div id="ref-vanbuuren2018">
-
-Buuren, S. van. 2018. *Flexible Imputation of Missing Data. Second
-Edition*. Boca Raton, FL.: CRC Press.
-
-</div>
-
 <div id="ref-dekroon2010">
 
-Kroon, M. L. A. de, C. M. Renders, J. P. van Wouwe, S. van Buuren, and
+de Kroon, M. L. A., C. M. Renders, J. P. van Wouwe, S. van Buuren, and
 R. A. Hirasing. 2010. “The Terneuzen Birth Cohort: BMI Changes Between 2
 and 6 Years Correlate Strongest with Adult Overweight.” *PloS ONE* 5
 (2): e9155.
@@ -145,6 +138,13 @@ and 6 Years Correlate Strongest with Adult Overweight.” *PloS ONE* 5
 
 Ruppert, D., M. P. Wand, and R. J. Carroll. 2003. *Semiparametric
 Regression*. Cambridge: Cambridge University Press.
+
+</div>
+
+<div id="ref-vanbuuren2018">
+
+van Buuren, S. 2018. *Flexible Imputation of Missing Data. Second
+Edition*. Boca Raton, FL.: CRC Press.
 
 </div>
 

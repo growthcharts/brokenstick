@@ -103,3 +103,39 @@ round(cor(broad), 3)
 2. If $\sigma^2 > 0$, then $\Omega$ overestimates the correlations between $y$'s, but correctly estimates the covariance among the random effects.
 3. If $\sigma^2 > 0$, then $\Omega + \hat\sigma^2 I(n_i)$ correctly estimates the covariances between $y$'s. This can be converted by `cov2cor()` to the time-to-time correlation matrix.
 
+## Further reading
+
+* [Main functions](mainfunctions.html)
+    + Plot trajectories
+    + Orginal scale and $Z$-score scale
+    + 1-line model
+    + 2-line broken stick model
+    + 9-line broken stick model
+    + Prediction
+    + Subject-level analysis
+
+* [Broken Stick Model for Irregular Longitudinal Data](brokenstick-article.html)
+    + Irregular observation times
+    + Literature overview
+    + Definition of the model
+    + Interpretation of the model
+    + Estimation by `lmer` and `kr` methods
+    + Software overview
+    + `brokenstick()` for model fitting
+    + `predict()` for trajectory plotting
+    + Conversion back and forth to the $Z$-score scale
+    + Predict growth curve of new subjects
+    + Assess the quality of the model
+    + Knot placement strategies
+    + Critical periods
+    + Time-to-time correlations
+    + Profile analysis
+    + Curve interpolation
+    + Multiple imputation
+    + Curve matching
+    + Discussion
+
+* [Help for old friends](oldfriends.html)
+    + Properties of the perfect model
+    + Estimating time-to-time correlations
+

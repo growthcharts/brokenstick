@@ -57,14 +57,14 @@ install_github("stefvanbuuren/brokenstick@V0.62.1")
 
 Fit model, old version:
 
-```{r fit_old, eval=FALSE}
+```{r fit-old, eval=FALSE}
 data <- brokenstick::smocc_200
 fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid)
 ```
 
 Fit model, version `0.75.0` and higher:
 
-```{r fit_new}
+```{r fit-new}
 data <- brokenstick::smocc_200
 
 # formula interface
@@ -89,7 +89,7 @@ All fitted models are identical.
 
 Predict model, old version:
 
-```{r predict_old, eval = FALSE}
+```{r predict-old, eval = FALSE}
 # predict at observed data
 p1 <- predict(fit)
 
@@ -106,7 +106,7 @@ p4 <- predict(fit, at = "knots", output = "broad")
 
 Predict model, new version:
 
-```{r predict_new}
+```{r predict-new}
 # predict at observed data
 p1 <- predict(fit1, data)
 
@@ -125,14 +125,14 @@ p4 <- predict(fit1, data, x = "knots", shape = "wide")
 
 Plot trajectories, old version 
 
-```{r plot_old, eval = FALSE}
+```{r plot-old, eval = FALSE}
 ids <- c(10001, 10005, 10022)
 plot(fit, ids = ids)
 ```
 
 Plot trajectories, new version 
 
-```{r plot_new, fig.height=3, fig.width=7}
+```{r plot-new, fig.height=3, fig.width=7}
 ids <- c(10001, 10005, 10022)
 plot(fit1, data, group = ids)
 ```
@@ -141,12 +141,48 @@ plot(fit1, data, group = ids)
 
 Proportion explained variance, old version
 
-```{r explain_old, eval=FALSE}
+```{r explain-old, eval=FALSE}
 get_pev(fit)
 ```
 
 
-```{r explain_new}
+```{r explain-new}
 get_r2(fit1, data)
 ```
 
+
+## Further reading
+
+* [Main functions](mainfunctions.html)
+    + Plot trajectories
+    + Orginal scale and $Z$-score scale
+    + 1-line model
+    + 2-line broken stick model
+    + 9-line broken stick model
+    + Prediction
+    + Subject-level analysis
+
+* [Broken Stick Model for Irregular Longitudinal Data](brokenstick-article.html)
+    + Irregular observation times
+    + Literature overview
+    + Definition of the model
+    + Interpretation of the model
+    + Estimation by `lmer` and `kr` methods
+    + Software overview
+    + `brokenstick()` for model fitting
+    + `predict()` for trajectory plotting
+    + Conversion back and forth to the $Z$-score scale
+    + Predict growth curve of new subjects
+    + Assess the quality of the model
+    + Knot placement strategies
+    + Critical periods
+    + Time-to-time correlations
+    + Profile analysis
+    + Curve interpolation
+    + Multiple imputation
+    + Curve matching
+    + Discussion
+
+* [Perfect model](perfectmodel.html)
+    + Properties of the perfect model
+    + Estimating time-to-time correlations

@@ -6,12 +6,6 @@ template:
     bootswatch: flatly
 navbar:
   type: inverse
-figures:
-  dev: svglite::svglite
-  dpi: 96
-  dev.args: []
-  fig.ext: svg
-  fig.width: 7.2916667
-  fig.height: ~
-  fig.retina: 2
-  fig.asp: 1.618
+authors:
+  Stef van Buuren:
+    href: https://stefvanbuuren.name
