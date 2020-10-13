@@ -87,7 +87,7 @@ We fit a trivial broken stick model with just one line anchored at the minimum a
 ```{r figure1, warning = FALSE}
 fit <- brokenstick(hgt ~ age | id, data)
 ids <- c(10001, 10005, 10022)
-plot(fit, new_data = data, group = ids, 
+plot(fit, new_data = data, group = ids, what = "all",
      xlab = "Age (years)", ylab = "Length (cm)")
 ```
 
@@ -95,7 +95,8 @@ The following plot displays the same data, but in standardised units so as to in
 
 ```{r zscore, warning = FALSE}
 fit0 <- brokenstick(hgt.z ~ age | id, data)
-plot(fit0, new_data = data, group = ids, xlab = "Age (years)", ylab = "Length (SDS)")
+plot(fit0, new_data = data, group = ids, what = "all", 
+     xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
 Note that both approximations are quite bad. 
@@ -104,7 +105,7 @@ Note that both approximations are quite bad.
 
 The *broken stick model* describes a trajectory by a series of connected straight lines. We first calculate a model with two connected lines. The first line starts at birth and end at the age of exactly 1 years. The second line spans the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate and plot the model as follows:
 
-```{r plotfit2, cache = TRUE}
+```{r plotfit2, cache = TRUE, warning=FALSE}
 fit2 <- brokenstick(hgt.z ~ age | id, data = data, knots = 0:3)
 plot(fit2, data, group = ids, xlim = c(0, 2.1), 
      xlab = "Age (years)", ylab = "Length (SDS)")
