@@ -22,10 +22,15 @@ Imports:
     stats,
     tidyr
 Suggests:
+    AGD,
     ggplot2,
     grDevices,
+    gridExtra,
     knitr,
+    lattice,
     MASS,
+    Matrix,
+    mice,
     mvtnorm,
     plyr,
     svglite,

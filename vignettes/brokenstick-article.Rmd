@@ -704,7 +704,7 @@ where $Z_1$ and $Z_2$ are the standard deviation scores at times $T_1$ and $T_2$
 
 The broken stick model provides an estimate of the time-to-time correlation matrix. The `brokenstick` object stores the variance-covariance matrix $\Omega$ of the random effects in the list component `fit$omega`. For a perfectly fitting model (with $\sigma^2=0$) $\Omega$ equals the time-to-time covariance matrix, so `cov2cor(fit$omega)` gives the desired time-to-time correlation matrix. If $\sigma^2 > 0$ then $\Omega$ overestimates the covariances between the observed data. In general, we need to add the within-residual variance estimate to the diagonal, thus $\Omega + \hat\sigma^2 I(n_i)$ to estimate the time-to-time covariance matrix.
 
-```{r time2time, cache=TRUE}
+```{r t2t, cache=TRUE}
 fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, 
                    knots = 1:4/2, boundary = c(0, 3))
 t2t <- fit$omega + diag(fit$sigma2, ncol(fit$omega))
@@ -713,7 +713,7 @@ round(cov2cor(t2t), 2)
 
 In child growth, we expect that the correlation tapers off as the difference between $T_1$ and $T_2$ grows. Also, for a fixed interval $T_2-T_1$ we expect the correlation to increase with age. Ignoring the uninteresting estimate for `age_3`, we find that both expectations hold. Altering the number and location of the knots may change this. It is often useful to scan the time-to-time correlation matrix for gross deviations of the expectations. If such happens, one could simplify the model, for example, by subjecting $\Omega$ to a correlation model.
 
-```{r time2timemany, cache=TRUE}
+```{r t2tm, cache=TRUE}
 fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, 
                    knots = seq(0, 2, 0.1), boundary = c(0, 3),
                    method = "kr")
@@ -1004,7 +1004,7 @@ Figure 21 from https://tnochildhealthstatistics.shinyapps.io/james_tryout/ demon
 
 Let's look at a numerical example. We split the data into one target child and 199 donor children, and fit a broken stick model to the donor set.
 
-```{r curvematching1, cache=TRUE}
+```{r cm1, cache=TRUE}
 donor_data <- smocc_200 %>% 
   filter(id != "10001")
 target_data <- smocc_200 %>% 
@@ -1021,7 +1021,7 @@ All timepoints from the donor data enter the broken stick model. Note that the `
 
 We now fit the prediction model on the child-level donor data. The prediction model contains the broken stick estimates for length SDS up to 6 months, as well as sex, gestational age and birth weight as covariates.
 
-```{r curvematching2}
+```{r cm2}
 # predict with matching model at child level
 covariates <- donor_data %>% 
   group_by(id) %>% 
@@ -1035,7 +1035,7 @@ summary(model)
 
 The next step is to extract model predictions for both donors and target and find the ten closest donors.
 
-```{r curvematching3}
+```{r cm3}
 donors_pred <- predict(model)
 names(donors_pred) <- donors$id
 
@@ -1050,7 +1050,7 @@ matches
 
 Finally, let us study the observed and fitted trajectories of the ten matches.
 
-```{r curvematching4, fig.height=4, fig.cap = "Curve matching. Observed and fitted trajectories of 10 matches for subject 10001.", set.theme = TRUE, warning=FALSE}
+```{r cm4, fig.height=4, fig.cap = "Curve matching. Observed and fitted trajectories of 10 matches for subject 10001.", set.theme = TRUE, warning=FALSE}
 ids <- as.numeric(names(matches))
 plot(fit, new_data = donor_data, group = ids, 
      xlim = c(0, 1.4), size_y = 1, size_yhat = 0,
