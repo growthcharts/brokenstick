@@ -3,24 +3,19 @@
 \docType{data}
 \name{fit_200}
 \alias{fit_200}
-\title{Broken stick model fitted on 200 children}
+\title{Broken stick model with nine lines for 200 children}
 \format{
-An object of class \code{brokenstick}, fitted by the
-\code{brokenstick()}. This is an \code{lmerMod} object with additional
-slots:
-\describe{
-\item{knots}{A vector of internal knots used by \code{make_basis()}}
-\item{boundary}{The boundary knots of the linear spline}
-\item{degree}{The degree of the spline. The brokenstick model corresponds to \code{degree = 1}.}
-\item{bs.call}{An object of class \code{call} representing the call that was used to construct the object.}
-\item{xy}{A data frame with column names \code{subjid}, \code{x} and \code{y} containing the data on which the model was fitted when called by the call in slot \code{bs.call}.}
-}
+An object of class \link[=brokenstick-class]{brokenstick}, fitted by the
+\code{\link[=brokenstick]{brokenstick()}}.
 }
 \description{
-The object \code{fit_200} is an object of class \code{brokenstick} that contains the fitted broken stick model. The class \code{brokenstick} extend the \code{lmerMod} class with additional attributes.
+The object \code{fit_200} is an object of class \code{brokenstick} that contains the
+fitted broken stick model.
 }
-\seealso{
-\code{\link[lme4]{lmer}}, \code{\link[lme4]{merMod-class}},
-\code{\link{brokenstick}}
+\details{
+This dataset was constructed as\if{html}{\out{<div class="r">}}\preformatted{knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
+fit_200 <- brokenstick(hgt.z ~ age | id, data = smocc_200,
+                       knots = knots, boundary = c(0, 3))
+}\if{html}{\out{</div>}}
 }
 \keyword{datasets}
