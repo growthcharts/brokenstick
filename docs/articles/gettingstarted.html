@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.76.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.77.0</span>
       </span>
     </div>
 
@@ -54,25 +54,19 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="../articles/brokenstick-article.html">Broken Stick Model for Irregular Longitudinal Data</a>
+    </li>
+    <li>
       <a href="../articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
-      <a href="../articles/knotplacement.html">Knot placement</a>
-    </li>
-    <li>
       <a href="../articles/mainfunctions.html">Overview of main functions</a>
-    </li>
-    <li>
-      <a href="../articles/model.html">Model formulation</a>
     </li>
     <li>
       <a href="../articles/oldfriends.html">Help for old friends</a>
     </li>
     <li>
       <a href="../articles/perfectmodel.html">Check perfect model</a>
-    </li>
-    <li>
-      <a href="../articles/prediction.html">Fit and predict</a>
     </li>
   </ul>
 </li>
@@ -102,7 +96,7 @@
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Getting started</h1>
             
-            <h4 class="date">2020-10-06</h4>
+            <h4 class="date">2020-10-13</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/stefvanbuuren/brokenstick/blob/master/vignettes/gettingstarted.Rmd"><code>vignettes/gettingstarted.Rmd</code></a></small>
       <div class="hidden name"><code>gettingstarted.Rmd</code></div>
@@ -222,11 +216,68 @@
 </tbody>
 </table>
 </div>
+<div id="acknowledgement" class="section level2">
+<h2 class="hasAnchor">
+<a href="#acknowledgement" class="anchor"></a>Acknowledgement</h2>
+<p>The development of the <code>brokenstick</code> package was kindly supported by the <em>Healthy Birth Growth and Development knowledge integration</em> (HBGDki) program of the Bill &amp; Melinda Gates Foundation.</p>
+</div>
 <div id="further-reading" class="section level2">
 <h2 class="hasAnchor">
 <a href="#further-reading" class="anchor"></a>Further reading</h2>
-<p>The <a href="mainfunctions.html">overview of the main functions</a> provides a short introduction into the capabilities of the package. Additional details are given in vignettes <a href="prediction.html">fit and predict</a>, <a href="knotplacement.html">knot placement</a> and <a href="model.html">model formulation</a>. ## Acknowledgement</p>
-<p>The development of the <code>brokenstick</code> package was kindly supported by the <em>Healthy Birth Growth and Development</em> (HBGD) program of the Bill &amp; Melinda Gates Foundation.</p>
+<ul>
+<li>
+<a href="mainfunctions.html">Main functions</a>
+<ul>
+<li>Plot trajectories</li>
+<li>Orginal scale and <span class="math inline">\(Z\)</span>-score scale</li>
+<li>1-line model</li>
+<li>2-line broken stick model</li>
+<li>9-line broken stick model</li>
+<li>Prediction</li>
+<li>Subject-level analysis</li>
+</ul>
+</li>
+<li>
+<a href="brokenstick-article.html">Broken Stick Model for Irregular Longitudinal Data</a>
+<ul>
+<li>Irregular observation times</li>
+<li>Literature overview</li>
+<li>Definition of the model</li>
+<li>Interpretation of the model</li>
+<li>Estimation by <code>lmer</code> and <code>kr</code> methods</li>
+<li>Software overview</li>
+<li>
+<code><a href="../reference/brokenstick.html">brokenstick()</a></code> for model fitting</li>
+<li>
+<code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> for trajectory plotting</li>
+<li>Conversion back and forth to the <span class="math inline">\(Z\)</span>-score scale</li>
+<li>Predict growth curve of new subjects</li>
+<li>Assess the quality of the model</li>
+<li>Knot placement strategies</li>
+<li>Critical periods</li>
+<li>Time-to-time correlations</li>
+<li>Profile analysis</li>
+<li>Curve interpolation</li>
+<li>Multiple imputation</li>
+<li>Curve matching</li>
+<li>Discussion</li>
+</ul>
+</li>
+<li>
+<a href="perfectmodel.html">Perfect model</a>
+<ul>
+<li>Properties of the perfect model</li>
+<li>Estimating time-to-time correlations</li>
+</ul>
+</li>
+<li>
+<a href="oldfriends.html">Help for old friends</a>
+<ul>
+<li>Properties of the perfect model</li>
+<li>Estimating time-to-time correlations</li>
+</ul>
+</li>
+</ul>
 </div>
   </div>
 
@@ -241,7 +292,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Stef van Buuren.</p>
+  <p>Developed by <a href="https://stefvanbuuren.name">Stef van Buuren</a>.</p>
 </div>
 
 <div class="pkgdown">

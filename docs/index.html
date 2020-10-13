@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.76.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.77.0</span>
       </span>
     </div>
 
@@ -60,25 +60,19 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/brokenstick-article.html">Broken Stick Model for Irregular Longitudinal Data</a>
+    </li>
+    <li>
       <a href="articles/gettingstarted.html">Getting started</a>
     </li>
     <li>
-      <a href="articles/knotplacement.html">Knot placement</a>
-    </li>
-    <li>
       <a href="articles/mainfunctions.html">Overview of main functions</a>
-    </li>
-    <li>
-      <a href="articles/model.html">Model formulation</a>
     </li>
     <li>
       <a href="articles/oldfriends.html">Help for old friends</a>
     </li>
     <li>
       <a href="articles/perfectmodel.html">Check perfect model</a>
-    </li>
-    <li>
-      <a href="articles/prediction.html">Fit and predict</a>
     </li>
   </ul>
 </li>
@@ -187,8 +181,8 @@
 <a href="#background" class="anchor"></a>Background</h3>
 <ol>
 <li>The name <em>broken stick</em> comes from Ruppert, Wand, and Carroll (<a href="#ref-ruppert2003">2003</a>), page 59-61.</li>
-<li>As far as I know, Kroon et al. (<a href="#ref-dekroon2010">2010</a>) is the first publication that uses the broken stick model without the intercept in a mixed modelling context. See <a href="https://stefvanbuuren.name/publications/2010%20TBC%20Overweight%20-%20PLoS%20ONE.pdf">The Terneuzen birth cohort: BMI changes between 2 and 6 years correlate strongest with adult overweight</a>.</li>
-<li>The model was formally defined and extended in <a href="https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick">Flexible Imputation of Missing Data (second edition)</a>. See Buuren (<a href="#ref-vanbuuren2018">2018</a>).</li>
+<li>As far as I know, de Kroon et al. (<a href="#ref-dekroon2010">2010</a>) is the first publication that uses the broken stick model without the intercept in a mixed modelling context. See <a href="https://stefvanbuuren.name/publications/2010%20TBC%20Overweight%20-%20PLoS%20ONE.pdf">The Terneuzen birth cohort: BMI changes between 2 and 6 years correlate strongest with adult overweight</a>.</li>
+<li>The model was formally defined and extended in <a href="https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick">Flexible Imputation of Missing Data (second edition)</a>. See van Buuren (<a href="#ref-vanbuuren2018">2018</a>).</li>
 <li>The evaluation by Anderson et al. (<a href="#ref-anderson2019">2019</a>) concluded: “We recommend the use of the brokenstick model with standardised Z‐score data. Aside from the accuracy of the fit, another key advantage of the brokenstick model is that it is easier to fit and provides easily interpretable estimates of child growth trajectories.”</li>
 </ol>
 </div>
@@ -207,14 +201,14 @@
 <li>“Comparing Predictive Abilities of Longitudinal Child Growth Models.” <em>Statistics in Medicine</em> 38 (19): 3555–70.</li>
 </ol>
 </div>
-<div id="ref-vanbuuren2018">
-<p>Buuren, S. van. 2018. <em>Flexible Imputation of Missing Data. Second Edition</em>. Boca Raton, FL.: CRC Press.</p>
-</div>
 <div id="ref-dekroon2010">
-<p>Kroon, M. L. A. de, C. M. Renders, J. P. van Wouwe, S. van Buuren, and R. A. Hirasing. 2010. “The Terneuzen Birth Cohort: BMI Changes Between 2 and 6 Years Correlate Strongest with Adult Overweight.” <em>PloS ONE</em> 5 (2): e9155.</p>
+<p>de Kroon, M. L. A., C. M. Renders, J. P. van Wouwe, S. van Buuren, and R. A. Hirasing. 2010. “The Terneuzen Birth Cohort: BMI Changes Between 2 and 6 Years Correlate Strongest with Adult Overweight.” <em>PloS ONE</em> 5 (2): e9155.</p>
 </div>
 <div id="ref-ruppert2003">
 <p>Ruppert, D., M. P. Wand, and R. J. Carroll. 2003. <em>Semiparametric Regression</em>. Cambridge: Cambridge University Press.</p>
+</div>
+<div id="ref-vanbuuren2018">
+<p>van Buuren, S. 2018. <em>Flexible Imputation of Missing Data. Second Edition</em>. Boca Raton, FL.: CRC Press.</p>
 </div>
 </div>
 </div>
@@ -248,7 +242,8 @@
 <div class="developers">
 <h2>Developers</h2>
 <ul class="list-unstyled">
-<li>Stef van Buuren <br><small class="roles"> Author, maintainer </small>  </li>
+<li>
+<a href="https://stefvanbuuren.name">Stef van Buuren</a> <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
 
@@ -256,7 +251,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a></li>
-<li><a href="https://github.com/stefvanbuuren/brokenstick"><img src="https://img.shields.io/badge/github%20version-0.76.2-orange.svg"></a></li>
+<li><a href="https://github.com/stefvanbuuren/brokenstick"><img src="https://img.shields.io/badge/github%20version-0.77.0-orange.svg"></a></li>
 </ul>
 </div>
 </div>
@@ -264,7 +259,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Stef van Buuren.</p>
+  <p>Developed by <a href="https://stefvanbuuren.name">Stef van Buuren</a>.</p>
 </div>
 
 <div class="pkgdown">

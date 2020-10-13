@@ -2,14 +2,12 @@ pandoc: 2.7.3
 pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
+  brokenstick-article: brokenstick-article.html
   gettingstarted: gettingstarted.html
-  knotplacement: knotplacement.html
   mainfunctions: mainfunctions.html
-  model: model.html
   oldfriends: oldfriends.html
   perfectmodel: perfectmodel.html
-  prediction: prediction.html
-last_built: 2020-10-06T20:43Z
+last_built: 2020-10-13T14:52Z
 urls:
   reference: https://stefvanbuuren.name/brokenstick/reference
   article: https://stefvanbuuren.name/brokenstick/articles
