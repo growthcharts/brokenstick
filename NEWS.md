@@ -1,10 +1,10 @@
-# brokenstick 0.76.2
+# brokenstick 0.77.0
 
+- Add documentation for the brokenstick class object
+- Add JSS manuscript as a vignette
+- Remove the prediction vignette and its dependencies
 - Extend `plot.brokenstick()` with the ability to plot imputed trajectories
-
-# brokenstick 0.76.1
-
-- Adds the `weightloss` data
+- Add the `weightloss` data
 - Fail early when user specifies `degree > 1`
 
 # brokenstick 0.76.0
