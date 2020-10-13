@@ -9,3 +9,45 @@ navbar:
 authors:
   Stef van Buuren:
     href: https://stefvanbuuren.name
+reference:
+  - title: "Main user functions"
+    desc: >
+      Functions to fit, predict and visualise the broken stick model.
+    contents:
+      - brokenstick
+      - fitted.brokenstick
+      - plot.brokenstick
+      - predict.brokenstick
+      - residuals.brokenstick
+  - title: "Helper functions"
+    desc: >
+      Functions to set algorithmic options for model fitting or to extract
+      components of the fitted object.
+    contents:
+      - control_brokenstick
+      - control_kr
+      - get_knots
+      - get_r2
+  - title: "Numerical functions"
+    desc: >
+       Functions that perform the necessary calculations for the broken stick
+       model. Not designed to be called directly.
+    contents:
+      - EB
+      - kr
+      - make_basis
+      - parse_formula
+      - plot_trajectory
+  - title: "Class documentation"
+    desc: >
+      Package-level documentation.
+    contents:
+      - brokenstick-class
+      - brokenstick-pkg
+  - title: "Data objects"
+    desc: >
+     Documentation for built-in data objects
+    contents:
+      - smocc_200
+      - fit_200
+      - weightloss
