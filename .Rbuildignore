@@ -10,6 +10,7 @@
 ^_pkgdown\.yml$
 ^pkgdown$
 ^scripts$
-^vignettes$
-^vignettes/articles$
 ^LICENSE\.md$
+^cran-comments\.md$
+^cran-comments\.Rmd$
+^CRAN-RELEASE$
