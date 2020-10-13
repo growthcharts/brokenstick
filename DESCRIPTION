@@ -15,27 +15,22 @@ Depends:
 Imports:
     dplyr,
     lme4,
-    methods,
     matrixsampling,
+    methods,
     rlang,
     splines,
     stats,
     tidyr
 Suggests:
-    ggcorrplot,
     ggplot2,
-    growthstandards,
     grDevices,
     knitr,
     MASS,
     mvtnorm,
     plyr,
-    rbokeh,
     svglite,
     testthat,
     rmarkdown
-Remotes:
-    ki-tools/growthstandards
 URL: https://github.com/stefvanbuuren/brokenstick, https://stefvanbuuren.name/brokenstick/
 BugReports: https://github.com/stefvanbuuren/brokenstick/issues
 Encoding: UTF-8
