@@ -1,3 +1,7 @@
+# brokenstick 0.78.0
+
+- Prepare package from first CRAN submission
+
 # brokenstick 0.77.0
 
 - Add documentation for the brokenstick class object
