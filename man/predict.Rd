@@ -98,7 +98,7 @@ test <- smocc_200[1199:1940, ]
 fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
 
 # Predict, with preprocessing
-predict(fit, test)
+tail(predict(fit, test), 3)
 
 # case 1: x as knots
 z <- predict(fit, test, x = "knots")
