@@ -42,5 +42,5 @@ knitr::knit_hooks$set(set.theme = function(before, options, envir) {
 # })
 ```
 
-```{r, child='jss_txt.Rmd'}
+```{r, child='_jss_txt.Rmd'}
 ```

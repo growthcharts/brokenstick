@@ -596,7 +596,7 @@ Broken stick model with nine lines.
 <div class="sourceCode" id="cb37"><pre class="downlit">
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">data</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2.5</span>, <span class="fl">0</span><span class="op">)</span>, xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></pre></div>
 <div class="figure">
-<img src="brokenstick-article_files/figure-html/unnamed-chunk-12-1.png" alt="Alice and Fred - observed (blue) and fitted (red) trajectory." width="67%"><p class="caption">
+<img src="brokenstick-article_files/figure-html/unnamed-chunk-13-1.png" alt="Alice and Fred - observed (blue) and fitted (red) trajectory." width="67%"><p class="caption">
 Alice and Fred - observed (blue) and fitted (red) trajectory.
 </p>
 </div>
@@ -608,7 +608,7 @@ Alice and Fred - observed (blue) and fitted (red) trajectory.
 <h2 class="hasAnchor">
 <a href="#quality-of-prediction" class="anchor"></a>Quality of prediction</h2>
 <div class="figure">
-<img src="brokenstick-article_files/figure-html/unnamed-chunk-13-1.png" alt="Predicted versus observed values." width="100%"><p class="caption">
+<img src="brokenstick-article_files/figure-html/unnamed-chunk-14-1.png" alt="Predicted versus observed values." width="100%"><p class="caption">
 Predicted versus observed values.
 </p>
 </div>
@@ -988,11 +988,11 @@ Observed data plotted on top of 20 imputed trajectories.
 <a href="#curve-matching" class="anchor"></a>Curve matching</h2>
 <p>Curve matching <span class="citation">(van Buuren 2014)</span> is a tool to assist in the interpretation and prediction of individual growth curves. The idea is as follows. Suppose we measure the growth of the target child up to half a year and plot the measurements onto his or her growth chart. Curve matching is a nearest-neighbour technique that relies on historical growth data. It finds, say, ten other children who are similar to the target child, and add the curves of those matches to the child’s chart. If the matching is done right, then the bundle of historic growth curves suggests how the target child will develop in the future.</p>
 <div class="figure">
-<img src="figures/JAMES_tryout.pdf" alt="Curve matching. Predict infant length at 14 months given length data up to 6 months using 10 matches." width="100%"><p class="caption">
+<img src="figures/JAMES_tryout.png" alt="Curve matching. Predict infant length at 14 months given length data up to 6 months using 10 matches." width="100%"><p class="caption">
 Curve matching. Predict infant length at 14 months given length data up to 6 months using 10 matches.
 </p>
 </div>
-<p>Figure 21 from <a href="https://tnochildhealthstatistics.shinyapps.io/james_tryout/" class="uri">https://tnochildhealthstatistics.shinyapps.io/james_tryout/</a> demonstrates curve matching for infant length. The red curve corresponds to five measurements of the target child made during the first six months. The ten grey curves are historic growth curves from the ten matched children. We may define similarity in many ways. Here we use a linear model to predict length at the age of 14m from previous length data. The distance between the target child and another child is equal to the difference between their predicted values. The procedure lifts the data of the matches from the database, and plots the observed growth curves onto the chart as grey curves. This method for finding nearest neighbours is known as <em>predictive mean matching</em> and has grown into a powerful technique for missing data.<span class="citation">(van Buuren 2018)</span> The bundle of grey curves indicates some possible future trajectories of the target child. The mean of the bundle is the most likely path. Graphically it is the dotted blue curve between the last measurement and the age of the outcome.</p>
+<p>Figure 21 demonstrates curve matching for infant length. The red curve corresponds to five measurements of the target child made during the first six months. The ten grey curves are historic growth curves from the ten matched children. We may define similarity in many ways. Here we use a linear model to predict length at the age of 14m from previous length data. The distance between the target child and another child is equal to the difference between their predicted values. The procedure lifts the data of the matches from the database, and plots the observed growth curves onto the chart as grey curves. This method for finding nearest neighbours is known as <em>predictive mean matching</em> and has grown into a powerful technique for missing data.<span class="citation">(van Buuren 2018)</span> The bundle of grey curves indicates some possible future trajectories of the target child. The mean of the bundle is the most likely path. Graphically it is the dotted blue curve between the last measurement and the age of the outcome.</p>
 <p>Let’s look at a numerical example. We split the data into one target child and 199 donor children, and fit a broken stick model to the donor set.</p>
 <div class="sourceCode" id="cb68"><pre class="downlit">
 <span class="va">donor_data</span> <span class="op">&lt;-</span> <span class="va">smocc_200</span> <span class="op">%&gt;%</span> 

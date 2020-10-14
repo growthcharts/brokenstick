@@ -129,13 +129,15 @@
 <p>The user specifies a set of break ages at which the straight lines connect. Each individual obtains an estimate at each break age, so the set of estimates of the individual form a smoothed version of the observed trajectory.</p>
 <p>The main assumptions of the broken stick model are:</p>
 <ul>
-<li>The development between the break ages follows a straight line, and is generally not of particular interest;</li>
+<li>The trajectory between the break ages follows a straight line, and is generally not of particular interest;</li>
 <li>Broken stick estimates follow a common multivariate normal distribution;</li>
+<li>Missing data are missing at random (MAR);</li>
+<li>Individuals are exchangeable and uncorrelated.</li>
 </ul>
 <p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (<span class="math inline"><em>Z</em></span>) scale. Unique feature of the broken stick model are:</p>
 <ul>
 <li>
-<em>Modular</em>: Issues related to nonlinearities of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;</li>
+<em>Modular</em>: Issues related to non-linearity of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;</li>
 <li>
 <em>Local</em>: A given data point will contribute only to the estimates corresponding to the closest break ages;</li>
 <li>
@@ -147,31 +149,6 @@
 <li>Plotting individual trajectories,</li>
 <li>Predicting broken stick estimates for new data.</li>
 </ul>
-</div>
-<div id="main-functions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#main-functions" class="anchor"></a>Main functions</h2>
-<p>The main functions in the <code>brokenstick</code> package are:</p>
-<table class="table">
-<thead><tr class="header">
-<th>Function name</th>
-<th>Description</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code><a href="reference/brokenstick.html">brokenstick()</a></code></td>
-<td>Fit a broken stick model to irregular data</td>
-</tr>
-<tr class="even">
-<td><code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code></td>
-<td>Predict broken stick estimates</td>
-</tr>
-<tr class="odd">
-<td><code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code></td>
-<td>Plot observed and fitted trajectories</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div id="resources" class="section level2">
 <h2 class="hasAnchor">
@@ -194,7 +171,11 @@
 <div id="instructive-materials" class="section level3">
 <h3 class="hasAnchor">
 <a href="#instructive-materials" class="anchor"></a>Instructive materials</h3>
-<p>The <a href="https://stefvanbuuren.name/brokenstick/">companion site</a> contains various vignettes and articles that explain the model and the use of the software. The most extensive documentation is the paper <a href="https://stefvanbuuren.name/brokenstick/articles/brokenstick-article.html">Broken Stick Model for Irregular Longitudinal Data</a>.</p>
+<ul>
+<li>
+<a href="https://stefvanbuuren.name/brokenstick/">Companion site</a> contains vignettes and articles that explain the model and the use of the software;</li>
+<li>Paper in preparation <a href="https://stefvanbuuren.name/brokenstick/articles/brokenstick-article.html">Broken Stick Model for Irregular Longitudinal Data</a>.</li>
+</ul>
 </div>
 <div id="references" class="section level3">
 <h3 class="hasAnchor">
@@ -256,7 +237,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a></li>
-<li><a href="https://github.com/stefvanbuuren/brokenstick"><img src="https://img.shields.io/badge/github%20version-0.77.0-orange.svg"></a></li>
+<li><a href="https://github.com/stefvanbuuren/brokenstick"><img src="https://img.shields.io/badge/github%20version-0.78.0-orange.svg"></a></li>
 </ul>
 </div>
 </div>

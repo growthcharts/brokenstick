@@ -1,0 +1,112 @@
+---
+title: "cran-comments"
+output: github_document
+---
+
+## Reason for submission
+
+`brokenstick 0.78.0` is a new package
+
+## Test environments
+
+* local OS X install, 10.15.7, R 4.0.2
+* win-builder, using `devtools::check_win_devel()`
+* rhub
+
+### Local build
+
+Package built by
+
+```{r eval = FALSE}
+library("devtools")
+build(manual = TRUE)
+```
+
+```{bash eval=FALSE}
+R CMD CHECK brokenstick_0.78.0.tar.gz
+
+Status: OK
+```
+
+### WIN_DEVEL
+
+`devtools::check_win_devel()` resulted in:
+
+```
+Status: OK
+```
+
+### RHUB
+
+```{r eval=FALSE}
+check_rhub()
+```
+
+The result is:
+
+```
+── dscore 1.3.0: ERROR
+
+  Build ID:   dscore_1.3.0.tar.gz-6c32ff0b664f45338fe9902216505e74
+  Platform:   Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+  Submitted:  6m 29.3s ago
+  Build time: 6m 26s
+
+checking examples ...
+  ** running examples for arch 'i386' ... ERROR
+  Running examples in 'dscore-Ex.R' failed
+  
+  The error most likely occurred in:
+  > ### Name: get_age_equivalent
+  > base::assign(".ptime", proc.time(), pos = "CheckExEnv")
+  > ### Title: Get age equivalents of items that have a difficulty estimate
+  > 
+  > ### ** Examples
+  > ### Aliases: get_age_equivalent
+  > 
+  Error in loadNamespace(name) : there is no package called 'utf8'
+```
+
+The solution of this problem is outside my reach. 
+
+```
+── dscore 1.3.0: OK
+
+Build ID:	dscore_1.3.0.tar.gz-56b28c78bf1045d386e3fda917897383
+Platform:	Ubuntu Linux 16.04 LTS, R-release, GCC
+Submitted:	28 minutes 49.8 seconds ago
+Build time:	28 minutes 48.9 seconds
+```
+
+OK
+
+```
+── dscore 1.3.0: OK
+
+Build ID:	dscore_1.3.0.tar.gz-b47f1ead4d784a42b7c747eae6e66f7c
+Platform:	Fedora Linux, R-devel, clang, gfortran
+Submitted:	34 minutes 23.5 seconds ago
+Build time:	34 minutes 22.8 seconds
+```
+
+OK
+
+```
+── dscore 1.3.0: PREPERROR
+Build ID:	dscore_1.3.0.tar.gz-4557c74d8e6c4c36a2635e6d04f75f8b
+Platform:	Debian Linux, R-devel, GCC ASAN/UBSAN
+Submitted:	59 minutes 50.4 seconds ago
+Build time:	59 minutes 48.4 seconds
+
+...
+Build step 'Send files or execute commands over SSH' changed build result to SUCCESS
+Pinging https://builder.r-hub.io/build/SUCCESS/dscore_1.3.0.tar.gz-4557c74d8e6c4c36a2635e6d04f75f8b/2020-05-12T14:53:59Z
+{"status":"ok"}
+Finished: SUCCESS
+```
+
+The banner says `PREPERROR` but the logs say `SUCCESS`
+
+## Downstream dependencies
+
+There are no downstream dependencies for this package.

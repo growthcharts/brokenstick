@@ -14,4 +14,4 @@
 ^cran-comments\.md$
 ^cran-comments\.Rmd$
 ^CRAN-RELEASE$
-^vignettes/jss_txt.Rmd$
+vignettes/_jss_txt.Rmd
