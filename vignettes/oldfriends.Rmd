@@ -134,7 +134,7 @@ Plot trajectories, new version
 
 ```{r plot-new, fig.height=3, fig.width=7}
 ids <- c(10001, 10005, 10022)
-plot(fit1, data, group = ids)
+plot(fit1, data, group = ids, what = "all")
 ```
 
 ## Example 4: Explained variance

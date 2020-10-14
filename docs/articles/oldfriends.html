@@ -201,13 +201,7 @@
 <p>Plot trajectories, new version</p>
 <div class="sourceCode" id="cb8"><pre class="downlit">
 <span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, group <span class="op">=</span> <span class="va">ids</span><span class="op">)</span>
-<span class="co">#&gt; geom_path: Each group consists of only one observation. Do you need to adjust</span>
-<span class="co">#&gt; the group aesthetic?</span>
-<span class="co">#&gt; geom_path: Each group consists of only one observation. Do you need to adjust</span>
-<span class="co">#&gt; the group aesthetic?</span>
-<span class="co">#&gt; geom_path: Each group consists of only one observation. Do you need to adjust</span>
-<span class="co">#&gt; the group aesthetic?</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, group <span class="op">=</span> <span class="va">ids</span>, what <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></pre></div>
 <p><img src="oldfriends_files/figure-html/plot-new-1.png" width="672"></p>
 </div>
 <div id="example-4-explained-variance" class="section level2">
