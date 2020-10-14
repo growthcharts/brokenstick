@@ -4,12 +4,12 @@ Title: Broken Stick Model for Irregular Longitudinal Data
 Version: 0.78.0
 Authors@R: person("Stef", "van Buuren", email = "stef.vanbuuren@tno.nl", role = c("aut","cre"))
 Description: The broken stick model describes a set of individual curves by a
-    linear mixed model using first order linear B-splines. The main use of the model
+    linear mixed model using a second-order linear B-spline. The main use of the model
     is to align irregularly observed data to a user-specified grid of break ages.
     All fitting can done in the Z-score scale, so non-linearity and irregular data
     can be treated as separate problems. This package contains functions for fitting
     a broken stick model to data, for predicting broken stick curves in new data,
-    and for plotting the estimates.
+    and for plotting the broken stick estimates.
 Depends:
     R (>= 3.5.0)
 Imports:
