@@ -1,3 +1,8 @@
+# brokenstick 1.0.1
+
+- Repair plotting glitch in `oldfriends.Rmd`
+- Limit number of printed rows in `predict.brokenstick()` example
+
 # brokenstick 1.0.0
 
 - Ready for CRAN --> Move up to version 1.0.0
