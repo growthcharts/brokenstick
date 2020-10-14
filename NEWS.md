@@ -1,6 +1,6 @@
 # brokenstick 0.78.0
 
-- Prepare package from first CRAN submission
+- Prepare package for first CRAN submission
 
 # brokenstick 0.77.0
 
