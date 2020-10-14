@@ -25,7 +25,12 @@ build(manual = TRUE)
 ```{bash eval=FALSE}
 R CMD CHECK brokenstick_0.78.0.tar.gz
 
-Status: OK
+* checking re-building of vignette outputs ... WARNING
+Error(s) in re-building vignettes:
+--- re-building ‘brokenstick-article.Rmd’ using rmarkdown
+Warning in file(con, "r") :
+  cannot open file './_jss_txt.Rmd': No such file or directory
+Quitting from lines 46-46 (./_jss_txt.Rmd) 
 ```
 
 ### WIN_DEVEL
@@ -45,67 +50,40 @@ check_rhub()
 The result is:
 
 ```
-── dscore 1.3.0: ERROR
+Build ID:	brokenstick_0.78.0.tar.gz-61572f5f668243edae78a65a4cb5259d
+Platform:	Windows Server 2008 R2 SP1, R-devel, 32/64 bit
+Submitted:	7 minutes 11 seconds ago
+Build time:	6 minutes 32.2 seconds
 
-  Build ID:   dscore_1.3.0.tar.gz-6c32ff0b664f45338fe9902216505e74
-  Platform:   Windows Server 2008 R2 SP1, R-devel, 32/64 bit
-  Submitted:  6m 29.3s ago
-  Build time: 6m 26s
+...
+> # case 3: only group
+> predict(fit, test, group = c(11045, 11120, 999))
+Error in loadNamespace(name) : there is no package called 'utf8'
+Calls: <Anonymous> ... loadNamespace -> withRestarts -> withOneRestart -> doWithOneRestart
+Execution halted
 
-checking examples ...
-  ** running examples for arch 'i386' ... ERROR
-  Running examples in 'dscore-Ex.R' failed
-  
-  The error most likely occurred in:
-  > ### Name: get_age_equivalent
-  > base::assign(".ptime", proc.time(), pos = "CheckExEnv")
-  > ### Title: Get age equivalents of items that have a difficulty estimate
-  > 
-  > ### ** Examples
-  > ### Aliases: get_age_equivalent
-  > 
-  Error in loadNamespace(name) : there is no package called 'utf8'
 ```
 
 The solution of this problem is outside my reach. 
 
 ```
-── dscore 1.3.0: OK
-
-Build ID:	dscore_1.3.0.tar.gz-56b28c78bf1045d386e3fda917897383
+Build ID:	brokenstick_0.78.0.tar.gz-498bf3a054274ed69819b3c32a4d65af
 Platform:	Ubuntu Linux 16.04 LTS, R-release, GCC
-Submitted:	28 minutes 49.8 seconds ago
-Build time:	28 minutes 48.9 seconds
+Submitted:	26 minutes 35.1 seconds ago
+Build time:	26 minutes 14.8 seconds
 ```
 
-OK
+Status: Success. Just a "new submission" note.
 
 ```
-── dscore 1.3.0: OK
-
-Build ID:	dscore_1.3.0.tar.gz-b47f1ead4d784a42b7c747eae6e66f7c
+Build ID:	brokenstick_0.78.0.tar.gz-ce06a5c3e53d45f0bdf64595537d0c12
 Platform:	Fedora Linux, R-devel, clang, gfortran
-Submitted:	34 minutes 23.5 seconds ago
-Build time:	34 minutes 22.8 seconds
+Submitted:	32 minutes 31.7 seconds ago
+Build time:	31 minutes 52.9 seconds
 ```
 
-OK
+Status: Success. Just a "new submission" note.
 
-```
-── dscore 1.3.0: PREPERROR
-Build ID:	dscore_1.3.0.tar.gz-4557c74d8e6c4c36a2635e6d04f75f8b
-Platform:	Debian Linux, R-devel, GCC ASAN/UBSAN
-Submitted:	59 minutes 50.4 seconds ago
-Build time:	59 minutes 48.4 seconds
-
-...
-Build step 'Send files or execute commands over SSH' changed build result to SUCCESS
-Pinging https://builder.r-hub.io/build/SUCCESS/dscore_1.3.0.tar.gz-4557c74d8e6c4c36a2635e6d04f75f8b/2020-05-12T14:53:59Z
-{"status":"ok"}
-Finished: SUCCESS
-```
-
-The banner says `PREPERROR` but the logs say `SUCCESS`
 
 ## Downstream dependencies
 
