@@ -7,7 +7,7 @@
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![](https://img.shields.io/badge/github%20version-0.78.0-orange.svg)](https://github.com/growthcharts/brokenstick)
+[![](https://img.shields.io/badge/github%20version-1.0.0-orange.svg)](https://github.com/growthcharts/brokenstick)
 <!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear

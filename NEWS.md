@@ -1,3 +1,8 @@
+# brokenstick 1.0.0
+
+- Ready for CRAN --> Move up to version 1.0.0
+- The package is now hosted on `https://github.com/growthcharts/brokenstick/`
+
 # brokenstick 0.78.0
 
 - Prepare package for first CRAN submission
