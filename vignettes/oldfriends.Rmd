@@ -48,7 +48,7 @@ We recommend changing your code to reflect the above changes. If needed, the old
 
 ```{r eval=FALSE}
 library(devtools)
-install_github("stefvanbuuren/brokenstick@V0.62.1")
+install_github("growthcharts/brokenstick@V0.62.1")
 ```
 
 # Examples

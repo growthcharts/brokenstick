@@ -1,6 +1,6 @@
 destination: docs
 title: brokenstick
-url: https://stefvanbuuren.name/brokenstick
+url: https://growthcharts.org/brokenstick
 template:
   params:
     bootswatch: flatly

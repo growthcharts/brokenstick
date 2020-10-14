@@ -39,7 +39,7 @@ Three unique features of the broken stick model are:
 
 ## What is in the package?
 
-The `brokenstick` package contains functions to fit, predict and plot data. See the [reference page](https://stefvanbuuren.name/brokenstick/reference/index.html) for an overview.
+The `brokenstick` package contains functions to fit, predict and plot data. See the [reference page](https://growthcharts.org/brokenstick/reference/index.html) for an overview.
 
 ## Acknowledgement
 

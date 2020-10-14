@@ -6,10 +6,10 @@ bibentry(
   author       = personList(person("Stef", "van Buuren")),
   journal      = "Journal of Statistical Software",
   year         = "In preparation",
-  url          = "https://github.com/stefvanbuuren/brokenstick")
+  url          = "https://github.com/growthcharts/brokenstick")
 
   textVersion  =
   paste("Stef van Buuren (2020)",
         "Broken Stick Model for Irregular Longitudinal Data",
         "Journal of Statistical Software", "In preparation",
-        "https://github.com/stefvanbuuren/brokenstick.", sep = ", ")
+        "https://github.com/growthcharts/brokenstick.", sep = ", ")

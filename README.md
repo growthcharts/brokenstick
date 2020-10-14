@@ -7,7 +7,7 @@
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![](https://img.shields.io/badge/github%20version-0.78.0-orange.svg)](https://github.com/stefvanbuuren/brokenstick)
+[![](https://img.shields.io/badge/github%20version-0.78.0-orange.svg)](https://github.com/growthcharts/brokenstick)
 <!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear
@@ -27,7 +27,7 @@ The `brokenstick` package can be installed from GitHub as follows:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("stefvanbuuren/brokenstick")
+remotes::install_github("growthcharts/brokenstick")
 ```
 
 There is currently no CRAN version.
@@ -105,11 +105,11 @@ The `brokenstick` package contains functions for
 
 ### Instructive materials
 
-  - [Companion site](https://stefvanbuuren.name/brokenstick/) contains
+  - [Companion site](https://growthcharts.org/brokenstick/) contains
     vignettes and articles that explain the model and the use of the
     software;
   - Paper in preparation [Broken Stick Model for Irregular Longitudinal
-    Data](https://stefvanbuuren.name/brokenstick/articles/brokenstick-article.html).
+    Data](https://growthcharts.org/brokenstick/articles/brokenstick-article.html).
 
 ### References
 

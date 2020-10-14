@@ -36,8 +36,8 @@ Suggests:
     svglite,
     testthat,
     rmarkdown
-URL: https://github.com/stefvanbuuren/brokenstick, https://stefvanbuuren.name/brokenstick/
-BugReports: https://github.com/stefvanbuuren/brokenstick/issues
+URL: https://github.com/growthcharts/brokenstick, https://growthcharts.org/brokenstick/
+BugReports: https://github.com/growthcharts/brokenstick/issues
 Encoding: UTF-8
 License: MIT + file LICENSE
 LazyData: TRUE
