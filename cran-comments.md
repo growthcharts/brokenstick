@@ -23,12 +23,7 @@ build(manual = TRUE)
 ``` bash
 R CMD CHECK brokenstick_0.78.0.tar.gz
 
-* checking re-building of vignette outputs ... WARNING
-Error(s) in re-building vignettes:
---- re-building ‘brokenstick-article.Rmd’ using rmarkdown
-Warning in file(con, "r") :
-  cannot open file './_jss_txt.Rmd': No such file or directory
-Quitting from lines 46-46 (./_jss_txt.Rmd) 
+Status: OK
 ```
 
 ### WIN\_DEVEL
@@ -51,11 +46,7 @@ The result is:
     Build time: 6 minutes 32.2 seconds
     
     ...
-    > # case 3: only group
-    > predict(fit, test, group = c(11045, 11120, 999))
     Error in loadNamespace(name) : there is no package called 'utf8'
-    Calls: <Anonymous> ... loadNamespace -> withRestarts -> withOneRestart -> doWithOneRestart
-    Execution halted
 
 The solution of this problem is outside my reach.
 
