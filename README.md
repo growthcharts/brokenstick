@@ -7,7 +7,7 @@
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![](https://img.shields.io/badge/github%20version-0.77.0-orange.svg)](https://github.com/stefvanbuuren/brokenstick)
+[![](https://img.shields.io/badge/github%20version-0.78.0-orange.svg)](https://github.com/stefvanbuuren/brokenstick)
 <!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear
@@ -51,17 +51,19 @@ observed trajectory.
 
 The main assumptions of the broken stick model are:
 
-  - The development between the break ages follows a straight line, and
+  - The trajectory between the break ages follows a straight line, and
     is generally not of particular interest;
   - Broken stick estimates follow a common multivariate normal
     distribution;
+  - Missing data are missing at random (MAR);
+  - Individuals are exchangeable and uncorrelated.
 
 In order to conform to the assumption of multivariate normality, the
 user may fit the broken stick model on suitably transformed data that
 yield the standard normal (\(Z\)) scale. Unique feature of the broken
 stick model are:
 
-  - *Modular*: Issues related to nonlinearities of the growth curves in
+  - *Modular*: Issues related to non-linearity of the growth curves in
     the observed scale can be treated separately, i.e., outside the
     broken stick model;
   - *Local*: A given data point will contribute only to the estimates
@@ -74,16 +76,6 @@ The `brokenstick` package contains functions for
   - Fitting the broken stick model to data,
   - Plotting individual trajectories,
   - Predicting broken stick estimates for new data.
-
-## Main functions
-
-The main functions in the `brokenstick` package are:
-
-| Function name   | Description                                |
-| --------------- | ------------------------------------------ |
-| `brokenstick()` | Fit a broken stick model to irregular data |
-| `predict()`     | Predict broken stick estimates             |
-| `plot()`        | Plot observed and fitted trajectories      |
 
 ## Resources
 
@@ -113,11 +105,11 @@ The main functions in the `brokenstick` package are:
 
 ### Instructive materials
 
-The [companion site](https://stefvanbuuren.name/brokenstick/) contains
-various vignettes and articles that explain the model and the use of the
-software. The most extensive documentation is the paper [Broken Stick
-Model for Irregular Longitudinal
-Data](https://stefvanbuuren.name/brokenstick/articles/brokenstick-article.html).
+  - [Companion site](https://stefvanbuuren.name/brokenstick/) contains
+    vignettes and articles that explain the model and the use of the
+    software;
+  - Paper in preparation [Broken Stick Model for Irregular Longitudinal
+    Data](https://stefvanbuuren.name/brokenstick/articles/brokenstick-article.html).
 
 ### References
 
