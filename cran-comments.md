@@ -3,7 +3,7 @@ cran-comments
 
 ## Reason for submission
 
-`brokenstick 0.78.0` is a new package
+`brokenstick 1.0.0` is a new package
 
 ## Test environments
 
@@ -21,7 +21,7 @@ build(manual = TRUE)
 ```
 
 ``` bash
-R CMD CHECK brokenstick_0.78.0.tar.gz
+R CMD CHECK brokenstick_1.0.0.tar.gz
 
 Status: OK
 ```
