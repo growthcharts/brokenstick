@@ -101,15 +101,17 @@ The `brokenstick` package contains functions for
 > > Z‐score data. Aside from the accuracy of the fit, another key
 > > advantage of the brokenstick model is that it is easier to fit and
 > > provides easily interpretable estimates of child growth
-> > trajectories."
+> > trajectories.
 
 ### Instructive materials
 
   - [Companion site](https://growthcharts.org/brokenstick/) contains
     vignettes and articles that explain the model and the use of the
     software;
-  - Paper in preparation [Broken Stick Model for Irregular Longitudinal
-    Data](https://growthcharts.org/brokenstick/articles/brokenstick-article.html).
+  - Paper in preparation: *Broken Stick Model for Irregular Longitudinal
+    Data*:
+    [pdf](https://stefvanbuuren.name/publications/2020_Brokenstick_JSS_manuscript.pdf),
+    [html](https://growthcharts.org/brokenstick/articles/brokenstick-article.html).
 
 ### References
 
