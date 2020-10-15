@@ -10,7 +10,7 @@ vignette: >
 
 ## What is the broken stick model?
 
-The *broken stick model* describes a set of individual curves by a linear mixed model using first order linear B-splines. The model can be used to
+The *broken stick model* describes a set of individual curves by a linear mixed model using second-order linear B-splines. The model can be used to
 
 - smooth growth curves by a series of connected straight lines;
 - align irregularly observed curves to a common age grid;

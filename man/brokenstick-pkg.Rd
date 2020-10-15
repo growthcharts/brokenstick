@@ -6,7 +6,7 @@
 \title{\pkg{brokenstick}: A package for irregular longitudinal data.}
 \description{
 The broken stick model describes a set of individual curves
-by a linear mixed model using first order linear B-splines. The
+by a linear mixed model using second-order linear B-splines. The
 main use of the model is to align irregularly observed data to a
 user-specified grid of break ages.
 }

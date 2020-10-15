@@ -1,6 +1,6 @@
 #' Create linear splines basis
 #'
-#' This function creates the basis function of a linear first-order splines
+#' This function creates the basis function of a second-order (linear) splines
 #' at a user-specific set of break points.
 #' @aliases make_basis
 #' @param x a \code{data.frame} with one column

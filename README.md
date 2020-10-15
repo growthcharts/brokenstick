@@ -11,7 +11,7 @@ maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www
 <!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear
-mixed model using first order linear B-splines. The main use of the
+mixed model using second-order linear B-splines. The main use of the
 model is to align irregularly observed data to a user-specified grid of
 break ages.
 
@@ -35,8 +35,7 @@ There is currently no CRAN version.
 ## Overview
 
 The *broken stick model* describes a set of individual curves by a
-linear mixed model using first order linear B-splines. The model can be
-used
+linear mixed model using linear B-splines. The model can be used
 
   - to smooth growth curves by a series of connected straight lines;
   - to align irregularly observed curves to a common age grid;

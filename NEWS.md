@@ -1,3 +1,7 @@
+# brokenstick 1.0.2
+
+- Correct some "first-order" mindo's to "second-order"
+
 # brokenstick 1.0.1
 
 - Repair plotting glitch in `oldfriends.Rmd`
@@ -142,7 +146,7 @@ Stef van Buuren
 1) Netherlands Organization for Applied Scientific Research TNO
 2) Utrecht University
 
-The broken stick model describes a set of individual curves by a linear mixed model using first order linear B-splines. The model can be used
+The broken stick model describes a set of individual curves by a linear mixed model using second-order linear B-splines. The model can be used
 
 - to smooth growth curves by a series of connected straight lines;
 - to align irregularly observed curves to a common age grid;

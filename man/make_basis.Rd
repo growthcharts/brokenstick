@@ -35,7 +35,7 @@ A matrix with \code{length(x)} rows and \code{length(breaks)}
 columns, with some extra attributes described by \code{bs()}.
 }
 \description{
-This function creates the basis function of a linear first-order splines
+This function creates the basis function of a second-order (linear) splines
 at a user-specific set of break points.
 }
 \note{
