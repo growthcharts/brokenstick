@@ -614,7 +614,7 @@ ggplot(mice::tbc, aes(age + 0.2, bmi.z)) +
 
 The Terneuzen Birth Cohort [@dekroon2008] comprises of 2604 children born around the year 1980 in Terneuzen, The Netherlands. Figure 10 shows the BMI standard deviation scores (SDS) against age in a random subset of 306 children. While we may easily recognise scheduled visits at birth, 1y and 14y, observations at other periods are less structured. Compared to the analysis in @dekroon2010, we removed the knots at 8 days and 18 years (because these appear in sparse data areas) and added knots at 4, 14 and 24 years. We set the right boundary knot to 29y, slightly higher than the maximum age in the data.
 
-```{r tbc_lmer, cache=TRUE}
+```{r tbc-lmer, cache=TRUE}
 ctl <- control_brokenstick(
   lmer = lmerControl(check.conv.grad = .makeCC("warning", 0.02, NULL),
                      check.conv.singular = .makeCC("ignore", 0.001)))
@@ -625,7 +625,7 @@ fit_lmer <- brokenstick(bmi.z ~ age | id, data = mice::tbc,
 
 Depending on the precise specification of the knots, the default `brokenstick()` procedure that calls `lme4::lmer()` may print the warning `Model failed to converge with max|grad| = 0.011882 (tol = 0.002, component 1)` or a message `boundary (singular) fit: see ?isSingular`. These issues arise because of the over-parametrised nature of the default broken stick model, potentially resulting in a singular variance-covariance matrix `fit@omega`, combined with a sparsity of data. The `control_brokenstick()` command can prevent the warning and message.
 
-```{r tbc_trajectories_lmer, fig.height=5.4, fig.cap = "Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). lmer method.", set.theme = TRUE, warning=FALSE}
+```{r tbc-trajectories-lmer, fig.height=5.4, fig.cap = "Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). lmer method.", set.theme = TRUE, warning=FALSE}
 ids <- c(8, 1259, 2447, 7019, 7460, 7646)
 plot(fit_lmer, mice::tbc, group = ids,
      ylab = "BMI SDS", xlab = "Age (years)")
@@ -635,13 +635,13 @@ Figure 11 shows observed and fitted BMI SDS trajectories for six subjects using 
 
 The royal way to treat such warnings and message is to simplify the model, e.g., by removing knots. An alternative is to constrain the broken stick model, in particular the covariance matrix. Selecting the `kr` method applies the Argyle correlation model, at the expense of fit to the data. On the other hand, the fitted trajectories will be much stabler in regions with sparse data. The following snippet applies the `kr` method.
 
-```{r tbc_kr, cache=TRUE}
+```{r tbc-kr, cache=TRUE}
 fit_kr <- brokenstick(bmi.z ~ age | id, data = mice::tbc,
                       knots = knots, boundary = c(0, 29),
                       method = "kr", seed = 41441)
 ```
 
-```{r tbc_trajectories_kr, echo=FALSE, fig.height=5.4, fig.cap = "Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). kr method.", set.theme = TRUE, warning=FALSE}
+```{r tbc-trajectories-kr, echo=FALSE, fig.height=5.4, fig.cap = "Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). kr method.", set.theme = TRUE, warning=FALSE}
 plot(fit_kr, mice::tbc, group = ids, 
      ylab = "BMI SDS", xlab = "Age (years)")
 ```
@@ -650,7 +650,7 @@ Figure 12 is the equivalent to Figure 11, but now for method `kr`. The per cent 
 
 To identify critical periods, we need to predict adult overweight. In Figure 12, only three out of six subjects had a BMI measurement at adult age. Since we do not want the results to overly depend on fitted extrapolations, we restrict the analysis sample to persons with an adult measurement. The following lines extract the repeated measures for 92 (out of 306) individuals for whom we observed adult BMI.
 
-```{r tbc_data}
+```{r tbc-data}
 tbc1 <- mice::tbc %>% 
   filter(!is.na(ao) & first) %>% 
   select(id, nocc, sex)
@@ -664,7 +664,7 @@ data <- bind_cols(prd,
 head(data, 3)
 ```
 
-```{r tbc_trajectories_all, echo=FALSE, fig.height=4, fig.cap = "Body Mass Index (BMI) SDS trajectories for 92 subjects, coloured by adult overweight status.", set.theme = TRUE, warning=FALSE}
+```{r tbc-trajectories-all, echo=FALSE, fig.height=4, fig.cap = "Body Mass Index (BMI) SDS trajectories for 92 subjects, coloured by adult overweight status.", set.theme = TRUE, warning=FALSE}
 pd <- data %>% 
   select(id, ao, `0`:`24`) %>% 
   tidyr::pivot_longer(`0`:`24`, names_to = "age", values_to = "bmi") %>% 
@@ -842,7 +842,7 @@ boy$z <- AGD::y2z(y = boy$y, x = boy$x, sex = "M", ref = ref)
 boy$z
 ```
 
-```{r fig:inter1, echo = FALSE, fig.height = 4, fig.cap = "Linear interpolation in the cm scale results in an unrealistic trajectory at intermediate ages.", set.palette = TRUE}
+```{r inter1, echo = FALSE, fig.height = 4, fig.cap = "Linear interpolation in the cm scale results in an unrealistic trajectory at intermediate ages.", set.palette = TRUE}
 sds <- c(-2, -1, 0, 1, 2)
 age <- round(seq(0, 1.25, 1/48), 3)
 z <- rep(sds, times = length(age))
@@ -878,7 +878,7 @@ During the period the boy grows from moderately short (about -1.0 SD at month 1)
 
 A first alternative is to apply the linear interpolation in the $Z$-score scale. This option is attractive because convexity of centile lines is absent on this scale. 
 
-```{r fig:inter2, echo = FALSE, fig.height = 4, fig.cap = "Linear interpolation in the Z-score scale results in a more realistic trajectory at intermediate ages.", set.palette = TRUE}
+```{r inter2, echo = FALSE, fig.height = 4, fig.cap = "Linear interpolation in the Z-score scale results in a more realistic trajectory at intermediate ages.", set.palette = TRUE}
 zout <- approx(x = boy$x, y = boy$z, xout = as.numeric(rownames(w)))$y
 yout <- z2y(x = as.numeric(rownames(w)), z = zout, ref = ref)
 
@@ -925,7 +925,7 @@ zout <- predict(fit_200, x = age, y = z, shape = "vector")
 yout <- z2y(x = age, z = zout, ref = ref)
 ```
 
-```{r fig:inter3, echo = FALSE, fig.height = 4, fig.cap = "Broken stick model fitted in the SDS scale results in a most realistic expected trajectory at intermediate ages.", set.palette = TRUE}
+```{r inter3, echo = FALSE, fig.height = 4, fig.cap = "Broken stick model fitted in the SDS scale results in a most realistic expected trajectory at intermediate ages.", set.palette = TRUE}
 # create the plots
 oldpar <- par(mfrow = c(1, 2))
 matplot(x = as.numeric(rownames(w)), y = w, type = "l", lty = 1, 
