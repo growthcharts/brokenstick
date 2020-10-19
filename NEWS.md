@@ -1,3 +1,7 @@
+# brokenstick 1.0.3
+
+- Sanitise chunk names by removing `:` and `_` characters
+
 # brokenstick 1.0.2
 
 - Correct some "first-order" mindo's to "second-order"
