@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
       </span>
     </div>
 
@@ -97,7 +97,7 @@
       <h1 data-toc-skip>Broken Stick Model for Irregular Longitudinal Data</h1>
                         <h4 class="author">Stef van Buuren</h4>
             
-            <h4 class="date">2020-10-15</h4>
+            <h4 class="date">2020-10-19</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/growthcharts/brokenstick/blob/master/vignettes/brokenstick-article.Rmd"><code>vignettes/brokenstick-article.Rmd</code></a></small>
       <div class="hidden name"><code>brokenstick-article.Rmd</code></div>
@@ -676,7 +676,7 @@ Body Mass Index (BMI) SDS by log(age + 0.2) (Terneuzen cohort)
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_lmer</span>, <span class="fu">mice</span><span class="fu">::</span><span class="va"><a href="https://amices.github.io/mice/reference/tbc.html">tbc</a></span>, group <span class="op">=</span> <span class="va">ids</span>,
      ylab <span class="op">=</span> <span class="st">"BMI SDS"</span>, xlab <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span></pre></div>
 <div class="figure">
-<img src="brokenstick-article_files/figure-html/tbc_trajectories_lmer-1.png" alt="Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). lmer method." width="100%"><p class="caption">
+<img src="brokenstick-article_files/figure-html/tbc-trajectories-lmer-1.png" alt="Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). lmer method." width="100%"><p class="caption">
 Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). lmer method.
 </p>
 </div>
@@ -687,7 +687,7 @@ Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitt
                       knots <span class="op">=</span> <span class="va">knots</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">29</span><span class="op">)</span>,
                       method <span class="op">=</span> <span class="st">"kr"</span>, seed <span class="op">=</span> <span class="fl">41441</span><span class="op">)</span></pre></div>
 <div class="figure">
-<img src="brokenstick-article_files/figure-html/tbc_trajectories_kr-1.png" alt="Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). kr method." width="100%"><p class="caption">
+<img src="brokenstick-article_files/figure-html/tbc-trajectories-kr-1.png" alt="Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). kr method." width="100%"><p class="caption">
 Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). kr method.
 </p>
 </div>
@@ -713,7 +713,7 @@ Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitt
 ## 3    97 1.68    0.569  0.948   1.90   1.28   0.838  0.444  0.238  0.398  0.709
 ## # … with 4 more variables: nocc &lt;dbl&gt;, sex &lt;dbl&gt;, ao &lt;dbl&gt;, bmi.z.jv &lt;dbl&gt;</code></pre>
 <div class="figure">
-<img src="brokenstick-article_files/figure-html/tbc_trajectories_all-1.png" alt="Body Mass Index (BMI) SDS trajectories for 92 subjects, coloured by adult overweight status." width="100%"><p class="caption">
+<img src="brokenstick-article_files/figure-html/tbc-trajectories-all-1.png" alt="Body Mass Index (BMI) SDS trajectories for 92 subjects, coloured by adult overweight status." width="100%"><p class="caption">
 Body Mass Index (BMI) SDS trajectories for 92 subjects, coloured by adult overweight status.
 </p>
 </div>
@@ -896,7 +896,7 @@ Broken stick model. Observed and fitted trajectories for a model that summarises
 <span class="va">boy</span><span class="op">$</span><span class="va">z</span></pre></div>
 <pre><code>## [1] -0.98  0.99</code></pre>
 <div class="figure">
-<img src="brokenstick-article_files/figure-html/fig:inter1-1.png" alt="Linear interpolation in the cm scale results in an unrealistic trajectory at intermediate ages." width="100%"><p class="caption">
+<img src="brokenstick-article_files/figure-html/inter1-1.png" alt="Linear interpolation in the cm scale results in an unrealistic trajectory at intermediate ages." width="100%"><p class="caption">
 Linear interpolation in the cm scale results in an unrealistic trajectory at intermediate ages.
 </p>
 </div>
@@ -907,7 +907,7 @@ Linear interpolation in the cm scale results in an unrealistic trajectory at int
 <a href="#interpolation-in-the-z-score-scale" class="anchor"></a>Interpolation in the Z-score scale</h3>
 <p>A first alternative is to apply the linear interpolation in the <span class="math inline">\(Z\)</span>-score scale. This option is attractive because convexity of centile lines is absent on this scale.</p>
 <div class="figure">
-<img src="brokenstick-article_files/figure-html/fig:inter2-1.png" alt="Linear interpolation in the Z-score scale results in a more realistic trajectory at intermediate ages." width="100%"><p class="caption">
+<img src="brokenstick-article_files/figure-html/inter2-1.png" alt="Linear interpolation in the Z-score scale results in a more realistic trajectory at intermediate ages." width="100%"><p class="caption">
 Linear interpolation in the Z-score scale results in a more realistic trajectory at intermediate ages.
 </p>
 </div>
@@ -930,7 +930,7 @@ Linear interpolation in the Z-score scale results in a more realistic trajectory
 <span class="co"># convert predicted values to Y-scale</span>
 <span class="va">yout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AGD/man/z2y.html">z2y</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, z <span class="op">=</span> <span class="va">zout</span>, ref <span class="op">=</span> <span class="va">ref</span><span class="op">)</span></pre></div>
 <div class="figure">
-<img src="brokenstick-article_files/figure-html/fig:inter3-1.png" alt="Broken stick model fitted in the SDS scale results in a most realistic expected trajectory at intermediate ages." width="100%"><p class="caption">
+<img src="brokenstick-article_files/figure-html/inter3-1.png" alt="Broken stick model fitted in the SDS scale results in a most realistic expected trajectory at intermediate ages." width="100%"><p class="caption">
 Broken stick model fitted in the SDS scale results in a most realistic expected trajectory at intermediate ages.
 </p>
 </div>
