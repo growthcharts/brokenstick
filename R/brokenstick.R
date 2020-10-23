@@ -116,11 +116,11 @@
 #' # fit with implicit boundary c(0, 3)
 #' fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
 #'
-#' \dontrun{
 #' # using KR sampler
 #' fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3,
 #'                    method = "kr", seed = 1)
 #'
+#' \donttest{
 #' knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4)
 #' boundary <- c(0, 3)
 #' fit_lmer <- brokenstick(hgt.z ~ age | id, data = train,

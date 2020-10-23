@@ -55,7 +55,6 @@ The \code{plot} method for a \code{brokenstick} object plots the observed and
 fitted trajectories of one or more groups.
 }
 \examples{
-\dontrun{
 # fit model on raw hgt with knots at 0, 1, 2 and 3 years
 fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:3)
 gp <- c(10001, 10005, 10022)
@@ -76,7 +75,6 @@ plot(fit_200, smocc_200,
   group = gp, xlim = c(0, 2.1),
   xlab = "Age (years)", ylab = "Length (SDS)"
 )
-}
 }
 \seealso{
 \link{predict.brokenstick}, \link{plot_trajectory}.

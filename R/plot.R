@@ -26,7 +26,6 @@
 #' @method plot brokenstick
 #' @seealso [predict.brokenstick], [plot_trajectory].
 #' @examples
-#' \dontrun{
 #' # fit model on raw hgt with knots at 0, 1, 2 and 3 years
 #' fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:3)
 #' gp <- c(10001, 10005, 10022)
@@ -47,7 +46,6 @@
 #'   group = gp, xlim = c(0, 2.1),
 #'   xlab = "Age (years)", ylab = "Length (SDS)"
 #' )
-#' }
 #' @export
 plot.brokenstick <- function(x,
                              new_data,
