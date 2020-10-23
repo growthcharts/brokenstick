@@ -28,6 +28,7 @@ reference:
       - control_kr
       - get_knots
       - get_r2
+      - parse_formula
   - title: "Numerical functions"
     desc: >
        Functions that perform the necessary calculations for the broken stick
@@ -36,7 +37,6 @@ reference:
       - EB
       - kr
       - make_basis
-      - parse_formula
       - plot_trajectory
   - title: "Class documentation"
     desc: >
