@@ -1,15 +1,15 @@
-# brokenstick 1.0.3
+# brokenstick 1.1.0
 
-- Sanitise chunk names by removing `:` and `_` characters
+This version adds a couple of minor alterations.
 
-# brokenstick 1.0.2
-
-- Correct some "first-order" mindo's to "second-order"
-
-# brokenstick 1.0.1
-
-- Repair plotting glitch in `oldfriends.Rmd`
-- Limit number of printed rows in `predict.brokenstick()` example
+- Updates cran-comments
+- Adds a link to the JSS manuscript in the `description` field
+- Removes unnecessary `\dontrun{}` directives
+- Exports `parse_formula()` to remove `:::` from examples
+- Sanitises chunk names by removing `:` and `_` characters
+- Corrects some "first-order" mindo's to "second-order"
+- Repairs plotting glitch in `oldfriends.Rmd`
+- Limits number of printed rows in `predict.brokenstick()` example
 
 # brokenstick 1.0.0
 

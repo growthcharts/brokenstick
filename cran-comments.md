@@ -1,9 +1,13 @@
 cran-comments
 ================
 
-## Reason for submission
+## Resubmission 1
 
-`brokenstick 1.0.0` is a new package
+This is a resubmission. In this version I have
+
+  - Added a link to the JSS manuscript in the `description` field
+  - Removed unnecessary `\dontrun{}` directives
+  - Exported `parse_formula()` to remove `:::` from examples
 
 ## Test environments
 
