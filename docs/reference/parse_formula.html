@@ -74,7 +74,7 @@ the first variable mentioned in each formula component." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
       </span>
     </div>
 
@@ -168,13 +168,35 @@ Each element has length 1.</p>
     <p>Stef van Buuren, 2020</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
-<span class='co'># examples that yield identical result</span>
-<span class='fu'>brokenstick</span><span class='fu'>:::</span><span class='fu'>parse_formula</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>|</span> <span class='va'>z</span><span class='op'>)</span>
-<span class='fu'>brokenstick</span><span class='fu'>:::</span><span class='fu'>parse_formula</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>+</span> <span class='va'>a</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>x1</span> <span class='op'>|</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>b</span><span class='op'>)</span>
-<span class='fu'>brokenstick</span><span class='fu'>:::</span><span class='fu'>parse_formula</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>+</span> <span class='va'>a</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>x1</span> <span class='op'>*</span> <span class='va'>c</span> <span class='op'>|</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>d</span><span class='op'>)</span>
-<span class='op'>}</span>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='co'># examples that yield identical result</span>
+<span class='fu'>parse_formula</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>|</span> <span class='va'>z</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $x
+#&gt; [1] "x"
+#&gt; 
+#&gt; $y
+#&gt; [1] "y"
+#&gt; 
+#&gt; $g
+#&gt; [1] "z"
+#&gt; </div><div class='input'><span class='fu'>parse_formula</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>+</span> <span class='va'>a</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>x1</span> <span class='op'>|</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>b</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $x
+#&gt; [1] "x"
+#&gt; 
+#&gt; $y
+#&gt; [1] "y"
+#&gt; 
+#&gt; $g
+#&gt; [1] "z"
+#&gt; </div><div class='input'><span class='fu'>parse_formula</span><span class='op'>(</span><span class='va'>y</span> <span class='op'>+</span> <span class='va'>a</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>b</span><span class='op'>)</span> <span class='op'>~</span> <span class='va'>x</span> <span class='op'>+</span> <span class='va'>x1</span> <span class='op'>*</span> <span class='va'>c</span> <span class='op'>|</span> <span class='va'>z</span> <span class='op'>+</span> <span class='va'>d</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $x
+#&gt; [1] "x"
+#&gt; 
+#&gt; $y
+#&gt; [1] "y"
+#&gt; 
+#&gt; $g
+#&gt; [1] "z"
+#&gt; </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
