@@ -1,3 +1,7 @@
+# brokenstick 1.1.1
+
+- Handles an edge case that crashed `predict()`
+
 # brokenstick 1.1.0
 
 This version adds a couple of minor alterations.
