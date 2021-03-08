@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -77,7 +77,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/growthcharts/brokenstick/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -91,14 +91,13 @@
 
       
 
-      </header><script src="brokenstick-article_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="brokenstick-article_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="brokenstick-article_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="brokenstick-article_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Broken Stick Model for Irregular Longitudinal Data</h1>
                         <h4 class="author">Stef van Buuren</h4>
             
-            <h4 class="date">2020-11-02</h4>
+            <h4 class="date">2021-03-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/growthcharts/brokenstick/blob/master/vignettes/brokenstick-article.Rmd"><code>vignettes/brokenstick-article.Rmd</code></a></small>
       <div class="hidden name"><code>brokenstick-article.Rmd</code></div>
@@ -112,7 +111,7 @@
 <a href="#introduction" class="anchor"></a>Introduction</h1>
 <p>Most longitudinal studies plan data collection to occur at a fixed set of time points. In practice, the realised times can differ - sometimes substantially - from the scheduled times. There may be many reasons for such differences. For example, we planned a visit in the weekend or during a holiday, the subject didn’t show up, the measurement device was out of order, or the investigator got ill. Varying observation times may also result from combining data from multiple studies, each collected according to its own design. Timing variation can be substantial in observational studies, especially if the survey lacks a pre-specified schedule. Longitudinal data with timing differences between subjects are said to be <em>irregular</em>.</p>
 <p>Irregular observation times present significant challenges for quantitative analysis. For example, it isn’t easy to calculate the time-to-time correlation matrix if the data spread thinly over time. It might also be complex to predict the future from past data if subject times differ. Observation times may also relate to the process of interest. For example, more severe patients get more frequent measurements; unmotivated cohort members respond more rarely, and so on. Conventional methods like MANOVA, regression or cluster analysis break down if observation times differ or if drop-out is selective.</p>
-<p>While irregular observation times occur all over science, there is no universal or principled approach to resolve the problem. One straightforward fix is to take only those dates for which data are available (e.g., dates when stocks are traded), thus ignoring the times when markets are closed. One may also create bins of time intervals around the planned times, thereby ignoring within-period differences. Another ad-hoc method is to predict the value at the scheduled time from neighbouring data, e.g. by linear interpolation or smoothing, typically reducing the variability in the data. Some quick fixes create data sets where the timing problem seems to have “gone away”, which may tempt the analyst to ignore the potential effects of data patch-up on the substantive conclusions. While convenient and straightforward, the thoughtless application of these fixes introduces significant spurious relations over time, especially if the spacing of observations is highly irregular.<span class="citation">(Rehfeld et al. 2011)</span> Binning can lead to “surprisingly large” biases.<span class="citation">(Towers 2014)</span> If timing variation is related to the outcome of interest, these methods may result in biased estimates and exaggerated claims.<span class="citation">(Pullenayegum and Lim 2016)</span></p>
+<p>While irregular observation times occur all over science, there is no universal or principled approach to resolve the problem. One straightforward fix is to take only those dates for which data are available (e.g., dates when stocks are traded), thus ignoring the times when markets are closed. One may also create bins of time intervals around the planned times, thereby ignoring within-period differences. Another ad-hoc method is to predict the value at the scheduled time from neighbouring data, e.g. by linear interpolation or smoothing, typically reducing the variability in the data. Some quick fixes create data sets where the timing problem seems to have “gone away,” which may tempt the analyst to ignore the potential effects of data patch-up on the substantive conclusions. While convenient and straightforward, the thoughtless application of these fixes introduces significant spurious relations over time, especially if the spacing of observations is highly irregular.<span class="citation">(Rehfeld et al. 2011)</span> Binning can lead to “surprisingly large” biases.<span class="citation">(Towers 2014)</span> If timing variation is related to the outcome of interest, these methods may result in biased estimates and exaggerated claims.<span class="citation">(Pullenayegum and Lim 2016)</span></p>
 <p>The linear mixed model for longitudinal data <span class="citation">(Laird and Ware 1982; Fitzmaurice, Laird, and Ware 2011)</span> is the standard for the analysis of irregular data. The longitudinal mixed model represents each subject’s observed curve by a parametric function of time. The parameter estimates of the function are specific to each subject and modelled as random effects. The linear mixed model is highly useful for irregular data since it borrows strength across different realisations of the same process, summarising each trajectory by a small number of parameters that vary over subjects. The analyst can break down the distribution of these random effects as a function of individual characteristics. The linear mixed model is attractive when the number of measurements differs between individuals, or when the measurements are taken at different times.</p>
 <p>This paper explores the use of the <em>broken stick model</em> as a method to transform irregularly observed data into <em>repeated measures</em>. The broken stick model describes a curve by a series of connected straight lines. The model has a long history and is known under many other names, amongst others, <em>segmented straight lines</em> <span class="citation">(Bellman and Roth 1969)</span>, <em>piecewise regression</em> <span class="citation">(Toms and Lesperance 2003)</span>, <em>structural change models</em> <span class="citation">(Bai and Perron 2003)</span>, <em>broken line smoothing</em> <span class="citation">(Koutsoyiannis 2000)</span> and <em>segmented regression</em> <span class="citation">(Lerman 1980)</span>. The term <em>broken stick</em> goes back to at least <span class="citation">MacArthur (1957)</span>, who used to it in an analogy to indicate the abundances of species. Most of the literature on the broken stick model concentrates on the problem of finding optimal times at which the lines should connect. Instead, the present paper will focus on the problem of summarising irregular individual trajectories by estimates made at a <em>pre-specified time grid</em>. This time grid is identical for all individuals, but it needs not to be equidistant. Our model formulation is a special case of the linear mixed model, with time modelled as a set of random effects coded as a linear B-spline and with subjects as the grouping factor. The output of the transformation is a set of repeated measures, where every subject obtains a score on every time point.</p>
 <p>Substantive researchers often favour repeated measures over the use of linear mixed models because of simplicity. For example, with repeated measures data, we can easily fit a subject-level model to predict future outcomes conditional on earlier data. While such simple regression models may be less efficient than modelling the full data <span class="citation">(Diggle et al. 2002, Sec. 6.1)</span>, increased insight may be more valuable than increased precision.</p>
@@ -139,8 +138,8 @@ Abacus plot of observation times for the first 20 children of the SMOCC data.
 </div>
 <p>The blue points in Figure 1 indicate the observation times. In general, the blue points are close to the scheduled ages (indicated by vertical lines), especially in the first half year. Observation times vary more for older children. Several children have one or more missing visits (e.g. 10002, 10008, 10024). Some children (10012, 10015) had fairly close visits. Child 10028 dropped out after month 9.</p>
 <p>Let us fit two models, with two and nine lines respectively, to the standard deviation score (SDS) of body length.</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
 <span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">smocc_200</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>
 <span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.0833</span>, <span class="fl">0.1667</span>, <span class="fl">0.25</span>, <span class="fl">0.5</span>, <span class="fl">0.75</span>, <span class="fl">1</span>, <span class="fl">1.25</span>, <span class="fl">1.5</span>, <span class="fl">2</span><span class="op">)</span>
 <span class="va">fit9</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">smocc_200</span>, 
@@ -149,7 +148,7 @@ Abacus plot of observation times for the first 20 children of the SMOCC data.
            xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span>
 <span class="va">m9</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, group <span class="op">=</span> <span class="va">ids</span>,
            xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span>
-<span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span><span class="va">m2</span>, <span class="va">m9</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></pre></div>
+<span class="fu">gridExtra</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span><span class="va">m2</span>, <span class="va">m9</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :
 ## Model failed to converge with max|grad| = 0.00772396 (tol = 0.002, component 1)</code></pre>
 <div class="figure">
@@ -241,14 +240,14 @@ Y_i = X_i\beta + X_ib_i + \epsilon_i
 <h3 class="hasAnchor">
 <a href="#parameter-estimation-method-lmer" class="anchor"></a>Parameter estimation, method lmer</h3>
 <p>Estimation of the broken stick model relies on two well-developed  functions: <code><a href="https://rdrr.io/r/splines/bs.html">splines::bs()</a></code> <span class="citation">(R Core Team 2020)</span> and <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lme4::lmer()</a></code>.<span class="citation">(Bates et al. 2015)</span> The following snippet illustrates how the <code>brokenstick::make.basis()</code> function calculates the matrix of <span class="math inline">\(B\)</span>-splines for the time variable <code>age</code>:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">splines</span><span class="op">)</span>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">splines</span><span class="op">)</span>
 <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="fu">::</span><span class="va"><a href="../reference/smocc_200.html">smocc_200</a></span>
 <span class="va">brk</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>
 <span class="va">X</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/splines/bs.html">bs</a></span><span class="op">(</span><span class="va">data</span><span class="op">$</span><span class="va">age</span>, knots <span class="op">=</span> <span class="va">brk</span>, Boundary.knots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>, degree <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">X</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">brk</span>, <span class="fl">3</span><span class="op">)</span>, sep <span class="op">=</span> <span class="st">"_"</span><span class="op">)</span>
 <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"age"</span>, <span class="st">"hgt.z"</span><span class="op">)</span><span class="op">]</span>, <span class="va">X</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre></div>
 <pre><code>##      id   age hgt.z age_0 age_0.5  age_1 age_2 age_3
 ## 1 10001 0.000  0.57  1.00    0.00 0.0000     0     0
 ## 2 10001 0.082  0.89  0.84    0.16 0.0000     0     0
@@ -258,36 +257,36 @@ Y_i = X_i\beta + X_ib_i + \epsilon_i
 ## 6 10001 0.753 -0.40  0.00    0.49 0.5058     0     0</code></pre>
 <p>The numerical example shows that the <code><a href="https://rdrr.io/r/splines/bs.html">bs()</a></code> function transforms the <code>age</code> variable into five columns, the <span class="math inline">\(B\)</span>-spline basis, with names like <code>age_0</code> and <code>age_0.5</code>. If <code>age</code> coincides with one of these (e.g., as in the top row), then the corresponding column receives a <code>1</code>. In all other cases, age distributes over two adjacent columns. To make things fit, we need an additional column (here <code>age_3</code>) at the last position, the right boundary knot. There is also a left boundary knot, and I have conveniently set that equal to the first breakpoint, marking the start of time. Setting <code>degree = 1</code> specifies a <span class="math inline">\(B\)</span>-spline gives the broken stick model its name and its characteristic shape.</p>
 <p>To illustrate the second step of the calculations, we call <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lme4::lmer()</a></code> as follows:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/">lme4</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/lme4/lme4/">lme4</a></span><span class="op">)</span>
 <span class="va">ctl</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmerControl.html">.makeCC</a></span><span class="op">(</span><span class="st">"warning"</span>, tol <span class="op">=</span> <span class="fl">4e-3</span><span class="op">)</span>
 <span class="va">f</span> <span class="op">&lt;-</span> <span class="va">hgt.z</span> <span class="op">~</span> <span class="fl">0</span> <span class="op">+</span> <span class="va">age_0</span> <span class="op">+</span> <span class="va">age_0.5</span> <span class="op">+</span> <span class="va">age_1</span> <span class="op">+</span> <span class="va">age_2</span> <span class="op">+</span> <span class="va">age_3</span> <span class="op">+</span>
   <span class="op">(</span><span class="fl">0</span> <span class="op">+</span> <span class="va">age_0</span> <span class="op">+</span> <span class="va">age_0.5</span> <span class="op">+</span> <span class="va">age_1</span> <span class="op">+</span> <span class="va">age_2</span> <span class="op">+</span> <span class="va">age_3</span> <span class="op">|</span> <span class="va">id</span><span class="op">)</span>
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lmer</a></span><span class="op">(</span><span class="va">f</span>, <span class="va">data</span>, 
-            control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmerControl.html">lmerControl</a></span><span class="op">(</span>check.conv.grad <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span><span class="op">)</span></pre></div>
+            control <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmerControl.html">lmerControl</a></span><span class="op">(</span>check.conv.grad <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :
 ## Model failed to converge with max|grad| = 0.0066811 (tol = 0.004, component 1)</code></pre>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="co">### fitted trajectories for all persons</span>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co">### fitted trajectories for all persons</span>
 <span class="va">bse</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/lme4/man/ranef.html">ranef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">id</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/fixef.html">fixef</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">bse</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">bse</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##       age_0 age_0.5  age_1  age_2  age_3
 ## 10001  0.77    0.26 -0.005  0.088 -0.148
 ## 10002 -0.27   -0.21 -0.465 -0.479 -0.052
 ## 10003  1.65    1.96  1.294  1.129 -1.323</code></pre>
 <p>The broken stick estimates are the sum of the fixed and random effects. We need to remove the intercept as predictor rows all sum to 1. Warnings often occur when fitting broken stick models with <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lme4::lmer()</a></code>. Here we have surpressed the warning <code>## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, : Model failed to converge with max|grad| = 0.0031397 (tol = 0.002, component 1)</code> by setting <code>tol</code> to a more relaxed value. I have found that the broken estimates still look sound and reasonable. Most of my experience derives for child growth data, so there is no guarantee that this apparent robustness will hold for other types of data. Warnings become less frequent for a lower number of breakpoints and larger samples sizes.</p>
 <p>The  package can fit the same model in an easier way:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="va">ctl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_brokenstick.html">control_brokenstick</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ctl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_brokenstick.html">control_brokenstick</a></span><span class="op">(</span>
   lmer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmerControl.html">lmerControl</a></span><span class="op">(</span>check.conv.grad <span class="op">=</span> 
                        <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmerControl.html">.makeCC</a></span><span class="op">(</span><span class="st">"warning"</span>, tol <span class="op">=</span> <span class="fl">4e-3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">mod</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">smocc_200</span>, 
                    knots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>,
-                   control <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></pre></div>
+                   control <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :
 ## Model failed to converge with max|grad| = 0.0066811 (tol = 0.004, component 1)</code></pre>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">smocc_200</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mod</span>, <span class="va">smocc_200</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 6
 ##      id    `0`  `0.5`      `1`     `2`     `3`
 ##   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
@@ -303,7 +302,7 @@ Y_i = X_i\beta + X_ib_i + \epsilon_i
 <ol style="list-style-type: decimal">
 <li><p>It is relatively easy to constrain the fitted covariance of random effects, <span class="math inline">\(\Omega\)</span>, to a matrix of simple structure. Informing the sampler of the time-dependent structure of the random effect leads to stabler estimates of <span class="math inline">\(\Omega\)</span>. The package currently implements two <em>correlations models</em>. These models express the correlation <span class="math inline">\(\rho(t_1, t_2)\)</span> between two Z -scores <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Z_2\)</span> at successive ages <span class="math inline">\(t_1\)</span> and <span class="math inline">\(t_2\)</span> as a function of those ages. The <em>Argyle model</em> <span class="citation">(Argyle, Seheult, and Wooff 2008)</span> is <span class="math inline">\(\rho(t_1, t_2) = \exp(-\lambda|T_1-T_2|)\)</span>, where <span class="math inline">\(T_i = \log(\tau+t_i)\)</span> is a logarithmic rescaling of the time axis and <span class="math inline">\(\rho=exp(-\lambda)\)</span>. The Cole correlation model <span class="citation">(Cole 1995)</span> describes the Fisher-transformed correlation as a function of the average <span class="math inline">\((t_1+t_2)/2\)</span> and the difference <span class="math inline">\((t_2-t_1)\)</span>, including two multiplicative terms. Note that both models were proposed in the context of child growth, and have not been tested for other types of time-dependent data.</p></li>
 <li><p>The KR-sampler fits the slightly more general linear-mixed model with heterogeneous within-subject variances, i.e. with a residual variance <span class="math inline">\(\sigma_i^2\)</span> per subject <span class="math inline">\(i\)</span> instead of the global residual <span class="math inline">\(\sigma^2\)</span>. This makes it easier to identify, study and weight subjects based on how well they fit the model.</p></li>
-<li><p>A third option is to simulate imputations as an extra step to the KR-sampler. For subject with large <span class="math inline">\(\sigma_i^2\)</span>, the random effect estimates are a too smooth representation of the data, leading to inappropriate variance estimates when those estimates are analysed as “just data”. Section 11.3 of <span class="citation">van Buuren (2018)</span> pioneered a solution that constructs multiple trajectories by adding a proper amount of residual noise to random effect estimates. The variance estimation then proceeds according to the principles of multiple imputation.<span class="citation">(Rubin 1987)</span></p></li>
+<li><p>A third option is to simulate imputations as an extra step to the KR-sampler. For subject with large <span class="math inline">\(\sigma_i^2\)</span>, the random effect estimates are a too smooth representation of the data, leading to inappropriate variance estimates when those estimates are analysed as “just data.” Section 11.3 of <span class="citation">van Buuren (2018)</span> pioneered a solution that constructs multiple trajectories by adding a proper amount of residual noise to random effect estimates. The variance estimation then proceeds according to the principles of multiple imputation.<span class="citation">(Rubin 1987)</span></p></li>
 </ol>
 </div>
 <div id="random-effects-estimation" class="section level3">
@@ -396,9 +395,9 @@ Y_i = X_i\beta + X_ib_i + \epsilon_i
 <h2 class="hasAnchor">
 <a href="#data-preparation" class="anchor"></a>Data preparation</h2>
 <p>Before we can fit the model, the data need to be in shape. Data preparation is often the most time-consuming part of the analysis. The <code><a href="../reference/brokenstick.html">brokenstick()</a></code> function takes tidy data in the long-form, with every observed subject-time combination in a row. This section uses the built-in <code>smocc_200</code> data, containing the heights of 200 children measured at ten visits up to two years.<span class="citation">(Herngreen et al. 1994)</span></p>
-<div class="sourceCode" id="cb13"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/growthcharts/brokenstick">brokenstick</a></span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">smocc_200</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/growthcharts/brokenstick">brokenstick</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">smocc_200</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 7
 ##      id    age sex       ga    bw   hgt hgt.z
 ##   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -418,13 +417,13 @@ Y_i = X_i\beta + X_ib_i + \epsilon_i
 </ol>
 <p>It is easy to convert the measurements into the <span class="math inline">\(Z\)</span>-score scale, fit the model, and convert back to the raw scale afterwards, if desired. There are several  packages that assist in the calculations: <a href="https://CRAN.R-project.org/package=AGD"></a>, <a href="https://CRAN.R-project.org/package=anthro"></a>, <a href="https://CRAN.R-project.org/package=childsds"></a>, <a href="https://github.com/ki-tools/growthstandards"></a> and <a href="https://CRAN.R-project.org/package=zscorer"></a>.</p>
 <p>The <code>smocc_200</code> data contains the height measurement both in the original scale in cm (<code>hgt</code>) and the <span class="math inline">\(Z\)</span>-score scale (<code>hgt.z</code>) relative to the height references from the Fourth Dutch Growth study <span class="citation">(Fredriks et al. 2000)</span>. Let us recalculate height SDS using the  package. Fortunately, we find that the same values.</p>
-<div class="sourceCode" id="cb15"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stefvanbuuren/AGD">AGD</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/stefvanbuuren/AGD">AGD</a></span><span class="op">)</span>
 <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">smocc_200</span>, <span class="fu"><a href="https://rdrr.io/pkg/AGD/man/y2z.html">y2z</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">hgt</span>, 
                          x <span class="op">=</span> <span class="va">age</span>, 
                          sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"male"</span>, <span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>, 
                          ref <span class="op">=</span> <span class="va">nl4.hgt</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span><span class="va">z</span>, <span class="va">smocc_200</span><span class="op">$</span><span class="va">hgt.z</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span><span class="va">z</span>, <span class="va">smocc_200</span><span class="op">$</span><span class="va">hgt.z</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] FALSE</code></pre>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/zscores-1.png" alt="Distribution of height SDS for 200 Dutch children." width="100%"><p class="caption">
@@ -433,12 +432,12 @@ Distribution of height SDS for 200 Dutch children.
 </div>
 <p>Figure 3 shows that, as expected, the empirical Z-score distribution is close to the standard normal. The few very extremely low heights correspond to pre-term born infants. The next section concentrate on modelling <code>hgt.z</code>.</p>
 <p>Function <code><a href="https://rdrr.io/pkg/AGD/man/z2y.html">z2y()</a></code> applies the inverse transformation of <span class="math inline">\(Z\)</span>-scores to the original scale. The following snippet converts <code>hgt.z</code> into the cm scale.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit">
-<span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">smocc_200</span>, <span class="fu"><a href="https://rdrr.io/pkg/AGD/man/z2y.html">z2y</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">hgt.z</span>, 
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">smocc_200</span>, <span class="fu"><a href="https://rdrr.io/pkg/AGD/man/z2y.html">z2y</a></span><span class="op">(</span>z <span class="op">=</span> <span class="va">hgt.z</span>, 
                          x <span class="op">=</span> <span class="va">age</span>, 
                          sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"male"</span>, <span class="st">"M"</span>, <span class="st">"F"</span><span class="op">)</span>, 
                          ref <span class="op">=</span> <span class="va">nl4.hgt</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">smocc_200</span><span class="op">$</span><span class="va">hgt</span>, tol <span class="op">=</span> <span class="fl">0.0001</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/all.equal.html">all.equal</a></span><span class="op">(</span><span class="va">y</span>, <span class="va">smocc_200</span><span class="op">$</span><span class="va">hgt</span>, tol <span class="op">=</span> <span class="fl">0.0001</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "Mean relative difference: 0.003"</code></pre>
 <p>We have used the Dutch 1997 height references here, but there are more choices. The  package also supports the WHO Child Growth Standards.</p>
 <p>In practice we found that the model fit is often better when applied to <span class="math inline">\(Z\)</span>-scores. Age-conditional references are common in child growth exists, but could be rare in other fields. An alternative is to apply the broken stick model to the standardized residuals of a preliminary non-linear regression of the outcome on time.</p>
@@ -456,11 +455,11 @@ Length growth of 52 infants expressed in the Z-score scale.
 <h3 class="hasAnchor">
 <a href="#fit-one-line" class="anchor"></a>Fit one line</h3>
 <p>As a start, let us fit a simple model with just one line anchored at the minimum and maximum age.</p>
-<div class="sourceCode" id="cb19"><pre class="downlit">
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">smocc_200</span><span class="op">)</span>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">smocc_200</span><span class="op">)</span>
 <span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, new_data <span class="op">=</span> <span class="va">data</span>, group <span class="op">=</span> <span class="va">ids</span>, what <span class="op">=</span> <span class="st">"all"</span>,
-     xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (cm)"</span><span class="op">)</span></pre></div>
+     xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (cm)"</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/line1-1.png" alt="Simple linear model with one line anchored at the extremes." width="100%"><p class="caption">
 Simple linear model with one line anchored at the extremes.
@@ -472,18 +471,18 @@ Simple linear model with one line anchored at the extremes.
 <h3 class="hasAnchor">
 <a href="#fit-two-lines" class="anchor"></a>Fit two lines</h3>
 <p>We now extend to two connected lines. The first line should start at birth and end at the age of one year. The second line spans the period between one to two years. The lines must connect at the age of one year. We estimate and plot the model as follows:</p>
-<div class="sourceCode" id="cb20"><pre class="downlit">
-<span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">smocc_200</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">smocc_200</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit2</span>, <span class="va">data</span>, group <span class="op">=</span> <span class="va">ids</span>, 
-     xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></pre></div>
+     xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/plotfit2z-1.png" alt="Broken stick model with two lines." width="100%"><p class="caption">
 Broken stick model with two lines.
 </p>
 </div>
 <p>The <code>fit2</code> object holds the parameter estimates of the model:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit">
-<span class="va">fit2</span></pre></div>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit2</span></code></pre></div>
 <pre><code>## Class: brokenstick (lmer)
 ## Knots: 0 1 2 2.7 
 ## Means: 0.09 0.04 0.09 0.12 
@@ -500,10 +499,10 @@ Broken stick model with two lines.
 <h3 class="hasAnchor">
 <a href="#fit-nine-lines" class="anchor"></a>Fit nine lines</h3>
 <p>The two-line model does not fit well. We substantially refine the model by adding a knot for each scheduled visit. To make model specification independent of the data, we specify the right boundary as a constant of three years. We code and run the model as</p>
-<div class="sourceCode" id="cb23"><pre class="downlit">
-<span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">4</span><span class="op">)</span>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">4</span><span class="op">)</span>
 <span class="va">fit9</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">smocc_200</span>, 
-                    knots <span class="op">=</span> <span class="va">knots</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></pre></div>
+                    knots <span class="op">=</span> <span class="va">knots</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p>This optimization problem is more complicated and time-consuming. As noted before, it is common for the optimization software to issue warnings, often related to the number of random effects relative to the number of observations. While these may be a little discomforting, we have found that the warnings are generally at the conservative side, and that the parameter estimates seem OK. With a small residual variance of 0.059, the nine-line broken stick model fits the observed data very well.</p>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/plotfit9-1.png" alt="Broken stick model with nine lines." width="100%"><p class="caption">
@@ -521,9 +520,9 @@ Broken stick model with nine lines.
 <h3 class="hasAnchor">
 <a href="#all-subjects" class="anchor"></a>All subjects</h3>
 <p>The <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function obtains predictions from the broken stick model. The function is flexible, and allows for prediction of new subjects at arbitrary ages in a variety of output formats. The simplest call</p>
-<div class="sourceCode" id="cb24"><pre class="downlit">
-<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p1</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p1</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>##   .pred
 ## 1  0.57
 ## 2  0.88
@@ -531,9 +530,9 @@ Broken stick model with nine lines.
 <p>produces the predicted value (in <code>.pred</code>) for each row in <code>data</code>.</p>
 <p>The predicted values represent a compromise between the person’s data values and the global mean. In general, the fewer and less extreme data points of a person are, the closer the compromise will be toward the global mean. The compromise is called the <em>conditional mean</em> of the posterior distribution, the sum of the fixed and random effects.</p>
 <p>We can obtain the locations at which the lines connect by specifying the <code>x = "knots"</code> argument, e.g.</p>
-<div class="sourceCode" id="cb26"><pre class="downlit">
-<span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, x <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p2</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, x <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p2</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 9
 ##   .source    id    age sex      ga    bw   hgt hgt.z .pred
 ##   &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -542,9 +541,9 @@ Broken stick model with nine lines.
 ## 3 added   10001 0.167  &lt;NA&gt;     NA    NA    NA    NA 0.705</code></pre>
 <p>This is case 1 in the help of <code><a href="../reference/predict.brokenstick.html">predict.brokenstick()</a></code>. The result <code>p2</code> is a table with 2200 rows (= 11 knots <span class="math inline">\(\times\)</span> 200 subjects). The rows include additional identifying information. Adding the <code>shape = "wide"</code> argument transforms the information into <em>repeated measures</em>, with 200 rows and 12 = 1 + 11 columns, that form supplemental variables for further analyses at the subject level.</p>
 <p>We may also obtain both the conditional means as well as predictions at the observation ages for all children by</p>
-<div class="sourceCode" id="cb28"><pre class="downlit">
-<span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, x <span class="op">=</span> <span class="st">"knots"</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p3</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, x <span class="op">=</span> <span class="st">"knots"</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p3</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 9
 ##   .source    id    age sex       ga    bw   hgt hgt.z .pred
 ##   &lt;chr&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
@@ -553,8 +552,8 @@ Broken stick model with nine lines.
 ## 3 data    10001 0.159  female    40  3960  58.2 0.797 0.721</code></pre>
 <p>which contains 4140 rows (= 1940 data points + 2200 added points).</p>
 <p>Now suppose that we desire to predict height SDS at other ages, e.g. at 0.42, 1.33 and 4 years. We can do so by (case 4, all groups)</p>
-<div class="sourceCode" id="cb30"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.42</span>, <span class="fl">1.33</span>, <span class="fl">4</span><span class="op">)</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.42</span>, <span class="fl">1.33</span>, <span class="fl">4</span><span class="op">)</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 4
 ##      id `0.42`  `1.33`   `4`
 ##   &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
@@ -567,14 +566,14 @@ Broken stick model with nine lines.
 <h3 class="hasAnchor">
 <a href="#single-subject" class="anchor"></a>Single subject</h3>
 <p>Obtaining predicted values per subject requires the <code>group</code> argument (case 3). For example</p>
-<div class="sourceCode" id="cb32"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, group <span class="op">=</span> <span class="fl">10001</span>, shape <span class="op">=</span> <span class="st">"vector"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, group <span class="op">=</span> <span class="fl">10001</span>, shape <span class="op">=</span> <span class="st">"vector"</span><span class="op">)</span></code></pre></div>
 <pre><code>##  [1]  0.574  0.878  0.721  0.607  0.312 -0.203  0.076  0.128 -0.115  0.155</code></pre>
 <p>returns the vector of predictions for child 10001. Remove the <code>shape</code> argument to append the child’s data. Also, here we can predict at other times using the <code>x</code> argument (case 4).</p>
 <p>Now suppose that for subject 10001 we have additional height data at ages 0.42 and 1.33 years. Can we predict the child’s trajectory with these new points included? The answer is yes. The command (case 5)</p>
-<div class="sourceCode" id="cb34"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.42</span>, <span class="fl">1.33</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>, 
-             group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10001</span><span class="op">)</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">smocc_200</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.42</span>, <span class="fl">1.33</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">0.5</span>, <span class="op">-</span><span class="fl">1</span><span class="op">)</span>, 
+             group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10001</span><span class="op">)</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 9
 ##   .source    id   age sex       ga    bw   hgt  hgt.z   .pred
 ##   &lt;chr&gt;   &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;
@@ -587,15 +586,15 @@ Broken stick model with nine lines.
 <h3 class="hasAnchor">
 <a href="#new-subject" class="anchor"></a>New subject</h3>
 <p>Suppose we have measured two children, Fred and Alice. We wish to obtain predictions for both using the model <code>fit9</code>. The following snippet calculates predictions at both the observed ages and at the knot locations:</p>
-<div class="sourceCode" id="cb36"><pre class="downlit">
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>
   age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.12</span>, <span class="fl">0.32</span>, <span class="fl">0.62</span>, <span class="fl">1.1</span>, <span class="fl">0.25</span>, <span class="fl">0.46</span><span class="op">)</span>,
   hgt.z <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.2</span>, <span class="op">-</span><span class="fl">1.8</span>, <span class="op">-</span><span class="fl">1.7</span>, <span class="op">-</span><span class="fl">1.9</span>, <span class="op">-</span><span class="fl">2.1</span>, <span class="op">-</span><span class="fl">1.9</span>, <span class="op">-</span><span class="fl">1.5</span><span class="op">)</span>,
   id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"Fred"</span>, <span class="fl">5</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"Alice"</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">data</span>, x <span class="op">=</span> <span class="st">"knots"</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></pre></div>
+<span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">data</span>, x <span class="op">=</span> <span class="st">"knots"</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></code></pre></div>
 <p>We can plot the trajectories data by</p>
-<div class="sourceCode" id="cb37"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">data</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2.5</span>, <span class="fl">0</span><span class="op">)</span>, xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit9</span>, <span class="va">data</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2.5</span>, <span class="fl">0</span><span class="op">)</span>, xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/unnamed-chunk-12-1.png" alt="Alice and Fred - observed (blue) and fitted (red) trajectory." width="67%"><p class="caption">
 Alice and Fred - observed (blue) and fitted (red) trajectory.
@@ -655,27 +654,27 @@ Predicted versus observed values.
 <span class="math inline">\(Z_2\)</span> correlates highly with <span class="math inline">\(Z_{\rm adult}\)</span>, so it is easier (i.e. with higher sensitivity and specificity) to identify children at risk for adult overweight.</li>
 </ol>
 <p><span class="citation">de Kroon et al. (2010)</span> found that the age interval 2-6 years met all criteria for a critical period. Our re-analysis tests the requirements for the following age intervals: birth-4 months, 4 months-1 year, 1-2 years, 2-4 years, 4-6 years, 6-10 years and 10-14 years. Hence, we define the following break ages:</p>
-<div class="sourceCode" id="cb38"><pre class="downlit">
-<span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">10</span>, <span class="fl">14</span>, <span class="fl">24</span>, <span class="fl">29</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>
-<span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"birth"</span>, <span class="st">"4m"</span>, <span class="st">"1y"</span>, <span class="st">"2y"</span>, <span class="st">"4y"</span>, <span class="st">"6y"</span>, <span class="st">"10y"</span>, <span class="st">"14y"</span>, <span class="st">"24y"</span>, <span class="st">""</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">10</span>, <span class="fl">14</span>, <span class="fl">24</span>, <span class="fl">29</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>
+<span class="va">labels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"birth"</span>, <span class="st">"4m"</span>, <span class="st">"1y"</span>, <span class="st">"2y"</span>, <span class="st">"4y"</span>, <span class="st">"6y"</span>, <span class="st">"10y"</span>, <span class="st">"14y"</span>, <span class="st">"24y"</span>, <span class="st">""</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/tbc1-1.png" alt="Body Mass Index (BMI) SDS by log(age + 0.2) (Terneuzen cohort)" width="100%"><p class="caption">
 Body Mass Index (BMI) SDS by log(age + 0.2) (Terneuzen cohort)
 </p>
 </div>
 <p>The Terneuzen Birth Cohort <span class="citation">(de Kroon et al. 2008)</span> comprises of 2604 children born around the year 1980 in Terneuzen, The Netherlands. Figure 10 shows the BMI standard deviation scores (SDS) against age in a random subset of 306 children. While we may easily recognise scheduled visits at birth, 1y and 14y, observations at other periods are less structured. Compared to the analysis in <span class="citation">de Kroon et al. (2010)</span>, we removed the knots at 8 days and 18 years (because these appear in sparse data areas) and added knots at 4, 14 and 24 years. We set the right boundary knot to 29y, slightly higher than the maximum age in the data.</p>
-<div class="sourceCode" id="cb39"><pre class="downlit">
-<span class="va">ctl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_brokenstick.html">control_brokenstick</a></span><span class="op">(</span>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ctl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_brokenstick.html">control_brokenstick</a></span><span class="op">(</span>
   lmer <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmerControl.html">lmerControl</a></span><span class="op">(</span>check.conv.grad <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmerControl.html">.makeCC</a></span><span class="op">(</span><span class="st">"warning"</span>, <span class="fl">0.02</span>, <span class="cn">NULL</span><span class="op">)</span>,
                      check.conv.singular <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/lme4/man/lmerControl.html">.makeCC</a></span><span class="op">(</span><span class="st">"ignore"</span>, <span class="fl">0.001</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
 <span class="va">fit_lmer</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">bmi.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="fu">mice</span><span class="fu">::</span><span class="va"><a href="https://amices.org/mice/reference/tbc.html">tbc</a></span>,
                         knots <span class="op">=</span> <span class="va">knots</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">29</span><span class="op">)</span>,
-                        control <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></pre></div>
+                        control <span class="op">=</span> <span class="va">ctl</span><span class="op">)</span></code></pre></div>
 <p>Depending on the precise specification of the knots, the default <code><a href="../reference/brokenstick.html">brokenstick()</a></code> procedure that calls <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lme4::lmer()</a></code> may print the warning <code>Model failed to converge with max|grad| = 0.011882 (tol = 0.002, component 1)</code> or a message <code>boundary (singular) fit: see ?isSingular</code>. These issues arise because of the over-parametrised nature of the default broken stick model, potentially resulting in a singular variance-covariance matrix <code>fit@omega</code>, combined with a sparsity of data. The <code><a href="../reference/control_brokenstick.html">control_brokenstick()</a></code> command can prevent the warning and message.</p>
-<div class="sourceCode" id="cb40"><pre class="downlit">
-<span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">1259</span>, <span class="fl">2447</span>, <span class="fl">7019</span>, <span class="fl">7460</span>, <span class="fl">7646</span><span class="op">)</span>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">1259</span>, <span class="fl">2447</span>, <span class="fl">7019</span>, <span class="fl">7460</span>, <span class="fl">7646</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_lmer</span>, <span class="fu">mice</span><span class="fu">::</span><span class="va"><a href="https://amices.org/mice/reference/tbc.html">tbc</a></span>, group <span class="op">=</span> <span class="va">ids</span>,
-     ylab <span class="op">=</span> <span class="st">"BMI SDS"</span>, xlab <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span></pre></div>
+     ylab <span class="op">=</span> <span class="st">"BMI SDS"</span>, xlab <span class="op">=</span> <span class="st">"Age (years)"</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/tbc-trajectories-lmer-1.png" alt="Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). lmer method." width="100%"><p class="caption">
 Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). lmer method.
@@ -683,10 +682,10 @@ Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitt
 </div>
 <p>Figure 11 shows observed and fitted BMI SDS trajectories for six subjects using the <code>lmer</code> method. In general, the model fits the data well. The per cent explained variance of BMI SDS obtained by <code><a href="../reference/get_r2.html">get_r2(fit_lmer, mice::tbc)</a></code> equals 84 per cent. Note that he fitted trajectory for subject 8 reveals a pretty rough estimate at the age of 24y. Persons 1259 and 7460 have very low (-2.5 SD) and high (+2.5 SD) BMI SDS at adult age, respectively. Note that the model pulls the adult BMI SDS estimates (in red) towards the global mean, due to the well-known bias-variance tradeoff.<span class="citation">(Gelman and Hill 2007, 394)</span> Pulling is more vigorous at the extremes. The effect is negligible for more average trajectories, such as for subject 2447.</p>
 <p>The royal way to treat such warnings and message is to simplify the model, e.g., by removing knots. An alternative is to constrain the broken stick model, in particular the covariance matrix. Selecting the <code>kr</code> method applies the Argyle correlation model, at the expense of fit to the data. On the other hand, the fitted trajectories will be much stabler in regions with sparse data. The following snippet applies the <code>kr</code> method.</p>
-<div class="sourceCode" id="cb41"><pre class="downlit">
-<span class="va">fit_kr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">bmi.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="fu">mice</span><span class="fu">::</span><span class="va"><a href="https://amices.org/mice/reference/tbc.html">tbc</a></span>,
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit_kr</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">bmi.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="fu">mice</span><span class="fu">::</span><span class="va"><a href="https://amices.org/mice/reference/tbc.html">tbc</a></span>,
                       knots <span class="op">=</span> <span class="va">knots</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">29</span><span class="op">)</span>,
-                      method <span class="op">=</span> <span class="st">"kr"</span>, seed <span class="op">=</span> <span class="fl">41441</span><span class="op">)</span></pre></div>
+                      method <span class="op">=</span> <span class="st">"kr"</span>, seed <span class="op">=</span> <span class="fl">41441</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/tbc-trajectories-kr-1.png" alt="Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). kr method." width="100%"><p class="caption">
 Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitted (red). kr method.
@@ -694,8 +693,8 @@ Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitt
 </div>
 <p>Figure 12 is the equivalent to Figure 11, but now for method <code>kr</code>. The per cent explained variance is the same. Due to the constraint placed on the covariance matrix, the trajectories are slightly smoother and more stable in the adult ages with limited data. The rough estimate for subject 8 has gone. There is still some gravity towards to global mean at knot 24y for persons 1259 and 7460, but it is of lesser magnitude. All fitted trajectories are well behaved. We, therefore, select the <code>kr</code> solution for further analysis.</p>
 <p>To identify critical periods, we need to predict adult overweight. In Figure 12, only three out of six subjects had a BMI measurement at adult age. Since we do not want the results to overly depend on fitted extrapolations, we restrict the analysis sample to persons with an adult measurement. The following lines extract the repeated measures for 92 (out of 306) individuals for whom we observed adult BMI.</p>
-<div class="sourceCode" id="cb42"><pre class="downlit">
-<span class="va">tbc1</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="va"><a href="https://amices.org/mice/reference/tbc.html">tbc</a></span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">tbc1</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="va"><a href="https://amices.org/mice/reference/tbc.html">tbc</a></span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">ao</span><span class="op">)</span> <span class="op">&amp;</span> <span class="va">first</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">select</span><span class="op">(</span><span class="va">id</span>, <span class="va">nocc</span>, <span class="va">sex</span><span class="op">)</span>
 <span class="va">tbc2</span> <span class="op">&lt;-</span> <span class="fu">mice</span><span class="fu">::</span><span class="va"><a href="https://amices.org/mice/reference/tbc.html">tbc.target</a></span> <span class="op">%&gt;%</span> 
@@ -705,7 +704,7 @@ Body Mass Index (BMI) SDS trajectories of six subjects, observed (blue) and fitt
 <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span><span class="va">prd</span>, 
                   <span class="fu">select</span><span class="op">(</span><span class="va">tbc1</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span>, 
                   <span class="fu">select</span><span class="op">(</span><span class="va">tbc2</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3 x 15
 ##      id   `0` `0.333`     `1`    `2`    `4`    `6`   `10`   `14`   `24`   `29`
 ##   &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
@@ -719,10 +718,10 @@ Body Mass Index (BMI) SDS trajectories for 92 subjects, coloured by adult overwe
 </p>
 </div>
 <p>Figure 13 shows the 92 fitted trajectories coloured by adult overweight status (BMI SDS &gt; 1.3). It is evident that BMI SDS at ages of 14y or 10y is highly predictive of adult overweight, but does that also hold in early childhood? Also, does a change in specific periods predict later overweight? To answer such questions, we fit simple linear models to predict observed (not fitted!) BMI SDS at adult age from the fitted BMI SDS trajectories. The following code block fits two models for the period 4y-6y.</p>
-<div class="sourceCode" id="cb44"><pre class="downlit">
-<span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bmi.z.jv</span> <span class="op">~</span> <span class="va">`6`</span>, <span class="va">data</span><span class="op">)</span>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">m1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bmi.z.jv</span> <span class="op">~</span> <span class="va">`6`</span>, <span class="va">data</span><span class="op">)</span>
 <span class="va">m2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bmi.z.jv</span> <span class="op">~</span> <span class="va">`6`</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">`6`</span><span class="op">-</span><span class="va">`4`</span><span class="op">)</span>, <span class="va">data</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">m1</span>, <span class="va">m2</span><span class="op">)</span></code></pre></div>
 <pre><code>## Analysis of Variance Table
 ## 
 ## Model 1: bmi.z.jv ~ `6`
@@ -743,13 +742,13 @@ Body Mass Index (BMI) SDS trajectories for 92 subjects, coloured by adult overwe
 \]</span></p>
 <p>where <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Z_2\)</span> are the standard deviation scores at times <span class="math inline">\(T_1\)</span> and <span class="math inline">\(T_2\)</span>, with <span class="math inline">\(T_2&gt;T_1\)</span>, and where <span class="math inline">\(r\)</span> is the correlation between <span class="math inline">\(Z_1\)</span> and <span class="math inline">\(Z_2\)</span>. The conditional gain corrects for regression to the mean, which is its selling point over traditional velocity measures and is less sensitive to measurement error.<span class="citation">(van Buuren 2007)</span> A practical difficulty is to obtain <span class="math inline">\(r\)</span> for a given <span class="math inline">\(T_1\)</span> and <span class="math inline">\(T_2\)</span>. The time-to-time correlation matrix needs to be known. Also, we need to interpolate <span class="math inline">\(r\)</span> if <span class="math inline">\(T_1\)</span> or <span class="math inline">\(T_2\)</span> differs from the tabulated ages.</p>
 <p>The broken stick model provides an estimate of the time-to-time correlation matrix. The <code>brokenstick</code> object stores the variance-covariance matrix <span class="math inline">\(\Omega\)</span> of the random effects in the list component <code>fit$omega</code>. For a perfectly fitting model (with <span class="math inline">\(\sigma^2=0\)</span>) <span class="math inline">\(\Omega\)</span> equals the time-to-time covariance matrix, so <code><a href="https://rdrr.io/r/stats/cor.html">cov2cor(fit$omega)</a></code> gives the desired time-to-time correlation matrix. If <span class="math inline">\(\sigma^2 &gt; 0\)</span> then <span class="math inline">\(\Omega\)</span> overestimates the covariances between the observed data. In general, we need to add the within-residual variance estimate to the diagonal, thus <span class="math inline">\(\Omega + \hat\sigma^2 I(n_i)\)</span> to estimate the time-to-time covariance matrix.</p>
-<div class="sourceCode" id="cb46"><pre class="downlit">
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">smocc_200</span>, 
-                   knots <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">/</span><span class="fl">2</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">smocc_200</span>, 
+                   knots <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">/</span><span class="fl">2</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## boundary (singular) fit: see ?isSingular</code></pre>
-<div class="sourceCode" id="cb48"><pre class="downlit">
-<span class="va">t2t</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">omega</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">sigma2</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">omega</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov2cor</a></span><span class="op">(</span><span class="va">t2t</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">t2t</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">omega</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">sigma2</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">omega</span><span class="op">)</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov2cor</a></span><span class="op">(</span><span class="va">t2t</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span></code></pre></div>
 <pre><code>##         age_0 age_0.5 age_1 age_1.5 age_2 age_3
 ## age_0    1.00    0.52  0.41    0.42  0.35  0.01
 ## age_0.5  0.52    1.00  0.77    0.73  0.68 -0.30
@@ -758,12 +757,12 @@ Body Mass Index (BMI) SDS trajectories for 92 subjects, coloured by adult overwe
 ## age_2    0.35    0.68  0.79    0.84  1.00  0.07
 ## age_3    0.01   -0.30 -0.16    0.00  0.07  1.00</code></pre>
 <p>In child growth, we expect that the correlation tapers off as the difference between <span class="math inline">\(T_1\)</span> and <span class="math inline">\(T_2\)</span> grows. Also, for a fixed interval <span class="math inline">\(T_2-T_1\)</span> we expect the correlation to increase with age. Ignoring the uninteresting estimate for <code>age_3</code>, we find that both expectations hold. Altering the number and location of the knots may change this. It is often useful to scan the time-to-time correlation matrix for gross deviations of the expectations. If such happens, one could simplify the model, for example, by subjecting <span class="math inline">\(\Omega\)</span> to a correlation model.</p>
-<div class="sourceCode" id="cb50"><pre class="downlit">
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">smocc_200</span>, 
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">smocc_200</span>, 
                    knots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span>, <span class="fl">0.1</span><span class="op">)</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>,
                    method <span class="op">=</span> <span class="st">"kr"</span><span class="op">)</span>
 <span class="va">t2t</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">omega</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">sigma2</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">ncol</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">omega</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">t2t</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/dim.html">dim</a></span><span class="op">(</span><span class="va">t2t</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 22 22</code></pre>
 <p>The above code fits a model with 22 equidistant breakpoints, which is likely large enough for most purposes. It works because it restricts the covariance-matrix by the Argyle correlation model, which summarises the information by just two parameters. We may extract or re-estimate these parameters and create a one-liner for calculating <span class="math inline">\(r\)</span>.</p>
 <p>We cannot indefinitely add breakpoints. Suppose we double the number of knots by setting <code>knots = seq(0, 2, 0.05)</code>. Then even <code>kr</code> is not able to cope and will abort with <code>Error: Sigma is symmetric but not positive</code>. Thus, as always, be sensible in what you ask the software to do for you.</p>
@@ -784,12 +783,12 @@ Daily body weight (KG) for 12 subjects under three conditions.
 <div id="constant-model" class="section level3">
 <h3 class="hasAnchor">
 <a href="#constant-model" class="anchor"></a>Constant model</h3>
-<div class="sourceCode" id="cb52"><pre class="downlit">
-<span class="va">fit0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">body_weight</span> <span class="op">~</span> <span class="va">day</span> <span class="op">|</span> <span class="va">subject</span>, <span class="va">data</span>, 
+<div class="sourceCode" id="cb52"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">body_weight</span> <span class="op">~</span> <span class="va">day</span> <span class="op">|</span> <span class="va">subject</span>, <span class="va">data</span>, 
                     knots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span>, degree <span class="op">=</span> <span class="fl">0</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit0</span>, <span class="va">data</span>, size_y <span class="op">=</span> <span class="fl">0</span>, color_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"grey"</span>, <span class="fl">2</span><span class="op">)</span>, what <span class="op">=</span> <span class="st">"all"</span>,
      scales <span class="op">=</span> <span class="st">"free_y"</span>, xlab <span class="op">=</span> <span class="st">"Day"</span>, ylab <span class="op">=</span> <span class="st">"Body weight (KG)"</span>, 
-     n_plot <span class="op">=</span> <span class="fl">12</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></pre></div>
+     n_plot <span class="op">=</span> <span class="fl">12</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/weightloss-constant-1.png" alt="Constant model. Observed and fitted trajectories for a model that summarises each experimental period by a constant." width="100%"><p class="caption">
 Constant model. Observed and fitted trajectories for a model that summarises each experimental period by a constant.
@@ -797,8 +796,8 @@ Constant model. Observed and fitted trajectories for a model that summarises eac
 </div>
 <p>The model underlying Figure 15 summarises the trajectory within a period by a constant, the mean. We obtain an estimate of these mean by setting the <code>degree = 0</code> argument. This model gives a fair representation of the trajectory of subjects 9 (a persistent downward trend), 1 and 5 (no trend). On the other hand, the model fails to capture patterns for subjects 2, 4 and 8 (rebound in period 3) or 11 (inverse rebound).</p>
 <p>It is straightforward quantify the effects of <code>Diet</code> and <code>Activity</code> relative to <code>Control</code>. The next code snippet calculates these effects per person, accounting for the intervention order reversal for subjects 4 and 12.</p>
-<div class="sourceCode" id="cb53"><pre class="downlit">
-<span class="va">prd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit0</span>, <span class="va">data</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">prd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit0</span>, <span class="va">data</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">control</span> <span class="op">&lt;-</span> <span class="va">prd</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>
 <span class="va">diet</span> <span class="op">&lt;-</span> <span class="va">prd</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>
 <span class="va">diet</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">prd</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, <span class="fl">4</span><span class="op">]</span>
@@ -806,7 +805,7 @@ Constant model. Observed and fitted trajectories for a model that summarises eac
 <span class="va">activity</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">prd</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, <span class="fl">3</span><span class="op">]</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>diet_control <span class="op">=</span> <span class="va">diet</span> <span class="op">-</span> <span class="va">control</span>, 
                  activity_control <span class="op">=</span> <span class="va">activity</span> <span class="op">-</span> <span class="va">control</span>, 
-                 activity_diet <span class="op">=</span> <span class="va">activity</span> <span class="op">-</span> <span class="va">diet</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></pre></div>
+                 activity_diet <span class="op">=</span> <span class="va">activity</span> <span class="op">-</span> <span class="va">diet</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <pre><code>##    diet_control activity_control activity_diet
 ## 1           0.2              0.2           0.0
 ## 2          -1.1             -1.8          -0.7
@@ -825,12 +824,12 @@ Constant model. Observed and fitted trajectories for a model that summarises eac
 <div id="broken-stick-model-1" class="section level3">
 <h3 class="hasAnchor">
 <a href="#broken-stick-model-1" class="anchor"></a>Broken stick model</h3>
-<div class="sourceCode" id="cb55"><pre class="downlit">
-<span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">body_weight</span> <span class="op">~</span> <span class="va">day</span> <span class="op">|</span> <span class="va">subject</span>, <span class="va">data</span>, 
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">body_weight</span> <span class="op">~</span> <span class="va">day</span> <span class="op">|</span> <span class="va">subject</span>, <span class="va">data</span>, 
                     knots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">21</span>, <span class="fl">42</span>, <span class="fl">63</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, size_y <span class="op">=</span> <span class="fl">0</span>, color_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="st">"grey"</span>, <span class="fl">2</span><span class="op">)</span>, what <span class="op">=</span> <span class="st">"all"</span>,
      size_yhat <span class="op">=</span> <span class="fl">1.5</span>, scales <span class="op">=</span> <span class="st">"free_y"</span>, , xlab <span class="op">=</span> <span class="st">"Day"</span>, ylab <span class="op">=</span> <span class="st">"Body weight (KG)"</span>,
-     n_plot <span class="op">=</span> <span class="fl">12</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></pre></div>
+     n_plot <span class="op">=</span> <span class="fl">12</span>, ncol <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/weightloss-slope-1.png" alt="Broken stick model. Observed and fitted trajectories for a model that summarises each experimental period by a line." width="100%"><p class="caption">
 Broken stick model. Observed and fitted trajectories for a model that summarises each experimental period by a line.
@@ -838,8 +837,8 @@ Broken stick model. Observed and fitted trajectories for a model that summarises
 </div>
 <p>Figure 16 shows the same data as in Figure 15 but now fitted by the broken stick model. This model also suggests a persistent downward trend for subject 9 and an absence of for participants 1 and 5. Also, the model now correctly identifies the prominent zig-zag patterns for persons 2, 4, 8 and 11 across the three experimental periods.</p>
 <p>A natural way to quantify the effect of the intervention is to calculate the before-after estimate per period. For example, for person 2 the effect of diet is <span class="math inline">\(60.9 - 63.6 = -2.7\)</span> KG, of activity is <span class="math inline">\(62.6-60.9=+1.7\)</span> KG. The following code accounts for the alternate treatment ordering of subjects 4 and 12.</p>
-<div class="sourceCode" id="cb56"><pre class="downlit">
-<span class="va">prd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb56"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">prd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span><span class="op">)</span>
 <span class="va">control</span> <span class="op">&lt;-</span> <span class="va">prd</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span> <span class="op">-</span> <span class="va">prd</span><span class="op">[</span>, <span class="fl">2</span><span class="op">]</span>
 <span class="va">diet</span> <span class="op">&lt;-</span> <span class="va">prd</span><span class="op">[</span>, <span class="fl">4</span><span class="op">]</span> <span class="op">-</span> <span class="va">prd</span><span class="op">[</span>, <span class="fl">3</span><span class="op">]</span>
 <span class="va">diet</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">prd</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, <span class="fl">5</span><span class="op">]</span> <span class="op">-</span> <span class="va">prd</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, <span class="fl">4</span><span class="op">]</span>
@@ -847,7 +846,7 @@ Broken stick model. Observed and fitted trajectories for a model that summarises
 <span class="va">activity</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">prd</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, <span class="fl">4</span><span class="op">]</span> <span class="op">-</span> <span class="va">prd</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">4</span>, <span class="fl">12</span><span class="op">)</span>, <span class="fl">3</span><span class="op">]</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>control <span class="op">=</span> <span class="va">control</span>, 
                  diet <span class="op">=</span> <span class="va">diet</span>, 
-                 activity <span class="op">=</span> <span class="va">activity</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></pre></div>
+                 activity <span class="op">=</span> <span class="va">activity</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></code></pre></div>
 <pre><code>##    control diet activity
 ## 1     -0.3  0.5     -0.4
 ## 2      0.1 -2.7      1.7
@@ -863,15 +862,15 @@ Broken stick model. Observed and fitted trajectories for a model that summarises
 ## 12    -0.9 -0.4     -0.5</code></pre>
 <p>The average effects are -0.2 KG (control), -0.7 KG (diet) and -0.3 KG (activity). Although not statistically significant, the slight decrease of -0.2 KG during the control period suggests that weight monitoring by itself may motivate the participant to lose weight. The effect estimates for diet and activity are of similar magnitude as before. Still, they can be sizeable discrepancies at the individual level, e.g. for subjects 2 or 11.</p>
 <p>We may obtain a simple estimate of the sequence effect by linear regression as</p>
-<div class="sourceCode" id="cb58"><pre class="downlit">
-<span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">diet</span>, <span class="va">activity</span><span class="op">)</span>,
+<div class="sourceCode" id="cb58"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">diet</span>, <span class="va">activity</span><span class="op">)</span>,
                  act <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">12</span><span class="op">)</span>,
                  per2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span>, <span class="fl">0</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">7</span><span class="op">)</span>, <span class="fl">0</span><span class="op">)</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">act</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">act</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## (Intercept)         act 
 ##       -0.68        0.38</code></pre>
-<div class="sourceCode" id="cb60"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">act</span> <span class="op">+</span> <span class="va">per2</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb60"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">act</span> <span class="op">+</span> <span class="va">per2</span>, data <span class="op">=</span> <span class="va">df</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## (Intercept)         act        per2 
 ##       -0.79        0.38        0.12</code></pre>
 <p>The result is a little surprising. When applied in period 2, the intervention leads to higher body weight (+123 grammes) as compared to administration in period 3. Of course, bear in mind that we calculated these results on very few individuals. Hence, they are sensitive to substantial estimation error.</p>
@@ -890,11 +889,11 @@ Broken stick model. Observed and fitted trajectories for a model that summarises
 <h3 class="hasAnchor">
 <a href="#interpolation-in-measurement-scale" class="anchor"></a>Interpolation in measurement scale</h3>
 <p>Suppose we measured the length of a boy at the ages of 1 month (52.6 cm) and 14 months (81.7 cm). The following code block uses the <code><a href="https://rdrr.io/pkg/AGD/man/y2z.html">AGD::y2z()</a></code> function to convert the measurements to standard deviation scores (SDS) relative to the reference of the Fourth Dutch Growth Study.</p>
-<div class="sourceCode" id="cb62"><pre class="downlit">
-<span class="va">boy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">14</span><span class="op">/</span><span class="fl">12</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">52.6</span>, <span class="fl">81.7</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb62"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">boy</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">14</span><span class="op">/</span><span class="fl">12</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">52.6</span>, <span class="fl">81.7</span><span class="op">)</span><span class="op">)</span>
 <span class="va">ref</span> <span class="op">&lt;-</span> <span class="fu">AGD</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/AGD/man/References-NL4.html">nl4.hgt</a></span>
 <span class="va">boy</span><span class="op">$</span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu">AGD</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/AGD/man/y2z.html">y2z</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">boy</span><span class="op">$</span><span class="va">y</span>, x <span class="op">=</span> <span class="va">boy</span><span class="op">$</span><span class="va">x</span>, sex <span class="op">=</span> <span class="st">"M"</span>, ref <span class="op">=</span> <span class="va">ref</span><span class="op">)</span>
-<span class="va">boy</span><span class="op">$</span><span class="va">z</span></pre></div>
+<span class="va">boy</span><span class="op">$</span><span class="va">z</span></code></pre></div>
 <pre><code>## [1] -0.98  0.99</code></pre>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/inter1-1.png" alt="Linear interpolation in the cm scale results in an unrealistic trajectory at intermediate ages." width="100%"><p class="caption">
@@ -919,8 +918,8 @@ Linear interpolation in the Z-score scale results in a more realistic trajectory
 <h3 class="hasAnchor">
 <a href="#interpolation-by-the-broken-stick-model" class="anchor"></a>Interpolation by the broken stick model</h3>
 <p>The second alternative is a model-based interpolation. Assuming the availability of a fitted broken stick model, we specify a dense time grid, say every week, and predict the length at these times given the data from the observed trajectory. The expected curve represents the most likely values under the model at the intermediate ages. The following code calculates the relevant estimates from the <code>fit_200</code> fitted model:</p>
-<div class="sourceCode" id="cb64"><pre class="downlit">
-<span class="co"># prepare data input</span>
+<div class="sourceCode" id="cb64"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># prepare data input</span>
 <span class="va">age</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">2</span><span class="op">/</span><span class="fl">24</span>, <span class="fl">28</span><span class="op">/</span><span class="fl">24</span>, <span class="fl">1</span><span class="op">/</span><span class="fl">24</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>
 <span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span><span class="op">)</span>
 <span class="va">z</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">boy</span><span class="op">$</span><span class="va">z</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>; <span class="va">z</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">boy</span><span class="op">$</span><span class="va">z</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span>
@@ -929,7 +928,7 @@ Linear interpolation in the Z-score scale results in a more realistic trajectory
 <span class="va">zout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit_200</span>, x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">z</span>, shape <span class="op">=</span> <span class="st">"vector"</span><span class="op">)</span>
 
 <span class="co"># convert predicted values to Y-scale</span>
-<span class="va">yout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AGD/man/z2y.html">z2y</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, z <span class="op">=</span> <span class="va">zout</span>, ref <span class="op">=</span> <span class="va">ref</span><span class="op">)</span></pre></div>
+<span class="va">yout</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/AGD/man/z2y.html">z2y</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, z <span class="op">=</span> <span class="va">zout</span>, ref <span class="op">=</span> <span class="va">ref</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/inter3-1.png" alt="Broken stick model fitted in the SDS scale results in a most realistic expected trajectory at intermediate ages." width="100%"><p class="caption">
 Broken stick model fitted in the SDS scale results in a most realistic expected trajectory at intermediate ages.
@@ -942,11 +941,11 @@ Broken stick model fitted in the SDS scale results in a most realistic expected 
 <div id="multiple-imputation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#multiple-imputation" class="anchor"></a>Multiple imputation</h2>
-<p>Remember from section 2 that the broken stick estimates are conditional means. We may be tempted to analyse these estimates as if they were “just data”, but they do not have the same variability as the real data. For example, suppose we calculate the correlation matrix of the broken stick estimates. We know that the values in this matrix will exceed those from the underlying observed data. Not accounting for this fact leads to overconfident predictions and results that are too good to be true.</p>
+<p>Remember from section 2 that the broken stick estimates are conditional means. We may be tempted to analyse these estimates as if they were “just data,” but they do not have the same variability as the real data. For example, suppose we calculate the correlation matrix of the broken stick estimates. We know that the values in this matrix will exceed those from the underlying observed data. Not accounting for this fact leads to overconfident predictions and results that are too good to be true.</p>
 <p>Multiple imputation <span class="citation">(Rubin 1987; van Buuren 2018)</span> restores variability by adding noise. We may fit standard complete-data software to the imputed data, and obtain valid regression weights, confidence intervals and <span class="math inline">\(P\)</span>-values under a wide range of conditions.</p>
 <p>By default, method <code>kr</code> executes 200 iterations of the Kasim-Raudenbush sampler. The <code>imp_skip</code> argument to the <code><a href="../reference/control_kr.html">control_kr()</a></code> function specifies the interval at which the method adds noise to the broken stick estimates. The following code block appends the break ages to the input data and sets <code>imp_skip = 10</code>. The call to the <code><a href="../reference/brokenstick.html">brokenstick()</a></code> function thus creates 20 imputations for each missing outcome (<code>hgt.z</code> here).</p>
-<div class="sourceCode" id="cb65"><pre class="downlit">
-<span class="va">ctl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_brokenstick.html">control_brokenstick</a></span><span class="op">(</span>kr <span class="op">=</span> <span class="fu"><a href="../reference/control_kr.html">control_kr</a></span><span class="op">(</span>imp_skip <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ctl</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/control_brokenstick.html">control_brokenstick</a></span><span class="op">(</span>kr <span class="op">=</span> <span class="fu"><a href="../reference/control_kr.html">control_kr</a></span><span class="op">(</span>imp_skip <span class="op">=</span> <span class="fl">10</span><span class="op">)</span><span class="op">)</span>
 <span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">4</span><span class="op">)</span>
 <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">bind_rows</span><span class="op">(</span><span class="va">smocc_200</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">smocc_200</span><span class="op">$</span><span class="va">hgt.z</span><span class="op">)</span>, <span class="op">]</span>,
                   <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">smocc_200</span><span class="op">$</span><span class="va">id</span><span class="op">)</span>, age <span class="op">=</span> <span class="va">knots</span><span class="op">)</span><span class="op">)</span>
@@ -955,7 +954,7 @@ Broken stick model fitted in the SDS scale results in a most realistic expected 
                       method <span class="op">=</span> <span class="st">"kr"</span>, control <span class="op">=</span> <span class="va">ctl</span>, seed <span class="op">=</span> <span class="fl">15244</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit_kr</span>, new_data <span class="op">=</span> <span class="va">data</span>, show <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,
      group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>,
-     xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></pre></div>
+     xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/mi-code-1.png" alt="Observed data plotted on top of 20 imputed trajectories." width="100%"><p class="caption">
 Observed data plotted on top of 20 imputed trajectories.
@@ -963,14 +962,14 @@ Observed data plotted on top of 20 imputed trajectories.
 </div>
 <p>Figure 20 displays the observed data from three persons plotted on top of 20 imputed trajectories. The within-person within-time average over the grey trajectories approximates to the broken stick estimate (not shown here). The observed curve in each panel occasionally strays towards the boundaries of the grey bundle. This behaviour is as expected and indicates that the blue curve performs like a grey curve.</p>
 <p>Section 5.2 showed how we can estimate the time-to-time correlation matrix. An alternative way is to calculate it from the imputed data, as follows:</p>
-<div class="sourceCode" id="cb66"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">smocc_200</span><span class="op">$</span><span class="va">id</span><span class="op">)</span>, age <span class="op">=</span> <span class="va">knots</span><span class="op">)</span> <span class="op">%&gt;%</span>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="va">smocc_200</span><span class="op">$</span><span class="va">id</span><span class="op">)</span>, age <span class="op">=</span> <span class="va">knots</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">bind_cols</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">fit_kr</span><span class="op">$</span><span class="va">draws</span><span class="op">)</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">pivot_longer</span><span class="op">(</span>cols <span class="op">=</span> <span class="fu">starts_with</span><span class="op">(</span><span class="st">"V"</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"imp"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">pivot_wider</span><span class="op">(</span>id_cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"imp"</span><span class="op">)</span>, names_from <span class="op">=</span> <span class="st">"age"</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu">select</span><span class="op">(</span><span class="op">-</span><span class="va">id</span>, <span class="op">-</span><span class="va">imp</span><span class="op">)</span> <span class="op">%&gt;%</span>
   <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="op">)</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></pre></div>
+  <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span></code></pre></div>
 <pre><code>##           0 0.0833 0.1667 0.25  0.5 0.75    1 1.25  1.5    2
 ## 0      1.00   0.68   0.62 0.56 0.46 0.39 0.37 0.35 0.33 0.29
 ## 0.0833 0.68   1.00   0.81 0.76 0.66 0.56 0.53 0.53 0.50 0.45
@@ -995,8 +994,8 @@ Curve matching. Predict infant length at 14 months given length data up to 6 mon
 </div>
 <p>Figure 21 demonstrates curve matching for infant length. The red curve corresponds to five measurements of the target child made during the first six months. The ten grey curves are historic growth curves from the ten matched children. We may define similarity in many ways. Here we use a linear model to predict length at the age of 14m from previous length data. The distance between the target child and another child is equal to the difference between their predicted values. The procedure lifts the data of the matches from the database, and plots the observed growth curves onto the chart as grey curves. This method for finding nearest neighbours is known as <em>predictive mean matching</em> and has grown into a powerful technique for missing data.<span class="citation">(van Buuren 2018)</span> The bundle of grey curves indicates some possible future trajectories of the target child. The mean of the bundle is the most likely path. Graphically it is the dotted blue curve between the last measurement and the age of the outcome.</p>
 <p>Let’s look at a numerical example. We split the data into one target child and 199 donor children, and fit a broken stick model to the donor set.</p>
-<div class="sourceCode" id="cb68"><pre class="downlit">
-<span class="va">donor_data</span> <span class="op">&lt;-</span> <span class="va">smocc_200</span> <span class="op">%&gt;%</span> 
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">donor_data</span> <span class="op">&lt;-</span> <span class="va">smocc_200</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">!=</span> <span class="st">"10001"</span><span class="op">)</span>
 <span class="va">target_data</span> <span class="op">&lt;-</span> <span class="va">smocc_200</span> <span class="op">%&gt;%</span> 
   <span class="fu"><a href="https://rdrr.io/r/stats/filter.html">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">==</span> <span class="st">"10001"</span> <span class="op">&amp;</span> <span class="va">age</span> <span class="op">&lt;</span> <span class="fl">0.51</span><span class="op">)</span>
@@ -1005,11 +1004,11 @@ Curve matching. Predict infant length at 14 months given length data up to 6 mon
 <span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">4</span><span class="op">)</span>
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">donor_data</span>,
                    knots <span class="op">=</span> <span class="va">knots</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>,
-                   method <span class="op">=</span> <span class="st">"kr"</span>, seed <span class="op">=</span> <span class="fl">15244</span><span class="op">)</span></pre></div>
+                   method <span class="op">=</span> <span class="st">"kr"</span>, seed <span class="op">=</span> <span class="fl">15244</span><span class="op">)</span></code></pre></div>
 <p>All timepoints from the donor data enter the broken stick model. Note that the <code>target_data</code> contains only observations from the first five visits.</p>
 <p>We now fit the prediction model on the child-level donor data. The prediction model contains the broken stick estimates for length SDS up to 6 months, as well as sex, gestational age and birth weight as covariates.</p>
-<div class="sourceCode" id="cb69"><pre class="downlit">
-<span class="co"># predict with matching model at child level</span>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># predict with matching model at child level</span>
 <span class="va">covariates</span> <span class="op">&lt;-</span> <span class="va">donor_data</span> <span class="op">%&gt;%</span> 
   <span class="fu">group_by</span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">%&gt;%</span> 
   <span class="fu">slice</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
@@ -1017,7 +1016,7 @@ Curve matching. Predict infant length at 14 months given length data up to 6 mon
 <span class="va">donors</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span><span class="va">covariates</span>, <span class="fu">select</span><span class="op">(</span><span class="va">bse</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span><span class="op">)</span>
 <span class="va">model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">`1.25`</span> <span class="op">~</span> <span class="va">`0`</span> <span class="op">+</span> <span class="va">`0.0833`</span> <span class="op">+</span> <span class="va">`0.1667`</span> <span class="op">+</span> <span class="va">`0.25`</span> <span class="op">+</span> <span class="va">`0.5`</span>
             <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">ga</span> <span class="op">+</span> <span class="va">bw</span>, data <span class="op">=</span> <span class="va">donors</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ## Call:
 ## lm(formula = `1.25` ~ `0` + `0.0833` + `0.1667` + `0.25` + `0.5` + 
@@ -1045,8 +1044,8 @@ Curve matching. Predict infant length at 14 months given length data up to 6 mon
 ## Multiple R-squared:  0.774,  Adjusted R-squared:  0.764 
 ## F-statistic: 81.3 on 8 and 190 DF,  p-value: &lt;2e-16</code></pre>
 <p>The next step is to extract model predictions for both donors and target and find the ten closest donors.</p>
-<div class="sourceCode" id="cb71"><pre class="downlit">
-<span class="va">donors_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">donors_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">donors_pred</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">donors</span><span class="op">$</span><span class="va">id</span>
 
 <span class="va">target</span> <span class="op">&lt;-</span> <span class="fu">bind_cols</span><span class="op">(</span>
@@ -1055,16 +1054,16 @@ Curve matching. Predict infant length at 14 months given length data up to 6 mon
 <span class="va">target_pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model</span>, newdata <span class="op">=</span> <span class="va">target</span><span class="op">)</span>
 
 <span class="va">matches</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">donors_pred</span> <span class="op">-</span> <span class="va">target_pred</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
-<span class="va">matches</span></pre></div>
+<span class="va">matches</span></code></pre></div>
 <pre><code>##  11013  10093  11023  11051  10006  10068  11063  10032  11046  11080 
 ## 0.0026 0.0376 0.0376 0.0693 0.0771 0.0792 0.0841 0.0852 0.0893 0.0953</code></pre>
 <p>Finally, let us study the observed and fitted trajectories of the ten matches.</p>
-<div class="sourceCode" id="cb73"><pre class="downlit">
-<span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">matches</span><span class="op">)</span><span class="op">)</span>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">matches</span><span class="op">)</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, new_data <span class="op">=</span> <span class="va">donor_data</span>, group <span class="op">=</span> <span class="va">ids</span>, 
      xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.4</span><span class="op">)</span>, size_y <span class="op">=</span> <span class="fl">1</span>, size_yhat <span class="op">=</span> <span class="fl">0</span>,
      xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span>, 
-     ncol <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></pre></div>
+     ncol <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></code></pre></div>
 <div class="figure">
 <img src="brokenstick-article_files/figure-html/cm4-1.png" alt="Curve matching. Observed and fitted trajectories of 10 matches for subject 10001." width="100%"><p class="caption">
 Curve matching. Observed and fitted trajectories of 10 matches for subject 10001.
@@ -1115,132 +1114,132 @@ Curve matching. Observed and fitted trajectories of 10 matches for subject 10001
 <div id="literature" class="section level1 unnumbered">
 <h1 class="hasAnchor">
 <a href="#literature" class="anchor"></a>Literature</h1>
-<div id="refs" class="references">
-<div id="ref-anderson2019">
-<p>Anderson, C., R. Hafen, O. Sofrygin, L. Ryan, and HBGDki Community. 2019. “Comparing Predictive Abilities of Longitudinal Child Growth Models.” <em>Statistics in Medicine</em> 38 (19): 3555–70.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-anderson2019" class="csl-entry">
+Anderson, C., R. Hafen, O. Sofrygin, L. Ryan, and HBGDki Community. 2019. <span>“Comparing Predictive Abilities of Longitudinal Child Growth Models.”</span> <em>Statistics in Medicine</em> 38 (19): 3555–70.
 </div>
-<div id="ref-argyle2008">
-<p>Argyle, J., A. H. Seheult, and D. A. Wooff. 2008. “Correlation Models for Monitoring Child Growth.” <em>Statistics in Medicine</em> 27 (6): 888–904.</p>
+<div id="ref-argyle2008" class="csl-entry">
+Argyle, J., A. H. Seheult, and D. A. Wooff. 2008. <span>“Correlation Models for Monitoring Child Growth.”</span> <em>Statistics in Medicine</em> 27 (6): 888–904.
 </div>
-<div id="ref-bai2003">
-<p>Bai, J., and P. Perron. 2003. “Computation and Analysis of Multiple Structural Change Models.” <em>Journal of Applied Econometrics</em> 18 (1): 1–22.</p>
+<div id="ref-bai2003" class="csl-entry">
+Bai, J., and P. Perron. 2003. <span>“Computation and Analysis of Multiple Structural Change Models.”</span> <em>Journal of Applied Econometrics</em> 18 (1): 1–22.
 </div>
-<div id="ref-bates2015">
-<p>Bates, D., M. Mächler, B. Bolker, and S. Walker. 2015. “Fitting Linear Mixed-Effects Models Using lme4.” <em>Journal of Statistical Software</em> 67 (1): 1–48. <a href="https://doi.org/10.18637/jss.v067.i01">https://doi.org/10.18637/jss.v067.i01</a>.</p>
+<div id="ref-bates2015" class="csl-entry">
+Bates, D., M. Mächler, B. Bolker, and S. Walker. 2015. <span>“Fitting Linear Mixed-Effects Models Using <span class="nocase">lme4</span>.”</span> <em>Journal of Statistical Software</em> 67 (1): 1–48. <a href="https://doi.org/10.18637/jss.v067.i01">https://doi.org/10.18637/jss.v067.i01</a>.
 </div>
-<div id="ref-bellman1969">
-<p>Bellman, R., and R. Roth. 1969. “Curve Fitting by Segmented Straight Lines.” <em>Journal of the American Statistical Association</em> 64 (327): 1079–84.</p>
+<div id="ref-bellman1969" class="csl-entry">
+Bellman, R., and R. Roth. 1969. <span>“Curve Fitting by Segmented Straight Lines.”</span> <em>Journal of the American Statistical Association</em> 64 (327): 1079–84.
 </div>
-<div id="ref-cole1995">
-<p>Cole, T. J. 1995. “Conditional Reference Charts to Assess Weight Gain in British Infants.” <em>Archives of Disease in Childhood</em> 73 (1): 8–16.</p>
+<div id="ref-cole1995" class="csl-entry">
+Cole, T. J. 1995. <span>“Conditional Reference Charts to Assess Weight Gain in British Infants.”</span> <em>Archives of Disease in Childhood</em> 73 (1): 8–16.
 </div>
-<div id="ref-deboor1978">
-<p>de Boor, C. 1978. <em>A Practical Guide to Splines</em>. New York: Springer-Verlag.</p>
+<div id="ref-deboor1978" class="csl-entry">
+de Boor, C. 1978. <em>A Practical Guide to Splines</em>. New York: Springer-Verlag.
 </div>
-<div id="ref-dekroon2008">
-<p>de Kroon, M. L. A., C. M. Renders, E. C. Kuipers, J. P. van Wouwe, S. van Buuren, G. A. de Jonge, and R. A. Hirasing. 2008. “Identifying Metabolic Syndrome Without Blood Tests in Young Adults - the Terneuzen Birth Cohort.” <em>European Journal of Public Health</em> 18 (6): 656–60.</p>
+<div id="ref-dekroon2008" class="csl-entry">
+de Kroon, M. L. A., C. M. Renders, E. C. Kuipers, J. P. van Wouwe, S. van Buuren, G. A. de Jonge, and R. A. Hirasing. 2008. <span>“Identifying Metabolic Syndrome Without Blood Tests in Young Adults - the Terneuzen Birth Cohort.”</span> <em>European Journal of Public Health</em> 18 (6): 656–60.
 </div>
-<div id="ref-dekroon2010">
-<p>de Kroon, M. L. A., C. M. Renders, J. P. van Wouwe, S. van Buuren, and R. A. Hirasing. 2010. “The Terneuzen Birth Cohort: BMI Changes Between 2 and 6 Years Correlate Strongest with Adult Overweight.” <em>PloS ONE</em> 5 (2): e9155.</p>
+<div id="ref-dekroon2010" class="csl-entry">
+de Kroon, M. L. A., C. M. Renders, J. P. van Wouwe, S. van Buuren, and R. A. Hirasing. 2010. <span>“The Terneuzen Birth Cohort: BMI Changes Between 2 and 6 Years Correlate Strongest with Adult Overweight.”</span> <em>PloS ONE</em> 5 (2): e9155.
 </div>
-<div id="ref-dietz1994">
-<p>Dietz, W. H. 1994. “Critical Periods in Childhood for the Development of Obesity.” <em>American Journal of Clinical Nutrition</em> 59 (5): 955–59.</p>
+<div id="ref-dietz1994" class="csl-entry">
+Dietz, W. H. 1994. <span>“Critical Periods in Childhood for the Development of Obesity.”</span> <em>American Journal of Clinical Nutrition</em> 59 (5): 955–59.
 </div>
-<div id="ref-diggle1988">
-<p>Diggle, P. J. 1988. “An Approach to the Analysis of Repeated Measurements.” <em>Biometrics</em>, 959–71.</p>
+<div id="ref-diggle1988" class="csl-entry">
+Diggle, P. J. 1988. <span>“An Approach to the Analysis of Repeated Measurements.”</span> <em>Biometrics</em>, 959–71.
 </div>
-<div id="ref-diggle2002">
-<p>Diggle, P. J., P. Heagerty, K. Y. Liang, and S. Zeger. 2002. <em>Analysis of Longitudinal Data. Second Edition.</em> Oxford University Press.</p>
+<div id="ref-diggle2002" class="csl-entry">
+Diggle, P. J., P. Heagerty, K. Y. Liang, and S. Zeger. 2002. <em>Analysis of Longitudinal Data. Second Edition.</em> Oxford University Press.
 </div>
-<div id="ref-fitzmaurice2011">
-<p>Fitzmaurice, G. M, N. M. Laird, and J. H. Ware. 2011. <em>Applied Longitudinal Analysis. Second Edition.</em> New York: John Wiley &amp; Sons.</p>
+<div id="ref-fitzmaurice2011" class="csl-entry">
+Fitzmaurice, G. M, N. M. Laird, and J. H. Ware. 2011. <em>Applied Longitudinal Analysis. Second Edition.</em> New York: John Wiley &amp; Sons.
 </div>
-<div id="ref-fredriks2000">
-<p>Fredriks, A. M., S. van Buuren, R. J. F. Burgmeijer, J. F. Meulmeester, R. J. Beuker, E. Brugman, M. J. Roede, S. P. Verloove-Vanhorick, and J. M. Wit. 2000. “Continuing Positive Secular Growth Change in the Netherlands 1955-1997.” <em>Pediatric Research</em> 47 (3): 316–23.</p>
+<div id="ref-fredriks2000" class="csl-entry">
+Fredriks, A. M., S. van Buuren, R. J. F. Burgmeijer, J. F. Meulmeester, R. J. Beuker, E. Brugman, M. J. Roede, S. P. Verloove-Vanhorick, and J. M. Wit. 2000. <span>“Continuing Positive Secular Growth Change in the Netherlands 1955-1997.”</span> <em>Pediatric Research</em> 47 (3): 316–23.
 </div>
-<div id="ref-gelman2007">
-<p>Gelman, A., and J. Hill. 2007. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Cambridge: Cambridge University Press.</p>
+<div id="ref-gelman2007" class="csl-entry">
+Gelman, A., and J. Hill. 2007. <em>Data Analysis Using Regression and Multilevel/Hierarchical Models</em>. Cambridge: Cambridge University Press.
 </div>
-<div id="ref-hafen2020">
-<p>Hafen, R., and B. Schloerke. 2020. <em>Trelliscopejs: Create Interactive Trelliscope Displays</em>. <a href="https://CRAN.R-project.org/package=trelliscopejs">https://CRAN.R-project.org/package=trelliscopejs</a>.</p>
+<div id="ref-hafen2020" class="csl-entry">
+Hafen, R., and B. Schloerke. 2020. <em>Trelliscopejs: Create Interactive Trelliscope Displays</em>. <a href="https://CRAN.R-project.org/package=trelliscopejs">https://CRAN.R-project.org/package=trelliscopejs</a>.
 </div>
-<div id="ref-hand1987">
-<p>Hand, D. J., and C. C. Taylor. 1987. <em>Multivariate Analysis of Variance and Repeated Measures: A Practical Approach for Behavioural Scientists</em>. Vol. 5. Boca Raton, FL: CRC press.</p>
+<div id="ref-hand1987" class="csl-entry">
+Hand, D. J., and C. C. Taylor. 1987. <em>Multivariate Analysis of Variance and Repeated Measures: A Practical Approach for Behavioural Scientists</em>. Vol. 5. Boca Raton, FL: CRC press.
 </div>
-<div id="ref-herngreen1994">
-<p>Herngreen, W. P., S. van Buuren, J. C. van Wieringen, J. D. Reerink, S. P. Verloove-Vanhorick, and J. H. Ruys. 1994. “Growth in Length and Weight from Birth to 2 Years of a Representative Sample of Netherlands Children (Born in 1988-89) Related to Socio-Economic Status and Other Background Characteristics.” <em>Annals of Human Biology</em> 21 (5): 449–63.</p>
+<div id="ref-herngreen1994" class="csl-entry">
+Herngreen, W. P., S. van Buuren, J. C. van Wieringen, J. D. Reerink, S. P. Verloove-Vanhorick, and J. H. Ruys. 1994. <span>“Growth in Length and Weight from Birth to 2 Years of a Representative Sample of Netherlands Children (born in 1988-89) Related to Socio-Economic Status and Other Background Characteristics.”</span> <em>Annals of Human Biology</em> 21 (5): 449–63.
 </div>
-<div id="ref-ismail2016">
-<p>Ismail, L. C., F. A. Puglia, E. O. Ohuma, S. T. Ash, D. C. Bishop, R. M. Carew, A. S. Al Dhaheri, and W. C. Chumlea. 2016. “Precision of Recumbent Crown-Heel Length When Using an Infantometer.” <em>BMC Pediatrics</em> 16 (1): 186.</p>
+<div id="ref-ismail2016" class="csl-entry">
+Ismail, L. C., F. A. Puglia, E. O. Ohuma, S. T. Ash, D. C. Bishop, R. M. Carew, A. S. Al Dhaheri, and W. C. Chumlea. 2016. <span>“Precision of Recumbent Crown-Heel Length When Using an Infantometer.”</span> <em>BMC Pediatrics</em> 16 (1): 186.
 </div>
-<div id="ref-johnson1988">
-<p>Johnson, R. A., and D. W. Wichern. 1988. <em>Applied Multivariate Statistical Analysis. Second Edition.</em> Englewood Cliffs, NJ: Prentice Hall.</p>
+<div id="ref-johnson1988" class="csl-entry">
+Johnson, R. A., and D. W. Wichern. 1988. <em>Applied Multivariate Statistical Analysis. Second Edition.</em> Englewood Cliffs, NJ: Prentice Hall.
 </div>
-<div id="ref-kasim1998">
-<p>Kasim, R. M., and S. W. Raudenbush. 1998. “Application of Gibbs Sampling to Nested Variance Components Models with Heterogeneous Within-Group Variance.” <em>Journal of Educational and Behavioral Statistics</em> 23 (2): 93–116.</p>
+<div id="ref-kasim1998" class="csl-entry">
+Kasim, R. M., and S. W. Raudenbush. 1998. <span>“Application of <span>G</span>ibbs Sampling to Nested Variance Components Models with Heterogeneous Within-Group Variance.”</span> <em>Journal of Educational and Behavioral Statistics</em> 23 (2): 93–116.
 </div>
-<div id="ref-kenward1987">
-<p>Kenward, M. G. 1987. “A Method for Comparing Profiles of Repeated Measurements.” <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 36 (3): 296–308.</p>
+<div id="ref-kenward1987" class="csl-entry">
+Kenward, M. G. 1987. <span>“A Method for Comparing Profiles of Repeated Measurements.”</span> <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 36 (3): 296–308.
 </div>
-<div id="ref-koutsoyiannis2000">
-<p>Koutsoyiannis, D. 2000. “Broken Line Smoothing: A Simple Method for Interpolating and Smoothing Data Series.” <em>Environmental Modelling &amp; Software</em> 15 (2): 139–49.</p>
+<div id="ref-koutsoyiannis2000" class="csl-entry">
+Koutsoyiannis, D. 2000. <span>“Broken Line Smoothing: A Simple Method for Interpolating and Smoothing Data Series.”</span> <em>Environmental Modelling &amp; Software</em> 15 (2): 139–49.
 </div>
-<div id="ref-krone2020">
-<p>Krone, T., R. Boessen, S. Bijlsma, R. van Stokkum, N. D. S. Clabbers, and W. J. Pasman. 2020. “The Possibilities of the Use of N-of-1 and Do-It-Yourself Trials in Nutritional Research.” <em>PloS ONE</em> 15 (5): e0232680.</p>
+<div id="ref-krone2020" class="csl-entry">
+Krone, T., R. Boessen, S. Bijlsma, R. van Stokkum, N. D. S. Clabbers, and W. J. Pasman. 2020. <span>“The Possibilities of the Use of n-of-1 and Do-It-Yourself Trials in Nutritional Research.”</span> <em>PloS ONE</em> 15 (5): e0232680.
 </div>
-<div id="ref-laird1982">
-<p>Laird, N. M., and J. H. Ware. 1982. “Random-Effects Models for Longitudinal Data.” <em>Biometrics</em> 38 (4): 963–74.</p>
+<div id="ref-laird1982" class="csl-entry">
+Laird, N. M., and J. H. Ware. 1982. <span>“Random-Effects Models for Longitudinal Data.”</span> <em>Biometrics</em> 38 (4): 963–74.
 </div>
-<div id="ref-lerman1980">
-<p>Lerman, P. M. 1980. “Fitting Segmented Regression Models by Grid Search.” <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 29 (1): 77–84.</p>
+<div id="ref-lerman1980" class="csl-entry">
+Lerman, P. M. 1980. <span>“Fitting Segmented Regression Models by Grid Search.”</span> <em>Journal of the Royal Statistical Society: Series C (Applied Statistics)</em> 29 (1): 77–84.
 </div>
-<div id="ref-lokku2020">
-<p>Lokku, A., L. S. Lim, C. S. Birken, E. M. Pullenayegum, and TARGet Kids! Collaboration,. 2020. “Summarizing the Extent of Visit Irregularity in Longitudinal Data.” <em>BMC Medical Research Methodology</em> 20: 1–9.</p>
+<div id="ref-lokku2020" class="csl-entry">
+Lokku, A., L. S. Lim, C. S. Birken, E. M. Pullenayegum, and TARGet Kids! Collaboration,. 2020. <span>“Summarizing the Extent of Visit Irregularity in Longitudinal Data.”</span> <em>BMC Medical Research Methodology</em> 20: 1–9.
 </div>
-<div id="ref-macarthur1957">
-<p>MacArthur, R. H. 1957. “On the Relative Abundance of Bird Species.” <em>Proceedings of the National Academy of Sciences of the United States of America</em> 43 (3): 293.</p>
+<div id="ref-macarthur1957" class="csl-entry">
+MacArthur, R. H. 1957. <span>“On the Relative Abundance of Bird Species.”</span> <em>Proceedings of the National Academy of Sciences of the United States of America</em> 43 (3): 293.
 </div>
-<div id="ref-morrison1976">
-<p>Morrison, D. F. 1976. <em>Multivariate Statistical Methods. Second Edition.</em> Singapore: McGraw-Hill.</p>
+<div id="ref-morrison1976" class="csl-entry">
+Morrison, D. F. 1976. <em>Multivariate Statistical Methods. Second Edition.</em> Singapore: McGraw-Hill.
 </div>
-<div id="ref-naumova2001">
-<p>Naumova, E. N., A. Must, and N. M. Laird. 2001. “Tutorial in Biostatistics: Evaluating the Impact of ‘Critical Periods’ in Longitudinal Studies of Growth Using Piecewise Mixed Effects Models.” <em>International Journal of Epidemiology</em> 30: 1332–41.</p>
+<div id="ref-naumova2001" class="csl-entry">
+Naumova, E. N., A. Must, and N. M. Laird. 2001. <span>“Tutorial in Biostatistics: Evaluating the Impact of ‘critical Periods’ in Longitudinal Studies of Growth Using Piecewise Mixed Effects Models.”</span> <em>International Journal of Epidemiology</em> 30: 1332–41.
 </div>
-<div id="ref-pullenayegum2016">
-<p>Pullenayegum, E. M., and L. S. H. Lim. 2016. “Longitudinal Data Subject to Irregular Observation: A Review of Methods with a Focus on Visit Processes, Assumptions, and Study Design.” <em>Statistical Methods in Medical Research</em> 25 (6): 2992–3014.</p>
+<div id="ref-pullenayegum2016" class="csl-entry">
+Pullenayegum, E. M., and L. S. H. Lim. 2016. <span>“Longitudinal Data Subject to Irregular Observation: A Review of Methods with a Focus on Visit Processes, Assumptions, and Study Design.”</span> <em>Statistical Methods in Medical Research</em> 25 (6): 2992–3014.
 </div>
-<div id="ref-r2020">
-<p>R Core Team. 2020. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.</p>
+<div id="ref-r2020" class="csl-entry">
+R Core Team. 2020. <em>R: A Language and Environment for Statistical Computing</em>. Vienna, Austria: R Foundation for Statistical Computing. <a href="https://www.R-project.org/">https://www.R-project.org/</a>.
 </div>
-<div id="ref-rehfeld2011">
-<p>Rehfeld, K., N. Marwan, J. Heitzig, and J. Kurths. 2011. “Comparison of Correlation Analysis Techniques for Irregularly Sampled Time Series.” <em>Nonlinear Processes in Geophysics</em> 18 (3): 389–404.</p>
+<div id="ref-rehfeld2011" class="csl-entry">
+Rehfeld, K., N. Marwan, J. Heitzig, and J. Kurths. 2011. <span>“Comparison of Correlation Analysis Techniques for Irregularly Sampled Time Series.”</span> <em>Nonlinear Processes in Geophysics</em> 18 (3): 389–404.
 </div>
-<div id="ref-rubin1987">
-<p>Rubin, D. B. 1987. <em>Multiple Imputation for Nonresponse in Surveys</em>. New York: John Wiley &amp; Sons.</p>
+<div id="ref-rubin1987" class="csl-entry">
+Rubin, D. B. 1987. <em>Multiple Imputation for Nonresponse in Surveys</em>. New York: John Wiley &amp; Sons.
 </div>
-<div id="ref-skrondal2009">
-<p>Skrondal, A., and S. Rabe‐Hesketh. 2009. “Prediction in Multilevel Generalized Linear Models.” <em>Journal of the Royal Statistical Society: Series A (Statistics in Society)</em> 172 (3): 659–87.</p>
+<div id="ref-skrondal2009" class="csl-entry">
+Skrondal, A., and S. Rabe‐Hesketh. 2009. <span>“Prediction in Multilevel Generalized Linear Models.”</span> <em>Journal of the Royal Statistical Society: Series A (Statistics in Society)</em> 172 (3): 659–87.
 </div>
-<div id="ref-toms2003">
-<p>Toms, J. D., and M. L. Lesperance. 2003. “Piecewise Regression: A Tool for Identifying Ecological Thresholds.” <em>Ecology</em> 84 (8): 2034–41.</p>
+<div id="ref-toms2003" class="csl-entry">
+Toms, J. D., and M. L. Lesperance. 2003. <span>“Piecewise Regression: A Tool for Identifying Ecological Thresholds.”</span> <em>Ecology</em> 84 (8): 2034–41.
 </div>
-<div id="ref-towers2014">
-<p>Towers, S. 2014. “Potential Fitting Biases Resulting from Grouping Data into Variable Width Bins.” <em>Physics Letters B</em> 735: 146–48.</p>
+<div id="ref-towers2014" class="csl-entry">
+Towers, S. 2014. <span>“Potential Fitting Biases Resulting from Grouping Data into Variable Width Bins.”</span> <em>Physics Letters B</em> 735: 146–48.
 </div>
-<div id="ref-vanbuuren2007c">
-<p>van Buuren, S. 2007. “Growth References.” In <em>Growth Disorders 2nd</em>, edited by C. Kelnar, M. Savage, P. Saenger, and C. Cowell, 165–81. London: Hodder Arnold.</p>
+<div id="ref-vanbuuren2007c" class="csl-entry">
+van Buuren, S. 2007. <span>“Growth References.”</span> In <em>Growth Disorders 2nd</em>, edited by C. Kelnar, M. Savage, P. Saenger, and C. Cowell, 165–81. London: Hodder Arnold.
 </div>
-<div id="ref-vanbuuren2014d">
-<p>———. 2014. “Curve Matching: A Data-Driven Technique to Improve Individual Prediction of Childhood Growth.” <em>Annals of Nutrition &amp; Metabolism</em> 65 (3): 227–33.</p>
+<div id="ref-vanbuuren2014d" class="csl-entry">
+———. 2014. <span>“Curve Matching: A Data-Driven Technique to Improve Individual Prediction of Childhood Growth.”</span> <em>Annals of Nutrition &amp; Metabolism</em> 65 (3): 227–33.
 </div>
-<div id="ref-vanbuuren2018">
-<p>———. 2018. <em>Flexible Imputation of Missing Data. Second Edition</em>. Boca Raton, FL.: CRC Press.</p>
+<div id="ref-vanbuuren2018" class="csl-entry">
+———. 2018. <em>Flexible Imputation of Missing Data. Second Edition</em>. Boca Raton, FL.: CRC Press.
 </div>
-<div id="ref-vaughan2020">
-<p>Vaughan, D., and M. Kuhn. 2020. <em>Hardhat: Construct Modeling Packages</em>. <a href="https://CRAN.R-project.org/package=hardhat">https://CRAN.R-project.org/package=hardhat</a>.</p>
+<div id="ref-vaughan2020" class="csl-entry">
+Vaughan, D., and M. Kuhn. 2020. <em>Hardhat: Construct Modeling Packages</em>. <a href="https://CRAN.R-project.org/package=hardhat">https://CRAN.R-project.org/package=hardhat</a>.
 </div>
-<div id="ref-ziyatdinov2018">
-<p>Ziyatdinov, A., M. Vázquez-Santiago, H. Brunel, A. Martinez-Perez, H. Aschard, and J. M. Soria. 2018. “lme4qtl: Linear Mixed Models with Flexible Covariance Structure for Genetic Studies of Related Individuals.” <em>BMC Bioinformatics</em> 19 (1): 1–5.</p>
+<div id="ref-ziyatdinov2018" class="csl-entry">
+Ziyatdinov, A., M. Vázquez-Santiago, H. Brunel, A. Martinez-Perez, H. Aschard, and J. M. Soria. 2018. <span>“<span class="nocase">lme4qtl</span>: Linear Mixed Models with Flexible Covariance Structure for Genetic Studies of Related Individuals.”</span> <em>BMC Bioinformatics</em> 19 (1): 1–5.
 </div>
 </div>
 </div>

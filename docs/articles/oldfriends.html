@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -77,7 +77,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/growthcharts/brokenstick/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -91,13 +91,12 @@
 
       
 
-      </header><script src="oldfriends_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="oldfriends_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="oldfriends_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="oldfriends_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Help for old friends</h1>
             
-            <h4 class="date">2020-11-02</h4>
+            <h4 class="date">2021-03-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/growthcharts/brokenstick/blob/master/vignettes/oldfriends.Rmd"><code>vignettes/oldfriends.Rmd</code></a></small>
       <div class="hidden name"><code>oldfriends.Rmd</code></div>
@@ -106,8 +105,8 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/growthcharts/brokenstick">brokenstick</a></span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/growthcharts/brokenstick">brokenstick</a></span><span class="op">)</span></code></pre></div>
 <div id="background" class="section level1">
 <h1 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h1>
@@ -128,9 +127,9 @@
 <h1 class="hasAnchor">
 <a href="#install-legacy-version" class="anchor"></a>Install legacy version</h1>
 <p>We recommend changing your code to reflect the above changes. If needed, the old version <code>0.62.1</code> can be installed as</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span>
-<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"growthcharts/brokenstick@V0.62.1"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span>
+<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"growthcharts/brokenstick@V0.62.1"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="examples" class="section level1">
 <h1 class="hasAnchor">
@@ -139,12 +138,12 @@
 <h2 class="hasAnchor">
 <a href="#example-1-fit-model" class="anchor"></a>Example 1: Fit model</h2>
 <p>Fit model, old version:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit">
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="fu">::</span><span class="va"><a href="../reference/smocc_200.html">smocc_200</a></span>
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">hgt.z</span>, x <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">age</span>, subjid <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">subjid</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="fu">::</span><span class="va"><a href="../reference/smocc_200.html">smocc_200</a></span>
+<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">hgt.z</span>, x <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">age</span>, subjid <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">subjid</span><span class="op">)</span></code></pre></div>
 <p>Fit model, version <code>0.75.0</code> and higher:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="fu">::</span><span class="va"><a href="../reference/smocc_200.html">smocc_200</a></span>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="fu">::</span><span class="va"><a href="../reference/smocc_200.html">smocc_200</a></span>
 
 <span class="co"># formula interface</span>
 <span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span><span class="op">)</span>
@@ -159,15 +158,15 @@
 <span class="va">tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 <span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">tt</span><span class="op">[</span>, <span class="st">"age"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
                     <span class="va">tt</span><span class="op">[</span>, <span class="st">"hgt.z"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
-                    <span class="va">tt</span><span class="op">[</span>, <span class="st">"id"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></pre></div>
+                    <span class="va">tt</span><span class="op">[</span>, <span class="st">"id"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></code></pre></div>
 <p>All fitted models are identical.</p>
 </div>
 <div id="example-2-predict-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-2-predict-model" class="anchor"></a>Example 2: Predict model</h2>
 <p>Predict model, old version:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit">
-<span class="co"># predict at observed data</span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># predict at observed data</span>
 <span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
 
 <span class="co"># predict at knots</span>
@@ -177,10 +176,10 @@
 <span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, at <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span>
 
 <span class="co"># predict knots, broad version</span>
-<span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, at <span class="op">=</span> <span class="st">"knots"</span>, output <span class="op">=</span> <span class="st">"broad"</span><span class="op">)</span></pre></div>
+<span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, at <span class="op">=</span> <span class="st">"knots"</span>, output <span class="op">=</span> <span class="st">"broad"</span><span class="op">)</span></code></pre></div>
 <p>Predict model, new version:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit">
-<span class="co"># predict at observed data</span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># predict at observed data</span>
 <span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span><span class="op">)</span>
 
 <span class="co"># predict at knots</span>
@@ -190,30 +189,30 @@
 <span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, x <span class="op">=</span> <span class="st">"knots"</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
 
 <span class="co"># predict knots, broad matrix</span>
-<span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span></pre></div>
+<span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="example-3-plot-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-3-plot-model" class="anchor"></a>Example 3: Plot model</h2>
 <p>Plot trajectories, old version</p>
-<div class="sourceCode" id="cb7"><pre class="downlit">
-<span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, ids <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, ids <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></code></pre></div>
 <p>Plot trajectories, new version</p>
-<div class="sourceCode" id="cb8"><pre class="downlit">
-<span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, group <span class="op">=</span> <span class="va">ids</span>, what <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, group <span class="op">=</span> <span class="va">ids</span>, what <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></code></pre></div>
 <p><img src="oldfriends_files/figure-html/plot-new-1.png" width="672"></p>
 </div>
 <div id="example-4-explained-variance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-4-explained-variance" class="anchor"></a>Example 4: Explained variance</h2>
 <p>Proportion explained variance, old version</p>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="fu">get_pev</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit">
-<span class="fu"><a href="../reference/get_r2.html">get_r2</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.8121548</span></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">get_pev</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/get_r2.html">get_r2</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span><span class="op">)</span>
+<span class="co">#&gt; [1] 0.8121548</span></code></pre></div>
 </div>
 <div id="further-reading" class="section level2">
 <h2 class="hasAnchor">

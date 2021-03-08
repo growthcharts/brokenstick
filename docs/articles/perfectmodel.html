@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
       </span>
     </div>
 
@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -77,7 +77,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/growthcharts/brokenstick/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -91,14 +91,13 @@
 
       
 
-      </header><script src="perfectmodel_files/accessible-code-block-0.0.1/empty-anchor.js"></script><link href="perfectmodel_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="perfectmodel_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="perfectmodel_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Check perfect model</h1>
                         <h4 class="author">Stef van Buuren</h4>
             
-            <h4 class="date">2020-11-02</h4>
+            <h4 class="date">2021-03-08</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/growthcharts/brokenstick/blob/master/vignettes/perfectmodel.Rmd"><code>vignettes/perfectmodel.Rmd</code></a></small>
       <div class="hidden name"><code>perfectmodel.Rmd</code></div>
@@ -116,8 +115,8 @@
 <h2 class="hasAnchor">
 <a href="#data-generation" class="anchor"></a>Data generation</h2>
 <p>We adapt code from <a href="http://www.davekleinschmidt.com/sst-mixed-effects-simulation/simulations_slides.pdf" class="uri">http://www.davekleinschmidt.com/sst-mixed-effects-simulation/simulations_slides.pdf</a> to generate test data:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://had.co.nz/plyr">"plyr"</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://had.co.nz/plyr">"plyr"</a></span><span class="op">)</span>
 <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="http://mvtnorm.R-forge.R-project.org">"mvtnorm"</a></span><span class="op">)</span>
 <span class="va">make_data_generator</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">resid_var</span> <span class="op">=</span> <span class="fl">1</span>,
                                 <span class="va">ranef_covar</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">100</span>
@@ -135,10 +134,10 @@
     age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">ni</span>, <span class="va">n</span><span class="op">)</span>,
     <span class="va">simulated_data</span><span class="op">)</span>
   <span class="op">}</span>
-<span class="op">}</span></pre></div>
+<span class="op">}</span></code></pre></div>
 <p>Let us first model the perfect situation where <span class="math inline">\(\sigma^2 = 0\)</span> (so we set <code>resid_var</code> to zero) and where the ages align perfectly.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit">
-<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">77711</span><span class="op">)</span>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">77711</span><span class="op">)</span>
 <span class="va">covar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>,
                   <span class="fl">0.7</span>, <span class="fl">1</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>,
                   <span class="fl">0.5</span>, <span class="fl">0.8</span>, <span class="fl">1</span>, <span class="fl">0.6</span>,
@@ -147,7 +146,7 @@
                                ranef_covar <span class="op">=</span> <span class="va">covar</span>,
                                resid_var <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">gen_dat</span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre></div>
 <pre><code>##   subject age .n          X1
 ## 1       1   1  1 -0.94777697
 ## 2       1   2  1 -2.08372706
@@ -156,9 +155,9 @@
 ## 5       2   1  2 -0.08250395
 ## 6       2   2  2 -1.27072650</code></pre>
 <p>Check the correlation matrix of the <span class="math inline">\(y\)</span>’s.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://tidyr.tidyverse.org">"tidyr"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org">"dplyr"</a></span><span class="op">)</span></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://tidyr.tidyverse.org">"tidyr"</a></span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org">"dplyr"</a></span><span class="op">)</span></code></pre></div>
 <pre><code>## 
 ## Attaching package: 'dplyr'</code></pre>
 <pre><code>## The following objects are masked from 'package:plyr':
@@ -171,10 +170,10 @@
 <pre><code>## The following objects are masked from 'package:base':
 ## 
 ##     intersect, setdiff, setequal, union</code></pre>
-<div class="sourceCode" id="cb9"><pre class="downlit">
-<span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
 <span class="va">broad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html">spread</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">subject</span>, <span class="va">X1</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>,<span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span></code></pre></div>
 <pre><code>##           [,1]      [,2]      [,3]      [,4]
 ## [1,] 1.0000000 0.3497654 0.2550082 0.1611466
 ## [2,] 0.3497654 1.0000000 0.4061576 0.2460109
@@ -185,8 +184,8 @@
 <h2 class="hasAnchor">
 <a href="#fit-model" class="anchor"></a>Fit model</h2>
 <p>Fit broken stick model, with knots specified at ages <code>1:4</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit">
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/growthcharts/brokenstick">"brokenstick"</a></span><span class="op">)</span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/growthcharts/brokenstick">"brokenstick"</a></span><span class="op">)</span>
 <span class="va">knots</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>
 <span class="va">boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span>
 <span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">X1</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">subject</span>, <span class="va">data</span>, 
@@ -207,7 +206,7 @@
 
 <span class="co"># convert to time-to-time correlation matrix</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov2cor</a></span><span class="op">(</span><span class="va">omega</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">sigma2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></pre></div>
+<span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="conclusions" class="section level2">
 <h2 class="hasAnchor">
