@@ -86,6 +86,13 @@ test_that("accepts unordered x", {
   )
 })
 
+xz <- data.frame(id = c(NA_real_, NA_real_),
+                 age = c(NA_real_, NA_real_),
+                 hgt.z = c(NA_real_, NA_real_))
+test_that("accepts all NA's in newdata", {
+  expect_silent(predict(exp, new_data = xz, x = "knots"))
+})
+
 context("predict_brokenstick factor")
 
 fit <- fit_200

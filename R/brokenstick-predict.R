@@ -216,6 +216,8 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
                  X = X_s,
                  MoreArgs = list(model = object),
                  SIMPLIFY = TRUE)
+  if (!length(blup))
+    return(data.frame(.pred = rep(NA_real_, length(x))))
 
   xv <- get_knots(object)
   if (object$degree == 0L) xv <- xv[-length(xv)]
