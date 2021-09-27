@@ -1,3 +1,12 @@
+# brokenstick 1.1.1.9000
+
+- Simplifies the `brokenstick()` API to the classic formule/data arguments
+- Perform stricter tests on arguments of `brokenstick()`
+- Introduces argument `warn_splines` in `make_basis()` to suppress uninteresting warns from `splines::bs()`
+- Removes superfluous `knotnames` argument in `make_basis()`
+- Argument `x` in `make_basis()` is now a vector instead of a column vector
+- Introduces new `xname` argument in `make_basis()` to set the xname
+
 # brokenstick 1.1.1
 
 - Handles an edge case that crashed `predict()`
