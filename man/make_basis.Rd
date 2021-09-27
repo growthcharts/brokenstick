@@ -6,15 +6,17 @@
 \usage{
 make_basis(
   x,
+  xname = "x",
   knots = NULL,
   boundary = range(x),
   degree = 1L,
-  warn = TRUE,
-  knotnames = TRUE
+  warn = TRUE
 )
 }
 \arguments{
-\item{x}{a \code{data.frame} with one column}
+\item{x}{numeric vector}
+
+\item{xname}{predictor name. Default is \code{"x"}}
 
 \item{knots}{a vector of internal knots, excluding boundary knots}
 
@@ -27,8 +29,6 @@ column less than for \code{degree = 1}.}
 
 \item{warn}{a logical indicating whether warnings from \code{splines::bs()}
 should be given.}
-
-\item{knotnames}{Should the column names be the knots?}
 }
 \value{
 A matrix with \code{length(x)} rows and \code{length(breaks)}
@@ -44,8 +44,8 @@ array always included \code{boundary[1L]}.
 }
 \examples{
 knots <- c(58, 64, 68, 72)
-d1 <- make_basis(data.frame(hgt = women$height), knots = knots)
-d0 <- make_basis(data.frame(hgt = women$height), knots = knots, degree = 0)
+d1 <- make_basis(women$height, xname = "hgt", knots = knots)
+d0 <- make_basis(women$height, xname = "hgt", knots = knots, degree = 0)
 }
 \author{
 Stef van Buuren, 2020
