@@ -11,11 +11,11 @@
 #' variable in `data`. The generic shape is `formula = y ~ x | group`. The
 #' left-hand side is the outcome, the right-hand side the predictor, and the
 #' name of the grouping variable occurs after the `|` sign. Formula treatment
-#' is non-standard: 1) `y`, `x` and `group` should be numerical vectors, 2) only
-#' one variable is allowed in each model term (additional variables will be ignored).
+#' is non-standard: 1) `y` and `x` should be numeric, 2) only one variable
+#' is allowed in each model term (additional variables will be ignored).
 #'
-#' @param data A data frame containing the outcome, predictor and
-#' group variable.
+#' @param data A data frame or matrix containing the outcome (numeric),
+#' predictor (numeric) and group (numeric, factor, character) variable.
 #'
 #' @param knots Optional, but recommended. Numerical vector with the
 #' locations of the internal knots to be placed on the values of the predictor.
@@ -57,11 +57,6 @@
 #' on other data. Likewise, knots specified via `k` are data-dependent and do not transfer
 #' to other  data sets. Fixing the model requires specifying both `knots` and
 #' `boundary`.
-#'
-#' The warning "some 'x' values beyond boundary knots may cause ill-conditioned
-#' bases" indicates that model fitting applies to a subset of the range of `x`,
-#' and can be ignored. The user may prevent the warning by pre-filtering rows
-#' in `data` to the boundary range.
 #'
 #' @details
 #' The variance-covariance matrix of the random effects absorbs the
@@ -116,50 +111,47 @@ brokenstick <- function(formula,
                         control = control_brokenstick(),
                         seed = NA,
                         ...) {
-  if (is.data.frame(formula)) {
-    stop("Deprecated: First argument may no longer be a data.frame; please specify as formula.")
-  }
-  if (is.matrix(formula)) {
-    stop("Deprecated: First argument may no longer be a matrix; please specify as formula.")
-  }
-  if (is.numeric(formula)) {
-    stop("Deprecated: First argument may no longer be a numeric vector; please specify as formula.")
-  }
-  if (!inherits(formula, "formula")) {
-    stop("Argument `formula` is not a formula.")
-  }
-  if (!is.data.frame(data)) {
-    stop("Argument `data` is not a data.frame.")
-  }
+  stopifnot(
+    inherits(formula, "formula"),
+    is.data.frame(data) || is.matrix(data),
+    as.integer(degree) %in% c(0L, 1L)
+  )
+  data <- data.frame(data)
   method <- match.arg(method)
-
-  # pre-process formula to extract variable names
-  nms <- parse_formula(formula)
-  brokenstick_bridge(data, nms, knots, boundary, k, degree, method, control, seed, ...)
+  names <- parse_formula(formula)
+  brokenstick_bridge(data, names, knots, boundary, k, degree, method, control, seed, ...)
 }
 
 # ------------------------------------------------------------------------------
 # Bridge
 
-brokenstick_bridge <- function(data, nms, knots, boundary, k, degree,
-                               method, control, seed, ...) {
-  if (!degree %in% c(0, 1)) stop("brokenstick supports only degree 0 or 1", call. = FALSE)
+brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
+                               method, control, seed, warn_splines = FALSE,
+                               ...) {
+  y <- data[[names[["y"]]]]
+  x <- data[[names[["x"]]]]
+  g <- data[[names[["g"]]]]
 
-  y <- data[[nms$y]]
-  x <- data[, nms$x, drop = FALSE]
-  g <- data[[nms$g]]
+  stopifnot(
+    is.numeric(y),
+    is.numeric(x),
+    is.numeric(g) || is.factor(g) || is.character(g)
+  )
 
   l <- calculate_knots(x, k, knots, boundary)
   X <- make_basis(x,
-    knots = l$knots, boundary = l$boundary,
-    degree = degree
+    xname = names$x,
+    knots = l$knots,
+    boundary = l$boundary,
+    degree = degree,
+    warn = warn_splines
   )
 
   if (method == "lmer") {
     data_pad <- data.frame(data, X, stringsAsFactors = FALSE)
     names(data_pad) <- c(names(data), colnames(X))
     pred <- paste("0 +", paste(colnames(X), collapse = " + "))
-    fm <- as.formula(paste(nms$y, "~", pred, "+ (", pred, "|", nms$g, ")"))
+    fm <- as.formula(paste(names$y, "~", pred, "+ (", pred, "|", names$g, ")"))
     fit <- brokenstick_impl_lmer(
       data = data_pad,
       formula = fm,
@@ -179,7 +171,7 @@ brokenstick_bridge <- function(data, nms, knots, boundary, k, degree,
   }
 
   new_brokenstick(
-    names = nms,
+    names = names,
     knots = l$knots,
     boundary = l$boundary,
     degree = degree,

@@ -1,5 +1,3 @@
-context("brokenstick-edge")
-
 knots <- seq(0, 2, by = 0.25)
 boundary <- c(0, 3)
 
@@ -51,10 +49,10 @@ test_that("brokenstick handles low number of cases", {
   }
 )
 
-context("brokenstick - boundary")
 test_that("warns if right boundary is lower than max(age)", {
   expect_warning(brokenstick(hgt.z ~ age | id, smocc_200,
-                           knots = 1:2, boundary = c(0, 1)),
+                           knots = 1:2, boundary = c(0, 1),
+                           warn_splines = TRUE),
                regexp = "some 'x' values beyond boundary knots may cause ill-conditioned bases",
                fixed = TRUE)
 })

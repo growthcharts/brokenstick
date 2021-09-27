@@ -22,11 +22,11 @@ brokenstick(
 variable in \code{data}. The generic shape is \code{formula = y ~ x | group}. The
 left-hand side is the outcome, the right-hand side the predictor, and the
 name of the grouping variable occurs after the \code{|} sign. Formula treatment
-is non-standard: 1) \code{y}, \code{x} and \code{group} should be numerical vectors, 2) only
-one variable is allowed in each model term (additional variables will be ignored).}
+is non-standard: 1) \code{y} and \code{x} should be numeric, 2) only one variable
+is allowed in each model term (additional variables will be ignored).}
 
-\item{data}{A data frame containing the outcome, predictor and
-group variable.}
+\item{data}{A data frame or matrix containing the outcome (numeric),
+predictor (numeric) and group (numeric, factor, character) variable.}
 
 \item{knots}{Optional, but recommended. Numerical vector with the
 locations of the internal knots to be placed on the values of the predictor.}
@@ -95,11 +95,6 @@ Note that automatic knot specification is data-dependent, and may not reproduce
 on other data. Likewise, knots specified via \code{k} are data-dependent and do not transfer
 to other  data sets. Fixing the model requires specifying both \code{knots} and
 \code{boundary}.
-
-The warning "some 'x' values beyond boundary knots may cause ill-conditioned
-bases" indicates that model fitting applies to a subset of the range of \code{x},
-and can be ignored. The user may prevent the warning by pre-filtering rows
-in \code{data} to the boundary range.
 }
 \examples{
 data <- smocc_200[1:1198, ]
