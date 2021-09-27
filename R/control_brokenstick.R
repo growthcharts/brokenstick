@@ -20,7 +20,7 @@ control_brokenstick <- function(
 
 #' Set controls for Kasim-Raudenbush sampler
 #'
-#' @param model Correlation model: `argyle` (default), `cole` or `none`
+#' @param model Correlation model: `none` (default), `argyle` or `cole`
 #' @param runin Number of run-in iterations
 #' @param ndraw Number of parameter draws
 #' @param par_skip Number of iterations to next parameter draw
@@ -29,7 +29,7 @@ control_brokenstick <- function(
 #'
 #' @export
 control_kr <- function(
-  model = c("argyle", "cole", "none"),
+  model = c("none", "argyle", "cole"),
   runin = 100L,
   ndraw = 200L,
   par_skip = 1L,

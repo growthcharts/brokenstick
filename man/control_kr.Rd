@@ -5,7 +5,7 @@
 \title{Set controls for Kasim-Raudenbush sampler}
 \usage{
 control_kr(
-  model = c("argyle", "cole", "none"),
+  model = c("none", "argyle", "cole"),
   runin = 100L,
   ndraw = 200L,
   par_skip = 1L,
@@ -13,7 +13,7 @@ control_kr(
 )
 }
 \arguments{
-\item{model}{Correlation model: \code{argyle} (default), \code{cole} or \code{none}}
+\item{model}{Correlation model: \code{none} (default), \code{argyle} or \code{cole}}
 
 \item{runin}{Number of run-in iterations}
 

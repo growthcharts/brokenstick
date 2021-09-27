@@ -42,7 +42,8 @@
 #' only `degree = 0` and `degree = 1`.
 #'
 #' @param method Estimation method. Either `"kr"` (for the
-#' Kasim-Raudenbush sampler) or `"lmer"` (for [lme4::lmer()]) (default).
+#' Kasim-Raudenbush sampler) or `"lmer"` (for [lme4::lmer()]).
+#' Version 1.1.1.9000 changed the default to `method = "kr"`.
 #'
 #' @param control A list with parameters. Use `control_brokenstick()`
 #' to generate.
@@ -107,7 +108,7 @@ brokenstick <- function(formula,
                         boundary = NULL,
                         k = NULL,
                         degree = 1L,
-                        method = c("lmer", "kr"),
+                        method = c("kr", "lmer"),
                         control = control_brokenstick(),
                         seed = NA,
                         ...) {

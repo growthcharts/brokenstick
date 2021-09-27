@@ -1,5 +1,8 @@
 # brokenstick 1.1.1.9000
 
+- Changes the default estimation algorithm to `kr`, the Kasim-Raudenbush sampler
+- Improves error messages of edge cases in `test-brokenstick_edge.R`
+- Stabilises the `rgamma()` calls in KR-algorithm for edge cases
 - Simplifies the `brokenstick()` API to the classic formule/data arguments
 - Perform stricter tests on arguments of `brokenstick()`
 - Introduces argument `warn_splines` in `make_basis()` to suppress uninteresting warns from `splines::bs()`

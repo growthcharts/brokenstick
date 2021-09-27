@@ -11,7 +11,7 @@ brokenstick(
   boundary = NULL,
   k = NULL,
   degree = 1L,
-  method = c("lmer", "kr"),
+  method = c("kr", "lmer"),
   control = control_brokenstick(),
   seed = NA,
   ...
@@ -53,7 +53,8 @@ column less than for \code{degree = 1}. The \code{brokenstick} package supports
 only \code{degree = 0} and \code{degree = 1}.}
 
 \item{method}{Estimation method. Either \code{"kr"} (for the
-Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}) (default).}
+Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}).
+Version 1.1.1.9000 changed the default to \code{method = "kr"}.}
 
 \item{control}{A list with parameters. Use \code{control_brokenstick()}
 to generate.}

@@ -1,7 +1,7 @@
 ## author: Stef van Buuren, 2020
 
 kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
-                      model = "argyle",
+                      model = "none",
                       runin = 100L, ndraw = 10L, par_skip = 10L,
                       imp_skip = Inf) {
 
@@ -87,12 +87,14 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     #  n = 1, df = n.class - n.rc - 1,
     #  Sigma = chol2inv(chol.default(psi_smoothed + ridge))
     #)[, , 1L]
+    nu <- max(n.class - n.rc - 1L, 1L)  # prevent negative df
     inv.psi <- matrixsampling::rwishart(
-      n = 1L, nu = n.class - n.rc - 1L,
+      n = 1L, nu = nu,
       Sigma = chol2inv(chol.default(symridge(psi_smoothed))))[, , 1L]
 
     ## Draw sigma2
-    inv.sigma2 <- rgamma(n.class, n.g / 2 + 1 / (2 * theta), scale = 2 * theta / (ss * theta + sigma2.0))
+    shape <- n.g / 2 + 1 / (2 * theta)
+    inv.sigma2 <- rgamma(n.class, shape = shape, scale = 2 * theta / (ss * theta + sigma2.0))
 
     ## Draw sigma2.0
     H <- 1 / mean(inv.sigma2) # Harmonic mean
@@ -100,8 +102,12 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
 
     ## Draw theta
     G <- exp(mean(log(1 / inv.sigma2))) # Geometric mean
-    theta <- 1 / rgamma(1, n.class / 2 - 1, scale = 2 /
-                          (n.class * (sigma2.0 / H - log(sigma2.0) + log(G) - 1)))
+    shape <- max(n.class / 2 - 1, 0.01) # Prevent negative shape
+    rg <- rgamma(1,
+                 shape = shape,
+                 scale = 2 / (n.class * (sigma2.0 / H - log(sigma2.0) + log(G) - 1)))
+    rg <- max(rg, 0.00001) # Prevent extreme
+    theta <- 1 / rg
 
     # Save draws
     if (draw[iter]) {

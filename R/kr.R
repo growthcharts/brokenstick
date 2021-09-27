@@ -70,6 +70,7 @@ kr <- function(y,
   if (!is.na(seed)) set.seed(seed)
 
   ry <- !is.na(y)
+  g <- as.integer(factor(g))  # convert character into integer
   xg <- cbind(x, g)
   type <- c(rep(2L, ncol(x)), -2L)
 
