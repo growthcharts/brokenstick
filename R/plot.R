@@ -59,6 +59,7 @@ plot.brokenstick <- function(x,
                              n_plot = 3L) {
   if (!inherits(x, "brokenstick")) stop("Argument `x` not of class brokenstick.")
   if (!any(show)) stop("At least one of `show` should be TRUE.")
+  if (missing(new_data)) stop("No data found to plot. Specify `new_data` argument.")
   install.on.demand("ggplot2", ...)
 
   # calculate brokenstick predictions, long format

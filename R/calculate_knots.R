@@ -5,37 +5,33 @@ calculate_knots <- function(x, k, knots, boundary) {
   boundary_orig <- boundary
 
   # for NULL or length not 2, set boundary to data range
-  range <- range(x, na.rm = TRUE)
-  if (length(boundary_orig) != 2) boundary <- range
+  if (length(boundary_orig) != 2L) {
+    boundary <- range(x, na.rm = TRUE)
+  }
 
   # make sure that boundary includes all knots
   if (!is.null(knots_orig)) {
-    boundary[1] <- min(min(knots_orig, na.rm = TRUE), boundary[1])
-    boundary[2] <- max(max(knots_orig, na.rm = TRUE), boundary[2])
+    boundary[1L] <- min(min(knots_orig, na.rm = TRUE), boundary[1L])
+    boundary[2L] <- max(max(knots_orig, na.rm = TRUE), boundary[2L])
   }
 
-  # set k to zero if not specified
-  if (is.null(k_orig)) k <- 0
-
-  # if there is vector input via knots and if no k specified
-  # trim knots to exclude boundary points, and calculate k
-  if (is.null(k_orig) & length(knots_orig) >= 1) {
+  if (length(knots_orig)) {
+    # if there is vector input via knots
+    # trim knots to exclude boundary points, and set k
     knots <- as.numeric(knots_orig)
-    knots <- knots[knots > boundary[1] & knots < boundary[2]]
+    knots <- knots[knots > boundary[1L] & knots < boundary[2L]]
     k <- length(knots)
-  }
-
-  # for scalar k, calculate equidense quantiles from the data
-  if (!is.null(k_orig)) {
-    if (k_orig >= 0 & k_orig <= 25) {
+  } else {
+    # no user knots, set knots from
+    if (is.null(k_orig)) k_orig <- 0L
+    if (k_orig >= 0L && k_orig <= 50L) {
       k <- k_orig
       knots <- quantile(x,
-                        probs = seq(0, 1, length.out = k + 2),
-                        na.rm = TRUE
-      )[-c(1, k + 2)]
+                        probs = seq(0, 1, length.out = k + 2L),
+                        na.rm = TRUE)[-c(1L, k + 2L)]
     }
     else {
-      stop("Number of knots outside range 0-25")
+      stop("Number of internal knots `k` outside range 0-50")
     }
 
   }

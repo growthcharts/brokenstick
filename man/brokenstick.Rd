@@ -2,127 +2,49 @@
 % Please edit documentation in R/brokenstick.R
 \name{brokenstick}
 \alias{brokenstick}
-\alias{brokenstick.default}
-\alias{brokenstick.formula}
-\alias{brokenstick.data.frame}
-\alias{brokenstick.matrix}
-\alias{brokenstick.numeric}
 \title{Fit a \code{brokenstick} model to irregular data}
 \usage{
-brokenstick(x, ...)
-
-\method{brokenstick}{default}(x, ...)
-
-\method{brokenstick}{formula}(
+brokenstick(
   formula,
   data,
-  ...,
   knots = NULL,
   boundary = NULL,
   k = NULL,
   degree = 1L,
   method = c("lmer", "kr"),
   control = control_brokenstick(),
-  seed = NA
-)
-
-\method{brokenstick}{data.frame}(
-  x,
-  y,
-  group,
-  ...,
-  knots = NULL,
-  boundary = NULL,
-  k = NULL,
-  degree = 1L,
-  method = c("lmer", "kr"),
-  control = control_brokenstick(),
-  seed = NA
-)
-
-\method{brokenstick}{matrix}(
-  x,
-  y,
-  group,
-  ...,
-  knots = NULL,
-  boundary = NULL,
-  k = NULL,
-  degree = 1L,
-  method = c("lmer", "kr"),
-  control = control_brokenstick(),
-  seed = NA
-)
-
-\method{brokenstick}{numeric}(
-  x,
-  y,
-  group,
-  ...,
-  knots = NULL,
-  boundary = NULL,
-  k = NULL,
-  degree = 1L,
-  method = c("lmer", "kr"),
-  control = control_brokenstick(),
-  seed = NA
+  seed = NA,
+  ...
 )
 }
 \arguments{
-\item{x}{Predictor variables. Depending on the context:
-\itemize{
-\item A \strong{data frame} of predictors.
-\item A \strong{matrix} of predictors.
-}
+\item{formula}{A formula specifying the outcome, the predictor and the group
+variable in \code{data}. The generic shape is \code{formula = y ~ x | group}. The
+left-hand side is the outcome, the right-hand side the predictor, and the
+name of the grouping variable occurs after the \code{|} sign. Formula treatment
+is non-standard: 1) \code{y}, \code{x} and \code{group} should be numerical vectors, 2) only
+one variable is allowed in each model term (additional variables will be ignored).}
 
-If \code{x} has one column, then also specify \code{y} and \code{group}. If \code{x} has multiple
-columns, then specify the model by a \code{formula} argument.}
-
-\item{...}{Not currently used, but required for extensibility.}
-
-\item{formula}{A formula specifying the outcome terms on the
-left-hand side, the predictor term on the right-hand side and
-the group variable after the \code{|} sign, e.g \code{formula = hgt ~ age | id}.
-One may specify additional variables, but the \code{brokenstick} model
-will ignored them.
-
-Note: This formula specification is specific to the \code{brokenstick()}
-function.}
-
-\item{data}{When a \strong{formula} is used, \code{data} is specified as:
-\itemize{
-\item A \strong{data frame} containing predictor, group and outcome variables.
-}}
+\item{data}{A data frame containing the outcome, predictor and
+group variable.}
 
 \item{knots}{Optional, but recommended. Numerical vector with the
-locations of the breaks to be placed on the values of the predictor.
-Values outside the range of the data will extend the \code{boundary}
-knots (see below) beyond the data range.}
+locations of the internal knots to be placed on the values of the predictor.}
 
-\item{boundary}{Optional. Numerical vector of
-length 2 with the left and right boundary knots. The \code{boundary}
+\item{boundary}{Optional, but recommended. Numerical vector of
+length 2 with the left and right boundary knot. The \code{boundary}
 setting is passed to \code{\link[splines:bs]{splines::bs()}} as the \code{Boundary.knots} argument.
-If not specified, the range of predictor variable is taken. Automatic
-model specification is data-dependent. However, if both \code{knots} and
-\code{boundary} are supplied, the B-spline transformation parameter do not
-depend on the data. If specified, the \code{boundary} range is internally
-expanded to include at least \code{range(knots)}. The warning
-\verb{some 'x' values beyond boundary knots may cause ill-conditioned bases}
-implies that model fitting ignores any data beyond the (expanded) boundary
-range. It is possible to prevent this warning by pre-filtering rows
-in \code{data} to the boundary range.}
+If not specified, the function determines the boundary knots as
+\code{range(x)}. When specified, the \code{boundary} range is internally
+expanded to include at least \code{range(knots)}.}
 
 \item{k}{Optional, a convenience parameter for the number of
 internal knots. If specified, then \code{k} internal knots are placed
 at equidense quantiles of the predictor. For example,
 specifying \code{k = 1} puts a knot at the 50th quantile (median),
 setting \code{k = 3} puts knots at the 25th, 50th and 75th quantiles,
-and so on.
-
-Note: Knots specified via \code{k} are data-dependent
-and do not transfer to other data sets. We recommend
-using \code{knots} and \code{boundary} over \code{k}. If both \code{k} and
-\code{knots} are specified, then \code{k} takes precendence.}
+and so on. If the user specifies both \code{k} and \code{knots} arguments
+then \code{knots} takes precedence.}
 
 \item{degree}{the degree of the spline. The broken stick model
 requires linear splines, so the default is \code{degree = 1}.
@@ -139,33 +61,18 @@ to generate.}
 \item{seed}{Seed number for \code{\link[base:Random]{base::set.seed()}}. Use \code{NA} to bypass
 seed setting.}
 
-\item{y}{Outcome variable. When \code{x} is a \strong{data frame} or \strong{matrix},
-\code{y} is specified as:
-\itemize{
-\item A \strong{data frame} with 1 numeric column.
-\item A \strong{matrix} with 1 numeric column.
-\item A numeric \strong{vector}.
-}}
-
-\item{group}{Grouping variable. When \code{x} is a \strong{data frame} or \strong{matrix},
-\code{group} is specified as:
-\itemize{
-\item A \strong{data frame} with 1 column.
-\item A \strong{matrix} with 1 column.
-\item A numeric \strong{vector}.
-}}
+\item{\dots}{Not currently used, but required for extensibility.}
 }
 \value{
 A \code{brokenstick} object.
 }
 \description{
 The \code{brokenstick()} function fits an irregularly observed series
-of measurements onto a user-specified grid of points.
-The model codes de grid by a series of linear B-splines.
-Differences between observations are expressed by one random
-effect per grid point. When multiple set of series are modelled,
-each modeled trajectory consists of straight lines that join at the
-chosen grid points, and hence look like a broken stick.
+of measurements onto a user-specified grid of points (knots).
+The model codes the grid by a series of linear B-splines.
+Each modelled trajectory consists of straight lines that join at
+the chosen knots and look like a broken stick. Differences between
+observations are expressed by a random effect per knot.
 }
 \details{
 The variance-covariance matrix of the random effects absorbs the
@@ -183,41 +90,37 @@ variance-covariance matrix of the random effects. Currently, there
 are three such models: \code{argyle}, \code{cole} and \code{none}. See \code{\link[=kr]{kr()}} and
 \code{\link[=control_brokenstick]{control_brokenstick()}} for more details.
 }
-\examples{
-train <- smocc_200[1:1198, ]
+\note{
+Note that automatic knot specification is data-dependent, and may not reproduce
+on other data. Likewise, knots specified via \code{k} are data-dependent and do not transfer
+to other  data sets. Fixing the model requires specifying both \code{knots} and
+\code{boundary}.
 
-# fit with implicit boundary c(0, 3)
-fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
+The warning "some 'x' values beyond boundary knots may cause ill-conditioned
+bases" indicates that model fitting applies to a subset of the range of \code{x},
+and can be ignored. The user may prevent the warning by pre-filtering rows
+in \code{data} to the boundary range.
+}
+\examples{
+data <- smocc_200[1:1198, ]
+fit <- brokenstick(hgt.z ~ age | id, data, knots = 0:3)
+plot(fit, data, n_plot = 9)
 
 # using KR sampler
-fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3,
-                   method = "kr", seed = 1)
-
+fit <- brokenstick(hgt.z ~ age | id,
+  data = data, knots = 0:3,
+  method = "kr", seed = 1
+)
 \donttest{
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4)
 boundary <- c(0, 3)
-fit_lmer <- brokenstick(hgt.z ~ age | id, data = train,
-                        knots = knots, boundary = boundary)
-fit_kr <- brokenstick(hgt.z ~ age | id, data = train, knots = knots,
-                      boundary = boundary, method = "kr")
+fit_lmer <- brokenstick(hgt.z ~ age | id,
+  data = data,
+  knots = knots, boundary = boundary
+)
+fit_kr <- brokenstick(hgt.z ~ age | id,
+  data = data, knots = knots,
+  boundary = boundary, method = "kr"
+)
 }
-
-# Four ways to specify the same model
-# Formula interface
-mod1 <- brokenstick(hgt.z ~ age | id, train)
-
-# XY interface - numeric vector
-mod2 <- with(train, brokenstick(age, hgt.z, id))
-identical(mod1, mod2)
-
-# XY interface - data.frame
-mod3 <- with(train, brokenstick(data.frame(age), hgt.z, id))
-identical(mod1, mod3)
-
-# XY interface - matrix
-tt <- as.matrix(train[, c(1, 2, 7)])
-mod4 <- brokenstick(tt[, "age", drop = FALSE],
-                    tt[, "hgt.z", drop = FALSE],
-                    tt[, "id", drop = FALSE])
-identical(mod1, mod4)
 }
