@@ -30,13 +30,13 @@ to extract knots.}
 \item{\code{degree}}{The \code{degree} of the B-spline. See \code{\link[splines:bs]{splines::bs()}}. Either
 0 (constant model) or 1 (broken stick model).}
 \item{\code{model}}{Not used.}
-\item{\code{method}}{Either \code{lmer} or \code{kr}, identifying the fitting model.}
-\item{\code{control}}{List of control option returned by \code{\link[=control_brokenstick]{control_brokenstick()}}.}
+\item{\code{method}}{Either \code{"kr"} or \code{"lmer"}, identifying the fitting model.}
+\item{\code{control}}{List of control options returned by \code{\link[=set_control]{set_control()}}.}
 \item{\code{beta}}{Numeric vector with fixed effect estimates.}
 \item{\code{omega}}{Numeric matrix with variance-covariance estimates of the
-random effect.}
+broken stick estimates.}
 \item{\code{sigma2j}}{Numeric vector with estimates of the residual variance per
-group. Only used by method \code{kr}.}
+group. Only used by method \code{"kr"}.}
 \item{\code{sigma2}}{Numeric scalar with the mean residual variance.}
 \item{\code{draws}}{Numeric matrix with multiple imputations. The number of
 rows is equal to the number of missing values in \code{y}. The number of columns

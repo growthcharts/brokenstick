@@ -12,8 +12,9 @@ brokenstick(
   k = NULL,
   degree = 1L,
   method = c("kr", "lmer"),
-  control = control_brokenstick(),
+  control = set_control(method),
   seed = NA,
+  na.action = na.exclude,
   ...
 )
 }
@@ -56,16 +57,19 @@ only \code{degree = 0} and \code{degree = 1}.}
 Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}).
 Version 1.1.1.9000 changed the default to \code{method = "kr"}.}
 
-\item{control}{A list with parameters. Use \code{control_brokenstick()}
-to generate.}
+\item{control}{A list with parameters. Use \code{\link[=control_kr]{control_kr()}}\verb{, }\code{\link[lme4:lmerControl]{lme4::lmerControl()}}\code{or}\code{\link[=set_control]{set_control()}}`.}
 
 \item{seed}{Seed number for \code{\link[base:Random]{base::set.seed()}}. Use \code{NA} to bypass
-seed setting.}
+seed setting. Only used by method \code{"kr"}.}
+
+\item{na.action}{A function that indicates what \code{\link[lme4:lmer]{lme4::lmer()}} should so
+when the data contain \code{NA}s. Default set to \code{na.exclude}. Only used by
+method \code{"lmer"}.}
 
 \item{\dots}{Not currently used, but required for extensibility.}
 }
 \value{
-A \code{brokenstick} object.
+A object of class \code{brokenstick}.
 }
 \description{
 The \code{brokenstick()} function fits an irregularly observed series
@@ -76,20 +80,25 @@ the chosen knots and look like a broken stick. Differences between
 observations are expressed by a random effect per knot.
 }
 \details{
-The variance-covariance matrix of the random effects absorbs the
-relations over time. By default, this matrix is estimated
-as unstructured by \code{\link[lme4:lmer]{lme4::lmer()}}.
-This estimate may be unstable if
-the number of children is small relative to the number of specified
-knots. The function can be time consuming for data sets with thousands of
-children.
+The default algorithm since version 2.0 is the Bayesian Kasim-Raudenbush
+sampler (\code{method = "kr"}). The variance-covariance matrix of the broken stick
+estimates absorbs the relations over time. The \code{"kr"} method allows
+enforcing a simple structure on this variance-covariance matrix. Currently,
+there are three such correlation models: \code{"none"} (default), \code{"argyle"}
+and \code{"cole"}. Specify the \code{seed} argument for reproducibility.
+See \code{\link[=kr]{kr()}} for more details.
 
-An alternative - often faster for models with many random effects -
-is to use the Bayesian Kasim-Raudenbush sampler (method \code{kr}). That
-method also allow for enforcing a simple structure on the
-variance-covariance matrix of the random effects. Currently, there
-are three such models: \code{argyle}, \code{cole} and \code{none}. See \code{\link[=kr]{kr()}} and
-\code{\link[=control_brokenstick]{control_brokenstick()}} for more details.
+The alternative is \code{method = "lmer"}, which fits the broken stick model by
+\code{\link[lme4:lmer]{lme4::lmer()}}. With this method, the variance-covariance matrix can only be
+unstructured. This estimate may be unstable if the number of children is
+small relative to the number of specified knots. The default setting
+in \verb{[lme4::lmerControl()]} is  \code{check.nobs.vs.nRE= "stop"}. The
+\verb{[set_control()]} changes this to \code{check.nobs.vs.nRE= "warning"}, since
+otherwise many broken stick models would not run at all. The method
+throws warnings that estimates are not stable. It can be time
+consuming for data sets with thousands of children, or for models with
+many (say > 10) internal knots. Despite the warnings, the results often
+look reasonable.
 }
 \note{
 Note that automatic knot specification is data-dependent, and may not reproduce

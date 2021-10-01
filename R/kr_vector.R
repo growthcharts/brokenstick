@@ -1,9 +1,7 @@
 ## author: Stef van Buuren, 2020
 
 kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
-                      model = "none",
-                      runin = 100L, ndraw = 10L, par_skip = 10L,
-                      imp_skip = Inf) {
+                      control) {
 
   symridge <- function(x, ridge = 0.0001, ...) {
     x <- (x + t(x))/2
@@ -14,7 +12,7 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   ## hack to get knots, assumes that g is last
   kn <- as.numeric(sub(".*[_]", "", colnames(x)[-ncol(x)]))
 
-  # structure for var-cov model
+  # structure for var-cov cormodel
   grid <- expand.grid(t2 = kn, t1 = kn)
   grid <- data.frame(grid[grid$t1 < grid$t2, ], r = NA)
 
@@ -25,15 +23,15 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   }
 
   ## Initialize
-  n.iter <- runin + ndraw * par_skip
-  draw <- c(rep(FALSE, runin), rep(c(rep(FALSE, par_skip - 1L), TRUE), ndraw))
+  ti <- control$start + control$n * control$thin
+  draw <- c(rep(FALSE, control$start),
+            rep(c(rep(FALSE, control$thin - 1L), TRUE), control$n))
 
-  nimp <- floor(ndraw / imp_skip)
-  if (nimp)
-    impute <- c(rep(FALSE, runin),
-                rep(c(rep(FALSE, min(imp_skip, ndraw) - 1), TRUE), nimp))
+  if (control$m)
+    impute <- c(rep(FALSE, control$start),
+                rep(c(rep(FALSE, min(control$thin_imp, control$n) - 1L), TRUE), control$m))
   else
-    impute <- rep(FALSE, n.iter)
+    impute <- rep(FALSE, ti)
 
   if (is.null(wy)) wy <- !ry
   n.class <- length(unique(x[, type == -2]))
@@ -55,15 +53,15 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   sigma2.0 <- 1
   theta <- 1
 
-  store_beta <- matrix(NA, nrow = ndraw, ncol = n.rc)
-  store_omega <- array(NA, c(ndraw, n.rc, n.rc))
-  store_sigma2j <- matrix(NA, nrow = ndraw, ncol = n.class)
-  store_sigma2 <- matrix(NA, nrow = ndraw, ncol = 1L)
-  store_draws <- matrix(NA, nrow = nimp, ncol = sum(wy))
+  store_beta <- matrix(NA, nrow = control$n, ncol = n.rc)
+  store_omega <- array(NA, c(control$n, n.rc, n.rc))
+  store_sigma2j <- matrix(NA, nrow = control$n, ncol = n.class)
+  store_sigma2 <- matrix(NA, nrow = control$n, ncol = 1L)
+  store_draws <- matrix(NA, nrow = control$m, ncol = sum(wy))
   count_par <- count_imp <- 0L
 
   ## Execute Gibbs sampler
-  for (iter in seq_len(n.iter)) {
+  for (iter in seq_len(ti)) {
     ## Draw bees
     for (class in seq_len(n.class)) {
       vv <- inv.sigma2[class] * X.SS[[class]] + inv.psi
@@ -77,7 +75,7 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     mu <- colMeans(bees) + drop(rnorm(n = n.rc) %*% chol.default(chol2inv(chol.default(symridge(inv.psi))) / n.class))
 
     # Enforce simple structure on psi
-    method <- ifelse(n.iter <= runin, model, model)
+    method <- ifelse(ti <= control$start, control$cormodel, control$cormodel)
     psi <- crossprod(t(t(bees) - mu))
     psi_smoothed <- smooth_covariance(grid, psi, method = method)
 
@@ -140,7 +138,7 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     type = type,
     wy = wy,
     intercept = intercept,
-    n.iter = n.iter,
+    n.iter = ti,
     wy = wy,
     n.class = n.class,
     bees = bees,

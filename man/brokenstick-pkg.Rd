@@ -39,7 +39,7 @@ The following functions are user-oriented helpers:
 
 The following functions perform the calculations:
 \tabular{ll}{
-\code{control_brokenstick()}\tab Set controls to steer calculations\cr
+\code{set_control()}\tab Set controls to steer calculations\cr
 \code{EB()} \tab Empirical Bayes predictor for random effects\cr
 \code{kr()} \tab Kasim-Raudenbush sampler for two-level normal model \cr
 \code{make_basis()} \tab Create linear splines basis\cr

@@ -8,17 +8,9 @@
 #' @param y Vector with outcome value
 #' @param x Matrix with predictor value
 #' @param g Vector with group values
-#' @param control A list with elements:
-#'
-#'    * `model`: Correlation model: `"argyle"`, `"cole"` or `"none"`
-#'    * `runin`: Number of run-in iterations
-#'    * `ndraws`: Number of parameter draws
-#'    * `par_skip`: Number of iterations to next parameter draw
-#'    * `imp_skip`: Number of iterations to next outcome draw
-#'
+#' @param control A list created by [control_kr()]
 #' @param seed Seed number for [base::set.seed()]. Use `NA` to bypass
 #' seed setting.
-#' @param na.action Not really used here
 #' @return A list with components:
 #'
 #'     * `beta`  Fixed effects
@@ -30,30 +22,30 @@
 #' @author Stef van Buuren, based on [mice::mice.impute.2l.norm()]
 #'
 #' @details
-#' The calculation time of [lme4::lmer()] rapidly increases with the
-#' number of random effects. More than 10 random effects (knots)
-#' takes significant time, and beyond 15 knots generally impossible
-#' to fit.
-#'
-#' In contrast, the speed of the Kasim-Raudenbush sampler is almost
+#' The speed of the Kasim-Raudenbush sampler is almost
 #' independent of the number of random effect, and foremost depends
-#' on the *total number of iterations*: `runin` + `ndraws` * `par_skip`.
+#' on the *total number of iterations*: `end` in the `control` list.
 #'
-#' The defaults `ndraws = 200` and `par_skip = 1` provides a *good*
-#' approximation to the variance-covariance matrix of the random
-#' effects. Increase `par_skip` to `10` (*better*) or `20` (*best*) to
-#' obtain closer approximations at the expense of a linear
-#' increase in calculation time. Setting `ndraws = 50` (or lower)
-#' will reduce computation time, but the result should be treated as
-#' *indicative*.
+#' The defaults `start = 101`, `end = 300` and `thin = 1`
+#' provide 200 draws with a *reasonable* approximation to the variance-covariance
+#' matrix of the random effects.
 #'
-#' It is possible to subsample the parameter draws at every
-#' `imp_skip` iteration, and draw one or more synthetic outcome values
-#' from the posterior distribution of the outcome. The number of
-#' multiple imputations is equal to `floor(ndraws / imp_skip)`. Thus,
-#' setting `imp_skip = 20L` returns 200 / 20 = 10 multiple
-#' imputations for each missing value in the outcome. The default does
-#' not produce imputations.
+#' For a closer approximations with 200 draws set `end = 2100` with
+#' `thin = 10` (*better*) or `end = 4100` with `thin = 20` (*best*),
+#' at the expense of a linear increase in calculation time. Drawing fewer
+#' than 50 observations is not recommended, and such results are best treated
+#' as *indicative*.
+#'
+#' It is possible to draw multiple imputations for a subset of parameter draws.
+#' The `thin_imp` should be specified as a multiple of `thin`. For example,
+#' if `thin_imp` is 10 times `thin`, then the procedure will calculate and
+#' store multiple imputations in every tenth of the parameter draws. Thus,
+#' for 200 parameter draws there will be 20 draws from the posterior
+#' distribution of the outcome variable.
+#'
+#' The total number of parameter draws equals `(end - start + 1) / thin`. The number
+#' of multiple imputations equals `(end - start + 1) / thin_imp`. By default,
+#' `thin_imp` is `Inf` and does not produce imputations.
 #'
 #' @references
 #' Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested
@@ -64,8 +56,7 @@ kr <- function(y,
                x,
                g,
                control,
-               seed,
-               na.action) {
+               seed) {
 
   if (!is.na(seed)) set.seed(seed)
 
@@ -74,12 +65,7 @@ kr <- function(y,
   xg <- cbind(x, g)
   type <- c(rep(2L, ncol(x)), -2L)
 
-  res <- kr_vector(y, ry, xg, type, intercept = FALSE,
-                   model = control$model,
-                   runin = control$runin,
-                   ndraw = control$ndraw,
-                   par_skip = control$par_skip,
-                   imp_skip = control$imp_skip)
+  res <- kr_vector(y, ry, xg, type, intercept = FALSE, control = control)
   dimnames(res$omega) <- list(colnames(x), colnames(x))
   obj <- list(beta = res$beta,
               omega = res$omega,

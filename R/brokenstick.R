@@ -45,11 +45,15 @@
 #' Kasim-Raudenbush sampler) or `"lmer"` (for [lme4::lmer()]).
 #' Version 1.1.1.9000 changed the default to `method = "kr"`.
 #'
-#' @param control A list with parameters. Use `control_brokenstick()`
-#' to generate.
+#' @param control A list with parameters. Use [brokenstick::control_kr()]`,
+#' `[lme4::lmerControl()]` or `[brokenstick::set_control()]`.
 #'
 #' @param seed Seed number for [base::set.seed()]. Use `NA` to bypass
-#' seed setting.
+#' seed setting. Only used by method `"kr"`.
+#'
+#' @param na.action A function that indicates what [lme4::lmer()] should so
+#' when the data contain `NA`s. Default set to `na.exclude`. Only used by
+#' method `"lmer"`.
 #'
 #' @param \dots Not currently used, but required for extensibility.
 #'
@@ -60,24 +64,29 @@
 #' `boundary`.
 #'
 #' @details
-#' The variance-covariance matrix of the random effects absorbs the
-#' relations over time. By default, this matrix is estimated
-#' as unstructured by [lme4::lmer()].
-#' This estimate may be unstable if
-#' the number of children is small relative to the number of specified
-#' knots. The function can be time consuming for data sets with thousands of
-#' children.
+#' The default algorithm since version 2.0 is the Bayesian Kasim-Raudenbush
+#' sampler (`method = "kr"`). The variance-covariance matrix of the broken stick
+#' estimates absorbs the relations over time. The `"kr"` method allows
+#' enforcing a simple structure on this variance-covariance matrix. Currently,
+#' there are three such correlation models: `"none"` (default), `"argyle"`
+#' and `"cole"`. Specify the `seed` argument for reproducibility.
+#' See [kr()] for more details.
 #'
-#' An alternative - often faster for models with many random effects -
-#' is to use the Bayesian Kasim-Raudenbush sampler (method `kr`). That
-#' method also allow for enforcing a simple structure on the
-#' variance-covariance matrix of the random effects. Currently, there
-#' are three such models: `argyle`, `cole` and `none`. See [kr()] and
-#' [control_brokenstick()] for more details.
+#' The alternative is `method = "lmer"`, which fits the broken stick model by
+#' [lme4::lmer()]. With this method, the variance-covariance matrix can only be
+#' unstructured. This estimate may be unstable if the number of children is
+#' small relative to the number of specified knots. The default setting
+#' in `[lme4::lmerControl()]` is  `check.nobs.vs.nRE= "stop"`. The
+#' `[set_control()]` changes this to `check.nobs.vs.nRE= "warning"`, since
+#' otherwise many broken stick models would not run at all. The method
+#' throws warnings that estimates are not stable. It can be time
+#' consuming for data sets with thousands of children, or for models with
+#' many (say > 10) internal knots. Despite the warnings, the results often
+#' look reasonable.
 #'
 #' @return
 #'
-#' A `brokenstick` object.
+#' A object of class `brokenstick`.
 #'
 #' @examples
 #' data <- smocc_200[1:1198, ]
@@ -109,8 +118,9 @@ brokenstick <- function(formula,
                         k = NULL,
                         degree = 1L,
                         method = c("kr", "lmer"),
-                        control = control_brokenstick(),
+                        control = set_control(method),
                         seed = NA,
+                        na.action = na.exclude,
                         ...) {
   stopifnot(
     inherits(formula, "formula"),
@@ -120,15 +130,16 @@ brokenstick <- function(formula,
   data <- data.frame(data)
   method <- match.arg(method)
   names <- parse_formula(formula)
-  brokenstick_bridge(data, names, knots, boundary, k, degree, method, control, seed, ...)
+  brokenstick_bridge(data, names, knots, boundary, k, degree, method, control,
+                     seed, na.action, ...)
 }
 
 # ------------------------------------------------------------------------------
 # Bridge
 
 brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
-                               method, control, seed, warn_splines = FALSE,
-                               ...) {
+                               method, control, seed, na.action,
+                               warn_splines = FALSE, ...) {
   y <- data[[names[["y"]]]]
   x <- data[[names[["x"]]]]
   g <- data[[names[["g"]]]]
@@ -156,8 +167,8 @@ brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
     fit <- brokenstick_impl_lmer(
       data = data_pad,
       formula = fm,
-      control = control$lmer,
-      na.action = control$na.action
+      control = control,
+      na.action = na.action
     )
   }
   if (method == "kr") {
@@ -165,9 +176,8 @@ brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
       y = y,
       x = X,
       g = g,
-      control = control$kr,
-      seed = seed,
-      na.action = control$na.action
+      control = control,
+      seed = seed
     )
   }
 
@@ -213,7 +223,7 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
   )
 }
 
-brokenstick_impl_kr <- function(y, x, g, control, seed, na.action) {
+brokenstick_impl_kr <- function(y, x, g, control, seed) {
 
   # Kasim-Raudenbush sampler
   kr(
@@ -221,7 +231,6 @@ brokenstick_impl_kr <- function(y, x, g, control, seed, na.action) {
     x = x,
     g = g,
     control = control,
-    seed = seed,
-    na.action = na.action
+    seed = seed
   )
 }

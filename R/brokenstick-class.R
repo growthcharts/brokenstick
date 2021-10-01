@@ -24,13 +24,13 @@
 #'    \item{`degree`}{The `degree` of the B-spline. See [splines::bs()]. Either
 #'    0 (constant model) or 1 (broken stick model).}
 #'    \item{`model`}{Not used.}
-#'    \item{`method`}{Either `lmer` or `kr`, identifying the fitting model.}
-#'    \item{`control`}{List of control option returned by [control_brokenstick()].}
+#'    \item{`method`}{Either `"kr"` or `"lmer"`, identifying the fitting model.}
+#'    \item{`control`}{List of control options returned by [set_control()].}
 #'    \item{`beta`}{Numeric vector with fixed effect estimates.}
 #'    \item{`omega`}{Numeric matrix with variance-covariance estimates of the
-#'    random effect.}
+#'    broken stick estimates.}
 #'    \item{`sigma2j`}{Numeric vector with estimates of the residual variance per
-#'    group. Only used by method `kr`.}
+#'    group. Only used by method `"kr"`.}
 #'    \item{`sigma2`}{Numeric scalar with the mean residual variance.}
 #'    \item{`draws`}{Numeric matrix with multiple imputations. The number of
 #'    rows is equal to the number of missing values in `y`. The number of columns

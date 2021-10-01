@@ -1,5 +1,7 @@
 # brokenstick 1.1.1.9000
 
+- Removes a layer in the control list
+- Renames `control_brokenstick()` to `set_control()`
 - Changes the default estimation algorithm to `kr`, the Kasim-Raudenbush sampler
 - Improves error messages of edge cases in `test-brokenstick_edge.R`
 - Stabilises the `rgamma()` calls in KR-algorithm for edge cases
