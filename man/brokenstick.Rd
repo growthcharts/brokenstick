@@ -108,24 +108,23 @@ to other  data sets. Fixing the model requires specifying both \code{knots} and
 }
 \examples{
 data <- smocc_200[1:1198, ]
-fit <- brokenstick(hgt.z ~ age | id, data, knots = 0:3)
-plot(fit, data, n_plot = 9)
+f1 <- brokenstick(hgt.z ~ age | id, data, knots = 0:3, seed = 1)
+plot(f1, data, n_plot = 9)
 
-# using KR sampler
-fit <- brokenstick(hgt.z ~ age | id,
-  data = data, knots = 0:3,
-  method = "kr", seed = 1
-)
+# using lmer
+f2 <- brokenstick(hgt.z ~ age | id, data, knots = 0:3, method = "lmer")
+plot(f2, data, n_plot = 9)
+
 \donttest{
-knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4)
-boundary <- c(0, 3)
-fit_lmer <- brokenstick(hgt.z ~ age | id,
-  data = data,
-  knots = knots, boundary = boundary
-)
-fit_kr <- brokenstick(hgt.z ~ age | id,
-  data = data, knots = knots,
-  boundary = boundary, method = "kr"
-)
+# a model with more knots
+knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24, 36) / 12, 4)
+
+# method kr takes about 2 seconds
+f3 <- brokenstick(hgt.z ~ age | id, data, knots, seed = 2)
+plot(f3, data, n_plot = 9)
+
+# method lmer takes about 40 seconds
+f4 <- brokenstick(hgt.z ~ age | id, data, knots, method = "lmer")
+plot(f4, data, n_plot = 9)
 }
 }
