@@ -2,15 +2,17 @@
 
 kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
                       control) {
-
   symridge <- function(x, ridge = 0.0001, ...) {
-    x <- (x + t(x))/2
-    if (nrow(x) == 1L) return(x)
+    x <- (x + t(x)) / 2
+    if (nrow(x) == 1L) {
+      return(x)
+    }
     x + diag(diag(x) * ridge)
   }
 
   ## hack to get knots, assumes that g is last
-  kn <- as.numeric(sub(".*[_]", "", colnames(x)[-ncol(x)]))
+  xnames <- colnames(x)[-ncol(x)]
+  kn <- as.numeric(sub(".*[_]", "", xnames))
 
   # structure for var-cov cormodel
   grid <- expand.grid(t2 = kn, t1 = kn)
@@ -23,16 +25,6 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   }
 
   ## Initialize
-  ti <- control$start + control$n * control$thin
-  draw <- c(rep(FALSE, control$start),
-            rep(c(rep(FALSE, control$thin - 1L), TRUE), control$n))
-
-  if (control$m)
-    impute <- c(rep(FALSE, control$start),
-                rep(c(rep(FALSE, min(control$thin_imp, control$n) - 1L), TRUE), control$m))
-  else
-    impute <- rep(FALSE, ti)
-
   if (is.null(wy)) wy <- !ry
   n.class <- length(unique(x[, type == -2]))
   if (n.class == 0) stop("No class variable")
@@ -53,15 +45,34 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   sigma2.0 <- 1
   theta <- 1
 
+  store_this_imp <- store_this_draw <- rep(FALSE, control$end)
+  if (control$n) {
+    store_this_draw[control$start + (1L:control$n) * control$thin] <- TRUE
+  }
+  if (control$m) {
+    store_this_imp[control$start + (1L:control$m) * control$thin_imp] <- TRUE
+  }
+
   store_beta <- matrix(NA, nrow = control$n, ncol = n.rc)
-  store_omega <- array(NA, c(control$n, n.rc, n.rc))
+  colnames(store_beta) <- xnames
+
+  pnames <- outer(kn, kn, paste, sep = "_")
+  pnames <- t(pnames)[lower.tri(t(pnames), diag = TRUE)]
+  store_omega <- matrix(NA, nrow = control$n, ncol = length(pnames))
+  colnames(store_omega) <- pnames
+
   store_sigma2j <- matrix(NA, nrow = control$n, ncol = n.class)
+  colnames(store_sigma2j) <- unique(x[, type == -2])
+
   store_sigma2 <- matrix(NA, nrow = control$n, ncol = 1L)
-  store_draws <- matrix(NA, nrow = control$m, ncol = sum(wy))
+
+  store_imps <- matrix(NA, nrow = control$m, ncol = sum(wy))
+  if (control$m) row.names(store_imps) <- as.character(1:control$m)
+
   count_par <- count_imp <- 0L
 
   ## Execute Gibbs sampler
-  for (iter in seq_len(ti)) {
+  for (iter in seq_len(control$end)) {
     ## Draw bees
     for (class in seq_len(n.class)) {
       vv <- inv.sigma2[class] * X.SS[[class]] + inv.psi
@@ -75,20 +86,20 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     mu <- colMeans(bees) + drop(rnorm(n = n.rc) %*% chol.default(chol2inv(chol.default(symridge(inv.psi))) / n.class))
 
     # Enforce simple structure on psi
-    method <- ifelse(ti <= control$start, control$cormodel, control$cormodel)
     psi <- crossprod(t(t(bees) - mu))
-    psi_smoothed <- smooth_covariance(grid, psi, method = method)
+    psi_smoothed <- smooth_covariance(grid, psi, method = control$cormodel)
 
     # Draw psi
     # Add ridge to prevent inversion error with semi-definite psi_smoothed
-    #inv.psi <- rWishart(
+    # inv.psi <- rWishart(
     #  n = 1, df = n.class - n.rc - 1,
     #  Sigma = chol2inv(chol.default(psi_smoothed + ridge))
-    #)[, , 1L]
-    nu <- max(n.class - n.rc - 1L, 1L)  # prevent negative df
+    # )[, , 1L]
+    nu <- max(n.class - n.rc - 1L, 1L) # prevent negative df
     inv.psi <- matrixsampling::rwishart(
       n = 1L, nu = nu,
-      Sigma = chol2inv(chol.default(symridge(psi_smoothed))))[, , 1L]
+      Sigma = chol2inv(chol.default(symridge(psi_smoothed)))
+    )[, , 1L]
 
     ## Draw sigma2
     shape <- n.g / 2 + 1 / (2 * theta)
@@ -103,33 +114,42 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     shape <- max(n.class / 2 - 1, 0.01) # Prevent negative shape
     rg <- rgamma(1,
                  shape = shape,
-                 scale = 2 / (n.class * (sigma2.0 / H - log(sigma2.0) + log(G) - 1)))
+                 scale = 2 / (n.class * (sigma2.0 / H - log(sigma2.0) + log(G) - 1))
+    )
     rg <- max(rg, 0.00001) # Prevent extreme
     theta <- 1 / rg
 
     # Save draws
-    if (draw[iter]) {
+    if (store_this_draw[iter]) {
       count_par <- count_par + 1L
       store_beta[count_par, ] <- mu
-      store_omega[count_par, , ] <- chol2inv(chol.default(symridge(inv.psi)))
-      store_sigma2j[count_par, ] <- 1/inv.sigma2
+      cov <- chol2inv(chol.default(symridge(inv.psi)))
+      store_omega[count_par, ] <- cov[lower.tri(cov, diag = TRUE)]
+      store_sigma2j[count_par, ] <- 1 / inv.sigma2
       store_sigma2[count_par, ] <- mean(store_sigma2j[count_par, ])
     }
 
-    if (impute[iter]) {
+    if (store_this_imp[iter]) {
       count_imp <- count_imp + 1L
       imps <- rnorm(n = sum(wy), sd = sqrt(1 / inv.sigma2[gf.full[wy]])) +
         rowSums(as.matrix(x[wy, type == 2, drop = FALSE]) * bees[gf.full[wy], ])
-      store_draws[count_imp, ] <- imps
+      store_imps[count_imp, ] <- imps
     }
   }
 
+  # convert to coda::mcmc
+  mcmc <- list(
+    beta = mcmc(store_beta, start = control$start, thin = control$thin),
+    omega = mcmc(store_omega, start = control$start, thin = control$thin),
+    sigma2 = mcmc(store_sigma2, start = control$start, thin = control$thin),
+    sigma2j = mcmc(store_sigma2j, start = control$start, thin = control$thin)
+  )
+
   # post-process estimates
   beta <- colMeans(store_beta)
-  omega <- apply(store_omega, c(2L, 3L), mean)
+  omega <- colMeans(store_omega)
   sigma2j <- colMeans(store_sigma2j)
   sigma2 <- colMeans(store_sigma2)
-  draws <- t(store_draws)
 
   obj <- list(
     y = y,
@@ -138,7 +158,6 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     type = type,
     wy = wy,
     intercept = intercept,
-    n.iter = ti,
     wy = wy,
     n.class = n.class,
     bees = bees,
@@ -147,12 +166,12 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     inv.sigma2 = inv.sigma2,
     sigma2.0 = sigma2.0,
     theta = theta,
-    imps = draws,
+    imps = t(store_imps),
     beta = beta,
     omega = omega,
     sigma2j = sigma2j,
     sigma2 = sigma2,
-    draws = draws
+    mcmc = mcmc
   )
   class(obj) <- "kr_vector"
   obj

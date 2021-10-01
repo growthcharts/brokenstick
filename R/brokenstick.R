@@ -191,10 +191,10 @@ brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
     omega = fit$omega,
     sigma2j = fit$sigma2j,
     sigma2 = fit$sigma2,
-    draws = fit$draws
+    imps = fit$imps,
+    mcmc = fit$mcmc
   )
 }
-
 
 # ------------------------------------------------------------------------------
 # Implementation

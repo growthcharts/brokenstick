@@ -22,38 +22,37 @@ set_control <- function(method = c("kr", "lmer"),
 }
 
 #' Set controls for Kasim-Raudenbush sampler
-#'
+#' @param n        Integer. Number of samples from posterior. Default:  `n = 200`.
+#' @param m        Integer. Number of multiple imputations. Default: `m = 0`.
+#' @param start    Integer. The iteration number of the first observation
+#' @param thin     Integer. The thinning interval between consecutive observations
 #' @param cormodel String indicating the correlation model:
 #'                 `"none"` (default), `"argyle"` or `"cole"`
-#' @param m        Integer. Number of multiple imputations. The default `m = 0L`.
-#' @param start    Integer. The iteration number of the first observation
-#' @param end      Integer. The iteration number of the last observation
-#' @param thin     Integer. The thinning interval between consecutive observations
-#' @return         A list with five components
+#' @return         A list with five components. The function calculates parameters
+#'                 `end` (the iteration number of the last iteration) and
+#'                 `thin_imp` (thinning factor for multiple imputations) from the
+#'                 other inputs.
 #' @export
-control_kr <- function(cormodel = c("none", "argyle", "cole"),
+control_kr <- function(n = 200L,
                        m = 0L,
-                       start = 101L,
-                       end = 300L,
-                       thin = 1L) {
+                       start = 100L,
+                       thin = 1L,
+                       cormodel = c("none", "argyle", "cole")) {
   cormodel <- match.arg(cormodel)
-  n <- trunc((end - start + 1L) / thin)
-  # browser()
+
+  end <- start + n * thin
   if (m > n) {
-    stop("Number of imputations (m = ", m, ") exceeds number of draws: ", n, ".")
+    stop("Number of imputations (m = ", m, ") exceeds number of parameter draws (n = ", n, ").")
   }
-  if (m > 0L && n %% m != 0L) {
-    stop("Number of imputations (m = ", m, ") not a divisor of the number of draws: ", n, ".")
-  }
-  thin_imp <- ifelse(m, as.integer(n / m), Inf)
+  thin_imp <- ifelse(m, as.integer((end - start) / m), Inf)
 
   list(
-    cormodel = cormodel,
-    m = m,
     n = n,
+    m = m,
     start = start,
     end = end,
     thin = thin,
-    thin_imp = thin_imp
+    thin_imp = thin_imp,
+    cormodel = cormodel
   )
 }

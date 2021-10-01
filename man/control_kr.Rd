@@ -5,27 +5,30 @@
 \title{Set controls for Kasim-Raudenbush sampler}
 \usage{
 control_kr(
-  cormodel = c("none", "argyle", "cole"),
+  n = 200L,
   m = 0L,
-  start = 101L,
-  end = 300L,
-  thin = 1L
+  start = 100L,
+  thin = 1L,
+  cormodel = c("none", "argyle", "cole")
 )
 }
 \arguments{
-\item{cormodel}{String indicating the correlation model:
-\code{"none"} (default), \code{"argyle"} or \code{"cole"}}
+\item{n}{Integer. Number of samples from posterior. Default:  \code{n = 200}.}
 
-\item{m}{Integer. Number of multiple imputations. The default \code{m = 0L}.}
+\item{m}{Integer. Number of multiple imputations. Default: \code{m = 0}.}
 
 \item{start}{Integer. The iteration number of the first observation}
 
-\item{end}{Integer. The iteration number of the last observation}
-
 \item{thin}{Integer. The thinning interval between consecutive observations}
+
+\item{cormodel}{String indicating the correlation model:
+\code{"none"} (default), \code{"argyle"} or \code{"cole"}}
 }
 \value{
-\preformatted{    A list with five components
+\preformatted{    A list with five components. The function calculates parameters
+            `end` (the iteration number of the last iteration) and
+            `thin_imp` (thinning factor for multiple imputations) from the
+            other inputs.
 }
 }
 \description{

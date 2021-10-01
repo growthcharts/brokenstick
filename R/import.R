@@ -1,3 +1,4 @@
+#' @importFrom coda            mcmc
 #' @importFrom dplyr           bind_rows bind_cols filter group_by
 #'                             mutate pull relocate select
 #'                             starts_with ungroup `%>%`

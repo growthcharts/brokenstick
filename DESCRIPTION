@@ -15,6 +15,7 @@ Description: The broken stick model describes a set of individual curves by a
 Depends:
     R (>= 3.5.0)
 Imports:
+    coda,
     dplyr,
     lme4,
     matrixsampling,

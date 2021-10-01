@@ -66,12 +66,18 @@ kr <- function(y,
   type <- c(rep(2L, ncol(x)), -2L)
 
   res <- kr_vector(y, ry, xg, type, intercept = FALSE, control = control)
-  dimnames(res$omega) <- list(colnames(x), colnames(x))
+
+  # fold triangular vector into var-cov matrix
+  omega <- matrix(0, ncol(x), ncol(x))
+  omega[lower.tri(omega, diag = TRUE)] <- res$omega
+  omega[upper.tri(omega)] <- t(omega)[upper.tri(t(omega))]
+  row.names(omega) <- colnames(omega) <- colnames(x)
   obj <- list(beta = res$beta,
-              omega = res$omega,
+              omega = omega,
               sigma2j = res$sigma2j,
               sigma2 = res$sigma2,
-              draws = res$draws)
+              imps = res$imps,
+              mcmc = res$mcmc)
   class(obj) <- "kr"
   obj
 }
