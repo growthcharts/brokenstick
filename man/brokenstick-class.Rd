@@ -29,7 +29,6 @@ to extract knots.}
 \code{\link[=get_knots]{get_knots()}} to extract knots.}
 \item{\code{degree}}{The \code{degree} of the B-spline. See \code{\link[splines:bs]{splines::bs()}}. Either
 0 (constant model) or 1 (broken stick model).}
-\item{\code{model}}{Not used.}
 \item{\code{method}}{Either \code{"kr"} or \code{"lmer"}, identifying the fitting model.}
 \item{\code{control}}{List of control options returned by \code{\link[=set_control]{set_control()}}.}
 \item{\code{beta}}{Numeric vector with fixed effect estimates.}
@@ -38,16 +37,16 @@ broken stick estimates.}
 \item{\code{sigma2j}}{Numeric vector with estimates of the residual variance per
 group. Only used by method \code{"kr"}.}
 \item{\code{sigma2}}{Numeric scalar with the mean residual variance.}
-\item{\code{draws}}{Numeric matrix with multiple imputations. The number of
-rows is equal to the number of missing values in \code{y}. The number of columns
-depends on \code{imp_skip}. Only used by \code{kr} if \code{imp_skip} is set.}
+\item{\code{draws}}{Numeric matrix with multiple imputations \code{m}. The number of
+rows is equal to the number of missing values in the outcome vector \code{y}.
+The number of columns equals \code{m}. Only created by \code{"kr"}.}
 }
 }
 
 \references{
-van Buuren S (2020).
+van Buuren S (2021).
 Broken Stick Model for Irregular Longitudinal Data. \emph{In preparation}.
 }
 \author{
-Stef van Buuren, 2020
+Stef van Buuren, 2021
 }

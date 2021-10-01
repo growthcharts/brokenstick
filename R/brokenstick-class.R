@@ -23,7 +23,6 @@
 #'    [get_knots()] to extract knots.}
 #'    \item{`degree`}{The `degree` of the B-spline. See [splines::bs()]. Either
 #'    0 (constant model) or 1 (broken stick model).}
-#'    \item{`model`}{Not used.}
 #'    \item{`method`}{Either `"kr"` or `"lmer"`, identifying the fitting model.}
 #'    \item{`control`}{List of control options returned by [set_control()].}
 #'    \item{`beta`}{Numeric vector with fixed effect estimates.}
@@ -32,14 +31,42 @@
 #'    \item{`sigma2j`}{Numeric vector with estimates of the residual variance per
 #'    group. Only used by method `"kr"`.}
 #'    \item{`sigma2`}{Numeric scalar with the mean residual variance.}
-#'    \item{`draws`}{Numeric matrix with multiple imputations. The number of
-#'    rows is equal to the number of missing values in `y`. The number of columns
-#'    depends on `imp_skip`. Only used by `kr` if `imp_skip` is set.}
+#'    \item{`draws`}{Numeric matrix with multiple imputations `m`. The number of
+#'    rows is equal to the number of missing values in the outcome vector `y`.
+#'    The number of columns equals `m`. Only created by `"kr"`.}
 #' }
 #'
 #' @name brokenstick-class
 #' @rdname brokenstick-class
-#' @author Stef van Buuren, 2020
-#' @references van Buuren S (2020).
+#' @author Stef van Buuren, 2021
+#' @references van Buuren S (2021).
 #' Broken Stick Model for Irregular Longitudinal Data. \emph{In preparation}.
 NULL
+
+new_brokenstick <- function(names = list(x = character(),
+                                         y = character(),
+                                         z = character()),
+                            knots = numeric(0),
+                            boundary = numeric(0),
+                            degree = 1L,
+                            method = NA_character_,
+                            control = list(),
+                            beta = numeric(0),
+                            omega = numeric(0),
+                            sigma2j = numeric(0),
+                            sigma2 = numeric(0),
+                            draws = numeric(0)) {
+  result <- list(names = names,
+                 knots = knots,
+                 boundary = boundary,
+                 degree = degree,
+                 method = method,
+                 control = control,
+                 beta = beta,
+                 omega = omega,
+                 sigma2j = sigma2j,
+                 sigma2 = sigma2,
+                 draws = draws)
+  class(result) <- "brokenstick"
+  result
+}
