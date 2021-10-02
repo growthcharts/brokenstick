@@ -66,8 +66,8 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
 
   store_sigma2 <- matrix(NA, nrow = control$n, ncol = 1L)
 
-  store_imps <- matrix(NA, nrow = control$m, ncol = sum(wy))
-  if (control$m) row.names(store_imps) <- as.character(1:control$m)
+  store_imputes <- matrix(NA, nrow = control$m, ncol = sum(wy))
+  if (control$m) row.names(store_imputes) <- as.character(1:control$m)
 
   count_par <- count_imp <- 0L
 
@@ -131,9 +131,9 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
 
     if (store_this_imp[iter]) {
       count_imp <- count_imp + 1L
-      imps <- rnorm(n = sum(wy), sd = sqrt(1 / inv.sigma2[gf.full[wy]])) +
+      imputes <- rnorm(n = sum(wy), sd = sqrt(1 / inv.sigma2[gf.full[wy]])) +
         rowSums(as.matrix(x[wy, type == 2, drop = FALSE]) * bees[gf.full[wy], ])
-      store_imps[count_imp, ] <- imps
+      store_imputes[count_imp, ] <- imputes
     }
   }
 
@@ -166,7 +166,7 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     inv.sigma2 = inv.sigma2,
     sigma2.0 = sigma2.0,
     theta = theta,
-    imps = t(store_imps),
+    imputes = t(store_imputes),
     beta = beta,
     omega = omega,
     sigma2j = sigma2j,

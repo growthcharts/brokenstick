@@ -76,7 +76,7 @@ kr <- function(y,
               omega = omega,
               sigma2j = res$sigma2j,
               sigma2 = res$sigma2,
-              imps = res$imps,
+              imputes = res$imputes,
               mcmc = res$mcmc)
   class(obj) <- "kr"
   obj

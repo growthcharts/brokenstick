@@ -31,7 +31,7 @@
 #'    \item{`sigma2j`}{Numeric vector with estimates of the residual variance per
 #'    group. Only used by method `"kr"`.}
 #'    \item{`sigma2`}{Numeric scalar with the mean residual variance.}
-#'    \item{`imps`}{Numeric matrix with multiple imputations `m`. The number of
+#'    \item{`imputes`}{Numeric matrix with multiple imputations `m`. The number of
 #'    rows is equal to the number of missing values in the outcome vector `y`.
 #'    The number of columns equals `m`. Only created by `"kr"`.}
 #'    \item{`mcmc`}{A list with `mcmc` objects with the history of parameter
@@ -57,7 +57,7 @@ new_brokenstick <- function(names = list(x = character(),
                             omega = numeric(0),
                             sigma2j = numeric(0),
                             sigma2 = numeric(0),
-                            imps = numeric(0),
+                            imputes = numeric(0),
                             mcmc = list()) {
   result <- list(names = names,
                  knots = knots,
@@ -69,7 +69,7 @@ new_brokenstick <- function(names = list(x = character(),
                  omega = omega,
                  sigma2j = sigma2j,
                  sigma2 = sigma2,
-                 imps = imps,
+                 imputes = imputes,
                  mcmc = mcmc)
   class(result) <- "brokenstick"
   result

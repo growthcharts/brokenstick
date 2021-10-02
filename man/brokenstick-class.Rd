@@ -37,7 +37,7 @@ broken stick estimates.}
 \item{\code{sigma2j}}{Numeric vector with estimates of the residual variance per
 group. Only used by method \code{"kr"}.}
 \item{\code{sigma2}}{Numeric scalar with the mean residual variance.}
-\item{\code{imps}}{Numeric matrix with multiple imputations \code{m}. The number of
+\item{\code{imputes}}{Numeric matrix with multiple imputations \code{m}. The number of
 rows is equal to the number of missing values in the outcome vector \code{y}.
 The number of columns equals \code{m}. Only created by \code{"kr"}.}
 \item{\code{mcmc}}{A list with \code{mcmc} objects with the history of parameter
