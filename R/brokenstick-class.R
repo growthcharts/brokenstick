@@ -17,12 +17,12 @@
 #' \describe{
 #'    \item{`names`}{A list with elements named `x`, `y` and `g` providing the
 #'    variables names for the time, outcome and subject columns, respectively.}
-#'    \item{`knots`}{Numeric vector of with the internal knots. Use [get_knots()]
+#'    \item{`knots`}{Numeric vector of with internal knots. Use [get_knots()]
 #'    to extract knots.}
 #'    \item{`boundary`}{Numeric vector of length 2 with the boundary knots. Use
 #'    [get_knots()] to extract knots.}
-#'    \item{`degree`}{The `degree` of the B-spline. See [splines::bs()]. Either
-#'    0 (constant model) or 1 (broken stick model).}
+#'    \item{`degree`}{The `degree` of the B-spline. See [splines::bs()]. Support
+#'    only the values of 0 (step model) or 1 (broken stick model).}
 #'    \item{`method`}{Either `"kr"` or `"lmer"`, identifying the fitting model.}
 #'    \item{`control`}{List of control options returned by [set_control()].}
 #'    \item{`beta`}{Numeric vector with fixed effect estimates.}
@@ -31,11 +31,16 @@
 #'    \item{`sigma2j`}{Numeric vector with estimates of the residual variance per
 #'    group. Only used by method `"kr"`.}
 #'    \item{`sigma2`}{Numeric scalar with the mean residual variance.}
-#'    \item{`imputes`}{Numeric matrix with multiple imputations `m`. The number of
-#'    rows is equal to the number of missing values in the outcome vector `y`.
-#'    The number of columns equals `m`. Only created by `"kr"`.}
-#'    \item{`mcmc`}{A list with `mcmc` objects with the history of parameter
-#'    draws from the Kasim-Raudenbush sampler}
+#'    \item{`light`}{Should the returned object be lighter? If `light = TRUE`
+#'    the returned object will contain only the model settings and parameter
+#'    estimates and not store the `data`, `imp` and `mod` elements. The light
+#'    object can be used to predict broken stick estimates for new data, but
+#'    does not disclose the training data and is small.}
+#'    \item{`data`}{The training data used to fit the model.}
+#'    \item{`imp`}{The imputations generated for the missing outcome data. Only
+#'    for `kr`.}
+#'    \item{`mod`}{Either an object of class `kr` or [lme4::merMod-class],
+#'    depending on `method`.}
 #' }
 #'
 #' @name brokenstick-class
@@ -47,7 +52,7 @@ NULL
 
 new_brokenstick <- function(names = list(x = character(),
                                          y = character(),
-                                         z = character()),
+                                         g = character()),
                             knots = numeric(0),
                             boundary = numeric(0),
                             degree = 1L,
@@ -57,8 +62,10 @@ new_brokenstick <- function(names = list(x = character(),
                             omega = numeric(0),
                             sigma2j = numeric(0),
                             sigma2 = numeric(0),
-                            imputes = numeric(0),
-                            mcmc = list()) {
+                            light = FALSE,
+                            data = numeric(0),
+                            imp = numeric(0),
+                            mod = list()) {
   result <- list(names = names,
                  knots = knots,
                  boundary = boundary,
@@ -69,8 +76,12 @@ new_brokenstick <- function(names = list(x = character(),
                  omega = omega,
                  sigma2j = sigma2j,
                  sigma2 = sigma2,
-                 imputes = imputes,
-                 mcmc = mcmc)
+                 light = light)
+  if (!light) {
+    result$data <- data
+    result$imp <- imp
+    result$mod <- mod
+  }
   class(result) <- "brokenstick"
-  result
+  return(result)
 }

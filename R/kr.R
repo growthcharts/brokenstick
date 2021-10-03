@@ -17,35 +17,29 @@
 #'     * `omega` Variance-covariance of random effects
 #'     * `sigma2_j` Residual variance per group
 #'     * `sigma2` Average residual variance
-#'     * `draws` A matrix with `ndraw` columns with draws for missing data
+#'     * `imputes` Numeric matrix with multiple imputations `m`. The number of
+#'    rows is equal to the number of missing values in the outcome vector `y`.
+#'    The number of columns equals `m`.
 #'
 #' @author Stef van Buuren, based on [mice::mice.impute.2l.norm()]
 #'
 #' @details
 #' The speed of the Kasim-Raudenbush sampler is almost
 #' independent of the number of random effect, and foremost depends
-#' on the *total number of iterations*: `end` in the `control` list.
+#' on the *total number of iterations*.
 #'
-#' The defaults `start = 101`, `end = 300` and `thin = 1`
-#' provide 200 draws with a *reasonable* approximation to the variance-covariance
+#' The defaults `start = 100`, `n = 200` and `thin = 1` provide 200 parameter
+#' draws with a *reasonable* approximation to the variance-covariance
 #' matrix of the random effects.
 #'
-#' For a closer approximations with 200 draws set `end = 2100` with
-#' `thin = 10` (*better*) or `end = 4100` with `thin = 20` (*best*),
-#' at the expense of a linear increase in calculation time. Drawing fewer
-#' than 50 observations is not recommended, and such results are best treated
-#' as *indicative*.
+#' For a closer approximations with 200 draws set `control = control_kr(thin = 10)`
+#' (*better*) or `thin = 20` (*best*), at the expense of a linear increase in calculation
+#' time. Drawing fewer than 50 observations is not recommended, and such
+#' results are best treated as *indicative*.
 #'
-#' It is possible to draw multiple imputations for a subset of parameter draws.
-#' The `thin_imp` should be specified as a multiple of `thin`. For example,
-#' if `thin_imp` is 10 times `thin`, then the procedure will calculate and
-#' store multiple imputations in every tenth of the parameter draws. Thus,
-#' for 200 parameter draws there will be 20 draws from the posterior
-#' distribution of the outcome variable.
-#'
-#' The total number of parameter draws equals `(end - start + 1) / thin`. The number
-#' of multiple imputations equals `(end - start + 1) / thin_imp`. By default,
-#' `thin_imp` is `Inf` and does not produce imputations.
+#' It is possible to draw multiple imputations by setting the `m` parameters.
+#' For example, to draw five imputations for each missing outcome specify
+#' `control = control_kr(m = 5)`.
 #'
 #' @references
 #' Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested
@@ -76,8 +70,8 @@ kr <- function(y,
               omega = omega,
               sigma2j = res$sigma2j,
               sigma2 = res$sigma2,
-              imputes = res$imputes,
-              mcmc = res$mcmc)
+              imp = res$imputes,
+              mod = res$mcmc)
   class(obj) <- "kr"
   obj
 }

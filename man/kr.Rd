@@ -23,8 +23,11 @@ A list with components:\preformatted{* `beta`  Fixed effects
 * `omega` Variance-covariance of random effects
 * `sigma2_j` Residual variance per group
 * `sigma2` Average residual variance
-* `draws` A matrix with `ndraw` columns with draws for missing data
+* `imputes` Numeric matrix with multiple imputations `m`. The number of
 }
+
+rows is equal to the number of missing values in the outcome vector \code{y}.
+The number of columns equals \code{m}.
 }
 \description{
 Simulates posterior distributions of parameters from a two-level
@@ -35,28 +38,20 @@ extra step to the algorithm.
 \details{
 The speed of the Kasim-Raudenbush sampler is almost
 independent of the number of random effect, and foremost depends
-on the \emph{total number of iterations}: \code{end} in the \code{control} list.
+on the \emph{total number of iterations}.
 
-The defaults \code{start = 101}, \code{end = 300} and \code{thin = 1}
-provide 200 draws with a \emph{reasonable} approximation to the variance-covariance
+The defaults \code{start = 100}, \code{n = 200} and \code{thin = 1} provide 200 parameter
+draws with a \emph{reasonable} approximation to the variance-covariance
 matrix of the random effects.
 
-For a closer approximations with 200 draws set \code{end = 2100} with
-\code{thin = 10} (\emph{better}) or \code{end = 4100} with \code{thin = 20} (\emph{best}),
-at the expense of a linear increase in calculation time. Drawing fewer
-than 50 observations is not recommended, and such results are best treated
-as \emph{indicative}.
+For a closer approximations with 200 draws set \code{control = control_kr(thin = 10)}
+(\emph{better}) or \code{thin = 20} (\emph{best}), at the expense of a linear increase in calculation
+time. Drawing fewer than 50 observations is not recommended, and such
+results are best treated as \emph{indicative}.
 
-It is possible to draw multiple imputations for a subset of parameter draws.
-The \code{thin_imp} should be specified as a multiple of \code{thin}. For example,
-if \code{thin_imp} is 10 times \code{thin}, then the procedure will calculate and
-store multiple imputations in every tenth of the parameter draws. Thus,
-for 200 parameter draws there will be 20 draws from the posterior
-distribution of the outcome variable.
-
-The total number of parameter draws equals \code{(end - start + 1) / thin}. The number
-of multiple imputations equals \code{(end - start + 1) / thin_imp}. By default,
-\code{thin_imp} is \code{Inf} and does not produce imputations.
+It is possible to draw multiple imputations by setting the \code{m} parameters.
+For example, to draw five imputations for each missing outcome specify
+\code{control = control_kr(m = 5)}.
 }
 \references{
 Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested

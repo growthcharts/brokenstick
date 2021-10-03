@@ -23,12 +23,12 @@ A \code{brokenstick} object is a list with the following named elements:
 \describe{
 \item{\code{names}}{A list with elements named \code{x}, \code{y} and \code{g} providing the
 variables names for the time, outcome and subject columns, respectively.}
-\item{\code{knots}}{Numeric vector of with the internal knots. Use \code{\link[=get_knots]{get_knots()}}
+\item{\code{knots}}{Numeric vector of with internal knots. Use \code{\link[=get_knots]{get_knots()}}
 to extract knots.}
 \item{\code{boundary}}{Numeric vector of length 2 with the boundary knots. Use
 \code{\link[=get_knots]{get_knots()}} to extract knots.}
-\item{\code{degree}}{The \code{degree} of the B-spline. See \code{\link[splines:bs]{splines::bs()}}. Either
-0 (constant model) or 1 (broken stick model).}
+\item{\code{degree}}{The \code{degree} of the B-spline. See \code{\link[splines:bs]{splines::bs()}}. Support
+only the values of 0 (step model) or 1 (broken stick model).}
 \item{\code{method}}{Either \code{"kr"} or \code{"lmer"}, identifying the fitting model.}
 \item{\code{control}}{List of control options returned by \code{\link[=set_control]{set_control()}}.}
 \item{\code{beta}}{Numeric vector with fixed effect estimates.}
@@ -37,11 +37,16 @@ broken stick estimates.}
 \item{\code{sigma2j}}{Numeric vector with estimates of the residual variance per
 group. Only used by method \code{"kr"}.}
 \item{\code{sigma2}}{Numeric scalar with the mean residual variance.}
-\item{\code{imputes}}{Numeric matrix with multiple imputations \code{m}. The number of
-rows is equal to the number of missing values in the outcome vector \code{y}.
-The number of columns equals \code{m}. Only created by \code{"kr"}.}
-\item{\code{mcmc}}{A list with \code{mcmc} objects with the history of parameter
-draws from the Kasim-Raudenbush sampler}
+\item{\code{light}}{Should the returned object be lighter? If \code{light = TRUE}
+the returned object will contain only the model settings and parameter
+estimates and not store the \code{data}, \code{imp} and \code{mod} elements. The light
+object can be used to predict broken stick estimates for new data, but
+does not disclose the training data and is small.}
+\item{\code{data}}{The training data used to fit the model.}
+\item{\code{imp}}{The imputations generated for the missing outcome data. Only
+for \code{kr}.}
+\item{\code{mod}}{Either an object of class \code{kr} or \link[lme4:merMod-class]{lme4::merMod},
+depending on \code{method}.}
 }
 }
 
