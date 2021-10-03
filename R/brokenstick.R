@@ -48,9 +48,6 @@
 #' @param control A list with parameters. Use [brokenstick::control_kr()]`,
 #' `[lme4::lmerControl()]` or `[brokenstick::set_control()]`.
 #'
-#' @param seed Seed number for [base::set.seed()]. Use `NA` to bypass
-#' seed setting. Only used by method `"kr"`.
-#'
 #' @param na.action A function that indicates what [lme4::lmer()] should so
 #' when the data contain `NA`s. Default set to `na.exclude`. Only used by
 #' method `"lmer"`.
@@ -90,7 +87,7 @@
 #'
 #' @examples
 #' data <- smocc_200[1:1198, ]
-#' f1 <- brokenstick(hgt.z ~ age | id, data, knots = 0:3, seed = 1)
+#' f1 <- brokenstick(hgt.z ~ age | id, data, knots = 0:3, control = control_kr(seed = 1))
 #' plot(f1, data, n_plot = 9)
 #'
 #' # using lmer
@@ -102,7 +99,7 @@
 #' knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24, 36) / 12, 4)
 #'
 #' # method kr takes about 2 seconds
-#' f3 <- brokenstick(hgt.z ~ age | id, data, knots, seed = 2)
+#' f3 <- brokenstick(hgt.z ~ age | id, data, knots, control = control_kr(seed = 2))
 #' plot(f3, data, n_plot = 9)
 #'
 #' # method lmer takes about 40 seconds
@@ -117,8 +114,7 @@ brokenstick <- function(formula,
                         k = NULL,
                         degree = 1L,
                         method = c("kr", "lmer"),
-                        control = set_control(method),
-                        seed = NA,
+                        control = set_control(method = method),
                         na.action = na.exclude,
                         ...) {
   stopifnot(
@@ -130,14 +126,14 @@ brokenstick <- function(formula,
   method <- match.arg(method)
   names <- parse_formula(formula)
   brokenstick_bridge(data, names, knots, boundary, k, degree, method, control,
-                     seed, na.action, ...)
+                     na.action, ...)
 }
 
 # ------------------------------------------------------------------------------
 # Bridge
 
 brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
-                               method, control, seed, na.action,
+                               method, control, na.action,
                                warn_splines = FALSE, ...) {
   y <- data[[names[["y"]]]]
   x <- data[[names[["x"]]]]
@@ -175,8 +171,7 @@ brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
       y = y,
       x = X,
       g = g,
-      control = control,
-      seed = seed
+      control = control
     )
   }
 
@@ -191,6 +186,7 @@ brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
     omega = fit$omega,
     sigma2j = fit$sigma2j,
     sigma2 = fit$sigma2,
+    data = data,
     imp = fit$imp,
     mod = fit$mod
   )
@@ -222,14 +218,13 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
   )
 }
 
-brokenstick_impl_kr <- function(y, x, g, control, seed) {
+brokenstick_impl_kr <- function(y, x, g, control) {
 
   # Kasim-Raudenbush sampler
   kr(
     y = y,
     x = x,
     g = g,
-    control = control,
-    seed = seed
+    control = control
   )
 }

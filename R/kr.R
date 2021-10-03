@@ -9,8 +9,6 @@
 #' @param x Matrix with predictor value
 #' @param g Vector with group values
 #' @param control A list created by [control_kr()]
-#' @param seed Seed number for [base::set.seed()]. Use `NA` to bypass
-#' seed setting.
 #' @return A list with components:
 #'
 #'     * `beta`  Fixed effects
@@ -49,10 +47,9 @@
 kr <- function(y,
                x,
                g,
-               control,
-               seed) {
+               control) {
 
-  if (!is.na(seed)) set.seed(seed)
+  if (!is.na(control$seed)) set.seed(control$seed)
 
   ry <- !is.na(y)
   g <- as.integer(factor(g))  # convert character into integer

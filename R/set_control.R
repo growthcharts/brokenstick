@@ -6,7 +6,13 @@
 #' is set to `lmerControl(check.nobs.vs.nRE = "warning")`, which turns
 #' fatal errors with respect the number of parameters into warnings. Use
 #' `lmerControl(check.nobs.vs.nRE = "ignore")` to silence `lmer()`.
-#'
+#' @return For method `"kr"`, a list returned by [brokenstick::control_kr()].
+#'         For method `"lmer"`, an object of class `lmerControl`.
+#'         For other methods, `set_control()` returns `NULL`.
+#' @examples
+#' # defaults
+#' control <- set_control()
+#' control
 #' @export
 set_control <- function(method = c("kr", "lmer"),
                         kr = control_kr(),
@@ -26,9 +32,11 @@ set_control <- function(method = c("kr", "lmer"),
 #' @param m        Integer. Number of multiple imputations. Default: `m = 0`.
 #' @param start    Integer. The iteration number of the first observation
 #' @param thin     Integer. The thinning interval between consecutive observations
+#' @param seed     Integer. Seed number for [base::set.seed()]. Use `NA` to
+#' bypass seed setting.
 #' @param cormodel String indicating the correlation model:
 #'                 `"none"` (default), `"argyle"` or `"cole"`
-#' @return         A list with five components. The function calculates parameters
+#' @return         A list with eight components. The function calculates parameters
 #'                 `end` (the iteration number of the last iteration) and
 #'                 `thin_imp` (thinning factor for multiple imputations) from the
 #'                 other inputs.
@@ -37,6 +45,7 @@ control_kr <- function(n = 200L,
                        m = 0L,
                        start = 100L,
                        thin = 1L,
+                       seed = NA_integer_,
                        cormodel = c("none", "argyle", "cole")) {
   cormodel <- match.arg(cormodel)
 
@@ -53,6 +62,7 @@ control_kr <- function(n = 200L,
     end = end,
     thin = thin,
     thin_imp = thin_imp,
+    seed = seed,
     cormodel = cormodel
   )
 }

@@ -9,6 +9,7 @@ control_kr(
   m = 0L,
   start = 100L,
   thin = 1L,
+  seed = NA_integer_,
   cormodel = c("none", "argyle", "cole")
 )
 }
@@ -21,11 +22,14 @@ control_kr(
 
 \item{thin}{Integer. The thinning interval between consecutive observations}
 
+\item{seed}{Integer. Seed number for \code{\link[base:Random]{base::set.seed()}}. Use \code{NA} to
+bypass seed setting.}
+
 \item{cormodel}{String indicating the correlation model:
 \code{"none"} (default), \code{"argyle"} or \code{"cole"}}
 }
 \value{
-\preformatted{    A list with five components. The function calculates parameters
+\preformatted{    A list with eight components. The function calculates parameters
             `end` (the iteration number of the last iteration) and
             `thin_imp` (thinning factor for multiple imputations) from the
             other inputs.

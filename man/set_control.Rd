@@ -20,6 +20,16 @@ is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turns
 fatal errors with respect the number of parameters into warnings. Use
 \code{lmerControl(check.nobs.vs.nRE = "ignore")} to silence \code{lmer()}.}
 }
+\value{
+For method \code{"kr"}, a list returned by \code{\link[=control_kr]{control_kr()}}.
+For method \code{"lmer"}, an object of class \code{lmerControl}.
+For other methods, \code{set_control()} returns \code{NULL}.
+}
 \description{
 Set controls to steer calculations
+}
+\examples{
+# defaults
+control <- set_control()
+control
 }

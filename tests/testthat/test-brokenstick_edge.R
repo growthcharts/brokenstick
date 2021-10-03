@@ -5,28 +5,28 @@ boundary <- c(0, 3)
 test_that("brokenstick handles low number of cases - 1", {
   expect_error(brokenstick(hgt.z ~ age | id, smocc_200[1:10, ],
                            knots = knots, boundary = boundary,
-                           method = "kr", seed = 1L),
+                           method = "kr"),
                "`Sigma` is symmetric but not positive")
 })
 
 test_that("brokenstick handles low number of cases - 2", {
   expect_error(brokenstick(hgt.z ~ age | id, smocc_200[1:95, ],
                            knots = knots, boundary = boundary,
-                           method = "kr", seed = 2L),
+                           method = "kr"),
                "`Sigma` is symmetric but not positive")
 })
 
 test_that("brokenstick handles low number of cases - 3", {
   expect_error(brokenstick(hgt.z ~ age | id, smocc_200[1:100, ],
                            knots = knots, boundary = boundary,
-                           method = "kr", seed = 3L),
+                           method = "kr"),
                "`Sigma` is symmetric but not positive")
 })
 
 test_that("brokenstick handles low number of cases - 4", {
   expect_silent(brokenstick(hgt.z ~ age | id, smocc_200[1:200, ],
                             knots = knots, boundary = boundary,
-                            method = "kr", seed = 4L))
+                            method = "kr"))
 })
 
 

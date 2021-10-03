@@ -12,8 +12,7 @@ brokenstick(
   k = NULL,
   degree = 1L,
   method = c("kr", "lmer"),
-  control = set_control(method),
-  seed = NA,
+  control = set_control(method = method),
   na.action = na.exclude,
   ...
 )
@@ -58,9 +57,6 @@ Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lme
 Version 1.1.1.9000 changed the default to \code{method = "kr"}.}
 
 \item{control}{A list with parameters. Use \code{\link[=control_kr]{control_kr()}}\verb{, }\code{\link[lme4:lmerControl]{lme4::lmerControl()}}\code{or}\code{\link[=set_control]{set_control()}}`.}
-
-\item{seed}{Seed number for \code{\link[base:Random]{base::set.seed()}}. Use \code{NA} to bypass
-seed setting. Only used by method \code{"kr"}.}
 
 \item{na.action}{A function that indicates what \code{\link[lme4:lmer]{lme4::lmer()}} should so
 when the data contain \code{NA}s. Default set to \code{na.exclude}. Only used by
@@ -108,7 +104,7 @@ to other  data sets. Fixing the model requires specifying both \code{knots} and
 }
 \examples{
 data <- smocc_200[1:1198, ]
-f1 <- brokenstick(hgt.z ~ age | id, data, knots = 0:3, seed = 1)
+f1 <- brokenstick(hgt.z ~ age | id, data, knots = 0:3, control = control_kr(seed = 1))
 plot(f1, data, n_plot = 9)
 
 # using lmer
@@ -120,7 +116,7 @@ plot(f2, data, n_plot = 9)
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24, 36) / 12, 4)
 
 # method kr takes about 2 seconds
-f3 <- brokenstick(hgt.z ~ age | id, data, knots, seed = 2)
+f3 <- brokenstick(hgt.z ~ age | id, data, knots, control = control_kr(seed = 2))
 plot(f3, data, n_plot = 9)
 
 # method lmer takes about 40 seconds

@@ -4,7 +4,7 @@
 \alias{kr}
 \title{Kasim-Raudenbush sampler for two-level normal model}
 \usage{
-kr(y, x, g, control, seed)
+kr(y, x, g, control)
 }
 \arguments{
 \item{y}{Vector with outcome value}
@@ -14,9 +14,6 @@ kr(y, x, g, control, seed)
 \item{g}{Vector with group values}
 
 \item{control}{A list created by \code{\link[=control_kr]{control_kr()}}}
-
-\item{seed}{Seed number for \code{\link[base:Random]{base::set.seed()}}. Use \code{NA} to bypass
-seed setting.}
 }
 \value{
 A list with components:\preformatted{* `beta`  Fixed effects
