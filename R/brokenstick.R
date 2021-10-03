@@ -57,6 +57,12 @@
 #' when the data contain `NA`s. Default set to `na.exclude`. Only used by
 #' method `"lmer"`.
 #'
+#' @param light Should the returned object be lighter? If `light = TRUE`
+#'    the returned object will contain only the model settings and parameter
+#'    estimates and not store the `data`, `imp` and `mod` elements. The light
+#'    object can be used to predict broken stick estimates for new data, but
+#'    does not disclose the training data and is very small (often <20 Kb).
+#'
 #' @param \dots Forwards arguments to [brokenstick::control_kr()].
 #'
 #' @note
@@ -121,6 +127,7 @@ brokenstick <- function(formula,
                         method = c("kr", "lmer"),
                         control = set_control(method = method, ...),
                         na.action = na.exclude,
+                        light = FALSE,
                         ...) {
   stopifnot(
     inherits(formula, "formula"),
@@ -131,14 +138,14 @@ brokenstick <- function(formula,
   method <- match.arg(method)
   names <- parse_formula(formula)
   brokenstick_bridge(data, names, knots, boundary, k, degree, method, control,
-                     na.action, ...)
+                     na.action, light = light, ...)
 }
 
 # ------------------------------------------------------------------------------
 # Bridge
 
 brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
-                               method, control, na.action,
+                               method, control, na.action, light,
                                warn_splines = FALSE, ...) {
   y <- data[[names[["y"]]]]
   x <- data[[names[["x"]]]]
@@ -191,6 +198,7 @@ brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
     omega = fit$omega,
     sigma2j = fit$sigma2j,
     sigma2 = fit$sigma2,
+    light = light,
     data = data,
     imp = fit$imp,
     mod = fit$mod

@@ -14,6 +14,7 @@ brokenstick(
   method = c("kr", "lmer"),
   control = set_control(method = method, ...),
   na.action = na.exclude,
+  light = FALSE,
   ...
 )
 }
@@ -67,6 +68,12 @@ arguments.}
 \item{na.action}{A function that indicates what \code{\link[lme4:lmer]{lme4::lmer()}} should so
 when the data contain \code{NA}s. Default set to \code{na.exclude}. Only used by
 method \code{"lmer"}.}
+
+\item{light}{Should the returned object be lighter? If \code{light = TRUE}
+the returned object will contain only the model settings and parameter
+estimates and not store the \code{data}, \code{imp} and \code{mod} elements. The light
+object can be used to predict broken stick estimates for new data, but
+does not disclose the training data and is small.}
 
 \item{\dots}{Forwards arguments to \code{\link[=control_kr]{control_kr()}}.}
 }
