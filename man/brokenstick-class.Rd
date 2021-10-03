@@ -30,7 +30,8 @@ to extract knots.}
 \item{\code{degree}}{The \code{degree} of the B-spline. See \code{\link[splines:bs]{splines::bs()}}. Support
 only the values of 0 (step model) or 1 (broken stick model).}
 \item{\code{method}}{Either \code{"kr"} or \code{"lmer"}, identifying the fitting model.}
-\item{\code{control}}{List of control options returned by \code{\link[=set_control]{set_control()}}.}
+\item{\code{control}}{List of control options returned by \code{\link[=set_control]{set_control()}} used
+to set algorithmic details.}
 \item{\code{beta}}{Numeric vector with fixed effect estimates.}
 \item{\code{omega}}{Numeric matrix with variance-covariance estimates of the
 broken stick estimates.}

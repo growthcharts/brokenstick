@@ -24,7 +24,8 @@
 #'    \item{`degree`}{The `degree` of the B-spline. See [splines::bs()]. Support
 #'    only the values of 0 (step model) or 1 (broken stick model).}
 #'    \item{`method`}{Either `"kr"` or `"lmer"`, identifying the fitting model.}
-#'    \item{`control`}{List of control options returned by [set_control()].}
+#'    \item{`control`}{List of control options returned by [set_control()] used
+#'    to set algorithmic details.}
 #'    \item{`beta`}{Numeric vector with fixed effect estimates.}
 #'    \item{`omega`}{Numeric matrix with variance-covariance estimates of the
 #'    broken stick estimates.}

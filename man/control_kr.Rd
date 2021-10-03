@@ -5,18 +5,19 @@
 \title{Set controls for Kasim-Raudenbush sampler}
 \usage{
 control_kr(
-  n = 200L,
-  m = 0L,
-  start = 100L,
+  krn = 200L,
+  krm = 0L,
+  start = 101L,
   thin = 1L,
   seed = NA_integer_,
-  cormodel = c("none", "argyle", "cole")
+  cormodel = c("none", "argyle", "cole"),
+  ...
 )
 }
 \arguments{
-\item{n}{Integer. Number of samples from posterior. Default:  \code{n = 200}.}
+\item{krn}{Integer. Number of samples from posterior. Default:  \code{200}.}
 
-\item{m}{Integer. Number of multiple imputations. Default: \code{m = 0}.}
+\item{krm}{Integer. Number of multiple imputations. Default: \code{0}.}
 
 \item{start}{Integer. The iteration number of the first observation}
 
@@ -27,6 +28,8 @@ bypass seed setting.}
 
 \item{cormodel}{String indicating the correlation model:
 \code{"none"} (default), \code{"argyle"} or \code{"cole"}}
+
+\item{\dots}{Allow for dot parameters}
 }
 \value{
 \preformatted{    A list with eight components. The function calculates parameters

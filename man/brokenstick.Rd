@@ -12,7 +12,7 @@ brokenstick(
   k = NULL,
   degree = 1L,
   method = c("kr", "lmer"),
-  control = set_control(method = method),
+  control = set_control(method = method, ...),
   na.action = na.exclude,
   ...
 )
@@ -56,13 +56,19 @@ only \code{degree = 0} and \code{degree = 1}.}
 Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}).
 Version 1.1.1.9000 changed the default to \code{method = "kr"}.}
 
-\item{control}{A list with parameters. Use \code{\link[=control_kr]{control_kr()}}\verb{, }\code{\link[lme4:lmerControl]{lme4::lmerControl()}}\code{or}\code{\link[=set_control]{set_control()}}`.}
+\item{control}{List of control options returned by \code{\link[=set_control]{set_control()}} used
+to set algorithmic details. A list with parameters. When not specified,
+the functions sets to defaults
+for method \code{"kr"} by \code{\link[=control_kr]{control_kr()}}, and
+for method \code{"lmer"} by \code{\link[lme4:lmerControl]{lme4::lmerControl()}}. For ease of use, the user
+may set individual options to \code{"kr"} (e.g. \code{krn = 500}) via the \dots
+arguments.}
 
 \item{na.action}{A function that indicates what \code{\link[lme4:lmer]{lme4::lmer()}} should so
 when the data contain \code{NA}s. Default set to \code{na.exclude}. Only used by
 method \code{"lmer"}.}
 
-\item{\dots}{Not currently used, but required for extensibility.}
+\item{\dots}{Forwards arguments to \code{\link[=control_kr]{control_kr()}}.}
 }
 \value{
 A object of class \code{brokenstick}.
@@ -82,7 +88,7 @@ estimates absorbs the relations over time. The \code{"kr"} method allows
 enforcing a simple structure on this variance-covariance matrix. Currently,
 there are three such correlation models: \code{"none"} (default), \code{"argyle"}
 and \code{"cole"}. Specify the \code{seed} argument for reproducibility.
-See \code{\link[=kr]{kr()}} for more details.
+See \code{\link[=control_kr]{control_kr()}} for more details.
 
 The alternative is \code{method = "lmer"}, which fits the broken stick model by
 \code{\link[lme4:lmer]{lme4::lmer()}}. With this method, the variance-covariance matrix can only be

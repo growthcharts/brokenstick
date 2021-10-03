@@ -6,7 +6,8 @@
 #' is set to `lmerControl(check.nobs.vs.nRE = "warning")`, which turns
 #' fatal errors with respect the number of parameters into warnings. Use
 #' `lmerControl(check.nobs.vs.nRE = "ignore")` to silence `lmer()`.
-#' @return For method `"kr"`, a list returned by [brokenstick::control_kr()].
+#' @param \dots Forwards arguments to [control_kr()]
+#' @return For method `"kr"`, a list returned by [control_kr()].
 #'         For method `"lmer"`, an object of class `lmerControl`.
 #'         For other methods, `set_control()` returns `NULL`.
 #' @examples
@@ -15,8 +16,9 @@
 #' control
 #' @export
 set_control <- function(method = c("kr", "lmer"),
-                        kr = control_kr(),
-                        lmer = lmerControl(check.nobs.vs.nRE = "warning")) {
+                        kr = control_kr(...),
+                        lmer = lmerControl(check.nobs.vs.nRE = "warning"),
+                        ...) {
   method <- match.arg(method)
   if (method == "kr") {
     return(kr)
@@ -28,36 +30,38 @@ set_control <- function(method = c("kr", "lmer"),
 }
 
 #' Set controls for Kasim-Raudenbush sampler
-#' @param n        Integer. Number of samples from posterior. Default:  `n = 200`.
-#' @param m        Integer. Number of multiple imputations. Default: `m = 0`.
+#' @param krn      Integer. Number of samples from posterior. Default:  `200`.
+#' @param krm      Integer. Number of multiple imputations. Default: `0`.
 #' @param start    Integer. The iteration number of the first observation
 #' @param thin     Integer. The thinning interval between consecutive observations
 #' @param seed     Integer. Seed number for [base::set.seed()]. Use `NA` to
 #' bypass seed setting.
 #' @param cormodel String indicating the correlation model:
 #'                 `"none"` (default), `"argyle"` or `"cole"`
+#' @param \dots    Allow for dot parameters
 #' @return         A list with eight components. The function calculates parameters
 #'                 `end` (the iteration number of the last iteration) and
 #'                 `thin_imp` (thinning factor for multiple imputations) from the
 #'                 other inputs.
 #' @export
-control_kr <- function(n = 200L,
-                       m = 0L,
-                       start = 100L,
+control_kr <- function(krn = 200L,
+                       krm = 0L,
+                       start = 101L,
                        thin = 1L,
                        seed = NA_integer_,
-                       cormodel = c("none", "argyle", "cole")) {
+                       cormodel = c("none", "argyle", "cole"),
+                       ...) {
   cormodel <- match.arg(cormodel)
 
-  end <- start + n * thin
-  if (m > n) {
-    stop("Number of imputations (m = ", m, ") exceeds number of parameter draws (n = ", n, ").")
+  end <- start + krn * thin
+  if (krm > krn) {
+    stop("Number of imputations (krm = ", krm, ") exceeds number of parameter draws (krn = ", krn, ").")
   }
-  thin_imp <- ifelse(m, as.integer((end - start) / m), Inf)
+  thin_imp <- ifelse(krm, as.integer((end - start) / krm), Inf)
 
   list(
-    n = n,
-    m = m,
+    krn = krn,
+    krm = krm,
     start = start,
     end = end,
     thin = thin,

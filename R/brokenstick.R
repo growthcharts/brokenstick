@@ -45,14 +45,19 @@
 #' Kasim-Raudenbush sampler) or `"lmer"` (for [lme4::lmer()]).
 #' Version 1.1.1.9000 changed the default to `method = "kr"`.
 #'
-#' @param control A list with parameters. Use [brokenstick::control_kr()]`,
-#' `[lme4::lmerControl()]` or `[brokenstick::set_control()]`.
+#' @param control List of control options returned by [set_control()] used
+#'    to set algorithmic details. A list with parameters. When not specified,
+#'    the functions sets to defaults
+#'    for method `"kr"` by [brokenstick::control_kr()], and
+#'    for method `"lmer"` by [lme4::lmerControl()]. For ease of use, the user
+#'    may set individual options to `"kr"` (e.g. `krn = 500`) via the \dots
+#'    arguments.
 #'
 #' @param na.action A function that indicates what [lme4::lmer()] should so
 #' when the data contain `NA`s. Default set to `na.exclude`. Only used by
 #' method `"lmer"`.
 #'
-#' @param \dots Not currently used, but required for extensibility.
+#' @param \dots Forwards arguments to [brokenstick::control_kr()].
 #'
 #' @note
 #' Note that automatic knot specification is data-dependent, and may not reproduce
@@ -67,7 +72,7 @@
 #' enforcing a simple structure on this variance-covariance matrix. Currently,
 #' there are three such correlation models: `"none"` (default), `"argyle"`
 #' and `"cole"`. Specify the `seed` argument for reproducibility.
-#' See [kr()] for more details.
+#' See [control_kr()] for more details.
 #'
 #' The alternative is `method = "lmer"`, which fits the broken stick model by
 #' [lme4::lmer()]. With this method, the variance-covariance matrix can only be
@@ -114,7 +119,7 @@ brokenstick <- function(formula,
                         k = NULL,
                         degree = 1L,
                         method = c("kr", "lmer"),
-                        control = set_control(method = method),
+                        control = set_control(method = method, ...),
                         na.action = na.exclude,
                         ...) {
   stopifnot(

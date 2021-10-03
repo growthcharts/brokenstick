@@ -6,8 +6,9 @@
 \usage{
 set_control(
   method = c("kr", "lmer"),
-  kr = control_kr(),
-  lmer = lmerControl(check.nobs.vs.nRE = "warning")
+  kr = control_kr(...),
+  lmer = lmerControl(check.nobs.vs.nRE = "warning"),
+  ...
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ set_control(
 is set to \code{lmerControl(check.nobs.vs.nRE = "warning")}, which turns
 fatal errors with respect the number of parameters into warnings. Use
 \code{lmerControl(check.nobs.vs.nRE = "ignore")} to silence \code{lmer()}.}
+
+\item{\dots}{Forwards arguments to \code{\link[=control_kr]{control_kr()}}}
 }
 \value{
 For method \code{"kr"}, a list returned by \code{\link[=control_kr]{control_kr()}}.
