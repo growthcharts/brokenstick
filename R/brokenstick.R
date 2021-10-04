@@ -136,8 +136,7 @@ brokenstick <- function(formula,
   )
   data <- data.frame(data)
   method <- match.arg(method)
-  names <- parse_formula(formula)
-  obj <- brokenstick_bridge(data, names, knots, boundary, k, degree,
+  obj <- brokenstick_bridge(formula, data, knots, boundary, k, degree,
                             method, control, na.action, light, ...)
   return(obj)
 }
@@ -145,10 +144,11 @@ brokenstick <- function(formula,
 # ------------------------------------------------------------------------------
 # Bridge
 
-brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
+brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
                                method, control, na.action, light,
                                warn_splines = FALSE, ...) {
 
+  names <- parse_formula(formula)
   nms <- unname(unlist(names))
   if (!all(nms %in% colnames(data))) {
     stop("Variable(s) not found: ",
@@ -197,6 +197,7 @@ brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
   }
 
   obj <- new_brokenstick(
+    formula = formula,
     names = names,
     knots = l$knots,
     boundary = l$boundary,

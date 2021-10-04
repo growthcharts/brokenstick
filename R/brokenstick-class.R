@@ -15,6 +15,8 @@
 #'
 #' @section Elements:
 #' \describe{
+#'    \item{`formula`}{A formula with the model specification,
+#'    e.g. `formula(y ~ x | group)`}
 #'    \item{`names`}{A list with elements named `x`, `y` and `g` providing the
 #'    variables names for the time, outcome and subject columns, respectively.}
 #'    \item{`knots`}{Numeric vector of with internal knots. Use [get_knots()]
@@ -51,7 +53,8 @@
 #' Broken Stick Model for Irregular Longitudinal Data. \emph{In preparation}.
 NULL
 
-new_brokenstick <- function(names = list(x = character(),
+new_brokenstick <- function(formula = formula(),
+                            names = list(x = character(),
                                          y = character(),
                                          g = character()),
                             knots = numeric(0),
@@ -67,7 +70,8 @@ new_brokenstick <- function(names = list(x = character(),
                             data = numeric(0),
                             imp = numeric(0),
                             mod = list()) {
-  result <- list(names = names,
+  result <- list(formula = formula,
+                 names = names,
                  knots = knots,
                  boundary = boundary,
                  degree = degree,
