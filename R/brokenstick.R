@@ -98,11 +98,11 @@
 #'
 #' @examples
 #' data <- smocc_200[1:1198, ]
-#' f1 <- brokenstick(hgt.z ~ age | id, data, knots = 0:3, control = control_kr(seed = 1))
+#' f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, control = control_kr(seed = 1))
 #' plot(f1, data, n_plot = 9)
 #'
 #' # using lmer
-#' f2 <- brokenstick(hgt.z ~ age | id, data, knots = 0:3, method = "lmer")
+#' f2 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, method = "lmer")
 #' plot(f2, data, n_plot = 9)
 #'
 #' \donttest{
@@ -110,11 +110,11 @@
 #' knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24, 36) / 12, 4)
 #'
 #' # method kr takes about 2 seconds
-#' f3 <- brokenstick(hgt.z ~ age | id, data, knots, control = control_kr(seed = 2))
+#' f3 <- brokenstick(hgt_z ~ age | id, data, knots, control = control_kr(seed = 2))
 #' plot(f3, data, n_plot = 9)
 #'
 #' # method lmer takes about 40 seconds
-#' f4 <- brokenstick(hgt.z ~ age | id, data, knots, method = "lmer")
+#' f4 <- brokenstick(hgt_z ~ age | id, data, knots, method = "lmer")
 #' plot(f4, data, n_plot = 9)
 #' }
 #' @export

@@ -73,7 +73,10 @@
 #' test <- smocc_200[1199:1940, ]
 #'
 #' # Fit
-#' fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
+#' fit <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:3)
+#'
+#' # Predict, using train data
+#' nrow(predict(fit))
 #'
 #' # Predict, with preprocessing
 #' tail(predict(fit, test), 3)
@@ -113,16 +116,33 @@ predict.brokenstick <- function(object, newdata = NULL,
       x <- get_knots(object, ...)
   }
 
+  # Default case: return prediction for every row in newdata
+  # if:
+  # 1. the user did not specify y, x and group
+  # 2. or, the user specified y but not x
+  # Note: Sets NULL newdata to internal data in object for non-light object
   if ((is.null(x) && is.null(y) && is.null(group))
       || is.null(x) && !is.null(y)) {
-    # Default case: return prediction for every row in newdata
-    # - the user did not specify y, x and group
-    # - the user specified y but not x
-    if (is.null(newdata))
-      stop("Expected argument `newdata` not found.", call. = FALSE)
-    reset <- FALSE
+    if (is.null(newdata) && object$light) {
+      stop("Light brokenstick object expects a `newdata` argument.", call. = FALSE)
+    }
+    if (is.null(newdata) && !object$light) {
+      # use internal data
+      newdata <- object$data
+      reset <- FALSE
+    }
+    if (!is.null(newdata)) {
+      # take specified newdata
+      reset <- FALSE
+    }
   } else {
     # all other specifications involving x, y and group overwrite newdata
+    if (is.null(newdata) && object$light) {
+      stop("Light brokenstick object expects a `newdata` argument.", call. = FALSE)
+    }
+    if (is.null(newdata) && !object$light) {
+      newdata <- object$data
+    }
     newdata <- reset_data(newdata, object$names, x = x, y = y, group = group)
     reset <- TRUE
   }

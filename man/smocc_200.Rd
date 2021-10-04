@@ -10,7 +10,7 @@ unique \code{id} of each child (numeric)} \item{age}{Decimal age, 0-2.12
 years (numeric)} \item{sex}{Sex, \code{"male"} or \code{"female"}
 (character)} \item{ga}{Gestational age, completed weeks (numeric)}
 \item{bw}{Birth weight in grammes (numeric)} \item{hgt}{Height measurement in
-cm (34-102) (numeric)} \item{hgt.z}{Height in SDS relative Fourth Dutch
+cm (34-102) (numeric)} \item{hgt_z}{Height in SDS relative Fourth Dutch
 Growth Study 1997 (numeric)} }
 }
 \source{

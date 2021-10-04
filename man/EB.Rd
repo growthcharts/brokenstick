@@ -36,7 +36,7 @@ The current implementation does not provide prediction errors.
 #
 # EB estimate random effect for child id 10001
 data <- smocc_200[smocc_200$id == 10001, ]
-y <- data$hgt.z
+y <- data$hgt_z
 X <- make_basis(data$age,
   knots = fit_200$knots,
   boundary = fit_200$boundary)

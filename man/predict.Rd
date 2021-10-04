@@ -90,7 +90,10 @@ train <- smocc_200[1:1198, ]
 test <- smocc_200[1199:1940, ]
 
 # Fit
-fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
+fit <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:3)
+
+# Predict, using train data
+nrow(predict(fit))
 
 # Predict, with preprocessing
 tail(predict(fit, test), 3)

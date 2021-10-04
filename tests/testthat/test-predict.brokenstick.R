@@ -88,7 +88,7 @@ test_that("accepts unordered x", {
 
 xz <- data.frame(id = c(NA_real_, NA_real_),
                  age = c(NA_real_, NA_real_),
-                 hgt.z = c(NA_real_, NA_real_))
+                 hgt_z = c(NA_real_, NA_real_))
 test_that("accepts all NA's in newdata", {
   expect_silent(predict(exp, newdata = xz, x = "knots"))
 })
@@ -104,8 +104,8 @@ test_that("works if id in newdata is a factor", {
 })
 
 # We needed this to solve problem when newdata is a factor
-# obj1 <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = 1:2)
-# obj2 <- brokenstick(hgt.z ~ age | id, data = dat, knots = 1:2)
+# obj1 <- brokenstick(hgt_z ~ age | id, data = smocc_200, knots = 1:2)
+# obj2 <- brokenstick(hgt_z ~ age | id, data = dat, knots = 1:2)
 # test_that("brokenstick doesn't care about factors", {
 #   expect_identical(obj1, obj2)
 # })

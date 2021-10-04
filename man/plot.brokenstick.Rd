@@ -66,7 +66,7 @@ plot(fit1, smocc_200,
 )
 
 # fit model on standard deviation score
-fit2 <- brokenstick(hgt.z ~ age | id, smocc_200, knots = 0:3)
+fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:3)
 plot(fit2, smocc_200,
   group = gp, xlim = c(0, 2.1),
   xlab = "Age (years)", ylab = "Length (SDS)"

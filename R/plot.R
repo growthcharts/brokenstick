@@ -35,7 +35,7 @@
 #' )
 #'
 #' # fit model on standard deviation score
-#' fit2 <- brokenstick(hgt.z ~ age | id, smocc_200, knots = 0:3)
+#' fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:3)
 #' plot(fit2, smocc_200,
 #'   group = gp, xlim = c(0, 2.1),
 #'   xlab = "Age (years)", ylab = "Length (SDS)"
@@ -199,7 +199,7 @@ plot_trajectory <- function(x,
     g <- g +
       ggplot2::geom_line(ggplot2::aes_string(group = ".imp"),
                          data = data[k, ], color = color_imp[2L]) +
-      ggplot2::geom_point(ggplot2::aes_string(y = "hgt.z"),
+      ggplot2::geom_point(ggplot2::aes_string(y = "hgt_z"),
                           data = data[k, ], color = color_imp[1L],
                           size = size_imp)
   }
