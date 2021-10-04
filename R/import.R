@@ -7,7 +7,7 @@
 #' @importFrom matrixsampling  rwishart
 #' @importFrom rlang           .data arg_match
 #' @importFrom splines         bs
-#' @importFrom stats           approx as.formula cor cov2cor
+#' @importFrom stats           approx as.formula coef cor cov2cor
 #'                             fitted model.frame lm
 #'                             model.matrix na.exclude na.omit
 #'                             na.pass optim
