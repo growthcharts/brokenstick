@@ -7,5 +7,5 @@
 #' @family brokenstick
 #' @export
 fitted.brokenstick <- function(object, new_data = NULL, ...) {
-  predict(object, new_data)
+  return(predict(object, new_data))
 }

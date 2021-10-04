@@ -59,7 +59,7 @@ control_kr <- function(niter = 200L,
   }
   thin_imp <- ifelse(nimp, as.integer((end - start) / nimp), Inf)
 
-  list(
+  obj <- list(
     niter = niter,
     nimp = nimp,
     start = start,
@@ -69,4 +69,6 @@ control_kr <- function(niter = 200L,
     seed = seed,
     cormodel = cormodel
   )
+
+  return(obj)
 }

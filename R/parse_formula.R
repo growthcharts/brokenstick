@@ -33,5 +33,5 @@ parse_formula <- function(f) {
   if (any(vec == "."))
     stop(call. = FALSE, "No support for `.` in formula.")
 
-  list(x = x_name, y = y_name, g = g_name)
+  return(list(x = x_name, y = y_name, g = g_name))
 }

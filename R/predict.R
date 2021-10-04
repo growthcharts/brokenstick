@@ -167,7 +167,7 @@ predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
 }
 
 valid_predict_types <- function() {
-  c("numeric")
+  return(c("numeric"))
 }
 
 # ------------------------------------------------------------------------------
@@ -184,14 +184,15 @@ predict_brokenstick_bridge <- function(type, model, x, y, g) {
   if (nrow(x) != nrow(yhat))
     warning("Number of rows differs between between data and prediction.", .call = FALSE)
 
-  yhat
+  return(yhat)
 }
 
 get_predict_function <- function(type) {
-  switch(
+  f <- switch(
     type,
     numeric = predict_brokenstick_numeric
   )
+  return(f)
 }
 
 # ------------------------------------------------------------------------------
@@ -247,5 +248,5 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
     filter(!.data$knot) %>%
     pull("yhat")
 
-  data.frame(.pred = pred)
+  return(data.frame(.pred = pred))
 }

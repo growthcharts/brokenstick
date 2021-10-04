@@ -77,5 +77,5 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
     # message("Reset new_data: predict from vectors `x`, `y` and `group`.")
   }
 
-  reset
+  return(reset)
 }

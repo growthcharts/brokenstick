@@ -135,7 +135,8 @@ plot.brokenstick <- function(x,
   if (!show[3L]) idx <- idx & data[[".source"]] != "imputed"
 
   data <- data[idx, , drop = FALSE]
-  plot_trajectory(x = x, data = data, xlim = xlim, ylim = ylim, ...)
+  g <- plot_trajectory(x = x, data = data, xlim = xlim, ylim = ylim, ...)
+  return(g)
 }
 
 
@@ -238,5 +239,5 @@ plot_trajectory <- function(x,
     ) +
     theme
 
-  g
+  return(g)
 }

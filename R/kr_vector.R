@@ -174,5 +174,5 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     mcmc = mcmc
   )
   class(obj) <- "kr_vector"
-  obj
+  return(obj)
 }

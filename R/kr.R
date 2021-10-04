@@ -70,5 +70,5 @@ kr <- function(y,
               imp = res$imputes,
               mod = res$mcmc)
   class(obj) <- "kr"
-  obj
+  return(obj)
 }

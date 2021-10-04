@@ -11,5 +11,5 @@ residuals.brokenstick <- function(object, new_data = NULL, ...) {
   y <- new_data[[object$names$y]]
   r <- y - pred
   colnames(r) <- ".resid"
-  r
+  return(r)
 }

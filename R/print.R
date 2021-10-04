@@ -11,5 +11,5 @@ print.brokenstick <- function(x, ..., digits = 2L) {
   if (length(x$sigma2j)) cat("Cluster residuals (min, P25, P50, P75, max): ",
                              summary(x$sigma2j)[c(1:3, 5, 6)], "\n")
   cat("Residual variance: ", x$sigma2, "\n")
-  invisible(x)
+  return(invisible(x))
 }

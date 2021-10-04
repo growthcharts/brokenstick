@@ -137,8 +137,9 @@ brokenstick <- function(formula,
   data <- data.frame(data)
   method <- match.arg(method)
   names <- parse_formula(formula)
-  brokenstick_bridge(data, names, knots, boundary, k, degree, method, control,
-                     na.action, light = light, ...)
+  obj <- brokenstick_bridge(data, names, knots, boundary, k, degree, method, control,
+                            na.action, light = light, ...)
+  return(obj)
 }
 
 # ------------------------------------------------------------------------------
@@ -159,11 +160,11 @@ brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
 
   l <- calculate_knots(x, k, knots, boundary)
   X <- make_basis(x,
-    xname = names$x,
-    knots = l$knots,
-    boundary = l$boundary,
-    degree = degree,
-    warn = warn_splines
+                  xname = names$x,
+                  knots = l$knots,
+                  boundary = l$boundary,
+                  degree = degree,
+                  warn = warn_splines
   )
 
   if (method == "lmer") {
@@ -187,7 +188,7 @@ brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
     )
   }
 
-  new_brokenstick(
+  obj <- new_brokenstick(
     names = names,
     knots = l$knots,
     boundary = l$boundary,
@@ -203,6 +204,7 @@ brokenstick_bridge <- function(data, names, knots, boundary, k, degree,
     imp = fit$imp,
     mod = fit$mod
   )
+  return(obj)
 }
 
 # ------------------------------------------------------------------------------
@@ -221,7 +223,7 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
   # Here we trust that names(slot(model, "cnms")) gives the name of the
   # group variable
   df <- as.data.frame(VarCorr(model))
-  list(
+  obj <- list(
     model = model,
     beta = lme4::fixef(model),
     omega = as.matrix(as.data.frame(VarCorr(model)[[names(slot(model, "cnms"))]])),
@@ -229,15 +231,17 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
     sigma2 = df[df$grp == "Residual", "vcov"],
     draws = numeric()
   )
+  return(obj)
 }
 
 brokenstick_impl_kr <- function(y, x, g, control) {
 
   # Kasim-Raudenbush sampler
-  kr(
+  obj <- kr(
     y = y,
     x = x,
     g = g,
     control = control
   )
+  return(obj)
 }
