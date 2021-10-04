@@ -1,11 +1,15 @@
 # brokenstick 1.1.1.9000
 
+- Removes the superfluous `type` argument from `predict.brokenstick()`
+- Renames the `new_data` argument to `newdata` to conform to `predict.lm()`
+- Renames control parameters to conform to `coda` package for tighter integration (e.g., `start`, `end`, `thin`, `niter`, and so on)
+- Adds a `light` argument to `brokenstick()` 
 - Removes a layer in the control list
 - Renames `control_brokenstick()` to `set_control()`
 - Changes the default estimation algorithm to `kr`, the Kasim-Raudenbush sampler
 - Improves error messages of edge cases in `test-brokenstick_edge.R`
 - Stabilises the `rgamma()` calls in KR-algorithm for edge cases
-- Simplifies the `brokenstick()` API to the classic formule/data arguments
+- Simplifies the `brokenstick()` API to the classic formula/data arguments
 - Perform stricter tests on arguments of `brokenstick()`
 - Introduces argument `warn_splines` in `make_basis()` to suppress uninteresting warns from `splines::bs()`
 - Removes superfluous `knotnames` argument in `make_basis()`
