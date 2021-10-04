@@ -175,6 +175,14 @@ brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
                   warn = warn_splines
   )
 
+  if (method == "kr") {
+    fit <- kr(
+      y = y,
+      x = X,
+      g = g,
+      control = control
+    )
+  }
   if (method == "lmer") {
     data_pad <- data.frame(data, X, stringsAsFactors = FALSE)
     names(data_pad) <- c(names(data), colnames(X))
@@ -185,14 +193,6 @@ brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
       formula = fm,
       control = control,
       na.action = na.action
-    )
-  }
-  if (method == "kr") {
-    fit <- kr(
-      y = y,
-      x = X,
-      g = g,
-      control = control
     )
   }
 
@@ -239,18 +239,6 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
     sigma2j = numeric(),
     sigma2 = df[df$grp == "Residual", "vcov"],
     draws = numeric()
-  )
-  return(obj)
-}
-
-brokenstick_impl_kr <- function(y, x, g, control) {
-
-  # Kasim-Raudenbush sampler
-  obj <- kr(
-    y = y,
-    x = x,
-    g = g,
-    control = control
   )
   return(obj)
 }

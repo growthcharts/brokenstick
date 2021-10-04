@@ -17,15 +17,15 @@ parse_formula <- function(f) {
 
   if (!inherits(f, "formula"))
     stop(call. = FALSE, "Not a formula.")
-  if (length(f[[3]]) != 3L)
+  if (length(f[[3L]]) != 3L)
     stop(call. = FALSE, "Can't find RHS expansion in formula.")
-  if (f[[3]][[1]] != "|")
+  if (f[[3L]][[1L]] != "|")
     stop(call. = FALSE, "Can't find `|` operator in formula.")
 
   # Just take first variables - no support for `+` and friends
-  y_name <- all.vars(f[[2]], max.names = 1L)
-  x_name <- all.vars(f[[3]][[2]], max.names = 1L)
-  g_name <- all.vars(f[[3]][[3]], max.names = 1L)
+  y_name <- all.vars(f[[2L]], max.names = 1L)
+  x_name <- all.vars(f[[3L]][[2L]], max.names = 1L)
+  g_name <- all.vars(f[[3L]][[3L]], max.names = 1L)
 
   vec <- c(x_name, y_name, g_name)
   if (any(duplicated(vec)))
