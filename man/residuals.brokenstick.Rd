@@ -16,7 +16,7 @@ if \code{object$light} is \code{FALSE}.}
 \item{\dots}{Additional arguments. Ignored.}
 }
 \value{
-See \code{\link[=predict.brokenstick]{predict.brokenstick()}}.
+A data.frame with a column named \code{.resid}
 }
 \description{
 Extract residuals from brokenstick model
