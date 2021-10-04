@@ -48,7 +48,7 @@
 #' )
 #' @export
 plot.brokenstick <- function(x,
-                             new_data,
+                             newdata,
                              ...,
                              what = "droplast",
                              .x = NULL,
@@ -59,16 +59,16 @@ plot.brokenstick <- function(x,
                              n_plot = 3L) {
   if (!inherits(x, "brokenstick")) stop("Argument `x` not of class brokenstick.")
   if (!any(show)) stop("At least one of `show` should be TRUE.")
-  if (missing(new_data)) stop("No data found to plot. Specify `new_data` argument.")
+  if (missing(newdata)) stop("No data found to plot. Specify `newdata` argument.")
   install.on.demand("ggplot2", ...)
 
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
   data <- predict(
-    object = x, new_data = new_data, what = what, ...,
+    object = x, newdata = newdata, what = what, ...,
     x = .x, group = group, strip_data = FALSE
   )
-  if (ncol(data) == 1L) data <- bind_cols(.source = "data", new_data, data)
+  if (ncol(data) == 1L) data <- bind_cols(.source = "data", newdata, data)
 
   # add imputations
   if (show[3L]) {
@@ -76,18 +76,18 @@ plot.brokenstick <- function(x,
       stop("Cannot find imputations. Use method `kr` and set `imp_skip`.")
     }
 
-    new_data_isna <- is.na(new_data[, x$names$y, drop = TRUE])
-    if (sum(new_data_isna) != nrow(x$draws)) {
+    newdata_isna <- is.na(newdata[, x$names$y, drop = TRUE])
+    if (sum(newdata_isna) != nrow(x$draws)) {
       stop(
-        "Missing data count mismatch: ", sum(new_data_isna),
-        " (new_data) versus ", nrow(x$draw), " (x$draws)."
+        "Missing data count mismatch: ", sum(newdata_isna),
+        " (newdata) versus ", nrow(x$draw), " (x$draws)."
       )
     }
 
     draws <- x$draws
     colnames(draws) <- paste(".imp", 1:ncol(draws), sep = "_")
-    imputed <- new_data %>%
-      filter(new_data_isna) %>%
+    imputed <- newdata %>%
+      filter(newdata_isna) %>%
       select(- x$names$y) %>%
       bind_cols(as.data.frame(draws)) %>%
       mutate(.source = "imputed") %>%

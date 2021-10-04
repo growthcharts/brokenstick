@@ -9,12 +9,9 @@
 #'
 #' @param object A `brokenstick` object.
 #'
-#' @param new_data A data frame or matrix of new predictors.
-#'
-#' @param type A single character. The type of predictions to generate.
-#' Valid options are:
-#'
-#' - `"numeric"` for numeric predictions.
+#' @param newdata Optional. A data frame in which to look for variables with
+#' which to predict. If omitted and if `isFALSE(object$light)`, the fitted
+#' predictors are used.
 #'
 #' @param ... Not used, but required for extensibility.
 #'
@@ -27,9 +24,9 @@
 #' @param group A vector with group identifications
 #'
 #' @param strip_data A logical indicating whether the row with the
-#'  observed data from `new_data` should be stripped from the
+#'  observed data from `newdata` should be stripped from the
 #'  return. The default is `TRUE`. Set to `FALSE` to infer which data
-#'  points are extracted from `new_data`.
+#'  points are extracted from `newdata`.
 #'
 #' @param shape A string: `"long"` (default), `"wide"` or `"vector"`
 #' specifying the shape of the return value. Note that use of `"wide"`
@@ -38,38 +35,38 @@
 #' @details
 #'
 #' By default, `predict()` calculates predictions for every row in
-#' `new_data`. It is possible to tailor the behavior through the
+#' `newdata`. It is possible to tailor the behavior through the
 #' `x`, `y` and `group` arguments. What exactly happens depends on
 #' which of these arguments is specified:
 #'
 #' 1. If the user specifies `x`, but no `y` and `group`, the function
-#' returns - for every group in `new_data` - predictions at `x`
-#' values. This method will use the data from `new_data`.
+#' returns - for every group in `newdata` - predictions at `x`
+#' values. This method will use the data from `newdata`.
 #' 2. If the user specifies `x` and `y` but no `group`, the function
 #' forms a hypothetical new group with the `x` and `y` values. This
-#' method uses no information from `new_data`.
+#' method uses no information from `newdata`.
 #' 3. If the user specifies `group`, but no `x` or `y`, the function
-#' searches for the relevant data in `new_data` and limits its
+#' searches for the relevant data in `newdata` and limits its
 #' predictions to the specified groups. This is useful if prediction
 #' for only one or a few groups is needed.
 #' 4. If the user specifies `x` and `group`, but no `y`, the function
 #' will create new values for `x` in each group, search for the relevant
-#' data in `new_data` and limit prediction to locations `x` in those
+#' data in `newdata` and limit prediction to locations `x` in those
 #' groups.
 #' 5. If the user specifies `x`, `y` and `group`, the functions
 #' assumes that these vectors form a data frame. The lengths of `x`,
 #' `y` and `group` must be the same. This procedure uses only
-#' information from `new_data` for groups with `group` values that match
+#' information from `newdata` for groups with `group` values that match
 #' those on `newdata`.
-#' 6. As case 5, but now without a `new_data` argument. All data are
-#' specified through `x`, `y` and `group`. No matching to `new_data`
+#' 6. As case 5, but now without a `newdata` argument. All data are
+#' specified through `x`, `y` and `group`. No matching to `newdata`
 #' attempted.
 #'
 #' @return
 #'
 #' A tibble of predictions. If `x`, `y` and `group` are not specified,
 #' the number of rows in the tibble is guaranteed to be the same as
-#' the number of rows in `new_data`.
+#' the number of rows in `newdata`.
 #'
 #' @examples
 #' train <- smocc_200[1:1198, ]
@@ -87,7 +84,7 @@
 #' # case 2: x and y, one new group
 #' predict(fit, test, x = "knots", y = c(1, 1, 0.5, 0))
 #'
-#' # case 2: x and y, one new group, we need not specify new_data
+#' # case 2: x and y, one new group, we need not specify newdata
 #' predict(fit, x = "knots", y = c(1, 1, 0.5, 0))
 #'
 #' # case 3: only group
@@ -99,11 +96,11 @@
 #' # case 5: vectorized
 #' predict(fit, test, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 #'
-#' # case 6: vectorized, without new_data, results are different for 11045 and 11120
+#' # case 6: vectorized, without newdata, results are different for 11045 and 11120
 #' predict(fit, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 #' @rdname predict
 #' @export
-predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
+predict.brokenstick <- function(object, newdata = NULL,
                                 ...,
                                 x = NULL, y = NULL, group = NULL,
                                 strip_data = TRUE,
@@ -118,15 +115,15 @@ predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
 
   if ((is.null(x) && is.null(y) && is.null(group))
       || is.null(x) && !is.null(y)) {
-    # Default case: return prediction for every row in new_data
+    # Default case: return prediction for every row in newdata
     # - the user did not specify y, x and group
     # - the user specified y but not x
-    if (is.null(new_data))
-      stop("Expected argument `new_data` not found.", call. = FALSE)
+    if (is.null(newdata))
+      stop("Expected argument `newdata` not found.", call. = FALSE)
     reset <- FALSE
   } else {
-    # all other specifications involving x, y and group overwrite new_data
-    new_data <- reset_data(new_data, object$names, x = x, y = y, group = group)
+    # all other specifications involving x, y and group overwrite newdata
+    newdata <- reset_data(newdata, object$names, x = x, y = y, group = group)
     reset <- TRUE
   }
 
@@ -135,23 +132,23 @@ predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
     strip_data <- FALSE
   }
 
-  x <- as.matrix(new_data[, object$names$x, drop = FALSE])
-  y <- as.matrix(new_data[, object$names$y, drop = FALSE])
-  g <- as.matrix(new_data[, object$names$g, drop = FALSE])
-  p <- predict_brokenstick_bridge(type, object, x, y, g)
+  x <- as.matrix(newdata[, object$names$x, drop = FALSE])
+  y <- as.matrix(newdata[, object$names$y, drop = FALSE])
+  g <- as.matrix(newdata[, object$names$g, drop = FALSE])
+  p <- predict_brokenstick_bridge(object, x, y, g)
 
   if (!reset) {
     if (shape == "long") return(p)
     if (shape == "vector") return(pull(p))
     if (shape == "wide") {
-      return(bind_cols(new_data, p) %>%
+      return(bind_cols(newdata, p) %>%
                pivot_wider(id_cols = object$names$g,
                            names_from = object$names$x,
                            values_from = ".pred"))
     }
   }
 
-  ret <- bind_cols(new_data, p)
+  ret <- bind_cols(newdata, p)
   if (strip_data) {
     ret <- filter(ret, .data[[".source"]] == "added")
   }
@@ -166,33 +163,20 @@ predict.brokenstick <- function(object, new_data = NULL, type = "numeric",
   stop("Internal error")
 }
 
-valid_predict_types <- function() {
-  return(c("numeric"))
-}
-
 # ------------------------------------------------------------------------------
 # Bridge
 
-predict_brokenstick_bridge <- function(type, model, x, y, g) {
+predict_brokenstick_bridge <- function(model, x, y, g) {
   x <- as.matrix(x)
   y <- as.matrix(y)
   g <- as.matrix(g)
 
-  predict_function <- get_predict_function(type)
-  yhat <- predict_function(model, x, y, g)
+  yhat <- predict_brokenstick_numeric(model, x, y, g)
 
   if (nrow(x) != nrow(yhat))
     warning("Number of rows differs between between data and prediction.", .call = FALSE)
 
   return(yhat)
-}
-
-get_predict_function <- function(type) {
-  f <- switch(
-    type,
-    numeric = predict_brokenstick_numeric
-  )
-  return(f)
 }
 
 # ------------------------------------------------------------------------------

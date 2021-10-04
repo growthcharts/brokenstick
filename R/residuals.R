@@ -6,9 +6,9 @@
 #' @return See [predict.brokenstick()].
 #' @family brokenstick
 #' @export
-residuals.brokenstick <- function(object, new_data = NULL, ...) {
-  pred <- predict(object, new_data)
-  y <- new_data[[object$names$y]]
+residuals.brokenstick <- function(object, newdata = NULL, ...) {
+  pred <- predict(object, newdata)
+  y <- newdata[[object$names$y]]
   r <- y - pred
   colnames(r) <- ".resid"
   return(r)

@@ -6,6 +6,6 @@
 #' @return See [predict.brokenstick()].
 #' @family brokenstick
 #' @export
-fitted.brokenstick <- function(object, new_data = NULL, ...) {
-  return(predict(object, new_data))
+fitted.brokenstick <- function(object, newdata = NULL, ...) {
+  return(predict(object, newdata))
 }

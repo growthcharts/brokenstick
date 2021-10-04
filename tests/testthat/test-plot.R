@@ -9,4 +9,4 @@ context("plot.brokenstick")
 # fit_kr <- brokenstick(hgt.z ~ age | id, data = data,
 #                       knots = knots, boundary = c(0, 3),
 #                       method = "kr", control = ctl, seed = 81204)
-# plot(fit_kr, new_data = data, show = c(TRUE, FALSE, TRUE), group = c(10001, 10005, 10022))
+# plot(fit_kr, newdata = data, show = c(TRUE, FALSE, TRUE), group = c(10001, 10005, 10022))

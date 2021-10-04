@@ -6,8 +6,7 @@
 \usage{
 \method{predict}{brokenstick}(
   object,
-  new_data = NULL,
-  type = "numeric",
+  newdata = NULL,
   ...,
   x = NULL,
   y = NULL,
@@ -19,13 +18,9 @@
 \arguments{
 \item{object}{A \code{brokenstick} object.}
 
-\item{new_data}{A data frame or matrix of new predictors.}
-
-\item{type}{A single character. The type of predictions to generate.
-Valid options are:
-\itemize{
-\item \code{"numeric"} for numeric predictions.
-}}
+\item{newdata}{Optional. A data frame in which to look for variables with
+which to predict. If omitted and if \code{isFALSE(object$light)}, the fitted
+predictors are used.}
 
 \item{...}{Not used, but required for extensibility.}
 
@@ -38,9 +33,9 @@ positions of the knots.}
 \item{group}{A vector with group identifications}
 
 \item{strip_data}{A logical indicating whether the row with the
-observed data from \code{new_data} should be stripped from the
+observed data from \code{newdata} should be stripped from the
 return. The default is \code{TRUE}. Set to \code{FALSE} to infer which data
-points are extracted from \code{new_data}.}
+points are extracted from \code{newdata}.}
 
 \item{shape}{A string: \code{"long"} (default), \code{"wide"} or \code{"vector"}
 specifying the shape of the return value. Note that use of \code{"wide"}
@@ -50,7 +45,7 @@ and sparse matrix.}
 \value{
 A tibble of predictions. If \code{x}, \code{y} and \code{group} are not specified,
 the number of rows in the tibble is guaranteed to be the same as
-the number of rows in \code{new_data}.
+the number of rows in \code{newdata}.
 }
 \description{
 The predictions from a broken stick model coincide with the
@@ -62,31 +57,31 @@ the fitted model, through the \code{x} and \code{y} arguments.
 }
 \details{
 By default, \code{predict()} calculates predictions for every row in
-\code{new_data}. It is possible to tailor the behavior through the
+\code{newdata}. It is possible to tailor the behavior through the
 \code{x}, \code{y} and \code{group} arguments. What exactly happens depends on
 which of these arguments is specified:
 \enumerate{
 \item If the user specifies \code{x}, but no \code{y} and \code{group}, the function
-returns - for every group in \code{new_data} - predictions at \code{x}
-values. This method will use the data from \code{new_data}.
+returns - for every group in \code{newdata} - predictions at \code{x}
+values. This method will use the data from \code{newdata}.
 \item If the user specifies \code{x} and \code{y} but no \code{group}, the function
 forms a hypothetical new group with the \code{x} and \code{y} values. This
-method uses no information from \code{new_data}.
+method uses no information from \code{newdata}.
 \item If the user specifies \code{group}, but no \code{x} or \code{y}, the function
-searches for the relevant data in \code{new_data} and limits its
+searches for the relevant data in \code{newdata} and limits its
 predictions to the specified groups. This is useful if prediction
 for only one or a few groups is needed.
 \item If the user specifies \code{x} and \code{group}, but no \code{y}, the function
 will create new values for \code{x} in each group, search for the relevant
-data in \code{new_data} and limit prediction to locations \code{x} in those
+data in \code{newdata} and limit prediction to locations \code{x} in those
 groups.
 \item If the user specifies \code{x}, \code{y} and \code{group}, the functions
 assumes that these vectors form a data frame. The lengths of \code{x},
 \code{y} and \code{group} must be the same. This procedure uses only
-information from \code{new_data} for groups with \code{group} values that match
+information from \code{newdata} for groups with \code{group} values that match
 those on \code{newdata}.
-\item As case 5, but now without a \code{new_data} argument. All data are
-specified through \code{x}, \code{y} and \code{group}. No matching to \code{new_data}
+\item As case 5, but now without a \code{newdata} argument. All data are
+specified through \code{x}, \code{y} and \code{group}. No matching to \code{newdata}
 attempted.
 }
 }
@@ -106,7 +101,7 @@ z <- predict(fit, test, x = "knots")
 # case 2: x and y, one new group
 predict(fit, test, x = "knots", y = c(1, 1, 0.5, 0))
 
-# case 2: x and y, one new group, we need not specify new_data
+# case 2: x and y, one new group, we need not specify newdata
 predict(fit, x = "knots", y = c(1, 1, 0.5, 0))
 
 # case 3: only group
@@ -118,6 +113,6 @@ predict(fit, test, x = c(0.5, 1, 1.25), group = c(11045, 11120, 999))
 # case 5: vectorized
 predict(fit, test, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 
-# case 6: vectorized, without new_data, results are different for 11045 and 11120
+# case 6: vectorized, without newdata, results are different for 11045 and 11120
 predict(fit, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
 }

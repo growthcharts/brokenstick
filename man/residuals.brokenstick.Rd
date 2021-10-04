@@ -4,12 +4,14 @@
 \alias{residuals.brokenstick}
 \title{Extract residuals from brokenstick model}
 \usage{
-\method{residuals}{brokenstick}(object, new_data = NULL, ...)
+\method{residuals}{brokenstick}(object, newdata = NULL, ...)
 }
 \arguments{
 \item{object}{A \code{brokenstick} object.}
 
-\item{new_data}{A data frame or matrix of new predictors.}
+\item{newdata}{Optional. A data frame in which to look for variables with
+which to predict. If omitted and if \code{isFALSE(object$light)}, the fitted
+predictors are used.}
 
 \item{\dots}{Additional arguments. Ignored.}
 }

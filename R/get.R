@@ -40,18 +40,18 @@ get_knots <- function(object,
 #' Obtain proportion of explained variance from a broken stick model
 #'
 #' @param object An object of class \code{brokenstick}
-#' @param new_data Data on which `r.squared` must be calculated
+#' @param newdata Data on which `r.squared` must be calculated
 #' @return Proportion of explained variance
 #' @examples
 #' get_r2(fit_200, smocc_200)
 #' @export
-get_r2 <- function(object, new_data) {
+get_r2 <- function(object, newdata) {
   if (!inherits(object, "brokenstick")) {
     stop("object not of class brokenstick")
   }
 
-  p <- predict(object, new_data)
-  nd <- new_data %>%
+  p <- predict(object, newdata = newdata)
+  nd <- newdata %>%
     select(object$names$y) %>%
     bind_cols(p) %>%
     tidyr::drop_na()

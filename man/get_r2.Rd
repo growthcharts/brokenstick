@@ -4,12 +4,12 @@
 \alias{get_r2}
 \title{Obtain proportion of explained variance from a broken stick model}
 \usage{
-get_r2(object, new_data)
+get_r2(object, newdata)
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick}}
 
-\item{new_data}{Data on which \code{r.squared} must be calculated}
+\item{newdata}{Data on which \code{r.squared} must be calculated}
 }
 \value{
 Proportion of explained variance
