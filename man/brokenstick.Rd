@@ -62,7 +62,7 @@ to set algorithmic details. A list with parameters. When not specified,
 the functions sets to defaults
 for method \code{"kr"} by \code{\link[=control_kr]{control_kr()}}, and
 for method \code{"lmer"} by \code{\link[lme4:lmerControl]{lme4::lmerControl()}}. For ease of use, the user
-may set individual options to \code{"kr"} (e.g. \code{krn = 500}) via the \dots
+may set individual options to \code{"kr"} (e.g. \code{niter = 500}) via the \dots
 arguments.}
 
 \item{na.action}{A function that indicates what \code{\link[lme4:lmer]{lme4::lmer()}} should so
@@ -73,7 +73,7 @@ method \code{"lmer"}.}
 the returned object will contain only the model settings and parameter
 estimates and not store the \code{data}, \code{imp} and \code{mod} elements. The light
 object can be used to predict broken stick estimates for new data, but
-does not disclose the training data and is small.}
+does not disclose the training data and is very small (often <20 Kb).}
 
 \item{\dots}{Forwards arguments to \code{\link[=control_kr]{control_kr()}}.}
 }

@@ -50,7 +50,7 @@
 #'    the functions sets to defaults
 #'    for method `"kr"` by [brokenstick::control_kr()], and
 #'    for method `"lmer"` by [lme4::lmerControl()]. For ease of use, the user
-#'    may set individual options to `"kr"` (e.g. `krn = 500`) via the \dots
+#'    may set individual options to `"kr"` (e.g. `niter = 500`) via the \dots
 #'    arguments.
 #'
 #' @param na.action A function that indicates what [lme4::lmer()] should so

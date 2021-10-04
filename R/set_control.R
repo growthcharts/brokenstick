@@ -30,8 +30,8 @@ set_control <- function(method = c("kr", "lmer"),
 }
 
 #' Set controls for Kasim-Raudenbush sampler
-#' @param krn      Integer. Number of samples from posterior. Default:  `200`.
-#' @param krm      Integer. Number of multiple imputations. Default: `0`.
+#' @param niter      Integer. Number of samples from posterior. Default:  `200`.
+#' @param nimp      Integer. Number of multiple imputations. Default: `0`.
 #' @param start    Integer. The iteration number of the first observation
 #' @param thin     Integer. The thinning interval between consecutive observations
 #' @param seed     Integer. Seed number for [base::set.seed()]. Use `NA` to
@@ -44,8 +44,8 @@ set_control <- function(method = c("kr", "lmer"),
 #'                 `thin_imp` (thinning factor for multiple imputations) from the
 #'                 other inputs.
 #' @export
-control_kr <- function(krn = 200L,
-                       krm = 0L,
+control_kr <- function(niter = 200L,
+                       nimp = 0L,
                        start = 101L,
                        thin = 1L,
                        seed = NA_integer_,
@@ -53,15 +53,15 @@ control_kr <- function(krn = 200L,
                        ...) {
   cormodel <- match.arg(cormodel)
 
-  end <- start + krn * thin
-  if (krm > krn) {
-    stop("Number of imputations (krm = ", krm, ") exceeds number of parameter draws (krn = ", krn, ").")
+  end <- start + niter * thin
+  if (nimp > niter) {
+    stop("Number of imputations (nimp = ", nimp, ") exceeds number of parameter draws (niter = ", niter, ").")
   }
-  thin_imp <- ifelse(krm, as.integer((end - start) / krm), Inf)
+  thin_imp <- ifelse(nimp, as.integer((end - start) / nimp), Inf)
 
   list(
-    krn = krn,
-    krm = krm,
+    niter = niter,
+    nimp = nimp,
     start = start,
     end = end,
     thin = thin,

@@ -46,28 +46,28 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   theta <- 1
 
   store_this_imp <- store_this_draw <- rep(FALSE, control$end)
-  if (control$krn) {
-    store_this_draw[control$start + (1L:control$krn) * control$thin] <- TRUE
+  if (control$niter) {
+    store_this_draw[control$start + (1L:control$niter) * control$thin] <- TRUE
   }
-  if (control$krm) {
-    store_this_imp[control$start + (1L:control$krm) * control$thin_imp] <- TRUE
+  if (control$nimp) {
+    store_this_imp[control$start + (1L:control$nimp) * control$thin_imp] <- TRUE
   }
 
-  store_beta <- matrix(NA, nrow = control$krn, ncol = n.rc)
+  store_beta <- matrix(NA, nrow = control$niter, ncol = n.rc)
   colnames(store_beta) <- xnames
 
   pnames <- outer(kn, kn, paste, sep = "_")
   pnames <- t(pnames)[lower.tri(t(pnames), diag = TRUE)]
-  store_omega <- matrix(NA, nrow = control$krn, ncol = length(pnames))
+  store_omega <- matrix(NA, nrow = control$niter, ncol = length(pnames))
   colnames(store_omega) <- pnames
 
-  store_sigma2j <- matrix(NA, nrow = control$krn, ncol = n.class)
+  store_sigma2j <- matrix(NA, nrow = control$niter, ncol = n.class)
   colnames(store_sigma2j) <- unique(x[, type == -2])
 
-  store_sigma2 <- matrix(NA, nrow = control$krn, ncol = 1L)
+  store_sigma2 <- matrix(NA, nrow = control$niter, ncol = 1L)
 
-  store_imputes <- matrix(NA, nrow = control$krm, ncol = sum(wy))
-  if (control$krm) row.names(store_imputes) <- as.character(1:control$krm)
+  store_imputes <- matrix(NA, nrow = control$nimp, ncol = sum(wy))
+  if (control$nimp) row.names(store_imputes) <- as.character(1:control$nimp)
 
   count_par <- count_imp <- 0L
 

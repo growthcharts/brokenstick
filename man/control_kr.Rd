@@ -5,8 +5,8 @@
 \title{Set controls for Kasim-Raudenbush sampler}
 \usage{
 control_kr(
-  krn = 200L,
-  krm = 0L,
+  niter = 200L,
+  nimp = 0L,
   start = 101L,
   thin = 1L,
   seed = NA_integer_,
@@ -15,9 +15,9 @@ control_kr(
 )
 }
 \arguments{
-\item{krn}{Integer. Number of samples from posterior. Default:  \code{200}.}
+\item{niter}{Integer. Number of samples from posterior. Default:  \code{200}.}
 
-\item{krm}{Integer. Number of multiple imputations. Default: \code{0}.}
+\item{nimp}{Integer. Number of multiple imputations. Default: \code{0}.}
 
 \item{start}{Integer. The iteration number of the first observation}
 
