@@ -7,8 +7,6 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
 
   # 1 create x for every group in data
   if (!is.null(x) && is.null(y) && is.null(group)) {
-    if (is.null(data))
-      stop("Expected argument `newdata` not found.", call. = FALSE)
     reset <- expand.grid(
       x = x,
       y = NA,
@@ -34,8 +32,6 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
 
   # 3 subset groups from data
   if (is.null(x) && is.null(y) && !is.null(group)) {
-    if (is.null(data))
-      stop("Expected argument `newdata` not found.", call. = FALSE)
     reset <- data[data[[names$g]] %in% group, , drop = FALSE]
     reset <- bind_cols(.source = "data", reset)
     # message("Reset newdata: subset of groups.")
@@ -43,8 +39,6 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
 
   # 4 create x for subset of groups from data
   if (!is.null(x) && is.null(y) && !is.null(group)) {
-    if (is.null(data))
-      stop("Expected argument `newdata` not found.", call. = FALSE)
     groups <- intersect(data[[names$g]], group)
     reset <- expand.grid(
       s = "added",
