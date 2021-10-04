@@ -1,5 +1,6 @@
 # brokenstick 1.1.1.9000
 
+- `predict_brokenstick()` can now work with the both (internal) training and (external) test data. All special cases updated and thouroghly explained in the documentation and examples.
 - Removes the superfluous `type` argument from `predict.brokenstick()`
 - Renames the `new_data` argument to `newdata` to conform to `predict.lm()`
 - Renames control parameters to conform to `coda` package for tighter integration (e.g., `start`, `end`, `thin`, `niter`, and so on)

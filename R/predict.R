@@ -10,8 +10,8 @@
 #' @param object A `brokenstick` object.
 #'
 #' @param newdata Optional. A data frame in which to look for variables with
-#' which to predict. If omitted and if `isFALSE(object$light)`, the fitted
-#' predictors are used.
+#' which to predict. The training data are used if omitted and
+#' if `object$light` is `FALSE`.
 #'
 #' @param ... Not used, but required for extensibility.
 #'
@@ -25,8 +25,8 @@
 #'
 #' @param strip_data A logical indicating whether the row with the
 #'  observed data from `newdata` should be stripped from the
-#'  return. The default is `TRUE`. Set to `FALSE` to infer which data
-#'  points are extracted from `newdata`.
+#'  return value. The default is `TRUE`. Set to `FALSE` to infer which data
+#'  points are extracted from `newdata`. Works best for `shape = "long"`.
 #'
 #' @param shape A string: `"long"` (default), `"wide"` or `"vector"`
 #' specifying the shape of the return value. Note that use of `"wide"`
@@ -35,72 +35,187 @@
 #' @details
 #'
 #' By default, `predict()` calculates predictions for every row in
-#' `newdata`. It is possible to tailor the behavior through the
+#' `newdata`. If the user specifies no `newdata` argument, then the
+#' function searches `object` for the training data (which are only
+#' available if `object$light` is `FALSE`).
+#' It is possible to tailor the behaviour of `predict()` through the
 #' `x`, `y` and `group` arguments. What exactly happens depends on
 #' which of these arguments is specified:
 #'
 #' 1. If the user specifies `x`, but no `y` and `group`, the function
-#' returns - for every group in `newdata` - predictions at `x`
-#' values. This method will use the data from `newdata`.
+#' returns - for every group in `newdata` - predictions at the
+#' specified `x` values. This method will use the data from `newdata`.
 #' 2. If the user specifies `x` and `y` but no `group`, the function
 #' forms a hypothetical new group with the `x` and `y` values. This
-#' method uses no information from `newdata`.
+#' method uses no information from `newdata`, and also works for
+#' a light `brokenstick` object.
 #' 3. If the user specifies `group`, but no `x` or `y`, the function
 #' searches for the relevant data in `newdata` and limits its
-#' predictions to the specified groups. This is useful if prediction
-#' for only one or a few groups is needed.
+#' predictions to those groups. This is useful if the user needs
+#' a prediction for only one or a few groups. This does not work for
+#' a light `brokenstick` object.
 #' 4. If the user specifies `x` and `group`, but no `y`, the function
-#' will create new values for `x` in each group, search for the relevant
-#' data in `newdata` and limit prediction to locations `x` in those
+#' will create new values for `x` in each `group`, search for the relevant
+#' data in `newdata` and provide predictions at values of `x` in those
 #' groups.
-#' 5. If the user specifies `x`, `y` and `group`, the functions
-#' assumes that these vectors form a data frame. The lengths of `x`,
-#' `y` and `group` must be the same. This procedure uses only
-#' information from `newdata` for groups with `group` values that match
-#' those on `newdata`.
-#' 6. As case 5, but now without a `newdata` argument. All data are
-#' specified through `x`, `y` and `group`. No matching to `newdata`
-#' attempted.
-#'
+#' 5. If the user specifies `x`, `y` and `group`, the function
+#' assumes that these vectors contain additional data on top on what is
+#' already available in `newdata`. The lengths of `x`,
+#' `y` and `group` must match.
+#' For a light `brokenstick` object, case effectively becomes
+#' case 6. See below.
+#' 6. As case 5, but now without `newdata` available. All data are
+#' specified through `x`, `y` and `group` and form a data frame.
+#' Matching to `newdata` is attempted, but as long as group id's are
+#' different from the training sample effectively new cases will be
+#' made.
 #' @return
 #'
-#' A tibble of predictions. If `x`, `y` and `group` are not specified,
-#' the number of rows in the tibble is guaranteed to be the same as
-#' the number of rows in `newdata`.
+#' If `shape == "long"` a long tibble of predictions. If `x`, `y` and `group`
+#' are not specified, the number of rows in the tibble is guaranteed to
+#' be the same as the number of rows in `newdata`.
+#'
+#' If `shape == "wide"` a wide tibble of prediction, one record per group. Note
+#' that this format could be inefficient, depending on the data.
+#'
+#' If `shape == "vector"` a vector of predicted values, of all x-values and groups.
 #'
 #' @examples
+#' library(dplyr)
+#'
+#' # -- Data
+#'
 #' train <- smocc_200[1:1198, ]
 #' test <- smocc_200[1199:1940, ]
 #'
-#' # Fit
-#' fit <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:3)
+#' # -- Fit model
 #'
-#' # Predict, using train data
-#' nrow(predict(fit))
+#' fit <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:3, seed = 1)
+#' fit_light <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:3,
+#'       light = TRUE, seed = 1)
 #'
-#' # Predict, with preprocessing
-#' tail(predict(fit, test), 3)
+#' # -- Predict, standard cases
 #'
-#' # case 1: x as knots
-#' z <- predict(fit, test, x = "knots")
+#' # Use train data, return column with predictions
+#' pred <- predict(fit)
+#' identical(nrow(train), nrow(pred))
 #'
-#' # case 2: x and y, one new group
-#' predict(fit, test, x = "knots", y = c(1, 1, 0.5, 0))
+#' # Predict without newdata, not possible for light object
+#' \dontrun{
+#' predict(fit_light)
+#' Error: Light brokenstick object expects a `newdata` argument.
+#' }
 #'
-#' # case 2: x and y, one new group, we need not specify newdata
-#' predict(fit, x = "knots", y = c(1, 1, 0.5, 0))
+#' # Use test data
+#' pred <- predict(fit, newdata = test)
+#' identical(nrow(test), nrow(pred))
 #'
-#' # case 3: only group
-#' predict(fit, test, group = c(11045, 11120, 999))
+#' # Predict, same but using newdata with the light object
+#' pred_light <- predict(fit_light, newdata = test)
+#' identical(pred, pred_light)
 #'
-#' # case 4: predict at x in selected groups
-#' predict(fit, test, x = c(0.5, 1, 1.25), group = c(11045, 11120, 999))
 #'
-#' # case 5: vectorized
-#' predict(fit, test, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
+#' # -- Predict, special cases
 #'
-#' # case 6: vectorized, without newdata, results are different for 11045 and 11120
-#' predict(fit, x = c(0.5, 1, 1.25), y = c(0, 0.5, 1), group = c(11045, 11120, 999))
+#'
+#' # -- Case 1: x, -y, -group
+#'
+#' # Case 1: x as "knots", standard estimates, train sample (n = 124)
+#' z <- predict(fit, x = "knots", shape = "wide")
+#' head(z, 3)
+#'
+#' # Case 1: x as values, linearly interpolated, train sample (n = 124)
+#' z <- predict(fit, x = c(0.5, 1, 1.5), shape = "wide")
+#' head(z, 3)
+#'
+#' # Case 1: x as values, linearly interpolated, test sample (n = 76)
+#' z <- predict(fit, test, x = c(0.5, 1, 1.5), shape = "wide")
+#' head(z, 3)
+#'
+#'
+#' # -- Case 2: x, y, -group
+#'
+#' # Case 2: form one new group with id = 0
+#' predict(fit, x = "knots", y = c(1, 1, 0.5, 0), shape = "wide")
+#'
+#' # Case 2: works also for a light object
+#' predict(fit_light, x = "knots", y = c(1, 1, 0.5, 0), shape = "wide")
+#'
+#'
+#' # -- Case 3: -x, -y, group
+#'
+#' # Case 3: Predict at observed age for subset of groups, training sample
+#' pred <- predict(fit, group = c(10001, 10005, 10022))
+#' head(pred, 3)
+#'
+#' # Case 3: Of course, we cannot do this for light objects
+#' \dontrun{
+#' pred_light <- predict(fit_light, group = c(10001, 10005, 10022))
+#' }
+#'
+#' # Case 3: We can use another sample. Note there is no child 999
+#' pred <- predict(fit, test, group = c(11045, 11120, 999))
+#' tail(pred, 3)
+#'
+#' # Case 3: Works also for a light object
+#' pred_light <- predict(fit_light, test, group = c(11045, 11120, 999))
+#' identical(pred, pred_light)
+#'
+#'
+#' # -- Case 4: x, -y, group
+#'
+#' # Case 4: Predict at specified x, only in selected groups, train sample
+#' pred <- predict(fit, x = c(0.5, 1, 1.25), group = c(10001, 10005, 10022))
+#' pred
+#'
+#' # Case 4: strip_data = FALSE provides access to the observed data
+#' pred_all <- predict(fit, x = c(0.5, 1, 1.25), group = c(10001, 10005, 10022),
+#'                     strip_data = FALSE)
+#' pred_all %>% dplyr::filter(id == 10001) %>% dplyr::arrange(age)
+#'
+#' # Case 4: Runs also with light object, but finds no matches
+#' pred_light <- predict(fit_light, x = c(0.5, 1, 1.25), group = c(10001, 10005, 10022))
+#' pred_light
+#'
+#' # Case 4: Applies also to test sample
+#' pred <- predict(fit, test, x = c(0.5, 1, 1.25), group = c(11045, 11120, 999))
+#' pred
+#'
+#' # Case 4: Works also with light object
+#' pred_light <- predict(fit_light, test, x = c(0.5, 1, 1.25),
+#'                       group = c(11045, 11120, 999))
+#' identical(pred_light, pred)
+#'
+#'
+#' # -- Case 5: x, y, group
+#'
+#' # Case 5: Add new data to training sample, and refreshes broken stick
+#' # estimate at age x.
+#' # Note that novel child (not in train) 999 has one data point
+#' predict(fit, x = c(0.9, 0.9, 0.9), y = c(1, 1, 1),
+#'         group = c(10001, 10005, 999))
+#'
+#' # Case 5: Same, but now for test sample. Novel child 899 has two data points
+#' predict(fit, test, x = c(0.5, 0.9, 0.6, 0.9),
+#'         y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899))
+#'
+#' # Case 5: Also works for light object
+#' predict(fit_light, test, x = c(0.5, 0.9, 0.6, 0.9),
+#'         y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899))
+#'
+#'
+#' # -- Case 6: As Case 5, but without previous data
+#'
+#' # Case 6: Same call as last, but now without newdata = test
+#' # All children are de facto novel as they do not occur in the training sample.
+#' # Note: Predictions for 11045 and 11120 differ from prediction in Case 5.
+#' predict(fit, x = c(0.5, 0.9, 0.6, 0.9),
+#'         y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899))
+#'
+#' # This also work for the light brokenstick object
+#' predict(fit_light, x = c(0.5, 0.9, 0.6, 0.9),
+#'         y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899))
+#'
 #' @rdname predict
 #' @export
 predict.brokenstick <- function(object, newdata = NULL,
@@ -124,7 +239,7 @@ predict.brokenstick <- function(object, newdata = NULL,
   if ((is.null(x) && is.null(y) && is.null(group))
       || is.null(x) && !is.null(y)) {
     if (is.null(newdata) && object$light) {
-      stop("Light brokenstick object expects a `newdata` argument.", call. = FALSE)
+      stop("A light brokenstick object expects a `newdata` argument.", call. = FALSE)
     }
     if (is.null(newdata) && !object$light) {
       # use internal data
@@ -137,11 +252,13 @@ predict.brokenstick <- function(object, newdata = NULL,
     }
   } else {
     # all other specifications involving x, y and group overwrite newdata
-    if (is.null(newdata) && object$light) {
-      stop("Light brokenstick object expects a `newdata` argument.", call. = FALSE)
-    }
-    if (is.null(newdata) && !object$light) {
+    if (is.null(newdata)) {
+      if (object$light) {
+        newdata <- data.frame()
+        # stop("Light brokenstick object expects a `newdata` argument.", call. = FALSE)
+      } else {
       newdata <- object$data
+      }
     }
     newdata <- reset_data(newdata, object$names, x = x, y = y, group = group)
     reset <- TRUE

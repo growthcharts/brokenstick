@@ -5,7 +5,7 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
     return(data)
   }
 
-  # 1 create x for every group in data
+  # Case 1: create x for every group in data
   if (!is.null(x) && is.null(y) && is.null(group)) {
     reset <- expand.grid(
       x = x,
@@ -17,7 +17,7 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
     # message("Reset newdata: predict at `x` in every group.")
   }
 
-  # 2 create new group with x and y
+  # Case 2: create new group with x and y
   if (!is.null(x) && !is.null(y) && is.null(group)) {
     if (length(x) != length(y))
       stop("Incompatible length of `x` and `y`.", call. = FALSE)
@@ -30,14 +30,17 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
     # message("Reset newdata: new group with `x` and `y`.")
   }
 
-  # 3 subset groups from data
+  # Case 3: subset groups from data
   if (is.null(x) && is.null(y) && !is.null(group)) {
+    if (!length(data)) {
+      stop("A light brokenstick object expects a `newdata` argument.", call. = FALSE)
+    }
     reset <- data[data[[names$g]] %in% group, , drop = FALSE]
     reset <- bind_cols(.source = "data", reset)
     # message("Reset newdata: subset of groups.")
   }
 
-  # 4 create x for subset of groups from data
+  # Case 4: create x for subset of groups from data
   if (!is.null(x) && is.null(y) && !is.null(group)) {
     groups <- intersect(data[[names$g]], group)
     reset <- expand.grid(
@@ -53,7 +56,7 @@ reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
     # message("Reset newdata: predict at `x` in subset of groups.")
   }
 
-  # 5 create data.frame from vectors x, y and group
+  # Case 5: create data.frame from vectors x, y and group
   if (!is.null(x) && !is.null(y) && !is.null(group)) {
     if (length(x) != length(y))
       stop("Incompatible length of `x` and `y`.", call. = FALSE)

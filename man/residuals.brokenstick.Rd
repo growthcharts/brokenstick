@@ -10,8 +10,8 @@
 \item{object}{A \code{brokenstick} object.}
 
 \item{newdata}{Optional. A data frame in which to look for variables with
-which to predict. If omitted and if \code{isFALSE(object$light)}, the fitted
-predictors are used.}
+which to predict. The training data are used if omitted and
+if \code{object$light} is \code{FALSE}.}
 
 \item{\dots}{Additional arguments. Ignored.}
 }
