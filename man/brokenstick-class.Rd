@@ -21,6 +21,7 @@ A \code{brokenstick} object is a list with the following named elements:
 \section{Elements}{
 
 \describe{
+\item{\code{call}}{Call that created the object}
 \item{\code{formula}}{A formula with the model specification,
 e.g. \code{formula(y ~ x | group)}}
 \item{\code{names}}{A list with elements named \code{x}, \code{y} and \code{g} providing the
