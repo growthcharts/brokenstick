@@ -8,7 +8,7 @@
 #'  for the correlation matrix.
 #' @param \dots  Not used.
 #' @export
-VarCorr.brokenstick <- function(x, scale = c("cov", "cor"), ...) {
+VarCorr <- function(x, scale = c("cov", "cor"), ...) {
   scale <- match.arg(scale)
   if (scale == "cov") return(x$omega)
   return(cov2cor(x$omega))

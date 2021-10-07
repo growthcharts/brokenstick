@@ -2,7 +2,7 @@
 #' @importFrom dplyr           bind_rows bind_cols filter group_by
 #'                             mutate pull relocate select
 #'                             starts_with ungroup `%>%`
-#' @importFrom lme4            fixef lmer lmerControl ranef VarCorr
+#' @importFrom lme4            fixef lmer lmerControl ranef
 #' @importFrom methods         slot
 #' @importFrom matrixsampling  rwishart
 #' @importFrom rlang           .data arg_match
