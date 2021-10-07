@@ -1,6 +1,6 @@
 # brokenstick 1.1.1.9000
 
-- Add a new function `VarCorr()` to extract the omega element from a `brokenstick` object
+- Adds a function `get_omega()` to extract the variance-covariance matrix of the broken stick estimates
 - `predict_brokenstick()` can now work with the both (internal) training and (external) test data. All special cases updated and thouroghly explained in the documentation and examples.
 - Removes the superfluous `type` argument from `predict.brokenstick()`
 - Renames the `new_data` argument to `newdata` to conform to `predict.lm()`
