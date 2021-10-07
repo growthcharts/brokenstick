@@ -15,6 +15,7 @@
 #'
 #' @section Elements:
 #' \describe{
+#'    \item{`call`}{Call that created the object}
 #'    \item{`formula`}{A formula with the model specification,
 #'    e.g. `formula(y ~ x | group)`}
 #'    \item{`names`}{A list with elements named `x`, `y` and `g` providing the
@@ -53,7 +54,8 @@
 #' Broken Stick Model for Irregular Longitudinal Data. \emph{In preparation}.
 NULL
 
-new_brokenstick <- function(formula = formula(),
+new_brokenstick <- function(call = match.call(),
+                            formula = formula(),
                             names = list(x = character(),
                                          y = character(),
                                          g = character()),
@@ -70,7 +72,8 @@ new_brokenstick <- function(formula = formula(),
                             data = numeric(0),
                             imp = numeric(0),
                             mod = list()) {
-  result <- list(formula = formula,
+  result <- list(call = call,
+                 formula = formula,
                  names = names,
                  knots = knots,
                  boundary = boundary,

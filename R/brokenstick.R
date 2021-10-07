@@ -129,6 +129,7 @@ brokenstick <- function(formula,
                         na.action = na.exclude,
                         light = FALSE,
                         ...) {
+  call <- match.call()
   stopifnot(
     inherits(formula, "formula"),
     is.data.frame(data) || is.matrix(data),
@@ -137,7 +138,8 @@ brokenstick <- function(formula,
   data <- data.frame(data)
   method <- match.arg(method)
   obj <- brokenstick_bridge(formula, data, knots, boundary, k, degree,
-                            method, control, na.action, light, ...)
+                            method, control, na.action, light, call,
+                            ...)
   return(obj)
 }
 
@@ -145,7 +147,7 @@ brokenstick <- function(formula,
 # Bridge
 
 brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
-                               method, control, na.action, light,
+                               method, control, na.action, light, call,
                                warn_splines = FALSE, ...) {
 
   names <- parse_formula(formula)
@@ -197,6 +199,7 @@ brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
   }
 
   obj <- new_brokenstick(
+    call = call,
     formula = formula,
     names = names,
     knots = l$knots,
