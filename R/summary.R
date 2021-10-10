@@ -94,7 +94,7 @@ localsummary.beta <- function(x, digits) {
 }
 
 localsummary.omega <- function(x, digits, what) {
-  omega <- get_omega(x, what = what)
+  omega <- get_omega(x, what = what, names = "all")
   upper <- round(omega, digits)
   upper[upper.tri(upper)] <- ""
   upper <- as.data.frame(upper)
