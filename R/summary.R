@@ -53,6 +53,14 @@ print.summary.brokenstick <- function(x,
   return(invisible(x))
 }
 
+#' @export
+print.brokenstick <- function(x,
+                              digits = max(3L, getOption("digits") - 3L),
+                              ...) {
+  stopifnot(inherits(x, "brokenstick"))
+  return(print(summary(x)))
+}
+
 # summary helpers
 localsummary.model <- function(x) {
   k <- length(get_knots(x, "all")) - 1
