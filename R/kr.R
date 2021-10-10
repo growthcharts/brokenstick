@@ -67,6 +67,8 @@ kr <- function(y,
               omega = omega,
               sigma2j = res$sigma2j,
               sigma2 = res$sigma2,
+              sample = c(length(res$y), sum(res$ry), sum(!res$ry), res$nclass,
+                         ncol(res$imputes)),
               imp = res$imputes,
               mod = res$mcmc)
   class(obj) <- "kr"

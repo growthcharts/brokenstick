@@ -213,6 +213,7 @@ brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
     sigma2 = fit$sigma2,
     light = light,
     data = data,
+    sample = fit$sample,
     imp = fit$imp,
     mod = fit$mod
   )
@@ -225,7 +226,7 @@ brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
 brokenstick_impl_lmer <- function(data, formula, control, na.action) {
 
   # Bates et al, linear mixed-effects model
-  model <- lmer(
+  mod <- lmer(
     formula = formula,
     data = data,
     control = control,
@@ -234,14 +235,17 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
 
   # Here we trust that names(slot(model, "cnms")) gives the name of the
   # group variable
-  df <- as.data.frame(VarCorr(model))
+  df <- as.data.frame(VarCorr(mod))
+  z <- summary(mod)
+  y <- mod@resp$y
   obj <- list(
-    model = model,
-    beta = lme4::fixef(model),
-    omega = as.matrix(as.data.frame(VarCorr(model)[[names(slot(model, "cnms"))]])),
+    mod = mod,
+    beta = lme4::fixef(mod),
+    omega = as.matrix(as.data.frame(VarCorr(mod)[[names(slot(mod, "cnms"))]])),
     sigma2j = numeric(),
     sigma2 = df[df$grp == "Residual", "vcov"],
-    draws = numeric()
-  )
+    sample = c(length(y), sum(!is.na(y)), sum(is.na(y)), as.integer(z$ngrps),
+               0L)
+    )
   return(obj)
 }

@@ -1,5 +1,6 @@
 # brokenstick 1.1.1.9000
 
+- Adds `summary()` method for `brokenstick` object
 - Adds a function `get_omega()` to extract the variance-covariance matrix of the broken stick estimates
 - `predict_brokenstick()` can now work with the both (internal) training and (external) test data. All special cases updated and thouroghly explained in the documentation and examples.
 - Removes the superfluous `type` argument from `predict.brokenstick()`

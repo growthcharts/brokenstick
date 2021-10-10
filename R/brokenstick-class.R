@@ -35,11 +35,12 @@
 #'    \item{`sigma2j`}{Numeric vector with estimates of the residual variance per
 #'    group. Only used by method `"kr"`.}
 #'    \item{`sigma2`}{Numeric scalar with the mean residual variance.}
+#'    \item{`sample`}{A numeric vector with descriptives of the training data.}
 #'    \item{`light`}{Should the returned object be lighter? If `light = TRUE`
 #'    the returned object will contain only the model settings and parameter
-#'    estimates and not store the `data`, `imp` and `mod` elements. The light
-#'    object can be used to predict broken stick estimates for new data, but
-#'    does not disclose the training data and is small.}
+#'    estimates and not store the `sample`, `data`, `imp` and `mod` elements.
+#'    The light object can be used to predict broken stick estimates for
+#'    new data, but does not disclose the training data and is small.}
 #'    \item{`data`}{The training data used to fit the model.}
 #'    \item{`imp`}{The imputations generated for the missing outcome data. Only
 #'    for `kr`.}
@@ -69,6 +70,7 @@ new_brokenstick <- function(call = match.call(),
                             sigma2j = numeric(0),
                             sigma2 = numeric(0),
                             light = FALSE,
+                            sample = numeric(0),
                             data = numeric(0),
                             imp = numeric(0),
                             mod = list()) {
@@ -84,6 +86,7 @@ new_brokenstick <- function(call = match.call(),
                  omega = omega,
                  sigma2j = sigma2j,
                  sigma2 = sigma2,
+                 sample = sample,
                  light = light)
   if (!light) {
     result$data <- data

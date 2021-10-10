@@ -16,4 +16,3 @@ fit_200_light <- brokenstick(hgt_z ~ age | id, data = smocc_200,
 usethis::use_data(smocc_200, overwrite = TRUE)
 usethis::use_data(fit_200, overwrite = TRUE)
 usethis::use_data(fit_200_light, overwrite = TRUE)
-
