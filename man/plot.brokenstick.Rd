@@ -6,7 +6,7 @@
 \usage{
 \method{plot}{brokenstick}(
   x,
-  newdata,
+  newdata = NULL,
   ...,
   what = "droplast",
   .x = NULL,

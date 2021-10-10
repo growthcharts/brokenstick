@@ -48,7 +48,7 @@
 #' )
 #' @export
 plot.brokenstick <- function(x,
-                             newdata,
+                             newdata = NULL,
                              ...,
                              what = "droplast",
                              .x = NULL,
@@ -57,10 +57,24 @@ plot.brokenstick <- function(x,
                              ylim = NULL,
                              show = c(TRUE, TRUE, FALSE),
                              n_plot = 3L) {
-  if (!inherits(x, "brokenstick")) stop("Argument `x` not of class brokenstick.")
-  if (!any(show)) stop("At least one of `show` should be TRUE.")
-  if (missing(newdata)) stop("No data found to plot. Specify `newdata` argument.")
+  stopifnot(inherits(x, "brokenstick"),
+            any(show))
   install.on.demand("ggplot2", ...)
+
+  # handle newdata
+  if (is.null(newdata) && x$light) {
+    stop("A light brokenstick object expects a `newdata` argument.", call. = FALSE)
+  }
+  if (is.null(newdata) && !x$light) {
+    newdata <- x$data
+  }
+  stopifnot(is.data.frame(newdata) || is.matrix(newdata))
+  nms <- unname(unlist(x$names))
+  if (!all(nms %in% colnames(newdata))) {
+    stop("Variable(s) not found: ",
+         paste(nms[!nms %in% colnames(newdata)], collapse = ", "),
+         call. = FALSE)
+  }
 
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
@@ -72,24 +86,24 @@ plot.brokenstick <- function(x,
 
   # add imputations
   if (show[3L]) {
-    if (!length(x$draws)) {
-      stop("Cannot find imputations. Use method `kr` and set `imp_skip`.")
+    if (!length(x$imp)) {
+      stop("Cannot find imputations. Use method 'kr' and set 'nimp'.")
     }
 
     newdata_isna <- is.na(newdata[, x$names$y, drop = TRUE])
-    if (sum(newdata_isna) != nrow(x$draws)) {
+    if (sum(newdata_isna) != nrow(x$imp)) {
       stop(
         "Missing data count mismatch: ", sum(newdata_isna),
-        " (newdata) versus ", nrow(x$draw), " (x$draws)."
+        " (newdata) versus ", nrow(x$imp), " (x$imp)."
       )
     }
 
-    draws <- x$draws
-    colnames(draws) <- paste(".imp", 1:ncol(draws), sep = "_")
+    imp <- x$imp
+    colnames(imp) <- paste(".imp", 1:ncol(imp), sep = "_")
     imputed <- newdata %>%
       filter(newdata_isna) %>%
       select(- x$names$y) %>%
-      bind_cols(as.data.frame(draws)) %>%
+      bind_cols(as.data.frame(imp)) %>%
       mutate(.source = "imputed") %>%
       pivot_longer(
         cols = starts_with(".imp_"),
