@@ -239,7 +239,7 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
   y <- mod@resp$y
   obj <- list(
     mod = mod,
-    beta = lme4::fixef(mod),
+    beta = fixef(mod),
     omega = as.matrix(as.data.frame(VarCorr(mod)[[names(slot(mod, "cnms"))]])),
     sigma2j = numeric(),
     sigma2 = df[df$grp == "Residual", "vcov"],
