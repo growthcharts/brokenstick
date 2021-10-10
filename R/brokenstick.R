@@ -236,7 +236,6 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
   # Here we trust that names(slot(model, "cnms")) gives the name of the
   # group variable
   df <- as.data.frame(VarCorr(mod))
-  z <- summary(mod)
   y <- mod@resp$y
   obj <- list(
     mod = mod,
@@ -244,7 +243,7 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
     omega = as.matrix(as.data.frame(VarCorr(mod)[[names(slot(mod, "cnms"))]])),
     sigma2j = numeric(),
     sigma2 = df[df$grp == "Residual", "vcov"],
-    sample = c(length(y), sum(!is.na(y)), sum(is.na(y)), as.integer(z$ngrps),
+    sample = c(length(y), sum(!is.na(y)), sum(is.na(y)), as.integer(ngrps(mod)),
                0L)
     )
   return(obj)
