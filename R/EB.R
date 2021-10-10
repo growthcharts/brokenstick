@@ -23,22 +23,10 @@
 #' Skrondal, A., Rabe-Hesketh, S. (2009).
 #' Prediction in multilevel generalized linear models.
 #' J. R. Statist. Soc. A, 172, 3, 659-687.
-#' @examples
-#' #
-#' # EB estimate random effect for child id 10001
-#' data <- smocc_200[smocc_200$id == 10001, ]
-#' y <- data$hgt_z
-#' X <- make_basis(data$age,
-#'   knots = fit_200$knots,
-#'   boundary = fit_200$boundary)
-#' EB(fit_200, y, X)
-#' @export
 EB <- function(model, y, X, Z = X, BS = TRUE) {
 
-  if (!inherits(model, "brokenstick")) stop("Argument `model` not of class brokenstick.")
-
-  # X should be a matrix
-  if (!is.matrix(X)) stop("Argument 'X' is not a matrix.")
+  stopifnot(inherits(model, "brokenstick"),
+            is.matrix(X))
 
   # eliminate missing outcomes
   select <- !(is.na(y) | is.na(X[, 1]))
@@ -56,12 +44,10 @@ EB <- function(model, y, X, Z = X, BS = TRUE) {
   X <- matrix(X[select, ], ncol = dim(X)[2])
   beta <- matrix(model$beta, ncol = 1)
 
-  # construct appropriate matrices
-  sigma.inv <- solve(Z %*% model$omega %*% t(Z) +
-    diag(model$sigma2, nrow(Z)))
-
   # calculate random effect by EB estimate
-  re <- model$omega %*% t(Z) %*% sigma.inv %*% (y - X %*% beta)
+  R <- solve(Z %*% model$omega %*% t(Z) + diag(model$sigma2, nrow(Z)),
+             y - X %*% beta)
+  re <- model$omega %*% t(Z) %*% R
 
   # calculate broken stick estimate by summing fixed and random parts
   if (BS) re <- model$beta + re
