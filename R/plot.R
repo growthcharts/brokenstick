@@ -4,20 +4,6 @@
 #' fitted trajectories of one or more groups.
 #'
 #' @param x An object of class `brokenstick`.
-#' @param what Which knots to plot? See [get_knots()]. The default,
-#' `what = "droplast"`, does not plot the right boundary knot.
-#' @param .x The `x` argument of the [predict.brokenstick()] function.
-#' @param xlim Vector of length 2 with range of x-axis
-#' @param ylim Vector of length 2 with range of y-axis
-#' @param show A logical vector of length 3. Element 1 specifies
-#' whether the observed data are plotted, element 2 specifies
-#' whether the broken stick are plotted, element 3 specifies
-#' whether imputations are plotted. The default is
-#' `c(TRUE, TRUE, FALSE)`.
-#' @param n_plot A integer indicating the number of individual plots.
-#' The default is 3, which plots the trajectories of the first three
-#' groups. The `n_plot` is a safety measure to prevent unintended
-#' plots of the entire data set.
 #' @param ... Extra arguments passed down to [predict.brokenstick()]
 #' and [plot_trajectory()].
 #' @inheritParams predict.brokenstick
@@ -49,16 +35,8 @@
 #' @export
 plot.brokenstick <- function(x,
                              newdata = NULL,
-                             ...,
-                             what = "droplast",
-                             .x = NULL,
-                             group = NULL,
-                             xlim = NULL,
-                             ylim = NULL,
-                             show = c(TRUE, TRUE, FALSE),
-                             n_plot = 3L) {
-  stopifnot(inherits(x, "brokenstick"),
-            any(show))
+                             ...) {
+  stopifnot(inherits(x, "brokenstick"))
   install.on.demand("ggplot2", ...)
 
   # handle newdata
@@ -76,6 +54,75 @@ plot.brokenstick <- function(x,
          call. = FALSE)
   }
 
+  g <- plot_trajectory(x = x, newdata = newdata, ...)
+  return(g)
+}
+
+
+#' Plot observed and fitted trajectories from fitted brokenstick model
+#'
+#' @inheritParams predict.brokenstick
+#' @param x An object of class `brokenstick`.
+#' @param newdata A `data.frame` or `matrix`
+#' @param what Which knots to plot? See [get_knots()]. The default,
+#' `what = "droplast"`, does not plot the right boundary knot.
+#' @param .x The `x` argument of the [predict.brokenstick()] function.
+#' @param color_y A character vector with two elements specifying the symbol and line color of the measured data points
+#' @param size_y Dot size of measured data points
+#' @param color_yhat A character vector with two elements specifying the symbol and line color of the predicted data points
+#' @param size_yhat Dot size of predicted data points
+#' @param color_imp A character vector with two elements specifying the symbol and line color of the imputed data
+#' @param size_imp Dot size of imputed data
+#' @param ncol Number of columns in plot
+#' @param xlab The label of the x-axis
+#' @param ylab The label of the y-axis
+#' @param xlim Vector of length 2 with range of x-axis
+#' @param ylim Vector of length 2 with range of y-axis
+#' @param show A logical vector of length 3. Element 1 specifies
+#' whether the observed data are plotted, element 2 specifies
+#' whether the broken stick are plotted, element 3 specifies
+#' whether imputations are plotted. The default is
+#' `c(TRUE, TRUE, FALSE)`.
+#' @param n_plot A integer indicating the number of individual plots.
+#' The default is 3, which plots the trajectories of the first three
+#' groups. The `n_plot` is a safety measure to prevent unintended
+#' plots of the entire data set.
+#' @param scales Axis scaling, e.g. `"fixed"`, `"free"`, and so on
+#' @param theme Plotting theme
+#' @param \dots Extra arguments passed down to [predict.brokenstick()].
+#' @return An object of class \code{ggplot}
+#' @rdname plot_trajectory
+#' @seealso [plot.brokenstick]
+#' @export
+plot_trajectory <- function(x,
+                            newdata,
+                            what = "droplast",
+                            .x = NULL,
+                            group = NULL,
+                            color_y = c(
+                              grDevices::hcl(240, 100, 40, 0.7),
+                              grDevices::hcl(240, 100, 40, 0.8)
+                            ),
+                            size_y = 2,
+                            color_yhat = c(
+                              grDevices::hcl(0, 100, 40, 0.7),
+                              grDevices::hcl(0, 100, 40, 0.8)
+                            ),
+                            size_yhat = 2,
+                            color_imp = c("grey80", "grey80"),
+                            size_imp = 2,
+                            ncol = 3L,
+                            xlab = NULL,
+                            ylab = NULL,
+                            xlim = NULL,
+                            ylim = NULL,
+                            show = c(TRUE, TRUE, FALSE),
+                            n_plot = 3L,
+                            scales = "fixed",
+                            theme = ggplot2::theme_light(),
+                            ...) {
+  stopifnot(inherits(x, "brokenstick"),
+            any(show))
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
   data <- predict(
@@ -149,55 +196,8 @@ plot.brokenstick <- function(x,
   if (!show[3L]) idx <- idx & data[[".source"]] != "imputed"
 
   data <- data[idx, , drop = FALSE]
-  g <- plot_trajectory(x = x, data = data, xlim = xlim, ylim = ylim, ...)
-  return(g)
-}
+  # g <- plot_trajectory(x = x, data = data, xlim = xlim, ylim = ylim, ...)
 
-
-#' Plot observed and fitted trajectories from fitted brokenstick model
-#'
-#' This function is called by `plot.brokenstick`. Normally we wouldn't
-#' call `plot_trajectory()` directly.
-#' @param x An object of class `brokenstick`.
-#' @param data A `data.frame` with columns names `x$names`, `".source"`
-#' and `".pred"`, and possibly `".imp"`
-#' @param color_y A character vector with two elements specifying the symbol and line color of the measured data points
-#' @param size_y Dot size of measured data points
-#' @param color_yhat A character vector with two elements specifying the symbol and line color of the predicted data points
-#' @param size_yhat Dot size of predicted data points
-#' @param color_imp A character vector with two elements specifying the symbol and line color of the imputed data
-#' @param size_imp Dot size of imputed data
-#' @param ncol Number of columns in plot
-#' @param xlab The label of the x-axis
-#' @param ylab The label of the y-axis
-#' @param xlim Vector of length 2 with range of x-axis
-#' @param ylim Vector of length 2 with range of y-axis
-#' @param scales Axis scaling, e.g. `"fixed"`, `"free"`, and so on
-#' @param theme Plotting theme
-#' @return An object of class \code{ggplot}
-#' @rdname plot_trajectory
-#' @seealso [plot.brokenstick]
-plot_trajectory <- function(x,
-                            data,
-                            color_y = c(
-                              grDevices::hcl(240, 100, 40, 0.7),
-                              grDevices::hcl(240, 100, 40, 0.8)
-                            ),
-                            size_y = 2,
-                            color_yhat = c(
-                              grDevices::hcl(0, 100, 40, 0.7),
-                              grDevices::hcl(0, 100, 40, 0.8)
-                            ),
-                            size_yhat = 2,
-                            color_imp = c("grey80", "grey80"),
-                            size_imp = 2,
-                            ncol = 3L,
-                            xlab = NULL,
-                            ylab = NULL,
-                            xlim = NULL,
-                            ylim = NULL,
-                            scales = "fixed",
-                            theme = ggplot2::theme_light()) {
   if (is.null(xlab)) xlab <- x$names$x
   if (is.null(ylab)) ylab <- x$names$y
   g <- ggplot2::ggplot(data, ggplot2::aes_string(x = x$names$x, y = x$names$y)) +
