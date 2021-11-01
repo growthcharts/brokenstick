@@ -2,8 +2,8 @@
 #'
 #' @param object An object of class \code{brokenstick}
 #' @param what A character vector of length 1. Valid values are
-#' \code{"all"}, \code{"internal"}, \code{"boundary"} or \code{"droplast"}.
-#' The default is \code{what = "all"}.
+#' \code{"all"}, \code{"internal"}, \code{"boundary"}, \code{"dropfirst"}
+#' or \code{"droplast"}. The default is \code{what = "all"}.
 #' @return A vector with knot locations, either both, internal only or
 #' boundary only. The result is \code{NULL} if \code{object} does not
 #' have proper class. Returns \code{numeric(0)} if
@@ -12,7 +12,7 @@
 #' get_knots(fit_200, "internal")
 #' @export
 get_knots <- function(object,
-                      what = c("all", "internal", "boundary", "droplast")
+                      what = c("all", "internal", "boundary", "dropfirst", "droplast")
 ) {
   stopifnot(inherits(object, c("brokenstick")))
 
@@ -27,6 +27,7 @@ get_knots <- function(object,
                    all = c(boundary[1L], internal, boundary[2L]),
                    internal = internal,
                    boundary = boundary,
+                   dropfirst = c(internal, boundary[2L]),
                    droplast = c(boundary[1L], internal)
   )
   return(result)

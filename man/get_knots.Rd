@@ -4,14 +4,17 @@
 \alias{get_knots}
 \title{Obtain the knots from a broken stick model}
 \usage{
-get_knots(object, what = c("all", "internal", "boundary", "droplast"))
+get_knots(
+  object,
+  what = c("all", "internal", "boundary", "dropfirst", "droplast")
+)
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick}}
 
 \item{what}{A character vector of length 1. Valid values are
-\code{"all"}, \code{"internal"}, \code{"boundary"} or \code{"droplast"}.
-The default is \code{what = "all"}.}
+\code{"all"}, \code{"internal"}, \code{"boundary"}, \code{"dropfirst"}
+or \code{"droplast"}. The default is \code{what = "all"}.}
 }
 \value{
 A vector with knot locations, either both, internal only or
