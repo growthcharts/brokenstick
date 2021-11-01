@@ -3,35 +3,30 @@
 #' The `plot` method for a `brokenstick` object plots the observed and
 #' fitted trajectories of one or more groups.
 #'
+#' By default, `plot(fit)` will plot the observed and fitted data for the
+#' first three groups in the data. The default setting drops the fitted value
+#' at the right boundary knot from the display.
+#'
 #' @param x An object of class `brokenstick`.
 #' @param ... Extra arguments passed down to [predict.brokenstick()]
 #' and [plot_trajectory()].
 #' @inheritParams predict.brokenstick
 #' @return An object of class [ggplot2::ggplot].
-#' @author Stef van Buuren 2020
+#' @author Stef van Buuren 2021
 #' @method plot brokenstick
 #' @seealso [predict.brokenstick], [plot_trajectory].
 #' @examples
 #' # fit model on raw hgt with knots at 0, 1, 2 and 3 years
 #' fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:3)
 #' gp <- c(10001, 10005, 10022)
-#' plot(fit1, smocc_200,
-#'   group = gp, xlim = c(0, 2.1),
-#'   xlab = "Age (years)", ylab = "Length (cm)"
-#' )
+#' plot(fit1, group = gp, xlab = "Age (years)", ylab = "Length (cm)")
 #'
 #' # fit model on standard deviation score
 #' fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:3)
-#' plot(fit2, smocc_200,
-#'   group = gp, xlim = c(0, 2.1),
-#'   xlab = "Age (years)", ylab = "Length (SDS)"
-#' )
+#' plot(fit2, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
 #'
-#' # model with 11 knots
-#' plot(fit_200, smocc_200,
-#'   group = gp, xlim = c(0, 2.1),
-#'   xlab = "Age (years)", ylab = "Length (SDS)"
-#' )
+#' # built-in model with 11 knots
+#' plot(fit_200, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
 #' @export
 plot.brokenstick <- function(x,
                              newdata = NULL,
