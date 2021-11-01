@@ -1,5 +1,6 @@
 # brokenstick 1.1.1.9000
 
+- Adds choice `"dropfirst"` to `get_knots()`
 - Rename `"knots"` list element in `brokenstick` object to `"internal"`
 - Adds legacy support for `"knots"` list element for old (pre V2.0) `brokenstick` objects
 - Adds `summary()` and `print` methods for `brokenstick` object
