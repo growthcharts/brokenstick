@@ -2,9 +2,9 @@
 #'
 #' @param object An object of class \code{brokenstick}
 #' @param what A character vector of length 1. Valid values are
-#' @param \dots Not used
 #' \code{"all"}, \code{"knots"}, \code{"boundary"} or \code{"droplast"}.
 #' The default is \code{what = "all"}.
+#' @param \dots Not used
 #' @return A vector with knot locations, either both, internal only or
 #' boundary only. The result is \code{NULL} if \code{object} does not
 #' have proper class. The function can return \code{numeric(0)} if
