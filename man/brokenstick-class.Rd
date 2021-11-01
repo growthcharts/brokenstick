@@ -26,7 +26,7 @@ A \code{brokenstick} object is a list with the following named elements:
 e.g. \code{formula(y ~ x | group)}}
 \item{\code{names}}{A list with elements named \code{x}, \code{y} and \code{g} providing the
 variables names for the time, outcome and subject columns, respectively.}
-\item{\code{knots}}{Numeric vector of with internal knots. Use \code{\link[=get_knots]{get_knots()}}
+\item{\code{internal}}{Numeric vector of with internal knots. Use \code{\link[=get_knots]{get_knots()}}
 to extract knots.}
 \item{\code{boundary}}{Numeric vector of length 2 with the boundary knots. Use
 \code{\link[=get_knots]{get_knots()}} to extract knots.}

@@ -323,7 +323,7 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
   if (object$degree > 1L) stop("Cannot predict for degree > 1")
 
   X <- make_basis(x = x,
-                  knots = get_knots(object, "knots"),
+                  internal = get_knots(object, "internal"),
                   boundary = get_knots(object, "boundary"),
                   degree = object$degree,
                   warn = FALSE)

@@ -20,7 +20,7 @@
 #'    e.g. `formula(y ~ x | group)`}
 #'    \item{`names`}{A list with elements named `x`, `y` and `g` providing the
 #'    variables names for the time, outcome and subject columns, respectively.}
-#'    \item{`knots`}{Numeric vector of with internal knots. Use [get_knots()]
+#'    \item{`internal`}{Numeric vector of with internal knots. Use [get_knots()]
 #'    to extract knots.}
 #'    \item{`boundary`}{Numeric vector of length 2 with the boundary knots. Use
 #'    [get_knots()] to extract knots.}
@@ -60,7 +60,7 @@ new_brokenstick <- function(call = match.call(),
                             names = list(x = character(),
                                          y = character(),
                                          g = character()),
-                            knots = numeric(0),
+                            internal = numeric(0),
                             boundary = numeric(0),
                             degree = 1L,
                             method = NA_character_,
@@ -77,7 +77,7 @@ new_brokenstick <- function(call = match.call(),
   result <- list(call = call,
                  formula = formula,
                  names = names,
-                 knots = knots,
+                 internal = internal,
                  boundary = boundary,
                  degree = degree,
                  method = method,

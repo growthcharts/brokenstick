@@ -7,7 +7,7 @@ model.frame.brokenstick <- function(formula, ...) {
 model.matrix.brokenstick <- function(object, ...) {
   x_name <- object$names$x[1L]
   obj <- make_basis(x = object$data[[x_name]],
-                    knots = object$knots,
+                    internal = object$internal,
                     boundary = object$boundary)
   return(obj)
 }

@@ -1,7 +1,7 @@
-calculate_knots <- function(x, k, knots, boundary) {
+calculate_knots <- function(x, k, internal, boundary) {
 
   k_orig <- k
-  knots_orig <- knots
+  knots_orig <- internal
   boundary_orig <- boundary
 
   # for NULL or length not 2, set boundary to data range
@@ -35,5 +35,5 @@ calculate_knots <- function(x, k, knots, boundary) {
     }
 
   }
-  return(list(k = k, knots = knots, boundary = boundary))
+  return(list(k = k, internal = knots, boundary = boundary))
 }

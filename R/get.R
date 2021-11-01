@@ -2,34 +2,35 @@
 #'
 #' @param object An object of class \code{brokenstick}
 #' @param what A character vector of length 1. Valid values are
-#' \code{"all"}, \code{"knots"}, \code{"boundary"} or \code{"droplast"}.
+#' \code{"all"}, \code{"internal"}, \code{"boundary"} or \code{"droplast"}.
 #' The default is \code{what = "all"}.
 #' @return A vector with knot locations, either both, internal only or
 #' boundary only. The result is \code{NULL} if \code{object} does not
-#' have proper class. The function can return \code{numeric(0)} if
+#' have proper class. Returns \code{numeric(0)} if
 #' there are no internal knots.
 #' @examples
-#' get_knots(fit_200, "knots")
+#' get_knots(fit_200, "internal")
 #' @export
 get_knots <- function(object,
-                      what = c("all", "knots", "boundary", "droplast")
+                      what = c("all", "internal", "boundary", "droplast")
 ) {
   stopifnot(inherits(object, c("brokenstick")))
 
   what <- match.arg(what)
-  knots <- object$knots
+  internal <- object$internal
+  # legacy for objects created before v2.0
+  if (is.null(internal)) internal <- object$knots
   boundary <- object$boundary
-  internal <- knots[knots > boundary[1L] & knots < boundary[2L]]
+  internal <- internal[internal > boundary[1L] & internal < boundary[2L]]
 
   result <- switch(what,
                    all = c(boundary[1L], internal, boundary[2L]),
-                   knots = internal,
+                   internal = internal,
                    boundary = boundary,
                    droplast = c(boundary[1L], internal)
   )
   return(result)
 }
-
 
 #' Obtain proportion of explained variance from a broken stick model
 #'

@@ -7,7 +7,7 @@
 make_basis(
   x,
   xname = "x",
-  knots = NULL,
+  internal = NULL,
   boundary = range(x),
   degree = 1L,
   warn = TRUE
@@ -18,7 +18,7 @@ make_basis(
 
 \item{xname}{predictor name. Default is \code{"x"}}
 
-\item{knots}{a vector of internal knots, excluding boundary knots}
+\item{internal}{a vector of internal knots, excluding boundary knots}
 
 \item{boundary}{vector of external knots}
 
@@ -44,8 +44,8 @@ array always included \code{boundary[1L]}.
 }
 \examples{
 knots <- c(58, 64, 68, 72)
-d1 <- make_basis(women$height, xname = "hgt", knots = knots)
-d0 <- make_basis(women$height, xname = "hgt", knots = knots, degree = 0)
+d1 <- make_basis(women$height, xname = "hgt", internal = knots)
+d0 <- make_basis(women$height, xname = "hgt", internal = knots, degree = 0)
 }
 \author{
 Stef van Buuren, 2020
