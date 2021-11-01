@@ -14,7 +14,11 @@ summary.brokenstick <- function(object, ...,
   ans$method <- object$method
   ans$beta <- localsummary.beta(object, digits)
   ans$omega <- localsummary.omega(object, digits, what = what)
-  ans$sigma2j <- summary(object$sigma2j)[c(1:3, 5, 6)]
+  if (length(object$sigma2j)) {
+    ans$sigma2j <- summary(object$sigma2j)[c(1:3, 5, 6)]
+  } else {
+    ans$sigma2j <- object$sigma2j
+  }
   ans$sigma2 <- object$sigma2
   ans$light <- object$light
   ans$sample <- object$sample
@@ -41,8 +45,9 @@ print.summary.brokenstick <- function(x,
       x$model$nerr, "(error)\n")
   cat("Knots       ", x$knots, "\n")
   cat("Means       ", x$beta, "\n")
-  if (length(x$sigma2j))
+  if (length(x$sigma2j)) {
     cat("Residuals   ", x$sigma2j, "(min, P25, P50, P75, max)\n")
+  }
   cat("Mean resid  ", x$sigma2, "\n")
   if (!is.null(x$r2)) cat("R-squared   ", x$r2, "\n")
   cat("\n")
