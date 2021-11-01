@@ -228,7 +228,7 @@ predict.brokenstick <- function(object, newdata = NULL,
   # handle special case: x = "knots"
   if (length(x)) {
     if (!is.na(x[1L]) && x[1L] == "knots")
-      x <- get_knots(object, ...)
+      x <- get_knots(object, what = "all")
   }
 
   # Default case: return prediction for every row in newdata
@@ -341,7 +341,7 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
   if (!length(blup))
     return(data.frame(.pred = rep(NA_real_, length(x))))
 
-  xv <- get_knots(object)
+  xv <- get_knots(object, what = "all")
   if (object$degree == 0L) xv <- xv[-length(xv)]
   long1 <- data.frame(
     group = rep(colnames(blup), each = nrow(blup)),

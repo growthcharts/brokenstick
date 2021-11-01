@@ -4,7 +4,7 @@
 \alias{get_knots}
 \title{Obtain the knots from a broken stick model}
 \usage{
-get_knots(object, what = c("all", "knots", "boundary", "droplast"), ...)
+get_knots(object, what = c("all", "knots", "boundary", "droplast"))
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick}}
@@ -12,8 +12,6 @@ get_knots(object, what = c("all", "knots", "boundary", "droplast"), ...)
 \item{what}{A character vector of length 1. Valid values are
 \code{"all"}, \code{"knots"}, \code{"boundary"} or \code{"droplast"}.
 The default is \code{what = "all"}.}
-
-\item{\dots}{Not used}
 }
 \value{
 A vector with knot locations, either both, internal only or
