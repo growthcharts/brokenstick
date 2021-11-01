@@ -1,5 +1,7 @@
 # brokenstick 1.1.1.9000
 
+- Rename `"knots"` list element in `brokenstick` object to `"internal"`
+- Adds legacy support for `"knots"` list element for old (pre V2.0) `brokenstick` objects
 - Adds `summary()` and `print` methods for `brokenstick` object
 - Adds a function `get_omega()` to extract the variance-covariance matrix of the broken stick estimates
 - `predict_brokenstick()` can now work with the both (internal) training and (external) test data. All special cases updated and thouroghly explained in the documentation and examples.
