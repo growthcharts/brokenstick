@@ -15,8 +15,7 @@
 #' @export
 parse_formula <- function(f) {
 
-  if (!inherits(f, "formula"))
-    stop(call. = FALSE, "Not a formula.")
+  stopifnot(inherits(f, "formula"))
   if (length(f[[3L]]) != 3L)
     stop(call. = FALSE, "Can't find RHS expansion in formula.")
   if (f[[3L]][[1L]] != "|")

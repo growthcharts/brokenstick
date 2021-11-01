@@ -13,24 +13,19 @@
 #' @export
 get_knots <- function(object,
                       what = c("all", "knots", "boundary", "droplast")
-                      ) {
-  if (!inherits(object, c("brokenstick"))) {
-    return(NULL)
-  }
+) {
+  stopifnot(inherits(object, c("brokenstick")))
 
   what <- match.arg(what)
-  if (inherits(object, "brokenstick")) {
-    knots <- object$knots
-    boundary <- object$boundary
-  }
-
-  internal <- knots[knots > boundary[1] & knots < boundary[2]]
+  knots <- object$knots
+  boundary <- object$boundary
+  internal <- knots[knots > boundary[1L] & knots < boundary[2L]]
 
   result <- switch(what,
-    all = c(boundary[1], internal, boundary[2]),
-    knots = internal,
-    boundary = boundary,
-    droplast = c(boundary[1], internal)
+                   all = c(boundary[1L], internal, boundary[2L]),
+                   knots = internal,
+                   boundary = boundary,
+                   droplast = c(boundary[1L], internal)
   )
   return(result)
 }
@@ -45,9 +40,7 @@ get_knots <- function(object,
 #' get_r2(fit_200)
 #' @export
 get_r2 <- function(object, newdata = NULL) {
-  if (!inherits(object, "brokenstick")) {
-    stop("object not of class brokenstick")
-  }
+  stopifnot(inherits(object, "brokenstick"))
   if (is.null(newdata) && object$light) {
     stop("A light brokenstick object expects a `newdata` argument.", call. = FALSE)
   }
