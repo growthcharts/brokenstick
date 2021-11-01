@@ -42,6 +42,9 @@ points are extracted from \code{newdata}. Works best for \code{shape = "long"}.}
 specifying the shape of the return value. Note that use of \code{"wide"}
 with many unique values in \code{x} creates an unwieldy, large
 and sparse matrix.}
+
+\item{what}{Which knots to predict when \code{x = "knots"}? See \code{\link[=get_knots]{get_knots()}}.
+The default, \code{NULL}, calculates all knots.}
 }
 \value{
 If \code{shape == "long"} a long tibble of predictions. If \code{x}, \code{y} and \code{group}

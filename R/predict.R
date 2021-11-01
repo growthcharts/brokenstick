@@ -32,6 +32,10 @@
 #' specifying the shape of the return value. Note that use of `"wide"`
 #' with many unique values in `x` creates an unwieldy, large
 #' and sparse matrix.
+#'
+#' @param what Which knots to predict when `x = "knots"`? See [get_knots()].
+#' The default, `NULL`, calculates all knots.
+#'
 #' @details
 #'
 #' By default, `predict()` calculates predictions for every row in
