@@ -4,7 +4,7 @@
 \alias{get_r2}
 \title{Obtain proportion of explained variance from a broken stick model}
 \usage{
-get_r2(object, newdata)
+get_r2(object, newdata = NULL)
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick}}
@@ -18,5 +18,5 @@ Proportion of explained variance
 Obtain proportion of explained variance from a broken stick model
 }
 \examples{
-get_r2(fit_200, smocc_200)
+get_r2(fit_200)
 }

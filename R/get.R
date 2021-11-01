@@ -42,11 +42,17 @@ get_knots <- function(object,
 #' @param newdata Data on which `r.squared` must be calculated
 #' @return Proportion of explained variance
 #' @examples
-#' get_r2(fit_200, smocc_200)
+#' get_r2(fit_200)
 #' @export
-get_r2 <- function(object, newdata) {
+get_r2 <- function(object, newdata = NULL) {
   if (!inherits(object, "brokenstick")) {
     stop("object not of class brokenstick")
+  }
+  if (is.null(newdata) && object$light) {
+    stop("A light brokenstick object expects a `newdata` argument.", call. = FALSE)
+  }
+  if (is.null(newdata) && !object$light) {
+    newdata <- object$data
   }
 
   p <- predict(object, newdata = newdata)
