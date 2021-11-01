@@ -1,4 +1,4 @@
-reset_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
+append_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
 
   if (is.null(data)) stop("`data` not found.")
   if (is.null(x) && is.null(y) && is.null(group)) {
