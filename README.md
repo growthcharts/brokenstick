@@ -7,8 +7,7 @@
 
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
-[![CRAN\_Status\_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
-[![](https://img.shields.io/badge/github%20version-1.1.0-orange.svg)](https://github.com/growthcharts/brokenstick)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
 <!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear
@@ -30,11 +29,12 @@ Install the `brokenstick` package from CRAN as follows:
 install.packages("brokenstick")
 ```
 
-The latest version can be installed from GitHub as follows:
+The latest version (revision branch) can be installed from GitHub as
+follows:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("growthcharts/brokenstick")
+remotes::install_github("growthcharts/brokenstick@revision")
 ```
 
 ## Overview
@@ -42,11 +42,11 @@ remotes::install_github("growthcharts/brokenstick")
 The *broken stick model* describes a set of individual curves by a
 linear mixed model using linear B-splines. The model can be used
 
-  - to smooth growth curves by a series of connected straight lines;
-  - to align irregularly observed curves to a common age grid;
-  - to create synthetic curves at a user-specified set of break ages;
-  - to estimate the time-to-time correlation matrix;
-  - to predict future observations.
+-   to smooth growth curves by a series of connected straight lines;
+-   to align irregularly observed curves to a common age grid;
+-   to create synthetic curves at a user-specified set of break ages;
+-   to estimate the time-to-time correlation matrix;
+-   to predict future observations.
 
 The user specifies a set of break ages at which the straight lines
 connect. Each individual obtains an estimate at each break age, so the
@@ -55,51 +55,51 @@ observed trajectory.
 
 The main assumptions of the broken stick model are:
 
-  - The trajectory between the break ages follows a straight line, and
+-   The trajectory between the break ages follows a straight line, and
     is generally not of particular interest;
-  - Broken stick estimates follow a common multivariate normal
+-   Broken stick estimates follow a common multivariate normal
     distribution;
-  - Missing data are missing at random (MAR);
-  - Individuals are exchangeable and uncorrelated.
+-   Missing data are missing at random (MAR);
+-   Individuals are exchangeable and uncorrelated.
 
 In order to conform to the assumption of multivariate normality, the
 user may fit the broken stick model on suitably transformed data that
-yield the standard normal (\(Z\)) scale. Unique feature of the broken
+yield the standard normal (*Z*) scale. Unique feature of the broken
 stick model are:
 
-  - *Modular*: Issues related to non-linearity of the growth curves in
+-   *Modular*: Issues related to non-linearity of the growth curves in
     the observed scale can be treated separately, i.e., outside the
     broken stick model;
-  - *Local*: A given data point will contribute only to the estimates
+-   *Local*: A given data point will contribute only to the estimates
     corresponding to the closest break ages;
-  - *Exportable*: The broken stick model can be exported and reused for
+-   *Exportable*: The broken stick model can be exported and reused for
     prediction for new data in alternative computing environments.
 
 The `brokenstick` package contains functions for
 
-  - Fitting the broken stick model to data,
-  - Plotting individual trajectories,
-  - Predicting broken stick estimates for new data.
+-   Fitting the broken stick model to data,
+-   Plotting individual trajectories,
+-   Predicting broken stick estimates for new data.
 
 ## Resources
 
 ### Background
 
-1.  I took the name *broken stick* from Ruppert, Wand, and Carroll
-    ([2003](#ref-ruppert2003)), page 59-61, but it is actually much
-    older.
-2.  As far as I know, de Kroon et al. ([2010](#ref-dekroon2010)) is the
-    first publication that uses the broken stick model without the
-    intercept in a mixed modelling context. See [The Terneuzen birth
-    cohort: BMI changes between 2 and 6 years correlate strongest with
-    adult
+1.  I took the name *broken stick* from [Ruppert, Wand, and
+    Carroll](#ref-ruppert2003) ([2003](#ref-ruppert2003)), page 59-61,
+    but it is actually much older.
+2.  As far as I know, [de Kroon et al.](#ref-dekroon2010)
+    ([2010](#ref-dekroon2010)) is the first publication that uses the
+    broken stick model without the intercept in a mixed modelling
+    context. See [The Terneuzen birth cohort: BMI changes between 2 and
+    6 years correlate strongest with adult
     overweight](https://stefvanbuuren.name/publications/2010%20TBC%20Overweight%20-%20PLoS%20ONE.pdf).
 3.  The model was formally defined and extended in [Flexible Imputation
     of Missing Data (second
     edition)](https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick).
-    See van Buuren ([2018](#ref-vanbuuren2018)).
-4.  The evaluation by Anderson et al. ([2019](#ref-anderson2019))
-    concluded:
+    See [van Buuren](#ref-vanbuuren2018) ([2018](#ref-vanbuuren2018)).
+4.  The evaluation by [Anderson et al.](#ref-anderson2019)
+    ([2019](#ref-anderson2019)) concluded:
 
 > > We recommend the use of the brokenstick model with standardised
 > > Z‐score data. Aside from the accuracy of the fit, another key
@@ -109,19 +109,19 @@ The `brokenstick` package contains functions for
 
 ### Instructive materials
 
-  - [Companion site](https://growthcharts.org/brokenstick/) contains
+-   [Companion site](https://growthcharts.org/brokenstick/) contains
     vignettes and articles that explain the model and the use of the
     software;
-  - Paper in preparation: *Broken Stick Model for Irregular Longitudinal
+-   Paper in preparation: *Broken Stick Model for Irregular Longitudinal
     Data*:
     [pdf](https://stefvanbuuren.name/publications/2020_Brokenstick_JSS_manuscript.pdf),
     [html](https://growthcharts.org/brokenstick/articles/brokenstick-article.html).
 
 ### References
 
-<div id="refs" class="references">
+<div id="refs" class="references csl-bib-body hanging-indent">
 
-<div id="ref-anderson2019">
+<div id="ref-anderson2019" class="csl-entry">
 
 Anderson, C., R. Hafen, O. Sofrygin, L. Ryan, and HBGDki Community.
 2019. “Comparing Predictive Abilities of Longitudinal Child Growth
@@ -129,7 +129,7 @@ Models.” *Statistics in Medicine* 38 (19): 3555–70.
 
 </div>
 
-<div id="ref-dekroon2010">
+<div id="ref-dekroon2010" class="csl-entry">
 
 de Kroon, M. L. A., C. M. Renders, J. P. van Wouwe, S. van Buuren, and
 R. A. Hirasing. 2010. “The Terneuzen Birth Cohort: BMI Changes Between 2
@@ -138,14 +138,14 @@ and 6 Years Correlate Strongest with Adult Overweight.” *PloS ONE* 5
 
 </div>
 
-<div id="ref-ruppert2003">
+<div id="ref-ruppert2003" class="csl-entry">
 
 Ruppert, D., M. P. Wand, and R. J. Carroll. 2003. *Semiparametric
 Regression*. Cambridge: Cambridge University Press.
 
 </div>
 
-<div id="ref-vanbuuren2018">
+<div id="ref-vanbuuren2018" class="csl-entry">
 
 van Buuren, S. 2018. *Flexible Imputation of Missing Data. Second
 Edition*. Boca Raton, FL.: CRC Press.
