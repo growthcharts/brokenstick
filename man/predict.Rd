@@ -12,7 +12,8 @@
   y = NULL,
   group = NULL,
   strip_data = TRUE,
-  shape = c("long", "wide", "vector")
+  shape = c("long", "wide", "vector"),
+  what = NULL
 )
 }
 \arguments{

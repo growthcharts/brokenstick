@@ -222,13 +222,14 @@ predict.brokenstick <- function(object, newdata = NULL,
                                 ...,
                                 x = NULL, y = NULL, group = NULL,
                                 strip_data = TRUE,
-                                shape = c("long", "wide", "vector")) {
+                                shape = c("long", "wide", "vector"),
+                                what = NULL) {
   shape <- match.arg(shape)
 
   # handle special case: x = "knots"
   if (length(x)) {
     if (!is.na(x[1L]) && x[1L] == "knots")
-      x <- get_knots(object, what = "all")
+      x <- get_knots(object, what = what)
   }
 
   # Default case: return prediction for every row in newdata
