@@ -53,7 +53,7 @@ covar <- matrix(c(1, 0.7, 0.5, 0.3,
                   0.3, 0.5, 0.6, 1), nrow = 4)
 gen_dat <- make_data_generator(n = 10000, 
                                ranef_covar = covar,
-                               resid_var = 1)
+                               resid_var = 2)
 data <- gen_dat()
 head(data)
 ```
@@ -72,12 +72,13 @@ cor(broad)
 
 Fit broken stick model, with knots specified at ages `1:4`.
 
-```{r eval=FALSE}
+```{r}
 library("brokenstick")
 knots <- 1:3
 boundary <- c(1, 4)
 fit <- brokenstick(X1 ~ age | subject, data, 
-                   knots = knots, boundary = boundary)
+                   knots = knots, boundary = boundary,
+                   method = "lmer")
 omega <- fit$omega
 beta <- fit$beta
 sigma2 <- fit$sigma2
@@ -99,9 +100,9 @@ round(cor(broad), 3)
 
 ## Conclusions
 
-1. If $\sigma^2=0$, then $\Omega$ reproduces correlations between $y$'s correctly. However, the estimate of $\sigma^2$ is too high. 
-2. If $\sigma^2 > 0$, then $\Omega$ overestimates the correlations between $y$'s, but correctly estimates the covariance among the random effects.
-3. If $\sigma^2 > 0$, then $\Omega + \hat\sigma^2 I(n_i)$ correctly estimates the covariances between $y$'s. This can be converted by `cov2cor()` to the time-to-time correlation matrix.
+1. If $\sigma^2=0$, then the off-diagonal elements of $\Omega$ reproduce the correlations among the $y$'s. The estimate of $\sigma^2$ is too high (about 0.13 instead of 0).
+2. If $\sigma^2 > 0$, then $\hat C = \Omega + \hat\sigma^2 I(n_i)$ reproduces the sample covariance matrix between $y$'s exactly.
+3. `cov2cor(hatC)` reproduces the sample time-to-time correlation matrix.
 
 ## Further reading
 

@@ -99,9 +99,9 @@ Let us fit two models, with two and nine lines respectively, to the standard dev
 
 ```{r plotfit2echo, echo = TRUE, eval = FALSE}
 ids <- c(10001, 10005, 10022)
-fit2 <- brokenstick(hgt.z ~ age | id, smocc_200, knots = 0:3)
+fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:3)
 knots <- c(0, 0.0833, 0.1667, 0.25, 0.5, 0.75, 1, 1.25, 1.5, 2)
-fit9 <- brokenstick(hgt.z ~ age | id, smocc_200, 
+fit9 <- brokenstick(hgt_z ~ age | id, smocc_200, 
                     knots = knots, boundary = c(0, 3))
 m2 <- plot(fit2, smocc_200, group = ids,
            xlab = "Age (years)", ylab = "Length (SDS)")
@@ -112,7 +112,7 @@ gridExtra::grid.arrange(m2, m9, nrow = 2)
 
 ```{r plotfit2x, echo = FALSE, fig.height = 6, fig.cap = "Broken stick model with two (top) and nine (bottom) line segments for three children. Blue = observed data, Red = Fitted broken stick curves.", set.theme = TRUE}
 ids <- c(10001, 10005, 10022)
-fit2 <- brokenstick(hgt.z ~ age | id, smocc_200, knots = 0:3)
+fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:3)
 m2 <- plot(fit2, smocc_200, group = ids,
            xlab = "Age (years)", ylab = "Length (SDS)")
 m9 <- plot(brokenstick::fit_200, smocc_200, group = ids,
@@ -227,7 +227,7 @@ data <- brokenstick::smocc_200
 brk <- c(0, 0.5, 1, 2)
 X <- bs(data$age, knots = brk, Boundary.knots = c(0, 3), degree = 1)
 colnames(X) <- paste("age", c(brk, 3), sep = "_")
-data <- cbind(data[, c("id", "age", "hgt.z")], X)
+data <- cbind(data[, c("id", "age", "hgt_z")], X)
 head(data)
 ```
 
@@ -241,29 +241,32 @@ library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 
 ```{r}
 library(lme4)
-ctl <- .makeCC("warning", tol = 4e-3)
-f <- hgt.z ~ 0 + age_0 + age_0.5 + age_1 + age_2 + age_3 +
+f <- hgt_z ~ 0 + age_0 + age_0.5 + age_1 + age_2 + age_3 +
   (0 + age_0 + age_0.5 + age_1 + age_2 + age_3 | id)
-fit <- lmer(f, data, 
-            control = lmerControl(check.conv.grad = ctl))
+fit <- lmer(f, data)
 
 ### fitted trajectories for all persons
 bse <- t(t(ranef(fit)$id) + fixef(fit))
 head(round(bse, 3), 3)
 ```
 
-The broken stick estimates are the sum of the fixed and random effects. We need to remove the intercept as predictor rows all sum to 1. Warnings often occur when fitting broken stick models with `lme4::lmer()`. Here we have surpressed the warning `## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, : Model failed to converge with max|grad| = 0.0031397 (tol = 0.002, component 1)` by setting `tol` to a more relaxed value. I have found that the broken estimates still look sound and reasonable. Most of my experience derives for child growth data, so there is no guarantee that this apparent robustness will hold for other types of data. Warnings become less frequent for a lower number of breakpoints and larger samples sizes.
+The broken stick estimates are the sum of the fixed and random effects. Note that we removed the intercept so that all predictor rows sum to 1. 
+
+Warnings often occur when fitting broken stick models with `lme4::lmer()`. Here we have obtain the warning `Model failed to converge with max|grad| = 0.0066811 (tol = 0.002, component 1)`. I have found that we may generally ignore such warnings since the broken estimates look sound and reasonable. Note that most of my experience derives from fitting child growth data, so there is no guarantee that this apparent robustness will hold for other types of data. Warnings from `lmer()` become much more frequent for a higher number of breakpoints and larger samples sizes. One reason is that random effects in the broken stick model are highly correlated. It is kniwn that fitting the covariance matrix of the random effects is difficult for overparametrised models. In addition, very few data points inform the estimation of the random effect at the right hand boundary. As these estimates are unrealiable and uninteresting I tend to ignore the last random effect. The user may suppress warnings like these by setting `tol` to a more relaxed value. For example, adding `control = lmerControl(check.conv.grad = .makeCC("warning", tol = 1e-2))` to the arguments will silence `lmer()`. As example is
+
+```{r}
+ctl <- lmerControl(check.conv.grad = .makeCC("warning", tol = 1e-2))
+fit <- lmer(f, data, control = ctl)
+```
 
 The \pkg{brokenstick} package can fit the same model in an easier way:
 
 ```{r}
-ctl <- control_brokenstick(
-  lmer = lmerControl(check.conv.grad = 
-                       .makeCC("warning", tol = 4e-3)))
-mod <- brokenstick(hgt.z ~ age | id, data = smocc_200, 
+mod <- brokenstick(hgt_z ~ age | id, data = smocc_200, method = "lmer",
                    knots = c(0, 0.5, 1, 2), boundary = c(0, 3),
-                   control = ctl)
-head(predict(mod, smocc_200, x = "knots", shape = "wide"), 3)
+                   control = set_control(method = "lmer",
+                                         lmer = ctl))
+head(predict(mod, x = "knots", shape = "wide"), 3)
 ```
 
 ### Parameter estimation, method kr
@@ -335,7 +338,7 @@ The broken stick model can fit observations in either the raw scale (cm, kg, and
 It is easy to convert the measurements into the $Z$-score scale, fit the model, and convert back to the raw scale afterwards, if desired. There are several \proglang{R} packages that assist in the calculations: [\pkg{AGD}](https://CRAN.R-project.org/package=AGD), 
 [\pkg{anthro}](https://CRAN.R-project.org/package=anthro), [\pkg{childsds}](https://CRAN.R-project.org/package=childsds), [\pkg{growthstandards}](https://github.com/ki-tools/growthstandards) and [\pkg{zscorer}](https://CRAN.R-project.org/package=zscorer). 
 
-The `smocc_200` data contains the height measurement both in the original scale in cm (`hgt`) and the $Z$-score scale (`hgt.z`) relative to the height references from the Fourth Dutch Growth study [@fredriks2000]. Let us  recalculate height SDS using the \pkg{AGD} package. Fortunately, we find that the same values.
+The `smocc_200` data contains the height measurement both in the original scale in cm (`hgt`) and the $Z$-score scale (`hgt_z`) relative to the height references from the Fourth Dutch Growth study [@fredriks2000]. Let us  recalculate height SDS using the \pkg{AGD} package. Fortunately, we find that the same values.
 
 ```{r y2z}
 library(AGD)
@@ -343,11 +346,11 @@ z <- with(smocc_200, y2z(y = hgt,
                          x = age, 
                          sex = ifelse(sex == "male", "M", "F"), 
                          ref = nl4.hgt))
-identical(z, smocc_200$hgt.z)
+identical(z, smocc_200$hgt_z)
 ```
 
 ```{r zscores, echo = FALSE, fig.height=3, fig.cap = "Distribution of height SDS for 200 Dutch children.", set.theme = TRUE, warning=FALSE}
-ggplot(smocc_200, aes(hgt.z)) +
+ggplot(smocc_200, aes(hgt_z)) +
   xlim(-6, 6) + xlab("Height SDS") +
   theme_light() +
   geom_histogram(binwidth = 0.1, colour = "white", 
@@ -356,12 +359,12 @@ ggplot(smocc_200, aes(hgt.z)) +
                 color = colors[5], size = 0.7)
 ```
 
-Figure 3 shows that, as expected, the empirical Z-score distribution is close to the standard normal. The few very extremely low heights correspond to pre-term born infants. The next section concentrate on modelling `hgt.z`.
+Figure 3 shows that, as expected, the empirical Z-score distribution is close to the standard normal. The few very extremely low heights correspond to pre-term born infants. The next section concentrate on modelling `hgt_z`.
 
-Function `z2y()` applies the inverse transformation of $Z$-scores to the original scale. The following snippet converts `hgt.z` into the cm scale.
+Function `z2y()` applies the inverse transformation of $Z$-scores to the original scale. The following snippet converts `hgt_z` into the cm scale.
 
 ```{r z2y}
-y <- with(smocc_200, z2y(z = hgt.z, 
+y <- with(smocc_200, z2y(z = hgt_z, 
                          x = age, 
                          sex = ifelse(sex == "male", "M", "F"), 
                          ref = nl4.hgt))
@@ -375,7 +378,7 @@ In practice we found that the model fit is often better when applied to $Z$-scor
 ## Model fitting
 
 ```{r plotsds, echo=FALSE, fig.height=4, fig.cap = "Length growth of 52 infants expressed in the Z-score scale.", set.theme = TRUE, warning=FALSE}
-ggplot(smocc_200[1:500, ], aes(x = age, y = hgt.z, group = id, color = as.factor(id))) +
+ggplot(smocc_200[1:500, ], aes(x = age, y = hgt_z, group = id, color = as.factor(id))) +
   geom_line(size = 0.2) + 
   geom_point(size = 0.7) +
   scale_colour_viridis_d(option = "viridis") +
@@ -392,7 +395,7 @@ Figure 4 displays the growth curves of a subset of 52 children. The $Z$-score tr
 As a start, let us fit a simple model with just one line anchored at the minimum and maximum age. 
 
 ```{r line1, fig.height=3, fig.cap = "Simple linear model with one line anchored at the extremes.", set.theme = TRUE, warning=FALSE}
-fit <- brokenstick(hgt.z ~ age | id, smocc_200)
+fit <- brokenstick(hgt_z ~ age | id, smocc_200)
 ids <- c(10001, 10005, 10022)
 plot(fit, new_data = data, group = ids, what = "all",
      xlab = "Age (years)", ylab = "Length (cm)")
@@ -405,7 +408,7 @@ Figure 5 shows the observed (blue) and fitted (red) trajectories of three select
 We now extend to two connected lines. The first line should start at birth and end at the age of one year. The second line spans the period between one to two years. The lines must connect at the age of one year. We estimate and plot the model as follows:
 
 ```{r plotfit2z, fig.height=3, fig.cap = "Broken stick model with two lines.", set.theme = TRUE, warning=FALSE}
-fit2 <- brokenstick(hgt.z ~ age | id, smocc_200, knots = 0:2)
+fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:2)
 plot(fit2, data, group = ids, 
      xlab = "Age (years)", ylab = "Length (SDS)")
 ```
@@ -424,7 +427,7 @@ The two-line model does not fit well. We substantially refine the model by addin
 
 ```{r fit9, cache = TRUE, warning = FALSE, eval = FALSE}
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-fit9 <- brokenstick(hgt.z ~ age | id, data = smocc_200, 
+fit9 <- brokenstick(hgt_z ~ age | id, data = smocc_200, 
                     knots = knots, boundary = c(0, 3))
 ```
 
@@ -509,7 +512,7 @@ Suppose we have measured two children, Fred and Alice. We wish to obtain predict
 ```{r}
 data <- data.frame(
   age = c(0, 0.12, 0.32, 0.62, 1.1, 0.25, 0.46),
-  hgt.z = c(-1.2, -1.8, -1.7, -1.9, -2.1, -1.9, -1.5),
+  hgt_z = c(-1.2, -1.8, -1.7, -1.9, -2.1, -1.9, -1.5),
   id = c(rep("Fred", 5), rep("Alice", 2)))
 p <- predict(fit9, data, x = "knots", strip_data = FALSE)
 ```
@@ -531,14 +534,14 @@ pred <- predict(fit_200, smocc_200, shape = "vector")
 oldpar <- par(mfrow = c(1, 2))
 
 # Z-score scale
-MASS::eqscplot(x = smocc_200$hgt.z, xlab = "Height (SDS)", 
+MASS::eqscplot(x = smocc_200$hgt_z, xlab = "Height (SDS)", 
                y = pred, ylab = "Predicted Z-score", 
                pch = ".", xlim = c(-4, 4), ylim = c(-4, 4))
 abline(0, 1, col = "grey")
 
 # cm scale
 y_cm <- with(smocc_200, 
-             z2y(z = hgt.z, 
+             z2y(z = hgt_z, 
                  x = age, 
                  sex = ifelse(sex == "male", "M", "F"), 
                  ref = nl4.hgt))
@@ -554,8 +557,8 @@ abline(0, 1, col = "grey")
 par <- par(oldpar)
 ```
 
-<!-- round(cor(pred, smocc_200$hgt.z, use = "complete.obs")^2, 5) -->
-<!-- round(sd(pred - smocc_200$hgt.z, na.rm = TRUE), 3) -->
+<!-- round(cor(pred, smocc_200$hgt_z, use = "complete.obs")^2, 5) -->
+<!-- round(sd(pred - smocc_200$hgt_z, na.rm = TRUE), 3) -->
 <!-- r round(cor(y_cm, yhat_cm, use = "complete.obs")^2, 5) -->
 <!-- r round(sd(y_cm - yhat_cm, na.rm = TRUE), 3) -->
 
@@ -615,12 +618,14 @@ ggplot(mice::tbc, aes(age + 0.2, bmi.z)) +
 The Terneuzen Birth Cohort [@dekroon2008] comprises of 2604 children born around the year 1980 in Terneuzen, The Netherlands. Figure 10 shows the BMI standard deviation scores (SDS) against age in a random subset of 306 children. While we may easily recognise scheduled visits at birth, 1y and 14y, observations at other periods are less structured. Compared to the analysis in @dekroon2010, we removed the knots at 8 days and 18 years (because these appear in sparse data areas) and added knots at 4, 14 and 24 years. We set the right boundary knot to 29y, slightly higher than the maximum age in the data.
 
 ```{r tbc-lmer, cache=TRUE}
-ctl <- control_brokenstick(
-  lmer = lmerControl(check.conv.grad = .makeCC("warning", 0.02, NULL),
-                     check.conv.singular = .makeCC("ignore", 0.001)))
+ctl <- set_control(method = "lmer", 
+                   lmer = lmerControl(check.conv.grad = .makeCC("warning", 0.02, NULL),
+                                      check.conv.singular = .makeCC("ignore", 0.001)))
 fit_lmer <- brokenstick(bmi.z ~ age | id, data = mice::tbc,
                         knots = knots, boundary = c(0, 29),
-                        control = ctl)
+                        method = "lmer", control = ctl)
+fit_kr <- brokenstick(bmi.z ~ age | id, data = mice::tbc,
+                      knots = knots, boundary = c(0, 29))
 ```
 
 Depending on the precise specification of the knots, the default `brokenstick()` procedure that calls `lme4::lmer()` may print the warning `Model failed to converge with max|grad| = 0.011882 (tol = 0.002, component 1)` or a message `boundary (singular) fit: see ?isSingular`. These issues arise because of the over-parametrised nature of the default broken stick model, potentially resulting in a singular variance-covariance matrix `fit@omega`, combined with a sparsity of data. The `control_brokenstick()` command can prevent the warning and message.
@@ -705,7 +710,7 @@ where $Z_1$ and $Z_2$ are the standard deviation scores at times $T_1$ and $T_2$
 The broken stick model provides an estimate of the time-to-time correlation matrix. The `brokenstick` object stores the variance-covariance matrix $\Omega$ of the random effects in the list component `fit$omega`. For a perfectly fitting model (with $\sigma^2=0$) $\Omega$ equals the time-to-time covariance matrix, so `cov2cor(fit$omega)` gives the desired time-to-time correlation matrix. If $\sigma^2 > 0$ then $\Omega$ overestimates the covariances between the observed data. In general, we need to add the within-residual variance estimate to the diagonal, thus $\Omega + \hat\sigma^2 I(n_i)$ to estimate the time-to-time covariance matrix.
 
 ```{r t2t, cache=TRUE}
-fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, 
+fit <- brokenstick(hgt_z ~ age | id, data = smocc_200, 
                    knots = 1:4/2, boundary = c(0, 3))
 t2t <- fit$omega + diag(fit$sigma2, ncol(fit$omega))
 round(cov2cor(t2t), 2)
@@ -714,7 +719,7 @@ round(cov2cor(t2t), 2)
 In child growth, we expect that the correlation tapers off as the difference between $T_1$ and $T_2$ grows. Also, for a fixed interval $T_2-T_1$ we expect the correlation to increase with age. Ignoring the uninteresting estimate for `age_3`, we find that both expectations hold. Altering the number and location of the knots may change this. It is often useful to scan the time-to-time correlation matrix for gross deviations of the expectations. If such happens, one could simplify the model, for example, by subjecting $\Omega$ to a correlation model.
 
 ```{r t2tm, cache=TRUE}
-fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, 
+fit <- brokenstick(hgt_z ~ age | id, data = smocc_200, 
                    knots = seq(0, 2, 0.1), boundary = c(0, 3),
                    method = "kr")
 t2t <- fit$omega + diag(fit$sigma2, ncol(fit$omega))
@@ -961,17 +966,16 @@ Remember from section 2 that the broken stick estimates are conditional means. W
 
 Multiple imputation [@rubin1987; @vanbuuren2018] restores variability by adding noise. We may fit standard complete-data software to the imputed data, and obtain valid regression weights, confidence intervals and $P$-values under a wide range of conditions.
 
-By default, method `kr` executes 200 iterations of the Kasim-Raudenbush sampler. The `imp_skip` argument to the `control_kr()` function specifies the interval at which the method adds noise to the broken stick estimates. The following code block appends the break ages to the input data and sets `imp_skip = 10`. The call to the `brokenstick()` function thus creates 20 imputations for each missing outcome (`hgt.z` here).
+By default, method `kr` executes 200 iterations of the Kasim-Raudenbush sampler. The `imp_skip` argument to the `control_kr()` function specifies the interval at which the method adds noise to the broken stick estimates. The following code block appends the break ages to the input data and sets `imp_skip = 10`. The call to the `brokenstick()` function thus creates 20 imputations for each missing outcome (`hgt_z` here).
 
 ```{r mi-code, cache=TRUE, fig.height=3, fig.cap = "Observed data plotted on top of 20 imputed trajectories.", set.theme = TRUE, warning=FALSE}
-ctl <- control_brokenstick(kr = control_kr(imp_skip = 10))
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-data <- bind_rows(smocc_200[!is.na(smocc_200$hgt.z), ],
+data <- bind_rows(smocc_200[!is.na(smocc_200$hgt_z), ],
                   expand.grid(id = unique(smocc_200$id), age = knots))
-fit_kr <- brokenstick(hgt.z ~ age | id, data = data,
+fit_kr <- brokenstick(hgt_z ~ age | id, data = data,
                       knots = knots, boundary = c(0, 3),
-                      method = "kr", control = ctl, seed = 15244)
-plot(fit_kr, new_data = data, show = c(TRUE, FALSE, TRUE),
+                      control = control_kr(nimp = 20, seed = 123))
+plot(fit_kr, show = c(TRUE, FALSE, TRUE),
      group = c(10001, 10005, 10022),
      xlab = "Age (years)", ylab = "Length (SDS)")
 ```
@@ -982,8 +986,8 @@ Section 5.2 showed how we can estimate the time-to-time correlation matrix. An a
 
 ```{r t2t-imp}
 expand.grid(id = unique(smocc_200$id), age = knots) %>%
-  bind_cols(as.data.frame(fit_kr$draws)) %>%
-  pivot_longer(cols = starts_with("V"), names_to = "imp") %>%
+  bind_cols(as.data.frame(fit_kr$imp)) %>%
+  pivot_longer(cols = num_range("", 1:fit_kr$control$nimp), names_to = "imp") %>%
   pivot_wider(id_cols = c("id", "imp"), names_from = "age") %>%
   select(-id, -imp) %>%
   cor() %>%
@@ -1012,7 +1016,7 @@ target_data <- smocc_200 %>%
 
 # fit brokenstick model at time level
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-fit <- brokenstick(hgt.z ~ age | id, data = donor_data,
+fit <- brokenstick(hgt_z ~ age | id, data = donor_data,
                    knots = knots, boundary = c(0, 3),
                    method = "kr", seed = 15244)
 ```

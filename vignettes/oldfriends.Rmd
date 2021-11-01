@@ -59,7 +59,7 @@ Fit model, old version:
 
 ```{r fit-old, eval=FALSE}
 data <- brokenstick::smocc_200
-fit <- brokenstick(y = data$hgt.z, x = data$age, subjid = data$subjid)
+fit <- brokenstick(y = data$hgt_z, x = data$age, subjid = data$subjid)
 ```
 
 Fit model, version `0.75.0` and higher:
@@ -68,19 +68,22 @@ Fit model, version `0.75.0` and higher:
 data <- brokenstick::smocc_200
 
 # formula interface
-fit1 <- brokenstick(hgt.z ~ age | id, data)
+fit1 <- brokenstick(hgt_z ~ age | id, data)
 
 # XY interface - numeric vector
-fit2 <- with(data, brokenstick(age, hgt.z, id))
+# Deprecated in v2.0
+# fit2 <- with(data, brokenstick(age, hgt_z, id))
 
 # XY interface - data.frame
-fit3 <- with(data, brokenstick(data.frame(age), hgt.z, id))
+# Deprecated in v2.0
+# fit3 <- with(data, brokenstick(data.frame(age), hgt_z, id))
 
 # XY interface - matrix
-tt <- as.matrix(data[, c(1, 2, 7)])
-fit4 <- brokenstick(tt[, "age", drop = FALSE],
-                    tt[, "hgt.z", drop = FALSE],
-                    tt[, "id", drop = FALSE])
+# Deprecated in v2.0
+#tt <- as.matrix(data[, c(1, 2, 7)])
+#fit4 <- brokenstick(tt[, "age", drop = FALSE],
+#                    tt[, "hgt_z", drop = FALSE],
+#                    tt[, "id", drop = FALSE])
 ```
 
 All fitted models are identical.
@@ -108,16 +111,16 @@ Predict model, new version:
 
 ```{r predict-new}
 # predict at observed data
-p1 <- predict(fit1, data)
+p1 <- predict(fit1)
 
 # predict at knots
-p2 <- predict(fit1, data, x = "knots")
+p2 <- predict(fit1, x = "knots")
 
 # predict at both observed data and knots
-p3 <- predict(fit1, data, x = "knots", strip_data = FALSE)
+p3 <- predict(fit1, x = "knots", strip_data = FALSE)
 
 # predict knots, broad matrix
-p4 <- predict(fit1, data, x = "knots", shape = "wide")
+p4 <- predict(fit1, x = "knots", shape = "wide")
 ```
 
 
@@ -147,7 +150,7 @@ get_pev(fit)
 
 
 ```{r explain-new}
-get_r2(fit1, data)
+get_r2(fit1)
 ```
 
 
