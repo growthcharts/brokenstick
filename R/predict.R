@@ -239,7 +239,7 @@ predict.brokenstick <- function(object, newdata = NULL,
   if ((is.null(x) && is.null(y) && is.null(group))
       || is.null(x) && !is.null(y)) {
     if (is.null(newdata) && object$light) {
-      stop("A light brokenstick object expects a `newdata` argument.", call. = FALSE)
+      stop("Argument 'newdata' is required for a light brokenstick object.", call. = FALSE)
     }
     if (is.null(newdata) && !object$light) {
       # use internal data
@@ -255,12 +255,11 @@ predict.brokenstick <- function(object, newdata = NULL,
     if (is.null(newdata)) {
       if (object$light) {
         newdata <- data.frame()
-        # stop("Light brokenstick object expects a `newdata` argument.", call. = FALSE)
-      } else {
+              } else {
       newdata <- object$data
       }
     }
-    newdata <- reset_data(newdata, object$names, x = x, y = y, group = group)
+    newdata <- append_data(newdata, object$names, x = x, y = y, group = group)
     reset <- TRUE
   }
 

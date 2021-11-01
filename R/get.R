@@ -40,14 +40,7 @@ get_knots <- function(object,
 #' get_r2(fit_200)
 #' @export
 get_r2 <- function(object, newdata = NULL) {
-  stopifnot(inherits(object, "brokenstick"))
-  if (is.null(newdata) && object$light) {
-    stop("A light brokenstick object expects a `newdata` argument.", call. = FALSE)
-  }
-  if (is.null(newdata) && !object$light) {
-    newdata <- object$data
-  }
-
+  newdata <- get_newdata(object, newdata)
   p <- predict(object, newdata = newdata)
   nd <- newdata %>%
     select(object$names$y) %>%
@@ -91,4 +84,17 @@ get_omega <- function(x, what = c("cov", "cor"), names = NULL) {
   if (what == "cov") return(omega)
   if (dim(omega)[1L]) return(cov2cor(omega))
   return(omega)
+}
+
+get_newdata <- function(x, newdata) {
+  # sets the newdata argument
+  stopifnot(inherits(x, "brokenstick"))
+  if (is.null(newdata) && x$light) {
+    stop("Argument 'newdata' is required for a light brokenstick object.", call. = FALSE)
+  }
+  if (is.null(newdata) && !x$light) {
+    newdata <- x$data
+  }
+  stopifnot(is.data.frame(newdata) || is.matrix(newdata))
+  return(newdata)
 }

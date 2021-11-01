@@ -31,17 +31,8 @@
 plot.brokenstick <- function(x,
                              newdata = NULL,
                              ...) {
-  stopifnot(inherits(x, "brokenstick"))
   install.on.demand("ggplot2", ...)
-
-  # handle newdata
-  if (is.null(newdata) && x$light) {
-    stop("A light brokenstick object expects a `newdata` argument.", call. = FALSE)
-  }
-  if (is.null(newdata) && !x$light) {
-    newdata <- x$data
-  }
-  stopifnot(is.data.frame(newdata) || is.matrix(newdata))
+  newdata <- get_newdata(x, newdata)
   nms <- unname(unlist(x$names))
   if (!all(nms %in% colnames(newdata))) {
     stop("Variable(s) not found: ",
