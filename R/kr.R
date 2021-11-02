@@ -15,9 +15,10 @@
 #'     * `omega` Variance-covariance of random effects
 #'     * `sigma2_j` Residual variance per group
 #'     * `sigma2` Average residual variance
-#'     * `imputes` Numeric matrix with multiple imputations `m`. The number of
-#'    rows is equal to the number of missing values in the outcome vector `y`.
-#'    The number of columns equals `m`.
+#'     * `imputes` Numeric matrix with `nimp` multiple imputations.
+#'
+#' `imputes`: The number of rows is equal to the number of missing values in the outcome
+#' vector `y`. The number of columns equals `nimp`.
 #'
 #' @author Stef van Buuren, based on [mice::mice.impute.2l.norm()]
 #'
@@ -37,13 +38,12 @@
 #'
 #' It is possible to draw multiple imputations by setting the `m` parameters.
 #' For example, to draw five imputations for each missing outcome specify
-#' `control = control_kr(m = 5)`.
+#' `control = control_kr(nimp = 5)`.
 #'
 #' @references
 #' Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested
 #' variance components models with heterogeneous within-group variance. Journal
 #' of Educational and Behavioral Statistics, 23(2), 93--116.
-#' @export
 kr <- function(y,
                x,
                g,

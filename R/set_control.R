@@ -39,10 +39,9 @@ set_control <- function(method = c("kr", "lmer"),
 #' @param cormodel String indicating the correlation model:
 #'                 `"none"` (default), `"argyle"` or `"cole"`
 #' @param \dots    Allow for dot parameters
-#' @return         A list with eight components. The function calculates parameters
-#'                 `end` (the iteration number of the last iteration) and
-#'                 `thin_imp` (thinning factor for multiple imputations) from the
-#'                 other inputs.
+#' @return A list with eight components. The function calculates parameters
+#' `end` (the iteration number of the last iteration) and `thin_imp`
+#' (thinning factor for multiple imputations) from the other inputs.
 #' @export
 control_kr <- function(niter = 200L,
                        nimp = 0L,

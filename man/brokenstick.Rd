@@ -111,12 +111,22 @@ The alternative \code{method = "lmer"} fits the broken stick model by
 \code{\link[lme4:lmer]{lme4::lmer()}}. With this method, the variance-covariance matrix can only be
 unstructured. This estimate may be unstable if the number of children is
 small relative to the number of specified knots. The default setting
-in \verb{[lme4::lmerControl()]} is  \code{check.nobs.vs.nRE= "stop"}. The
+in \code{\link[lme4:lmerControl]{lme4::lmerControl()}} is  \code{check.nobs.vs.nRE= "stop"}. The
 \verb{[set_control()]} function changes this to \code{check.nobs.vs.nRE= "warning"}
 by default, since otherwise many broken stick models would not run at all.
 The method throws warnings that estimates are not stable. It can be time
 for models with many internal knots. Despite the warnings,
 the results often look reasonable.
+
+Diagnostics with \pkg{coda} and \pkg{lme4}: The function returns an object
+of class \code{brokenstick}. For \code{method = "kr"} the list component named
+\code{"mod"} contains a list of \code{mcmc} objects that can be further analysed with
+\code{\link[coda:trellisplots]{coda::acfplot()}}, \code{\link[coda:autocorr]{coda::autocorr()}}, \code{\link[coda:crosscorr]{coda::crosscorr()}}, \code{\link[coda:cumuplot]{coda::cumuplot()}},
+\code{\link[coda:densplot]{coda::densplot()}}, \code{\link[coda:effectiveSize]{coda::effectiveSize()}}, \code{\link[coda:geweke.plot]{coda::geweke.plot()}},
+\code{\link[coda:raftery.diag]{coda::raftery.diag()}}, \code{\link[coda:traceplot]{coda::traceplot()}} and the usual \code{plot()}
+and \code{summary()} functions. For \code{method = "lmer"} the list component named
+\code{"mod"} contains an object of class \link[lme4:merMod-class]{lme4::merMod}. These model objects
+are omitted in light \code{brokenstick} objects.
 }
 \note{
 Note that automatic knot specification is data-dependent, and may not reproduce

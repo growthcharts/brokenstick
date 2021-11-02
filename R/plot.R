@@ -79,7 +79,6 @@ plot.brokenstick <- function(x,
 #' @return An object of class \code{ggplot}
 #' @rdname plot_trajectory
 #' @seealso [plot.brokenstick]
-#' @export
 plot_trajectory <- function(x,
                             newdata,
                             what = "droplast",

@@ -94,13 +94,22 @@
 #' [lme4::lmer()]. With this method, the variance-covariance matrix can only be
 #' unstructured. This estimate may be unstable if the number of children is
 #' small relative to the number of specified knots. The default setting
-#' in `[lme4::lmerControl()]` is  `check.nobs.vs.nRE= "stop"`. The
+#' in [lme4::lmerControl()] is  `check.nobs.vs.nRE= "stop"`. The
 #' `[set_control()]` function changes this to `check.nobs.vs.nRE= "warning"`
 #' by default, since otherwise many broken stick models would not run at all.
 #' The method throws warnings that estimates are not stable. It can be time
 #' for models with many internal knots. Despite the warnings,
 #' the results often look reasonable.
 #'
+#' Diagnostics with \pkg{coda} and \pkg{lme4}: The function returns an object
+#' of class `brokenstick`. For `method = "kr"` the list component named
+#' `"mod"` contains a list of `mcmc` objects that can be further analysed with
+#' [coda::acfplot()], [coda::autocorr()], [coda::crosscorr()], [coda::cumuplot()],
+#' [coda::densplot()], [coda::effectiveSize()], [coda::geweke.plot()],
+#' [coda::raftery.diag()], [coda::traceplot()] and the usual `plot()`
+#' and `summary()` functions. For `method = "lmer"` the list component named
+#' `"mod"` contains an object of class [lme4::merMod]. These model objects
+#' are omitted in light `brokenstick` objects.
 #' @return
 #'
 #' A object of class `brokenstick`.

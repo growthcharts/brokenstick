@@ -32,11 +32,9 @@ bypass seed setting.}
 \item{\dots}{Allow for dot parameters}
 }
 \value{
-\preformatted{    A list with eight components. The function calculates parameters
-            `end` (the iteration number of the last iteration) and
-            `thin_imp` (thinning factor for multiple imputations) from the
-            other inputs.
-}
+A list with eight components. The function calculates parameters
+\code{end} (the iteration number of the last iteration) and \code{thin_imp}
+(thinning factor for multiple imputations) from the other inputs.
 }
 \description{
 Set controls for Kasim-Raudenbush sampler
