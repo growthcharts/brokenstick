@@ -72,6 +72,16 @@
 #' `boundary`.
 #'
 #' @details
+#' The choice between `method = "kr"` and `method = "lmer"` depends on the size
+#' of the data and the complexity of the model. In general, setting `method = "lmer"`
+#' can require substantial calculation time for more complex models
+#' (say > 8 internal knots) and may not converge. Method `"kr"` is less
+#' sensitive to model complexity and small samples, and has the added benefit that the
+#' variance-covariance matrix of the random effects can be constrained through the
+#' `cormodel` argument. On the other hand, `"lmer"` is the better-researched
+#' method, and could be much more efficient for simpler models and datasets with many
+#' rows.
+#'
 #' The default algorithm since version 2.0 is the Bayesian Kasim-Raudenbush
 #' sampler (`method = "kr"`). The variance-covariance matrix of the broken stick
 #' estimates absorbs the relations over time. The `"kr"` method allows
@@ -80,17 +90,16 @@
 #' and `"cole"`. Specify the `seed` argument for reproducibility.
 #' See [control_kr()] for more details.
 #'
-#' The alternative is `method = "lmer"`, which fits the broken stick model by
+#' The alternative `method = "lmer"` fits the broken stick model by
 #' [lme4::lmer()]. With this method, the variance-covariance matrix can only be
 #' unstructured. This estimate may be unstable if the number of children is
 #' small relative to the number of specified knots. The default setting
 #' in `[lme4::lmerControl()]` is  `check.nobs.vs.nRE= "stop"`. The
-#' `[set_control()]` changes this to `check.nobs.vs.nRE= "warning"`, since
-#' otherwise many broken stick models would not run at all. The method
-#' throws warnings that estimates are not stable. It can be time
-#' consuming for data sets with thousands of children, or for models with
-#' many (say > 10) internal knots. Despite the warnings, the results often
-#' look reasonable.
+#' `[set_control()]` function changes this to `check.nobs.vs.nRE= "warning"`
+#' by default, since otherwise many broken stick models would not run at all.
+#' The method throws warnings that estimates are not stable. It can be time
+#' for models with many internal knots. Despite the warnings,
+#' the results often look reasonable.
 #'
 #' @return
 #'
@@ -98,7 +107,7 @@
 #'
 #' @examples
 #' data <- smocc_200[1:1198, ]
-#' f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, control = control_kr(seed = 1))
+#' f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, seed = 123)
 #' plot(f1, data, n_plot = 9)
 #'
 #' # using lmer
@@ -110,7 +119,7 @@
 #' knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24, 36) / 12, 4)
 #'
 #' # method kr takes about 2 seconds
-#' f3 <- brokenstick(hgt_z ~ age | id, data, knots, control = control_kr(seed = 2))
+#' f3 <- brokenstick(hgt_z ~ age | id, data, knots, seed = 222)
 #' plot(f3, data, n_plot = 9)
 #'
 #' # method lmer takes about 40 seconds

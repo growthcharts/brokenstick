@@ -89,6 +89,16 @@ the chosen knots and look like a broken stick. Differences between
 observations are expressed by a random effect per knot.
 }
 \details{
+The choice between \code{method = "kr"} and \code{method = "lmer"} depends on the size
+of the data and the complexity of the model. In general, setting \code{method = "lmer"}
+can require substantial calculation time for more complex models
+(say > 8 internal knots) and may not converge. Method \code{"kr"} is less
+sensitive to model complexity and small samples, and has the added benefit that the
+variance-covariance matrix of the random effects can be constrained through the
+\code{cormodel} argument. On the other hand, \code{"lmer"} is the better-researched
+method, and could be much more efficient for simpler models and datasets with many
+rows.
+
 The default algorithm since version 2.0 is the Bayesian Kasim-Raudenbush
 sampler (\code{method = "kr"}). The variance-covariance matrix of the broken stick
 estimates absorbs the relations over time. The \code{"kr"} method allows
@@ -97,17 +107,16 @@ there are three such correlation models: \code{"none"} (default), \code{"argyle"
 and \code{"cole"}. Specify the \code{seed} argument for reproducibility.
 See \code{\link[=control_kr]{control_kr()}} for more details.
 
-The alternative is \code{method = "lmer"}, which fits the broken stick model by
+The alternative \code{method = "lmer"} fits the broken stick model by
 \code{\link[lme4:lmer]{lme4::lmer()}}. With this method, the variance-covariance matrix can only be
 unstructured. This estimate may be unstable if the number of children is
 small relative to the number of specified knots. The default setting
 in \verb{[lme4::lmerControl()]} is  \code{check.nobs.vs.nRE= "stop"}. The
-\verb{[set_control()]} changes this to \code{check.nobs.vs.nRE= "warning"}, since
-otherwise many broken stick models would not run at all. The method
-throws warnings that estimates are not stable. It can be time
-consuming for data sets with thousands of children, or for models with
-many (say > 10) internal knots. Despite the warnings, the results often
-look reasonable.
+\verb{[set_control()]} function changes this to \code{check.nobs.vs.nRE= "warning"}
+by default, since otherwise many broken stick models would not run at all.
+The method throws warnings that estimates are not stable. It can be time
+for models with many internal knots. Despite the warnings,
+the results often look reasonable.
 }
 \note{
 Note that automatic knot specification is data-dependent, and may not reproduce
@@ -117,7 +126,7 @@ to other  data sets. Fixing the model requires specifying both \code{knots} and
 }
 \examples{
 data <- smocc_200[1:1198, ]
-f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, control = control_kr(seed = 1))
+f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, seed = 123)
 plot(f1, data, n_plot = 9)
 
 # using lmer
@@ -129,7 +138,7 @@ plot(f2, data, n_plot = 9)
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24, 36) / 12, 4)
 
 # method kr takes about 2 seconds
-f3 <- brokenstick(hgt_z ~ age | id, data, knots, control = control_kr(seed = 2))
+f3 <- brokenstick(hgt_z ~ age | id, data, knots, seed = 222)
 plot(f3, data, n_plot = 9)
 
 # method lmer takes about 40 seconds
