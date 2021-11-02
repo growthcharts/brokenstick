@@ -79,7 +79,7 @@
 #' sensitive to model complexity and small samples, and has the added benefit that the
 #' variance-covariance matrix of the random effects can be constrained through the
 #' `cormodel` argument. On the other hand, `"lmer"` is the better-researched
-#' method, and could be much more efficient for simpler models and datasets with many
+#' method, and is more efficient for simpler models and datasets with many
 #' rows.
 #'
 #' The default algorithm since version 2.0 is the Bayesian Kasim-Raudenbush
@@ -107,12 +107,24 @@
 #'
 #' @examples
 #' data <- smocc_200[1:1198, ]
+#'
+#' # using kr method, default
 #' f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, seed = 123)
 #' plot(f1, data, n_plot = 9)
 #'
-#' # using lmer
+#' # study sampling behaviour of the sigma2 parameter with coda
+#' library(coda)
+#' plot(f1$mod$sigma2)
+#' acfplot(f1$mod$sigma2)
+#'
+#' # using lmer method
 #' f2 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, method = "lmer")
 #' plot(f2, data, n_plot = 9)
+#'
+#' # drill down into merMod object with standard diagnostics in lme4
+#' library(lme4)
+#' summary(f2$mod)
+#' plot(f2$mod)
 #'
 #' \donttest{
 #' # a model with more knots
