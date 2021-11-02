@@ -6,7 +6,7 @@
 \usage{
 plot_trajectory(
   x,
-  newdata,
+  newdata = NULL,
   what = "droplast",
   .x = NULL,
   group = NULL,

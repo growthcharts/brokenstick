@@ -79,8 +79,9 @@ plot.brokenstick <- function(x,
 #' @return An object of class \code{ggplot}
 #' @rdname plot_trajectory
 #' @seealso [plot.brokenstick]
+#' @export
 plot_trajectory <- function(x,
-                            newdata,
+                            newdata = NULL,
                             what = "droplast",
                             .x = NULL,
                             group = NULL,
@@ -108,6 +109,7 @@ plot_trajectory <- function(x,
                             ...) {
   stopifnot(inherits(x, "brokenstick"),
             any(show))
+  newdata <- get_newdata(x, newdata)
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
   data <- predict(
