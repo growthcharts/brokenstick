@@ -8,6 +8,7 @@
 [![Lifecycle:
 maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
+[![](https://img.shields.io/badge/github%20version-2.0.0-orange.svg)](https://growthcharts.github.io/brokenstick/)
 <!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear
@@ -114,7 +115,7 @@ The `brokenstick` package contains functions for
     software;
 -   Paper in preparation: *Broken Stick Model for Irregular Longitudinal
     Data*:
-    [pdf](https://stefvanbuuren.name/publications/2020_Brokenstick_JSS_manuscript.pdf),
+    [pdf](https://stefvanbuuren.name/publications/2021_brokenstick_JSS_manuscript.pdf),
     [html](https://growthcharts.org/brokenstick/articles/brokenstick-article.html).
 
 ### References
