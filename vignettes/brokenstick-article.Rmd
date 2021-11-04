@@ -54,7 +54,7 @@ The linear mixed model for longitudinal data [@laird1982; @fitzmaurice2011] is t
 
 This paper explores the use of the *broken stick model* to transform irregularly observed data into *repeated measures*. The broken stick model describes a curve by a series of connected straight lines. The model has a long history and is known under many other names, amongst others, *segmented straight lines* [@bellman1969], *piecewise regression* [@toms2003], *structural change models* [@bai2003], *broken line smoothing* [@koutsoyiannis2000] and *segmented regression* [@lerman1980]. The term *broken stick* goes back to at least @macarthur1957, who used it in an analogy to indicate the abundance of species. Most of the literature on the broken stick model concentrates on the problem of finding optimal times at which the lines should connect. Instead, the present paper will focus on the problem of summarising irregular individual trajectories by estimates made at a *pre-specified time grid*. This time grid is identical for all individuals, but it needs not be equidistant. Our model formulation is a special case of the linear mixed model, with time modelled as a set of random effects coded as a linear B-spline and subjects as the grouping factor. The output of the transformation is a set of repeated measures, where every subject obtains a score on every time point. 
 
-Many R packages offer tools for interpolation. The core \pkg{splines} package and the \pkg{akima} package [@akima2021] contains classic interpolation methods for one- and two-dimensional smoothing. Most contributed packages concentrate on time series or spatial interpolation, e.g. \pkg{deldir}, \pkg{interp}, \pkg{fields}, \pkg{gapfill}, \pkg{geoR}, \pkg{gstat} and \pkg{spatial}. See @li2014 and @lepot2017 for overviews of the different concepts and methodologies. Most interpolation techniques rely on neighbouring information, in time, space or both. The broken stick model addresses the problem where many independent replications provide short irregular multivariate time series, say of 5-30 time points. The scientific interest is to dynamically predict and update future observations. The model applies the linear mixed model to increase stability for such series by borrowing information across replicates. As there are no satisfactory solutions to this problem, the \pkg{brokenstick} package intends to fill this gap.
+Many R packages offer tools for interpolation. The \pkg{splines} package [@r2020] and the \pkg{akima} package [@akima2021] contains classic interpolation methods for one- and two-dimensional smoothing. Most contributed packages concentrate on time series or spatial interpolation, e.g. \pkg{deldir}, \pkg{interp}, \pkg{fields}, \pkg{gapfill}, \pkg{geoR}, \pkg{gstat} and \pkg{spatial}. See @li2014 and @lepot2017 for overviews of the different concepts and methodologies. Most interpolation techniques rely on neighbouring information, in time, space or both. The broken stick model addresses the problem where many independent replications provide short irregular multivariate time series, say of 5-30 time points. The scientific interest is to dynamically predict and update future observations. The model applies the linear mixed model to increase stability for such series by borrowing information across replicates. As there are no satisfactory solutions to this problem, the \pkg{brokenstick} package intends to fill this gap.
 
 Substantive researchers often favour repeated measures over the use of linear mixed models because of their simplicity. For example, we can easily fit a subject-level model to predict future outcomes conditional on earlier data with repeated measures data. While such simple regression models may be less efficient than modelling the complete data [@diggle2002, Sec. 6.1], increased insight may be more valuable than increased precision.
 
@@ -220,11 +220,32 @@ If $n_i >> k$ then the broken stick model provides a parsimonious representation
 
 Since each row in $X_i$ sums to unity, the broken stick model does not have a global intercept. The linear B-spline coding effectively replaces the global random intercept term by $k + 1$ *local intercepts*, one at each break age. The local intercept summarizes the information available in the adjacent left and right age intervals and ignores any information beyond the two adjacent knots. The broken stick estimates are thus primarily local. Outcome data observed outside the two adjacent age intervals influence the broken stick estimates only through the subject-level part of the model, in particular through $\Omega$.
 
-## Estimation
+# Estimation
 
-### Parameter estimation in steps
+## Main function
 
-Estimation of the broken stick model relies on two well-developed \proglang{R} functions: `splines::bs()` [@r2020] and `lme4::lmer()`.[@bates2015] Let us first look at the individual steps in the calculation. The following snippet calculates the matrix of $B$-splines for the time variable `age`:
+The `brokenstick()` function estimates the parameters of the broken stick model. The user needs to specify the outcome, the predictor and the grouping variable, as well as the location of the knots on the predictor variable. A call produces an object of class `brokenstick`:
+
+```{r}
+fit <- brokenstick(hgt_z ~ age | id, data = smocc_200, 
+                   knots = c(0, 0.5, 1, 2), boundary = c(0, 3),
+                   seed = 12321)
+fit
+```
+
+The object contains the model setting, the data and the results. Here we find estimates of the fixed effects $\beta$ under `means`, the residual variance $\sigma^2$ under `mean resid` and the variance-covariance matrix of the random effects $\Omega$ as `get_omega(fit)`. We calculate the broken stick estimates at the knot location as a wide matrix through the `predict()` function as follows:
+
+```{r}
+bse <- predict(fit, x = "knots", shape = "wide")
+dim(bse)
+head(bse, 3)
+```
+
+As a result we now have each individual trajectory summarised by six estimates.
+
+## Estimation steps explained
+
+We may break up the estimation process into two main steps. The first step calculates the matrix of $B$-splines for the time variable `age` by the core `splines::bs()` [@r2020] function:
 
 ```{r}
 library(splines)
@@ -239,70 +260,62 @@ head(data)
 
 The numerical example shows that the `bs()` function transforms the `age` variable into five columns, the $B$-spline basis, with names like `age_0` and `age_0.5`. If `age` coincides with one of these (e.g., as in the top row), then the corresponding column receives a `1`. In all other cases, age distributes over two adjacent columns. To make things fit, we need an additional column (here `age_3`) at the last position, the right boundary knot. There is also a left boundary knot, and I have conveniently set that equal to the first breakpoint, marking the start of time. Setting `degree = 1` specifies a $B$-spline gives the broken stick model its name and its characteristic shape.
 
-To illustrate the second step of the calculations, we call `lme4::lmer()` as follows:
+The second step is to specify the model and estimate its parameters. We have two methods for this: `"kr"` and `"lmer"`. Method `"lmer"` relies on the popular function `lme4::lmer()` [@bates2015] to fit a linear mixed normal model.
 
 ```{r warning=FALSE, echo=FALSE}
 library(Matrix, quietly = TRUE, warn.conflicts = FALSE)
 ```
 
-```{r}
+```{r mod-lmer, cache=FALSE}
 library(lme4)
-ctl <- lmerControl(check.conv.grad = .makeCC("warning", tol = 8e-3))
+ctl_lmer <- lmerControl(check.conv.grad = .makeCC("warning", tol = 0.04))
 f <- hgt_z ~ 0 + age_0 + age_0.5 + age_1 + age_2 + age_3 +
   (0 + age_0 + age_0.5 + age_1 + age_2 + age_3 | id)
-mod <- lmer(f, data, control = ctl)
+mod_lmer <- lme4::lmer(f, data, control = ctl_lmer)
+class(mod_lmer)
 ```
 
-The formula removes the intercept and specifies each knot as a random effect with `id` as grouping factor. The `control` argument suppresses the warning `Model failed to converge with max|grad| = 0.0066811 (tol = 0.002, component 1)`. Although such warnings often occur I found that the broken estimates generally look sound and reasonable. Note however that my experience derives primarily from child growth data, so there is no guarantee that this apparent robustness will hold for other types of data. Warnings become less frequent for a lower number of knots and for larger samples sizes.
+The formula removes the intercept and specifies each knot as a random effect with child `id` as grouping factor. The `control` argument suppresses the warning `Model failed to converge with max|grad| = 0.0360913`. Such warnings occur often if the model has many random effects. These warnings may also be thrown if some of the child data are outliers (for example pre-terms). I found that the broken estimates generally look sound and reasonable despite the warnings. Note however that my experience derives primarily from child growth data, so there is no guarantee that this apparent robustness will hold for other types of data. Warnings from `lmer()` become less frequent for a lower number of knots, for larger samples sizes and for better behaved data.
 
-Step three converts the result into brokenstick estimates by summing the fixed and random effects, effectively forming fitted trajectories for all persons.
+Object `mod_lmer` has class `lmerMod` so we may use standard `plot()`, `predict()` and `summary` methods offered by the \pkg{lme4} package. Converting the result into broken stick estimates requires summing the fixed and random effects. 
 
 ```{r}
-bse <- t(t(ranef(mod)$id) + fixef(mod))
-head(round(bse, 3), 3)
+bse_lmer <- t(t(ranef(mod_lmer)$id) + fixef(mod_lmer))
+head(round(bse_lmer, 3), 3)
 ```
 
-As a result we now have each individual trajectory summarised by six estimates.
+The calculation time of `lme4::lmer()` rapidly increases with the number of random effects. More than ten random effects (knots) takes significant time, and beyond 15 knots is generally impossible to fit. The \pkg{brokenstick} package provides another alternative, the *Kasim-Raudenbush (KR) sampler* [@kasim1998]. The method simulates draws from the posterior distributions of parameters from a two-level normal model with heterogeneous within-subject variances. The speed of the Kasim-Raudenbush sampler is almost insensitive to the number of random effects and depends primarily on the total number of iterations and somewhat on sample size. This method is available as the function `kr()` in the \pkg{brokenstick} package.
 
-### Parameter estimation, method lmer
+```{r mod-kr, cache=FALSE}
+ctl_kr <- control_kr()
+mod_kr <- kr(y = data$hgt_z, x = X, g = data$id, control = ctl_kr)
+```
 
-The `brokenstick::brokenstick()` function performs these steps in one call:
+The call to `control_kr()` produces a list with settings for the sampler according to the conventions of the \pkg{coda} package [@plummer2006]. The defaults in `control_kr()` should be reasonable across a wide range of cases. The list component `mod_kr$mod` contains various objects of class `mcmc` with the sampling history and detailed results. For example, inspect the fixed effect estimates as
 
 ```{r}
-fit1 <- brokenstick(hgt_z ~ age | id, data = smocc_200, method = "lmer",
-                    knots = c(0, 0.5, 1, 2), boundary = c(0, 3),
-                    control = ctl)
-head(predict(fit1, x = "knots", shape = "wide"), 3)
+library(coda)
+summary(mod_kr$mod$beta)
 ```
 
-We may use `plot()`, `predict()` and `summary` methods for `fit1`, or inspect the fitted linear mixed model at `fit1$mod` in detail by standard tools in the \pkg{lme4} package.
+Also, we may obtain trace plots and densities. For example try `plot(mod_kr$mod$beta)`.
 
-### Parameter estimation, method kr
-
-The calculation time of `lme4::lmer()` rapidly increases with the number of random effects. More than ten random effects (knots) takes significant time, and beyond 15 knots is generally impossible to fit. The \pkg{brokenstick} package provides another alternative, the *Kasim-Raudenbush (KR) sampler* [@kasim1998]. This method simulates draws from the posterior distributions of parameters from a two-level normal model with heterogeneous within-subject variances. The speed of the KR-Raudenbush sampler is almost insensitive to the number of random effects and depends primarily on the *total number of iterations* and somewhat on sample size. A call to `control_kr()` produces a list  of defaults that should be reasonable across a wide range of cases. 
-
-The `kr` method is the default estimation method in the \pkg{brokenstick} package.
+The `"kr"` method is the default since version 2.0.0. We obtain results for method `"lmer"` as
 
 ```{r}
-fit2 <- brokenstick(hgt_z ~ age | id, data = smocc_200, 
-                    knots = c(0, 0.5, 1, 2), boundary = c(0, 3),
-                    seed = 12321)
-head(predict(fit2, x = "knots", shape = "wide"), 3)
+fit_lmer <- brokenstick(hgt_z ~ age | id, data = smocc_200,
+                        knots = c(0, 0.5, 1, 2), boundary = c(0, 3),
+                        method = "lmer", control = ctl_lmer)
+head(predict(fit_lmer, x = "knots", shape = "wide"), 3)
 ```
 
-In general, the `lmer` and `kr` methods produces broken stick estimates that are similar, but not identical. Substantial discrepancies may occur in areas where data are sparse, for example, at the right boundary knot. The behaviour of the `kr` method has not been studied as well as `lmer`, so it is more experimental. 
-
-Apart from being faster for cases with many knots, the KR-sampler opens up interesting analytic options:
+The broken stick estimates from the `kr` and `lmer` methods are similar, but not identical. In fact, substantial discrepancies may occur in areas where data are sparse, for example, at the right boundary knot. Apart from being faster for more complex models, the KR-sampler opens up interesting analytic options:
 
 1. It is relatively easy to constrain the fitted covariance of random effects, $\Omega$, to a matrix of simple structure. Informing the sampler of the time-dependent structure of the random effect leads to stabler estimates of $\Omega$. The package currently implements two *correlations models*. These models express the correlation $\rho(t_1, t_2)$ between two Z -scores $Z_1$ and $Z_2$ at successive ages $t_1$ and $t_2$ as a function of those ages. The *Argyle model* [@argyle2008] is $\rho(t_1, t_2) = \exp(-\lambda|T_1-T_2|)$, where $T_i = \log(\tau+t_i)$ is a logarithmic rescaling of the time axis and $\rho=exp(-\lambda)$. The Cole correlation model [@cole1995] describes the Fisher-transformed correlation as a function of the average $(t_1+t_2)/2$ and the difference $(t_2-t_1)$, including two multiplicative terms. Note that both models were proposed in the context of child growth, so may fit less well for other types of time-dependent data.
 
-2. The KR-sampler fits the slightly more general linear-mixed model with heterogeneous within-subject variances, i.e. with a residual variance $\sigma_i^2$ per subject $i$ instead of the global residual $\sigma^2$. This makes it easier to identify, study and weight subjects based on how well they fit the model.
+2. The Kasim-Raudenbush sampler fits the slightly more general linear-mixed model with heterogeneous within-subject variances, i.e. with a residual variance $\sigma_i^2$ per subject $i$ instead of the global residual $\sigma^2$. This makes it easier to identify, study and weight subjects based on how well they fit the model.
 
-3. A third option is to simulate imputations as an extra step to the KR-sampler. For subject with large $\sigma_i^2$, the random effect estimates are a too smooth representation of the data, leading to inappropriate variance estimates when those estimates are analysed as "just data". Section 11.3 of @vanbuuren2018 pioneered a solution that constructs multiple trajectories by adding a proper amount of residual noise to random effect estimates. The variance estimation then proceeds according to the principles of multiple imputation.[@rubin1987]
-
-### Broken stick estimation for new data
-
-Apart from parameter estimates of the broken stick model, we also need a way to estimate broken stick values for a given set of parameters and (new) user data. The `brokenstick:::EB()` function implements the empirical Bayes (EB) estimate, also known as BLUP (@skrondal2009, p. 683). The procedure is the workhorse underlying the more versatile `predict()` method.
+3. A third option is to simulate imputations as an extra step to the sampler. For subject with large $\sigma_i^2$, the random effect estimates are a too smooth representation of the data, leading to inappropriate variance estimates when those estimates are analysed as "just data". Section 11.3 of @vanbuuren2018 pioneered a solution that constructs multiple trajectories by adding a proper amount of residual noise to random effect estimates. The variance estimation then proceeds according to the principles of multiple imputation.[@rubin1987]
 
 # Functionality
 
@@ -337,15 +350,15 @@ Function name          | Description
 -----------------------|---------------------------------
 `set_control()`        | Generic control function
 `control_kr()`         | Set controls for Kasim-Raudenbush sampler
+`kr()`                 | Kasim-Raudenbush sampler for two-level model
 `EB()`                 | Empirical Bayes predictor for random effects (internal)
-`kr()`                 | Kasim-Raudenbush sampler for two-level model (internal)
 `make_basis()`         | Create linear splines basis (internal)
 
 The package follows the standard R conventions for modelling objects. In some cases, the modeller does not wish to store the training data. Specify `brokenstick(..., light = TRUE)` to create a small object with just the parameter estimates. Of course, we cannot extract the original data from a light object. However, we can still use it to calculate brokenstick estimates for new cases by `predict(object, newdata = ...)`. 
 
 ## Data preparation
 
-Before we can fit the model, the data need to be in shape. Data preparation is often the most time-consuming part of the analysis. The `brokenstick()` function takes tidy data in the long-form, with every observed subject-time combination in a row. This section uses the built-in `smocc_200` data, containing the heights of 200 children measured at ten visits up to two years.[@herngreen1994]
+Before we can fit the model, the data need to be in shape. The `brokenstick()` function takes tidy data in the long-form, with every observed subject-time combination in a row. This section uses the built-in `smocc_200` data, containing the heights of 200 children measured at ten visits up to two years.[@herngreen1994]
 
 ```{r dataprep}
 library(brokenstick)
@@ -356,27 +369,22 @@ head(smocc_200, 3)
 
 The broken stick model can fit observations in either the raw scale (cm, kg, and so on) or as a standard deviation score (SDS), or $Z$-score. The results from the analysis of the $Z$-score is preferable for several reasons: 
 
-1. for growth curves, a straight line assumption is more plausible in the $Z$-score scale;
-2. observations in the $Z$-score scale are closer to multivariate normality;
-3. analysis of $Z$-scores highlights the interesting variation within and between children;
-4. fitting $Z$-score data leads to fewer convergence issues.
+1. For growth curves, a straight line assumption is more plausible in the $Z$-score scale;
+2. Observations in the $Z$-score scale are closer to multivariate normality;
+3. Analysis of $Z$-scores highlights the interesting variation within and between children;
+4. Fitting $Z$-score data leads to fewer convergence issues.
 
 It is easy to convert the measurements into the $Z$-score scale, fit the model, and convert back to the raw scale afterwards, if desired. There are several \proglang{R} packages that assist in the calculations: \pkg{AGD} [@vanbuuren2018b], \pkg{anthro} [@schumacher2020], \pkg{childsds} [@vogel2020], \pkg{growthstandards} [@hafen2021], \pkg{nlreferences} [@vanbuuren2021] and \pkg{zscorer} [@myatt2019].
 
-The `smocc_200` data contains the height measurement both in the original scale in cm (`hgt`) and the $Z$-score scale (`hgt_z`) relative to the height references from the Fourth Dutch Growth study [@fredriks2000]. For illustration, let us recalculate height SDS using the \pkg{nlreferences} package.
+The `smocc_200` data contains the height measurement both in the original scale in cm (`hgt`) and the $Z$-score scale (`hgt_z`) relative to the height references from the Fourth Dutch Growth study [@fredriks2000]. For illustration, let us calculate and check height SDS using the \pkg{AGD} package.
 
-```{r eval=FALSE}
-remotes::install_github("growthcharts/nlreferences")
-library(nlreferences)
-hgt_z <- transform2z(smocc_200, ynames = "hgt")
-identical(pull(hgt_z), smocc_200$hgt_z)
-```
-
-```{r y2z, include = FALSE}
-remotes::install_github("growthcharts/nlreferences")
-library(nlreferences)
-hgt_z <- transform2z(smocc_200, ynames = "hgt")
-identical(pull(hgt_z), smocc_200$hgt_z)
+```{r y2z}
+library(AGD)
+z <- with(smocc_200, y2z(y = hgt, 
+                         x = age, 
+                         sex = ifelse(sex == "male", "M", "F"), 
+                         ref = nl4.hgt))
+identical(z, smocc_200$hgt_z)
 ```
 
 ```{r zscores, echo = FALSE, fig.height=3, fig.cap = "Distribution of height SDS for 200 Dutch children.", set.theme = TRUE, warning=FALSE}
@@ -389,16 +397,17 @@ ggplot(smocc_200, aes(hgt_z)) +
                 color = colors[5], size = 0.7)
 ```
 
-Figure 3 shows that, as expected, the empirical Z-score distribution is close to the standard normal. The next section concentrate on modelling `hgt_z`.
-
-Function `transform2y()` applies the inverse transformation of $Z$-scores to the original scale. The following snippet converts `hgt_z` into the cm scale.
+Figure 3 shows that, as expected, the empirical Z-score distribution is close to the standard normal. The few very extremely low heights correspond to pre-term born infants. The next section concentrate on modelling `hgt_z`. Function `z2y()` applies the inverse transformation of $Z$-scores to the original scale. The following snippet converts `hgt_z` into the cm scale.
 
 ```{r z2y}
-y <- transform2y(smocc_200, znames = "hgt_z")
-all.equal(pull(y), smocc_200$hgt, tol = 0.0001)
+y <- with(smocc_200, AGD::z2y(z = hgt_z, 
+                              x = age, 
+                              sex = ifelse(sex == "male", "M", "F"), 
+                              ref = nl4.hgt))
+all.equal(y, smocc_200$hgt, tol = 0.0001)
 ```
 
-We have used the Dutch 1997 height references here, but evidently similar transform could be made using other references. In practice we found that the model fit is often better when applied to $Z$-scores. Age-conditional references are common in child growth exists, but could be rare in other fields. An alternative is to apply the broken stick model to the standardized residuals of a preliminary non-linear regression of the outcome on time.
+We have used the Dutch 1997 height references here, but similar transforms could be made using other references. In practice we found that the model fit is often better when applied to $Z$-scores. Age-conditional references are common in child growth exists, but could be rare in other fields. An alternative is to apply the broken stick model to the standardized residuals of a preliminary non-linear regression of the outcome on time.
 
 ## Model fitting
 
@@ -426,7 +435,7 @@ plot(fit, group = ids, what = "all",
      xlab = "Age (years)", ylab = "Length (cm)")
 ```
 
-Figure 5 shows the observed (blue) and fitted (red) trajectories of three selected children. Note that this model can only capture the overall age trend. As a result, the approximation to the data is quite bad.
+The `what = "all"` ensures that the right boundary is part of the plot. Figure 5 shows the observed (blue) and fitted (red) trajectories of three selected children. Note that this model can only capture the overall age trend. As a result, the approximation to the data is quite bad.
 
 ### Fit two lines
 
@@ -453,20 +462,20 @@ The two-line model does not fit well. We substantially refine the model by addin
 ```{r fit9, cache = TRUE, warning = FALSE, eval = FALSE}
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 fit9 <- brokenstick(hgt_z ~ age | id, data = smocc_200, 
-                    knots = knots, boundary = c(0, 3))
+                    knots = knots, boundary = c(0, 3), seed = 1)
 ```
 
 ```{r echo = FALSE}
 fit9 <- brokenstick::fit_200
 ```
 
-This optimization problem is more complicated and time-consuming. As noted before, it is common for the optimization software to issue warnings, often related to the number of random effects relative to the number of observations. While these may be a little discomforting, we have found that the warnings are generally at the conservative side, and that the parameter estimates seem OK. With a small residual variance of 0.059, the nine-line broken stick model fits the observed data very well. 
+This optimization problem is more complicated and time-consuming. As noted before, it is common for the optimization software to issue warnings, often related to the number of random effects relative to the number of observations. While these may be a little discomforting, we have found that the warnings are generally at the conservative side, and that the parameter estimates seem OK. With a small residual variance of `r fit9$sigma2`, the nine-line broken stick model fits the observed data very well. 
 
 ```{r plotfit9, echo = FALSE,fig.height=3, fig.cap = "Broken stick model with nine lines.", set.theme = TRUE, warning=FALSE}
 plot(fit9, group = ids, xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
-The training set includes all subjects. Depending on the study goals, we may wish to further improve the model fit by removing children from the data. For example, there might be children for which few observations are available, children with diseases, or children with trajectories that are very unusual or faulty. Be aware that such removals preserve the external generalisability of the training sample.
+The training set includes all subjects. Depending on the study goals, we may wish to further improve the model fit by removing children from the data. For example, there might be children for which few observations are available, children with diseases, or children with trajectories that are very unusual or faulty. Use `hist(fit9$sigma2j)` to spot the outlier. Of course, such removals may affect external generalisability.
 
 ## Prediction
 
@@ -551,6 +560,8 @@ plot(fit9, newdata = data, ylim = c(-2.5, 0),
 
 Alice contributes only two data points in the first half-year. The model expects that her height SDS will be around -1 SD at the age of two years. Using the data up to 1.1 years, the model predicts that Fred's growth curve remains around -2.0 SD until Fred is 1.5 years, and then increases to around -1.8 SD. While both predicted trajectories are extreme extrapolations, the example illustrates that it is possible to make informed predictions using just a handful of data points.
 
+The `brokenstick:::EB()` function implements the empirical Bayes (EB) estimate, also known as BLUP (@skrondal2009, p. 683). The procedure is the workhorse underlying the `predict()` method.
+
 ## Quality of prediction
 
 ```{r echo = FALSE, fig.height=4, fig.cap="Predicted versus observed values."}
@@ -562,15 +573,20 @@ MASS::eqscplot(x = smocc_200$hgt_z, xlab = "Height (SDS)",
                y = pred, ylab = "Predicted Z-score", 
                pch = ".", xlim = c(-4, 4), ylim = c(-4, 4))
 abline(0, 1, col = "grey")
-
 # cm scale
-y_cm <- pull(transform2y(smocc_200, znames = "hgt_z"))
-smocc_200$hgt_z <- pred
-yhat_cm <- pull(transform2y(smocc_200, znames = "hgt_z"))
+y_cm <- with(smocc_200, 
+             z2y(z = hgt_z, 
+                 x = age, 
+                 sex = ifelse(sex == "male", "M", "F"), 
+                 ref = nl4.hgt))
+yhat_cm <- with(smocc_200, 
+                z2y(z = pred, 
+                    x = age, 
+                    sex = ifelse(sex == "male", "M", "F"), 
+                    ref = nl4.hgt))
 MASS::eqscplot(x = y_cm, xlab = "Height (cm)",
                y = yhat_cm, ylab = "Predicted (cm)", pch = ".")
 abline(0, 1, col = "grey")
-
 par <- par(oldpar)
 ```
 
@@ -854,14 +870,13 @@ A growth chart visualises the individual trajectory relative to a set of centile
 
 ### Interpolation in measurement scale
 
-Suppose we measured the length of a boy at the ages of 1 month (52.6 cm) and 14 months (81.7 cm). The following code block uses the `centile::y2z()` function to convert the measurements to standard deviation scores (SDS) relative to the reference of the Fourth Dutch Growth Study.
+Suppose we measured the length of a boy at the ages of 1 month (52.6 cm) and 14 months (81.7 cm). The following code block uses the `AGD::y2z()` function to convert the measurements to standard deviation scores (SDS) relative to the reference of the Fourth Dutch Growth Study.
 
 ```{r zscores1, echo=TRUE}
-library(centile)
-library(nlreferences)
-ref <- load_reference("nl_1997_hgt_male_nl", pkg = "nlreferences")
 boy <- data.frame(x = c(1/12, 14/12), y = c(52.6, 81.7))
-boy$z <- centile::y2z(y = boy$y, x = boy$x, ref = ref)
+ref <- AGD::nl4.hgt
+boy$z <- AGD::y2z(y = boy$y, x = boy$x, sex = "M", ref = ref)
+boy$z
 ```
 
 ```{r fig:inter1, echo = FALSE, fig.height = 4, fig.cap = "Linear interpolation in the cm scale results in an unrealistic trajectory at intermediate ages.", set.palette = TRUE}
@@ -869,7 +884,7 @@ sds <- c(-2, -1, 0, 1, 2)
 age <- round(seq(0, 1.25, 1/48), 3)
 z <- rep(sds, times = length(age))
 x <- rep(age, each = length(sds))
-w <- z2y(z = z, x = x, sex = 'M', ref = ref)
+w <- AGD::z2y(z = z, x = x, sex = 'M', ref = ref)
 w <- matrix(w, ncol = length(sds), byrow = TRUE)
 dimnames(w) <- list(age, sds)
 
@@ -887,7 +902,7 @@ matplot(x = v[,1], y = v[,2:6],
         ylim = c(-2.5, 2.5),
         xlab = "Age (years)", ylab = "Length (SDS)")
 yout <- approx(x = boy$x, y = boy$y, xout = as.numeric(rownames(w)))$y
-zout <- y2z(x = as.numeric(rownames(w)), y = yout, ref = ref)
+zout <- AGD::y2z(x = as.numeric(rownames(w)), y = yout, ref = ref)
 matpoints(x = boy$x, y = boy$z, pch = 20, 
           cex = 1.5, col = colors[1], type = "p")
 matpoints(x = as.numeric(rownames(w)), y = zout, pch = 20, 
@@ -902,7 +917,7 @@ A first alternative is to apply the linear interpolation in the $Z$-score scale.
 
 ```{r fig:inter2, echo = FALSE, fig.height = 4, fig.cap = "Linear interpolation in the Z-score scale results in a more realistic trajectory at intermediate ages.", set.palette = TRUE}
 zout <- approx(x = boy$x, y = boy$z, xout = as.numeric(rownames(w)))$y
-yout <- z2y(x = as.numeric(rownames(w)), z = zout, ref = ref)
+yout <- AGD::z2y(x = as.numeric(rownames(w)), z = zout, ref = ref)
 
 oldpar <- par(mfrow = c(1, 2))
 matplot(x = as.numeric(rownames(w)), y = w, type = "l", lty = 1, 
@@ -944,7 +959,7 @@ z[1] <- boy$z[1]; z[length(z)] <- boy$z[2]
 zout <- predict(fit_200, x = age, y = z, shape = "vector")
 
 # convert predicted values to Y-scale
-yout <- z2y(x = age, z = zout, ref = ref)
+yout <- AGD::z2y(x = age, z = zout, ref = ref)
 ```
 
 ```{r fig:inter3, echo = FALSE, fig.height = 4, fig.cap = "Broken stick model fitted in the SDS scale results in a most realistic expected trajectory at intermediate ages.", set.palette = TRUE}
