@@ -9,45 +9,54 @@ The main fitting function \code{\link[=brokenstick]{brokenstick()}} returns an o
 }
 \details{
 The package exports S3 methods for the \code{brokenstick} class for the following
-generic functions: \code{\link[=fitted]{fitted()}}, \code{\link[=model.frame]{model.frame()}}, \code{\link[=model.matrix]{model.matrix()}}, \code{\link[=plot]{plot()}},
-\code{\link[=predict]{predict()}}, \code{\link[=print]{print()}}, \code{\link[=residuals]{residuals()}}.
+generic functions: \code{\link[=coef]{coef()}}, \code{\link[=fitted]{fitted()}}, \code{\link[=model.frame]{model.frame()}}, \code{\link[=model.matrix]{model.matrix()}},
+\code{\link[=plot]{plot()}}, \code{\link[=predict]{predict()}}, \code{\link[=print]{print()}}, \code{\link[=residuals]{residuals()}} and \code{\link[=summary]{summary()}}.
 
-The package documents methods \code{\link[=fitted.brokenstick]{fitted.brokenstick()}}, \code{\link[=plot.brokenstick]{plot.brokenstick()}},
-\code{\link[=predict.brokenstick]{predict.brokenstick()}} and \code{\link[=residuals.brokenstick]{residuals.brokenstick()}}. The package exports
-two helper functions for \code{brokenstick} objects: \code{\link[=get_knots]{get_knots()}} and \code{\link[=get_r2]{get_r2()}}.
+The package exports the following helper functions for \code{brokenstick} objects:
+\code{\link[=get_knots]{get_knots()}}, \code{\link[=get_omega]{get_omega()}} and \code{\link[=get_r2]{get_r2()}}.
 
 A \code{brokenstick} object is a list with the following named elements:
 }
 \section{Elements}{
 
 \describe{
-\item{\code{names}}{A list with elements named \code{x}, \code{y} and \code{g} providing the
-variables names for the time, outcome and subject columns, respectively.}
-\item{\code{knots}}{Numeric vector of with the internal knots. Use \code{\link[=get_knots]{get_knots()}}
-to extract knots.}
-\item{\code{boundary}}{Numeric vector of length 2 with the boundary knots. Use
-\code{\link[=get_knots]{get_knots()}} to extract knots.}
-\item{\code{degree}}{The \code{degree} of the B-spline. See \code{\link[splines:bs]{splines::bs()}}. Either
-0 (constant model) or 1 (broken stick model).}
-\item{\code{model}}{Not used.}
-\item{\code{method}}{Either \code{lmer} or \code{kr}, identifying the fitting model.}
-\item{\code{control}}{List of control option returned by \code{\link[=control_brokenstick]{control_brokenstick()}}.}
+\item{\code{call}}{Call that created the object}
+\item{\code{formula}}{A formula with the model specification,
+e.g. \code{formula(y ~ x | group)}}
+\item{\code{names}}{A named list with three elements (\code{"x"}, \code{"y"}, \code{"g"})
+providing the variable name for time, outcome and subject, respectively.}
+\item{\code{internal}}{Numeric vector of with internal knots.}
+\item{\code{boundary}}{Numeric vector of length 2 with the boundary knots.}
+\item{\code{degree}}{The \code{degree} of the B-spline. See \code{\link[splines:bs]{splines::bs()}}. Support
+only the values of 0 (step model) or 1 (broken stick model).}
+\item{\code{method}}{String, either \code{"kr"} or \code{"lmer"}, identifying the fitting model.}
+\item{\code{control}}{List of control options returned by \code{\link[=set_control]{set_control()}} used
+to set algorithmic details.}
 \item{\code{beta}}{Numeric vector with fixed effect estimates.}
 \item{\code{omega}}{Numeric matrix with variance-covariance estimates of the
-random effect.}
+broken stick estimates.}
 \item{\code{sigma2j}}{Numeric vector with estimates of the residual variance per
-group. Only used by method \code{kr}.}
+group. Only used by method \code{"kr"}.}
 \item{\code{sigma2}}{Numeric scalar with the mean residual variance.}
-\item{\code{draws}}{Numeric matrix with multiple imputations. The number of
-rows is equal to the number of missing values in \code{y}. The number of columns
-depends on \code{imp_skip}. Only used by \code{kr} if \code{imp_skip} is set.}
+\item{\code{sample}}{A numeric vector with descriptives of the training data.}
+\item{\code{light}}{Should the returned object be lighter? If \code{light = TRUE}
+the returned object will contain only the model settings and parameter
+estimates and not store the \code{sample}, \code{data}, \code{imp} and \code{mod} elements.
+The light object can be used to predict broken stick estimates for
+new data, but does not disclose the training data and is small.}
+\item{\code{data}}{The training data used to fit the model.}
+\item{\code{imp}}{The imputations generated for the missing outcome data. Only
+for \code{method = "kr"}.}
+\item{\code{mod}}{For \code{method = "kr"}: A named list with four components, each of
+class \link[coda:mcmc]{coda::mcmc}. For \code{method = "lmer"}: An object of class
+\link[lme4:merMod-class]{lme4::merMod}.}
 }
 }
 
 \references{
-van Buuren S (2020).
+van Buuren S (2021).
 Broken Stick Model for Irregular Longitudinal Data. \emph{In preparation}.
 }
 \author{
-Stef van Buuren, 2020
+Stef van Buuren, 2021
 }

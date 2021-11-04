@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -91,12 +91,12 @@
 
       
 
-      </header><script src="oldfriends_files/header-attrs-2.7/header-attrs.js"></script><div class="row">
+      </header><script src="oldfriends_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Help for old friends</h1>
             
-            <h4 class="date">2021-03-08</h4>
+            <h4 class="date">2021-11-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/growthcharts/brokenstick/blob/master/vignettes/oldfriends.Rmd"><code>vignettes/oldfriends.Rmd</code></a></small>
       <div class="hidden name"><code>oldfriends.Rmd</code></div>
@@ -105,31 +105,61 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/growthcharts/brokenstick">brokenstick</a></span><span class="op">)</span></code></pre></div>
 <div id="background" class="section level1">
 <h1 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h1>
-<p>Versions after <code>brokenstick 0.62.1</code> (May 2020) have a substantially changed interface. In particular, later versions (starting with <code>brokenstick 0.70.0</code>) include the following changes:</p>
+<p>The <code>brokenstick</code> package has three major interfaces:</p>
 <ol style="list-style-type: decimal">
-<li><p><code>brokenstick</code> adopts the <code>tidymodels</code> philosophy. It is now possible to fit a model using four different interfaces. There is no need anymore the hardcode variable names in the source data.</p></li>
-<li><p>Version <code>0.70.0</code> introduces a new estimation method, the Kasim-Raudenbush sampler. The new method is more flexible and faster than <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lme4::lmer()</a></code> when the number of knots is large.</p></li>
-<li><p>Version <code>0.70.0</code> introduces two simple correlation models that may be used to smooth out the variance-covariance matrix of the random effects.</p></li>
-<li><p>The definition of the <code>brokenstick</code> class has changed. Objects of class <code>brokenstick</code> do no longer store the training data.</p></li>
-<li><p>The <code>brokenstick_export</code> class is retired.</p></li>
-<li><p>The <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function is fully rewritten as has now a new interface. Since the <code>brokenstick</code> class does not store the training data anymore, the <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> function now obtains a <code>new_data</code> argument. Syntax that worked for <code>brokenstick</code> package before <code>0.70.0</code> does not work anymore and should be updated. The <code>shape</code> argument replaces the <code>output</code> argument.</p></li>
-<li><p>The <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> function is rewritten, and now requires a <code>new_data</code> specification.</p></li>
-<li><p>Replaced functions: <code><a href="../reference/brokenstick.html">brokenstick()</a></code> replaces <code>fit_brokenstick()</code>, <code><a href="../reference/predict.brokenstick.html">predict.brokenstick()</a></code> replaces <code>predict.brokenstick_export()</code>, <code><a href="../reference/get_r2.html">get_r2()</a></code> replaces <code>get_pev()</code></p></li>
-<li><p>Removed functions: <code>get_data()</code>, <code>get_X()</code>, <code>export()</code></p></li>
+<li>Up to version <code>brokenstick 0.62.1</code> (before May 2020)</li>
+<li>Up to version <code>brokenstick 1.1.1</code> (May 2020 - Nov 2021)</li>
+<li>Versions higher than <code>brokenstick 2.0.0</code> (Nov 2021 - now)</li>
 </ol>
+<p>This document summarises the main changes in <code>brokenstick 2.0.0</code>. See “Help for old friends” in <code>brokenstick 1.1.1</code> for an overview of the previous changes from <code>0.75.0</code> to <code>1.1.1</code>.</p>
+<div id="main-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#main-changes" class="anchor"></a>Main changes</h2>
+<ol style="list-style-type: decimal">
+<li><p>Function <code><a href="../reference/brokenstick.html">brokenstick()</a></code> in version <code>2.0.0</code> sets the Kasim-Raudenbush sampler as the default method. The former method <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lme4::lmer()</a></code> remains available by setting <code>method = "lmer"</code> argument.</p></li>
+<li><p>Version <code>2.0.0</code> adopts the variable names of the <code>coda</code> package (e.g., <code>start</code>, <code>end</code>, <code>thin</code>, <code>niter</code>, and so on) and stores the results of the Kasim-Raudenbush sampler as objects of class <code>mcmc</code>.</p></li>
+<li><p>For <code>method = "kr"</code> one may now inspect the solution of the sampler by standard functions from the <code>coda</code> package. For <code>method = "lmer"</code> we can apply functions from the <code>lme4</code> package for <code>merMod</code> objects.</p></li>
+<li><p>Version <code>2.0.0</code> redefines the <code>brokenstick</code> class. New entries include <code>call</code>, <code>formula</code>, <code>internal</code>, <code>sample</code>, <code>light</code>, <code>data</code>, <code>imp</code> and <code>mod</code>. Removed entries are <code>knots</code> (renamed to <code>internal</code>) and <code>draws</code> (renamed to <code>imp</code>). We may omit the <code>newdata</code> argument for the training data. Setting <code>light = TRUE</code> creates a small version of the <code>brokenstick</code> object. Objects of class <code>brokenstick</code> are not backwards compatible, so one should regenerate objects of class <code>brokenstick</code> in order use newer features in <code>2.0.0</code>.</p></li>
+<li><p>Version <code>2.0.0</code> conforms to classic model fitting interface in <code>R</code>. Renames the <code>new_data</code> argument to <code>newdata</code> to conform to <code><a href="https://rdrr.io/r/stats/predict.lm.html">predict.lm()</a></code>. Methods <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> and <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> no longer require a <code>newdata</code> argument. All special cases of <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> updated and explained in documentation and examples.</p></li>
+<li><p>Version <code>2.0.0</code> adds methods <code><a href="https://rdrr.io/r/stats/coef.html">coef()</a></code>, <code><a href="https://rdrr.io/r/stats/fitted.values.html">fitted()</a></code>, <code><a href="https://rdrr.io/r/stats/model.frame.html">model.frame()</a></code>, <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code>, <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> and <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> for the <code>brokenstick</code> object.</p></li>
+<li><p>Simplifies algorithmic control. Renames <code>control_brokenstick()</code> to <code><a href="../reference/set_control.html">set_control()</a></code> and removes a layer in the control list.</p></li>
+</ol>
+</div>
+<div id="minor-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-changes" class="anchor"></a>Minor changes</h2>
+<ul>
+<li>Stabilises the <code><a href="https://rdrr.io/r/stats/GammaDist.html">rgamma()</a></code> calls in KR-algorithm for edge cases.</li>
+<li>
+<code>predict_brokenstick()</code> can now work with the both (internal) training and (external) test data.</li>
+<li>Removes the superfluous <code>type</code> argument from <code><a href="../reference/predict.brokenstick.html">predict.brokenstick()</a></code>
+</li>
+<li>Adds a function <code><a href="../reference/get_omega.html">get_omega()</a></code> to extract the variance-covariance matrix of the broken stick estimates</li>
+<li>Adds choice <code>"dropfirst"</code> to <code><a href="../reference/get_knots.html">get_knots()</a></code>
+</li>
+<li>Improves error messages of edge cases in <code>test-brokenstick_edge.R</code>
+</li>
+<li>Perform stricter tests on arguments of <code><a href="../reference/brokenstick.html">brokenstick()</a></code>
+</li>
+<li>Introduces argument <code>warn_splines</code> in <code><a href="../reference/make_basis.html">make_basis()</a></code> to suppress uninteresting warns from <code><a href="https://rdrr.io/r/splines/bs.html">splines::bs()</a></code>
+</li>
+<li>Removes superfluous <code>knotnames</code> argument in <code><a href="../reference/make_basis.html">make_basis()</a></code>
+</li>
+<li>Argument <code>x</code> in <code><a href="../reference/make_basis.html">make_basis()</a></code> is now a vector instead of a column vector</li>
+<li>Introduces new <code>xname</code> argument in <code><a href="../reference/make_basis.html">make_basis()</a></code> to set the xname</li>
+</ul>
+</div>
 </div>
 <div id="install-legacy-version" class="section level1">
 <h1 class="hasAnchor">
 <a href="#install-legacy-version" class="anchor"></a>Install legacy version</h1>
-<p>We recommend changing your code to reflect the above changes. If needed, the old version <code>0.62.1</code> can be installed as</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<p>We recommend changing your code to reflect the above changes. If needed, version <code>1.1.1</code> can be installed as</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://devtools.r-lib.org/">devtools</a></span><span class="op">)</span>
-<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"growthcharts/brokenstick@V0.62.1"</span><span class="op">)</span></code></pre></div>
+<span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"growthcharts/brokenstick@9b969af"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="examples" class="section level1">
 <h1 class="hasAnchor">
@@ -137,48 +167,39 @@
 <div id="example-1-fit-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-1-fit-model" class="anchor"></a>Example 1: Fit model</h2>
-<p>Fit model, old version:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="fu">::</span><span class="va"><a href="../reference/smocc_200.html">smocc_200</a></span>
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">hgt.z</span>, x <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">age</span>, subjid <span class="op">=</span> <span class="va">data</span><span class="op">$</span><span class="va">subjid</span><span class="op">)</span></code></pre></div>
-<p>Fit model, version <code>0.75.0</code> and higher:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<p>Fit model, version <code>0.75.0</code> - <code>1.1.1</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="fu">::</span><span class="va"><a href="../reference/smocc_200.html">smocc_200</a></span>
 
 <span class="co"># formula interface</span>
-<span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt.z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span><span class="op">)</span>
+<span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span><span class="op">)</span>
 
 <span class="co"># XY interface - numeric vector</span>
-<span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">hgt.z</span>, <span class="va">id</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># Deprecated in v2.0.0</span>
+<span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">age</span>, <span class="va">hgt_z</span>, <span class="va">id</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># XY interface - data.frame</span>
-<span class="va">fit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span>, <span class="va">hgt.z</span>, <span class="va">id</span><span class="op">)</span><span class="op">)</span>
+<span class="co"># Deprecated in v2.0.0</span>
+<span class="va">fit3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/with.html">with</a></span><span class="op">(</span><span class="va">data</span>, <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span>, <span class="va">hgt_z</span>, <span class="va">id</span><span class="op">)</span><span class="op">)</span>
 
 <span class="co"># XY interface - matrix</span>
+<span class="co"># Deprecated in v2.0.0</span>
 <span class="va">tt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">7</span><span class="op">)</span><span class="op">]</span><span class="op">)</span>
 <span class="va">fit4</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">tt</span><span class="op">[</span>, <span class="st">"age"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
-                    <span class="va">tt</span><span class="op">[</span>, <span class="st">"hgt.z"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
+                    <span class="va">tt</span><span class="op">[</span>, <span class="st">"hgt_z"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span>,
                     <span class="va">tt</span><span class="op">[</span>, <span class="st">"id"</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></code></pre></div>
-<p>All fitted models are identical.</p>
+<p>Fit model, version <code>2.0.0</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="fu">::</span><span class="va"><a href="../reference/smocc_200.html">smocc_200</a></span>
+
+<span class="co"># formula interface</span>
+<span class="va">fit1</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="example-2-predict-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-2-predict-model" class="anchor"></a>Example 2: Predict model</h2>
-<p>Predict model, old version:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># predict at observed data</span>
-<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span>
-
-<span class="co"># predict at knots</span>
-<span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, at <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span>
-
-<span class="co"># predict at both observed data and knots</span>
-<span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, at <span class="op">=</span> <span class="st">"both"</span><span class="op">)</span>
-
-<span class="co"># predict knots, broad version</span>
-<span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, at <span class="op">=</span> <span class="st">"knots"</span>, output <span class="op">=</span> <span class="st">"broad"</span><span class="op">)</span></code></pre></div>
-<p>Predict model, new version:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<p>Predict model, version <code>0.75.0</code> - <code>1.1.1</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># predict at observed data</span>
 <span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span><span class="op">)</span>
 
@@ -190,29 +211,33 @@
 
 <span class="co"># predict knots, broad matrix</span>
 <span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span></code></pre></div>
+<p>Predict model, version <code>2.0.0</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># predict at observed data</span>
+<span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span><span class="op">)</span>
+
+<span class="co"># predict at knots</span>
+<span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, x <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span>
+
+<span class="co"># predict at both observed data and knots</span>
+<span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, x <span class="op">=</span> <span class="st">"knots"</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
+
+<span class="co"># predict knots, broad matrix</span>
+<span class="va">p4</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit1</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="example-3-plot-model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example-3-plot-model" class="anchor"></a>Example 3: Plot model</h2>
-<p>Plot trajectories, old version</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit</span>, ids <span class="op">=</span> <span class="va">ids</span><span class="op">)</span></code></pre></div>
-<p>Plot trajectories, new version</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<p>Plot trajectories, version <code>0.75.0</code> - <code>1.1.1</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span>, group <span class="op">=</span> <span class="va">ids</span>, what <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></code></pre></div>
-<p><img src="oldfriends_files/figure-html/plot-new-1.png" width="672"></p>
-</div>
-<div id="example-4-explained-variance" class="section level2">
-<h2 class="hasAnchor">
-<a href="#example-4-explained-variance" class="anchor"></a>Example 4: Explained variance</h2>
-<p>Proportion explained variance, old version</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">get_pev</span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_r2.html">get_r2</a></span><span class="op">(</span><span class="va">fit1</span>, <span class="va">data</span><span class="op">)</span>
-<span class="co">#&gt; [1] 0.8121548</span></code></pre></div>
+<p><img src="oldfriends_files/figure-html/plot-v1-1.png" width="672"></p>
+<p>Plot trajectories, version <code>2.0.0</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">fit1</span>, group <span class="op">=</span> <span class="va">ids</span>, what <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></code></pre></div>
+<p><img src="oldfriends_files/figure-html/plot-v2-1.png" width="672"></p>
 </div>
 <div id="further-reading" class="section level2">
 <h2 class="hasAnchor">

@@ -40,8 +40,9 @@
 
 
 <meta property="og:title" content="Broken stick model with nine lines for 200 children — fit_200" />
-<meta property="og:description" content="The object fit_200 is an object of class brokenstick that contains the
-fitted broken stick model." />
+<meta property="og:description" content="Object fit_200 has class brokenstick and
+contains the fitted broken stick model, including the training data and
+diagnostics." />
 
 
 
@@ -73,7 +74,7 @@ fitted broken stick model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -142,8 +143,9 @@ fitted broken stick model." />
     </div>
 
     <div class="ref-description">
-    <p>The object <code>fit_200</code> is an object of class <code>brokenstick</code> that contains the
-fitted broken stick model.</p>
+    <p>Object <code>fit_200</code> has class <code>brokenstick</code> and
+contains the fitted broken stick model, including the training data and
+diagnostics.</p>
     </div>
 
 
@@ -154,9 +156,9 @@ fitted broken stick model.</p>
 <code><a href='brokenstick.html'>brokenstick()</a></code>.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>This dataset was constructed as<div class="r"></p><pre><span class='va'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>9</span>, <span class='fl'>12</span>, <span class='fl'>15</span>, <span class='fl'>18</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>12</span>, <span class='fl'>4</span><span class='op'>)</span>
-<span class='va'>fit_200</span> <span class='op'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span><span class='op'>(</span><span class='va'>hgt.z</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>|</span> <span class='va'>id</span>, data <span class='op'>=</span> <span class='va'>smocc_200</span>,
-                       knots <span class='op'>=</span> <span class='va'>knots</span>, boundary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span>
+    <p>The dataset was constructed as<div class="sourceCode r"></p><pre><span class='va'>knots</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='fl'>6</span>, <span class='fl'>9</span>, <span class='fl'>12</span>, <span class='fl'>15</span>, <span class='fl'>18</span>, <span class='fl'>24</span><span class='op'>)</span><span class='op'>/</span><span class='fl'>12</span>, <span class='fl'>4</span><span class='op'>)</span>
+<span class='va'>fit_200</span> <span class='op'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span><span class='op'>(</span><span class='va'>hgt_z</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>|</span> <span class='va'>id</span>, data <span class='op'>=</span> <span class='va'>smocc_200</span>,
+                       knots <span class='op'>=</span> <span class='va'>knots</span>, boundary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>3</span><span class='op'>)</span>, seed <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
 </pre><p></div></p>
 
   </div>

@@ -9,13 +9,14 @@ An object of class \link[=brokenstick-class]{brokenstick}, fitted by the
 \code{\link[=brokenstick]{brokenstick()}}.
 }
 \description{
-The object \code{fit_200} is an object of class \code{brokenstick} that contains the
-fitted broken stick model.
+Object \code{fit_200} has class \code{brokenstick} and
+contains the fitted broken stick model, including the training data and
+diagnostics.
 }
 \details{
-This dataset was constructed as\if{html}{\out{<div class="r">}}\preformatted{knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-fit_200 <- brokenstick(hgt.z ~ age | id, data = smocc_200,
-                       knots = knots, boundary = c(0, 3))
+The dataset was constructed as\if{html}{\out{<div class="sourceCode r">}}\preformatted{knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
+fit_200 <- brokenstick(hgt_z ~ age | id, data = smocc_200,
+                       knots = knots, boundary = c(0, 3), seed = 1)
 }\if{html}{\out{</div>}}
 }
 \keyword{datasets}

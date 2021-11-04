@@ -32,16 +32,6 @@ This function can also provide the broken stick estimate for a given level,
 the sum of the global (fixed) and individual (random) effects.
 The current implementation does not provide prediction errors.
 }
-\examples{
-#
-# EB estimate random effect for child id 10001
-data <- smocc_200[smocc_200$id == 10001, ]
-y <- data$hgt.z
-X <- make_basis(data$age,
-  knots = fit_200$knots,
-  boundary = fit_200$boundary)
-EB(fit_200, y, X)
-}
 \references{
 Skrondal, A., Rabe-Hesketh, S. (2009).
 Prediction in multilevel generalized linear models.

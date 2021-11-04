@@ -4,7 +4,7 @@
 \alias{kr}
 \title{Kasim-Raudenbush sampler for two-level normal model}
 \usage{
-kr(y, x, g, control, seed, na.action)
+kr(y, x, g, control = control_kr())
 }
 \arguments{
 \item{y}{Vector with outcome value}
@@ -13,27 +13,21 @@ kr(y, x, g, control, seed, na.action)
 
 \item{g}{Vector with group values}
 
-\item{control}{A list with elements:
-\itemize{
-\item \code{model}: Correlation model: \code{"argyle"}, \code{"cole"} or \code{"none"}
-\item \code{runin}: Number of run-in iterations
-\item \code{ndraws}: Number of parameter draws
-\item \code{par_skip}: Number of iterations to next parameter draw
-\item \code{imp_skip}: Number of iterations to next outcome draw
-}}
-
-\item{seed}{Seed number for \code{\link[base:Random]{base::set.seed()}}. Use \code{NA} to bypass
-seed setting.}
-
-\item{na.action}{Not really used here}
+\item{control}{A list created by \code{\link[=control_kr]{control_kr()}} that sets algorithmic options
+of the sampler and correlation model.}
 }
 \value{
-A list with components:\preformatted{* `beta`  Fixed effects
+An object of class \code{kr}, basically a list with components:\preformatted{* `beta`  Fixed effects
 * `omega` Variance-covariance of random effects
 * `sigma2_j` Residual variance per group
 * `sigma2` Average residual variance
-* `draws` A matrix with `ndraw` columns with draws for missing data
+* `sample` Descriptive statistics about the data
+* `imp`   Numeric matrix with `nimp` multiple imputations.
+* `mod`   A list of objects of class [coda::mcmc()]
 }
+
+The number of rows in \code{imp} is equal to the number of missing values in the
+outcome vector \code{y}. The number of columns equals \code{nimp}.
 }
 \description{
 Simulates posterior distributions of parameters from a two-level
@@ -42,30 +36,22 @@ normal model with heterogeneous within-cluster variances
 extra step to the algorithm.
 }
 \details{
-The calculation time of \code{\link[lme4:lmer]{lme4::lmer()}} rapidly increases with the
-number of random effects. More than 10 random effects (knots)
-takes significant time, and beyond 15 knots generally impossible
-to fit.
-
-In contrast, the speed of the Kasim-Raudenbush sampler is almost
+The speed of the Kasim-Raudenbush sampler is almost
 independent of the number of random effect, and foremost depends
-on the \emph{total number of iterations}: \code{runin} + \code{ndraws} * \code{par_skip}.
+on the total number of iterations.
 
-The defaults \code{ndraws = 200} and \code{par_skip = 1} provides a \emph{good}
-approximation to the variance-covariance matrix of the random
-effects. Increase \code{par_skip} to \code{10} (\emph{better}) or \code{20} (\emph{best}) to
-obtain closer approximations at the expense of a linear
-increase in calculation time. Setting \code{ndraws = 50} (or lower)
-will reduce computation time, but the result should be treated as
-\emph{indicative}.
+The defaults \code{start = 100}, \code{n = 200} and \code{thin = 1} provide 200 parameter
+draws with a \emph{reasonable} approximation to the variance-covariance
+matrix of the random effects.
 
-It is possible to subsample the parameter draws at every
-\code{imp_skip} iteration, and draw one or more synthetic outcome values
-from the posterior distribution of the outcome. The number of
-multiple imputations is equal to \code{floor(ndraws / imp_skip)}. Thus,
-setting \code{imp_skip = 20L} returns 200 / 20 = 10 multiple
-imputations for each missing value in the outcome. The default does
-not produce imputations.
+For a closer approximations with 200 draws set \code{control = control_kr(thin = 10)}
+(\emph{better}) or \code{thin = 20} (\emph{best}), at the expense of a linear increase in calculation
+time. Drawing fewer than 50 observations is not recommended, and such
+results are best treated as \emph{indicative}.
+
+It is possible to draw multiple imputations by setting the \code{nimp} parameter.
+For example, to draw five imputations for each missing outcome specify
+\code{control = control_kr(nimp = 5)}.
 }
 \references{
 Kasim RM, Raudenbush SW. (1998). Application of Gibbs sampling to nested

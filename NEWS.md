@@ -1,3 +1,35 @@
+# brokenstick 2.0.0
+
+## Main changes
+
+1. Function `brokenstick()` in version `2.0.0` sets the Kasim-Raudenbush sampler as the default method. The former method `lme4::lmer()` remains available by setting `method = "lmer"` argument. 
+
+2. Version `2.0.0` adopts the variable names of the `coda` package (e.g., `start`, `end`, `thin`, `niter`, and so on) and stores the results of the Kasim-Raudenbush sampler as objects of class `mcmc`. 
+
+3. For `method = "kr"` one may now inspect the solution of the sampler by standard functions from the `coda` package. For `method = "lmer"` we can apply functions from the `lme4` package for `merMod` objects. 
+
+4. Version `2.0.0` redefines the `brokenstick` class. New entries include `call`, `formula`, `internal`, `sample`, `light`, `data`, `imp` and `mod`. Removed entries are `knots` (renamed to `internal`) and `draws` (renamed to `imp`). We may omit the `newdata` argument for the training data. Setting `light = TRUE` creates a small version of the `brokenstick` object. Objects of class `brokenstick` are not backwards compatible, so one should regenerate objects of class `brokenstick` in order use newer features in `2.0.0`.
+
+5. Version `2.0.0` conforms to classic model fitting interface in `R`. Renames the `new_data` argument to `newdata` to conform to `predict.lm()`. Methods `plot()` and `predict()` no longer require a `newdata` argument. All special cases of `predict()` updated and explained in documentation and examples.
+
+6. Version `2.0.0` adds methods `coef()`, `fitted()`, `model.frame()`, `model.matrix()`, `print()` and `summary` for the `brokenstick` object.
+
+7. Simplifies algorithmic control. Renames `control_brokenstick()` to `set_control()` and removes a layer in the control list.
+
+## Minor changes
+
+- Stabilises the `rgamma()` calls in KR-algorithm for edge cases.
+- `predict_brokenstick()` can now work with the both (internal) training and (external) test data. 
+- Removes the superfluous `type` argument from `predict.brokenstick()`
+- Adds a function `get_omega()` to extract the variance-covariance matrix of the broken stick estimates
+- Adds choice `"dropfirst"` to `get_knots()`
+- Improves error messages of edge cases in `test-brokenstick_edge.R`
+- Perform stricter tests on arguments of `brokenstick()`
+- Introduces argument `warn_splines` in `make_basis()` to suppress uninteresting warns from `splines::bs()`
+- Removes superfluous `knotnames` argument in `make_basis()`
+- Argument `x` in `make_basis()` is now a vector instead of a column vector
+- Introduces new `xname` argument in `make_basis()` to set the xname
+
 # brokenstick 1.1.1
 
 - Handles an edge case that crashed `predict()`

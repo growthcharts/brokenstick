@@ -2,127 +2,50 @@
 % Please edit documentation in R/brokenstick.R
 \name{brokenstick}
 \alias{brokenstick}
-\alias{brokenstick.default}
-\alias{brokenstick.formula}
-\alias{brokenstick.data.frame}
-\alias{brokenstick.matrix}
-\alias{brokenstick.numeric}
 \title{Fit a \code{brokenstick} model to irregular data}
 \usage{
-brokenstick(x, ...)
-
-\method{brokenstick}{default}(x, ...)
-
-\method{brokenstick}{formula}(
+brokenstick(
   formula,
   data,
-  ...,
   knots = NULL,
   boundary = NULL,
   k = NULL,
   degree = 1L,
-  method = c("lmer", "kr"),
-  control = control_brokenstick(),
-  seed = NA
-)
-
-\method{brokenstick}{data.frame}(
-  x,
-  y,
-  group,
-  ...,
-  knots = NULL,
-  boundary = NULL,
-  k = NULL,
-  degree = 1L,
-  method = c("lmer", "kr"),
-  control = control_brokenstick(),
-  seed = NA
-)
-
-\method{brokenstick}{matrix}(
-  x,
-  y,
-  group,
-  ...,
-  knots = NULL,
-  boundary = NULL,
-  k = NULL,
-  degree = 1L,
-  method = c("lmer", "kr"),
-  control = control_brokenstick(),
-  seed = NA
-)
-
-\method{brokenstick}{numeric}(
-  x,
-  y,
-  group,
-  ...,
-  knots = NULL,
-  boundary = NULL,
-  k = NULL,
-  degree = 1L,
-  method = c("lmer", "kr"),
-  control = control_brokenstick(),
-  seed = NA
+  method = c("kr", "lmer"),
+  control = set_control(method = method, ...),
+  na.action = na.exclude,
+  light = FALSE,
+  ...
 )
 }
 \arguments{
-\item{x}{Predictor variables. Depending on the context:
-\itemize{
-\item A \strong{data frame} of predictors.
-\item A \strong{matrix} of predictors.
-}
+\item{formula}{A formula specifying the outcome, the predictor and the group
+variable in \code{data}. The generic shape is \code{formula = y ~ x | group}. The
+left-hand side is the outcome, the right-hand side the predictor, and the
+name of the grouping variable occurs after the \code{|} sign. Formula treatment
+is non-standard: 1) \code{y} and \code{x} should be numeric, 2) only one variable
+is allowed in each model term (additional variables will be ignored).}
 
-If \code{x} has one column, then also specify \code{y} and \code{group}. If \code{x} has multiple
-columns, then specify the model by a \code{formula} argument.}
-
-\item{...}{Not currently used, but required for extensibility.}
-
-\item{formula}{A formula specifying the outcome terms on the
-left-hand side, the predictor term on the right-hand side and
-the group variable after the \code{|} sign, e.g \code{formula = hgt ~ age | id}.
-One may specify additional variables, but the \code{brokenstick} model
-will ignored them.
-
-Note: This formula specification is specific to the \code{brokenstick()}
-function.}
-
-\item{data}{When a \strong{formula} is used, \code{data} is specified as:
-\itemize{
-\item A \strong{data frame} containing predictor, group and outcome variables.
-}}
+\item{data}{A data frame or matrix containing the outcome (numeric),
+predictor (numeric) and group (numeric, factor, character) variable.}
 
 \item{knots}{Optional, but recommended. Numerical vector with the
-locations of the breaks to be placed on the values of the predictor.
-Values outside the range of the data will extend the \code{boundary}
-knots (see below) beyond the data range.}
+locations of the internal knots to be placed on the values of the predictor.}
 
-\item{boundary}{Optional. Numerical vector of
-length 2 with the left and right boundary knots. The \code{boundary}
+\item{boundary}{Optional, but recommended. Numerical vector of
+length 2 with the left and right boundary knot. The \code{boundary}
 setting is passed to \code{\link[splines:bs]{splines::bs()}} as the \code{Boundary.knots} argument.
-If not specified, the range of predictor variable is taken. Automatic
-model specification is data-dependent. However, if both \code{knots} and
-\code{boundary} are supplied, the B-spline transformation parameter do not
-depend on the data. If specified, the \code{boundary} range is internally
-expanded to include at least \code{range(knots)}. The warning
-\verb{some 'x' values beyond boundary knots may cause ill-conditioned bases}
-implies that model fitting ignores any data beyond the (expanded) boundary
-range. It is possible to prevent this warning by pre-filtering rows
-in \code{data} to the boundary range.}
+If not specified, the function determines the boundary knots as
+\code{range(x)}. When specified, the \code{boundary} range is internally
+expanded to include at least \code{range(knots)}.}
 
 \item{k}{Optional, a convenience parameter for the number of
 internal knots. If specified, then \code{k} internal knots are placed
 at equidense quantiles of the predictor. For example,
 specifying \code{k = 1} puts a knot at the 50th quantile (median),
 setting \code{k = 3} puts knots at the 25th, 50th and 75th quantiles,
-and so on.
-
-Note: Knots specified via \code{k} are data-dependent
-and do not transfer to other data sets. We recommend
-using \code{knots} and \code{boundary} over \code{k}. If both \code{k} and
-\code{knots} are specified, then \code{k} takes precendence.}
+and so on. If the user specifies both \code{k} and \code{knots} arguments
+then \code{knots} takes precedence.}
 
 \item{degree}{the degree of the spline. The broken stick model
 requires linear splines, so the default is \code{degree = 1}.
@@ -131,93 +54,117 @@ column less than for \code{degree = 1}. The \code{brokenstick} package supports
 only \code{degree = 0} and \code{degree = 1}.}
 
 \item{method}{Estimation method. Either \code{"kr"} (for the
-Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}) (default).}
+Kasim-Raudenbush sampler) or \code{"lmer"} (for \code{\link[lme4:lmer]{lme4::lmer()}}).
+Version 1.1.1.9000 changed the default to \code{method = "kr"}.}
 
-\item{control}{A list with parameters. Use \code{control_brokenstick()}
-to generate.}
+\item{control}{List of control options returned by \code{\link[=set_control]{set_control()}} used
+to set algorithmic details. A list with parameters. When not specified,
+the functions sets to defaults
+for method \code{"kr"} by \code{\link[=control_kr]{control_kr()}}, and
+for method \code{"lmer"} by \code{\link[lme4:lmerControl]{lme4::lmerControl()}}. For ease of use, the user
+may set individual options to \code{"kr"} (e.g. \code{niter = 500}) via the \dots
+arguments.}
 
-\item{seed}{Seed number for \code{\link[base:Random]{base::set.seed()}}. Use \code{NA} to bypass
-seed setting.}
+\item{na.action}{A function that indicates what \code{\link[lme4:lmer]{lme4::lmer()}} should so
+when the data contain \code{NA}s. Default set to \code{na.exclude}. Only used by
+method \code{"lmer"}.}
 
-\item{y}{Outcome variable. When \code{x} is a \strong{data frame} or \strong{matrix},
-\code{y} is specified as:
-\itemize{
-\item A \strong{data frame} with 1 numeric column.
-\item A \strong{matrix} with 1 numeric column.
-\item A numeric \strong{vector}.
-}}
+\item{light}{Should the returned object be lighter? If \code{light = TRUE}
+the returned object will contain only the model settings and parameter
+estimates and not store the \code{data}, \code{imp} and \code{mod} elements. The light
+object can be used to predict broken stick estimates for new data, but
+does not disclose the training data and is very small (often <20 Kb).}
 
-\item{group}{Grouping variable. When \code{x} is a \strong{data frame} or \strong{matrix},
-\code{group} is specified as:
-\itemize{
-\item A \strong{data frame} with 1 column.
-\item A \strong{matrix} with 1 column.
-\item A numeric \strong{vector}.
-}}
+\item{\dots}{Forwards arguments to \code{\link[=control_kr]{control_kr()}}.}
 }
 \value{
-A \code{brokenstick} object.
+A object of class \code{brokenstick}.
 }
 \description{
 The \code{brokenstick()} function fits an irregularly observed series
-of measurements onto a user-specified grid of points.
-The model codes de grid by a series of linear B-splines.
-Differences between observations are expressed by one random
-effect per grid point. When multiple set of series are modelled,
-each modeled trajectory consists of straight lines that join at the
-chosen grid points, and hence look like a broken stick.
+of measurements onto a user-specified grid of points (knots).
+The model codes the grid by a series of linear B-splines.
+Each modelled trajectory consists of straight lines that join at
+the chosen knots and look like a broken stick. Differences between
+observations are expressed by a random effect per knot.
 }
 \details{
-The variance-covariance matrix of the random effects absorbs the
-relations over time. By default, this matrix is estimated
-as unstructured by \code{\link[lme4:lmer]{lme4::lmer()}}.
-This estimate may be unstable if
-the number of children is small relative to the number of specified
-knots. The function can be time consuming for data sets with thousands of
-children.
+The choice between \code{method = "kr"} and \code{method = "lmer"} depends on the size
+of the data and the complexity of the model. In general, setting \code{method = "lmer"}
+can require substantial calculation time for more complex models
+(say > 8 internal knots) and may not converge. Method \code{"kr"} is less
+sensitive to model complexity and small samples, and has the added benefit that the
+variance-covariance matrix of the random effects can be constrained through the
+\code{cormodel} argument. On the other hand, \code{"lmer"} is the better-researched
+method, and is more efficient for simpler models and datasets with many
+rows.
 
-An alternative - often faster for models with many random effects -
-is to use the Bayesian Kasim-Raudenbush sampler (method \code{kr}). That
-method also allow for enforcing a simple structure on the
-variance-covariance matrix of the random effects. Currently, there
-are three such models: \code{argyle}, \code{cole} and \code{none}. See \code{\link[=kr]{kr()}} and
-\code{\link[=control_brokenstick]{control_brokenstick()}} for more details.
+The default algorithm since version 2.0 is the Bayesian Kasim-Raudenbush
+sampler (\code{method = "kr"}). The variance-covariance matrix of the broken stick
+estimates absorbs the relations over time. The \code{"kr"} method allows
+enforcing a simple structure on this variance-covariance matrix. Currently,
+there are three such correlation models: \code{"none"} (default), \code{"argyle"}
+and \code{"cole"}. Specify the \code{seed} argument for reproducibility.
+See \code{\link[=control_kr]{control_kr()}} for more details.
+
+The alternative \code{method = "lmer"} fits the broken stick model by
+\code{\link[lme4:lmer]{lme4::lmer()}}. With this method, the variance-covariance matrix can only be
+unstructured. This estimate may be unstable if the number of children is
+small relative to the number of specified knots. The default setting
+in \code{\link[lme4:lmerControl]{lme4::lmerControl()}} is  \code{check.nobs.vs.nRE= "stop"}. The
+\verb{[set_control()]} function changes this to \code{check.nobs.vs.nRE= "warning"}
+by default, since otherwise many broken stick models would not run at all.
+The method throws warnings that estimates are not stable. It can be time
+for models with many internal knots. Despite the warnings,
+the results often look reasonable.
+
+Diagnostics with \pkg{coda} and \pkg{lme4}: The function returns an object
+of class \code{brokenstick}. For \code{method = "kr"} the list component named
+\code{"mod"} contains a list of \code{mcmc} objects that can be further analysed with
+\code{\link[coda:trellisplots]{coda::acfplot()}}, \code{\link[coda:autocorr]{coda::autocorr()}}, \code{\link[coda:crosscorr]{coda::crosscorr()}}, \code{\link[coda:cumuplot]{coda::cumuplot()}},
+\code{\link[coda:densplot]{coda::densplot()}}, \code{\link[coda:effectiveSize]{coda::effectiveSize()}}, \code{\link[coda:geweke.plot]{coda::geweke.plot()}},
+\code{\link[coda:raftery.diag]{coda::raftery.diag()}}, \code{\link[coda:traceplot]{coda::traceplot()}} and the usual \code{plot()}
+and \code{summary()} functions. For \code{method = "lmer"} the list component named
+\code{"mod"} contains an object of class \link[lme4:merMod-class]{lme4::merMod}. These model objects
+are omitted in light \code{brokenstick} objects.
+}
+\note{
+Note that automatic knot specification is data-dependent, and may not reproduce
+on other data. Likewise, knots specified via \code{k} are data-dependent and do not transfer
+to other  data sets. Fixing the model requires specifying both \code{knots} and
+\code{boundary}.
 }
 \examples{
-train <- smocc_200[1:1198, ]
+data <- smocc_200[1:1198, ]
 
-# fit with implicit boundary c(0, 3)
-fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3)
+# using kr method, default
+f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, seed = 123)
+plot(f1, data, n_plot = 9)
 
-# using KR sampler
-fit <- brokenstick(hgt.z ~ age | id, data = train, knots = 0:3,
-                   method = "kr", seed = 1)
+# study sampling behaviour of the sigma2 parameter with coda
+library(coda)
+plot(f1$mod$sigma2)
+acfplot(f1$mod$sigma2)
+
+# using lmer method
+f2 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, method = "lmer")
+plot(f2, data, n_plot = 9)
+
+# drill down into merMod object with standard diagnostics in lme4
+library(lme4)
+summary(f2$mod)
+plot(f2$mod)
 
 \donttest{
-knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24) / 12, 4)
-boundary <- c(0, 3)
-fit_lmer <- brokenstick(hgt.z ~ age | id, data = train,
-                        knots = knots, boundary = boundary)
-fit_kr <- brokenstick(hgt.z ~ age | id, data = train, knots = knots,
-                      boundary = boundary, method = "kr")
+# a model with more knots
+knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24, 36) / 12, 4)
+
+# method kr takes about 2 seconds
+f3 <- brokenstick(hgt_z ~ age | id, data, knots, seed = 222)
+plot(f3, data, n_plot = 9)
+
+# method lmer takes about 40 seconds
+f4 <- brokenstick(hgt_z ~ age | id, data, knots, method = "lmer")
+plot(f4, data, n_plot = 9)
 }
-
-# Four ways to specify the same model
-# Formula interface
-mod1 <- brokenstick(hgt.z ~ age | id, train)
-
-# XY interface - numeric vector
-mod2 <- with(train, brokenstick(age, hgt.z, id))
-identical(mod1, mod2)
-
-# XY interface - data.frame
-mod3 <- with(train, brokenstick(data.frame(age), hgt.z, id))
-identical(mod1, mod3)
-
-# XY interface - matrix
-tt <- as.matrix(train[, c(1, 2, 7)])
-mod4 <- brokenstick(tt[, "age", drop = FALSE],
-                    tt[, "hgt.z", drop = FALSE],
-                    tt[, "id", drop = FALSE])
-identical(mod1, mod4)
 }

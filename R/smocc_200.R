@@ -11,7 +11,7 @@
 #' years (numeric)} \item{sex}{Sex, \code{"male"} or \code{"female"}
 #' (character)} \item{ga}{Gestational age, completed weeks (numeric)}
 #' \item{bw}{Birth weight in grammes (numeric)} \item{hgt}{Height measurement in
-#' cm (34-102) (numeric)} \item{hgt.z}{Height in SDS relative Fourth Dutch
+#' cm (34-102) (numeric)} \item{hgt_z}{Height in SDS relative Fourth Dutch
 #' Growth Study 1997 (numeric)} }
 #' @source Herngreen WP, van Buuren S, van Wieringen JC, Reerink JD,
 #'   Verloove-Vanhorick SP & Ruys JH (1994). Growth in length and weight from
@@ -23,8 +23,9 @@ NULL
 
 #' Broken stick model with nine lines for 200 children
 #'
-#' The object `fit_200` is an object of class `brokenstick` that contains the
-#' fitted broken stick model.
+#' Object `fit_200` has class `brokenstick` and
+#' contains the fitted broken stick model, including the training data and
+#' diagnostics.
 #'
 #' @name fit_200
 #' @docType data
@@ -32,11 +33,32 @@ NULL
 #'   [brokenstick()].
 #'
 #' @details
-#' This dataset was constructed as
+#' The dataset was constructed as
 #' ```{r eval=FALSE}
 #' knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-#' fit_200 <- brokenstick(hgt.z ~ age | id, data = smocc_200,
-#'                        knots = knots, boundary = c(0, 3))
+#' fit_200 <- brokenstick(hgt_z ~ age | id, data = smocc_200,
+#'                        knots = knots, boundary = c(0, 3), seed = 1)
+#' ```
+#' @keywords datasets
+NULL
+
+#' Broken stick model with nine lines for 200 children (light)
+#'
+#' Object `fit_200_light` has class `brokenstick` and stores the
+#' the model settings and parameter estimates.
+#'
+#' @name fit_200_light
+#' @docType data
+#' @format An object of class [brokenstick][brokenstick-class], fitted by the
+#'   [brokenstick()].
+#'
+#' @details
+#' The datasets was constructed as
+#' ```{r eval=FALSE}
+#' knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
+#' fit_200_light <- brokenstick(hgt_z ~ age | id, data = smocc_200,
+#'                        knots = knots, boundary = c(0, 3),
+#'                        light = TRUE, seed = 1)
 #' ```
 #' @keywords datasets
 NULL

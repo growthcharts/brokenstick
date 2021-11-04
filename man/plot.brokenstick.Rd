@@ -4,48 +4,17 @@
 \alias{plot.brokenstick}
 \title{Plot observed and fitted trajectories by group}
 \usage{
-\method{plot}{brokenstick}(
-  x,
-  new_data,
-  ...,
-  what = "droplast",
-  .x = NULL,
-  group = NULL,
-  xlim = NULL,
-  ylim = NULL,
-  show = c(TRUE, TRUE, FALSE),
-  n_plot = 3L
-)
+\method{plot}{brokenstick}(x, newdata = NULL, ...)
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick}.}
 
-\item{new_data}{A data frame or matrix of new predictors.}
+\item{newdata}{Optional. A data frame in which to look for variables with
+which to predict. The training data are used if omitted and
+if \code{object$light} is \code{FALSE}.}
 
 \item{...}{Extra arguments passed down to \code{\link[=predict.brokenstick]{predict.brokenstick()}}
 and \code{\link[=plot_trajectory]{plot_trajectory()}}.}
-
-\item{what}{Which knots to plot? See \code{\link[=get_knots]{get_knots()}}. The default,
-\code{what = "droplast"}, does not plot the right boundary knot.}
-
-\item{.x}{The \code{x} argument of the \code{\link[=predict.brokenstick]{predict.brokenstick()}} function.}
-
-\item{group}{A vector with group identifications}
-
-\item{xlim}{Vector of length 2 with range of x-axis}
-
-\item{ylim}{Vector of length 2 with range of y-axis}
-
-\item{show}{A logical vector of length 3. Element 1 specifies
-whether the observed data are plotted, element 2 specifies
-whether the broken stick are plotted, element 3 specifies
-whether imputations are plotted. The default is
-\code{c(TRUE, TRUE, FALSE)}.}
-
-\item{n_plot}{A integer indicating the number of individual plots.
-The default is 3, which plots the trajectories of the first three
-groups. The \code{n_plot} is a safety measure to prevent unintended
-plots of the entire data set.}
 }
 \value{
 An object of class \link[ggplot2:ggplot]{ggplot2::ggplot}.
@@ -54,31 +23,29 @@ An object of class \link[ggplot2:ggplot]{ggplot2::ggplot}.
 The \code{plot} method for a \code{brokenstick} object plots the observed and
 fitted trajectories of one or more groups.
 }
+\details{
+By default, \code{plot(fit)} will plot the observed and fitted data for the
+first three groups in the data. The default setting drops the fitted value
+at the right boundary knot from the display.
+}
 \examples{
+\dontrun{
 # fit model on raw hgt with knots at 0, 1, 2 and 3 years
 fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:3)
 gp <- c(10001, 10005, 10022)
-plot(fit1, smocc_200,
-  group = gp, xlim = c(0, 2.1),
-  xlab = "Age (years)", ylab = "Length (cm)"
-)
+plot(fit1, group = gp, xlab = "Age (years)", ylab = "Length (cm)")
 
 # fit model on standard deviation score
-fit2 <- brokenstick(hgt.z ~ age | id, smocc_200, knots = 0:3)
-plot(fit2, smocc_200,
-  group = gp, xlim = c(0, 2.1),
-  xlab = "Age (years)", ylab = "Length (SDS)"
-)
+fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:3)
+plot(fit2, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
 
-# model with 11 knots
-plot(fit_200, smocc_200,
-  group = gp, xlim = c(0, 2.1),
-  xlab = "Age (years)", ylab = "Length (SDS)"
-)
+# built-in model with 11 knots
+plot(fit_200, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
+}
 }
 \seealso{
 \link{predict.brokenstick}, \link{plot_trajectory}.
 }
 \author{
-Stef van Buuren 2020
+Stef van Buuren 2021
 }

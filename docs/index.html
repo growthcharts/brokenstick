@@ -39,7 +39,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -114,7 +114,7 @@
 <p>Install the <code>brokenstick</code> package from CRAN as follows:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"brokenstick"</span><span class="op">)</span></code></pre></div>
-<p>The latest version can be installed from GitHub as follows:</p>
+<p>The latest version (revision branch) can be installed from GitHub as follows:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"remotes"</span><span class="op">)</span>
 <span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"growthcharts/brokenstick"</span><span class="op">)</span></code></pre></div>
@@ -138,7 +138,7 @@
 <li>Missing data are missing at random (MAR);</li>
 <li>Individuals are exchangeable and uncorrelated.</li>
 </ul>
-<p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (<span class="math inline"><em>Z</em></span>) scale. Unique feature of the broken stick model are:</p>
+<p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (<em>Z</em>) scale. Unique feature of the broken stick model are:</p>
 <ul>
 <li>
 <em>Modular</em>: Issues related to non-linearity of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;</li>
@@ -161,10 +161,10 @@
 <h3 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h3>
 <ol>
-<li>I took the name <em>broken stick</em> from Ruppert, Wand, and Carroll (<a href="#ref-ruppert2003">2003</a>), page 59-61, but it is actually much older.</li>
-<li>As far as I know, de Kroon et al. (<a href="#ref-dekroon2010">2010</a>) is the first publication that uses the broken stick model without the intercept in a mixed modelling context. See <a href="https://stefvanbuuren.name/publications/2010%20TBC%20Overweight%20-%20PLoS%20ONE.pdf">The Terneuzen birth cohort: BMI changes between 2 and 6 years correlate strongest with adult overweight</a>.</li>
-<li>The model was formally defined and extended in <a href="https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick">Flexible Imputation of Missing Data (second edition)</a>. See van Buuren (<a href="#ref-vanbuuren2018">2018</a>).</li>
-<li>The evaluation by Anderson et al. (<a href="#ref-anderson2019">2019</a>) concluded:</li>
+<li>I took the name <em>broken stick</em> from <a href="#ref-ruppert2003">Ruppert, Wand, and Carroll</a> (<a href="#ref-ruppert2003">2003</a>), page 59-61, but it is actually much older.</li>
+<li>As far as I know, <a href="#ref-dekroon2010">de Kroon et al.</a> (<a href="#ref-dekroon2010">2010</a>) is the first publication that uses the broken stick model without the intercept in a mixed modelling context. See <a href="https://stefvanbuuren.name/publications/2010%20TBC%20Overweight%20-%20PLoS%20ONE.pdf">The Terneuzen birth cohort: BMI changes between 2 and 6 years correlate strongest with adult overweight</a>.</li>
+<li>The model was formally defined and extended in <a href="https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick">Flexible Imputation of Missing Data (second edition)</a>. See <a href="#ref-vanbuuren2018">van Buuren</a> (<a href="#ref-vanbuuren2018">2018</a>).</li>
+<li>The evaluation by <a href="#ref-anderson2019">Anderson et al.</a> (<a href="#ref-anderson2019">2019</a>) concluded:</li>
 </ol>
 <blockquote>
 <blockquote>
@@ -184,21 +184,21 @@
 <div id="references" class="section level3">
 <h3 class="hasAnchor">
 <a href="#references" class="anchor"></a>References</h3>
-<div id="refs" class="references">
-<div id="ref-anderson2019">
-<p>Anderson, C., R. Hafen, O. Sofrygin, L. Ryan, and HBGDki Community.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-anderson2019" class="csl-entry">
+Anderson, C., R. Hafen, O. Sofrygin, L. Ryan, and HBGDki Community.
 <ol>
 <li>“Comparing Predictive Abilities of Longitudinal Child Growth Models.” <em>Statistics in Medicine</em> 38 (19): 3555–70.</li>
 </ol>
 </div>
-<div id="ref-dekroon2010">
-<p>de Kroon, M. L. A., C. M. Renders, J. P. van Wouwe, S. van Buuren, and R. A. Hirasing. 2010. “The Terneuzen Birth Cohort: BMI Changes Between 2 and 6 Years Correlate Strongest with Adult Overweight.” <em>PloS ONE</em> 5 (2): e9155.</p>
+<div id="ref-dekroon2010" class="csl-entry">
+de Kroon, M. L. A., C. M. Renders, J. P. van Wouwe, S. van Buuren, and R. A. Hirasing. 2010. “The Terneuzen Birth Cohort: BMI Changes Between 2 and 6 Years Correlate Strongest with Adult Overweight.” <em>PloS ONE</em> 5 (2): e9155.
 </div>
-<div id="ref-ruppert2003">
-<p>Ruppert, D., M. P. Wand, and R. J. Carroll. 2003. <em>Semiparametric Regression</em>. Cambridge: Cambridge University Press.</p>
+<div id="ref-ruppert2003" class="csl-entry">
+Ruppert, D., M. P. Wand, and R. J. Carroll. 2003. <em>Semiparametric Regression</em>. Cambridge: Cambridge University Press.
 </div>
-<div id="ref-vanbuuren2018">
-<p>van Buuren, S. 2018. <em>Flexible Imputation of Missing Data. Second Edition</em>. Boca Raton, FL.: CRC Press.</p>
+<div id="ref-vanbuuren2018" class="csl-entry">
+van Buuren, S. 2018. <em>Flexible Imputation of Missing Data. Second Edition</em>. Boca Raton, FL: CRC Press.
 </div>
 </div>
 </div>
@@ -244,7 +244,6 @@
 <ul class="list-unstyled">
 <li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a></li>
 <li><a href="https://cran.r-project.org/package=brokenstick"><img src="https://www.r-pkg.org/badges/version/brokenstick" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://github.com/growthcharts/brokenstick"><img src="https://img.shields.io/badge/github%20version-1.1.0-orange.svg"></a></li>
 </ul>
 </div>
 </div>

@@ -6,7 +6,10 @@
 \usage{
 plot_trajectory(
   x,
-  data,
+  newdata = NULL,
+  what = "droplast",
+  .x = NULL,
+  group = NULL,
   color_y = c(grDevices::hcl(240, 100, 40, 0.7), grDevices::hcl(240, 100, 40, 0.8)),
   size_y = 2,
   color_yhat = c(grDevices::hcl(0, 100, 40, 0.7), grDevices::hcl(0, 100, 40, 0.8)),
@@ -18,15 +21,24 @@ plot_trajectory(
   ylab = NULL,
   xlim = NULL,
   ylim = NULL,
+  show = c(TRUE, TRUE, FALSE),
+  n_plot = 3L,
   scales = "fixed",
-  theme = ggplot2::theme_light()
+  theme = ggplot2::theme_light(),
+  ...
 )
 }
 \arguments{
 \item{x}{An object of class \code{brokenstick}.}
 
-\item{data}{A \code{data.frame} with columns names \code{x$names}, \code{".source"}
-and \code{".pred"}, and possibly \code{".imp"}}
+\item{newdata}{A \code{data.frame} or \code{matrix}}
+
+\item{what}{Which knots to plot? See \code{\link[=get_knots]{get_knots()}}. The default,
+\code{what = "droplast"}, does not plot the right boundary knot.}
+
+\item{.x}{The \code{x} argument of the \code{\link[=predict.brokenstick]{predict.brokenstick()}} function.}
+
+\item{group}{A vector with group identifications}
 
 \item{color_y}{A character vector with two elements specifying the symbol and line color of the measured data points}
 
@@ -50,16 +62,28 @@ and \code{".pred"}, and possibly \code{".imp"}}
 
 \item{ylim}{Vector of length 2 with range of y-axis}
 
+\item{show}{A logical vector of length 3. Element 1 specifies
+whether the observed data are plotted, element 2 specifies
+whether the broken stick are plotted, element 3 specifies
+whether imputations are plotted. The default is
+\code{c(TRUE, TRUE, FALSE)}.}
+
+\item{n_plot}{A integer indicating the number of individual plots.
+The default is 3, which plots the trajectories of the first three
+groups. The \code{n_plot} is a safety measure to prevent unintended
+plots of the entire data set.}
+
 \item{scales}{Axis scaling, e.g. \code{"fixed"}, \code{"free"}, and so on}
 
 \item{theme}{Plotting theme}
+
+\item{\dots}{Extra arguments passed down to \code{\link[=predict.brokenstick]{predict.brokenstick()}}.}
 }
 \value{
 An object of class \code{ggplot}
 }
 \description{
-This function is called by \code{plot.brokenstick}. Normally we wouldn't
-call \code{plot_trajectory()} directly.
+Plot observed and fitted trajectories from fitted brokenstick model
 }
 \seealso{
 \link{plot.brokenstick}

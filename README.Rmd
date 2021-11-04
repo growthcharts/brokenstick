@@ -21,7 +21,6 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 [![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
-[![](https://img.shields.io/badge/github%20version-1.1.0-orange.svg)](https://github.com/growthcharts/brokenstick)
 <!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear mixed model using second-order linear B-splines. The main use of the model is to align irregularly observed data to a user-specified grid of break ages.
@@ -36,7 +35,7 @@ Install the `brokenstick` package from CRAN as follows:
 install.packages("brokenstick")
 ```
 
-The latest version can be installed from GitHub as follows: 
+The latest version (revision branch) can be installed from GitHub as follows: 
 
 ```{r eval = FALSE}
 install.packages("remotes")

@@ -3,13 +3,14 @@
 #' @aliases residuals.brokenstick
 #' @inheritParams predict.brokenstick
 #' @param \dots Additional arguments. Ignored.
-#' @return See [predict.brokenstick()].
+#' @return A data.frame with a column named `.resid`
 #' @family brokenstick
 #' @export
-residuals.brokenstick <- function(object, new_data = NULL, ...) {
-  pred <- predict(object, new_data)
-  y <- new_data[[object$names$y]]
+residuals.brokenstick <- function(object, newdata = NULL, ...) {
+  newdata <- get_newdata(object, newdata)
+  pred <- predict(object, newdata)
+  y <- newdata[[object$names$y]]
   r <- y - pred
   colnames(r) <- ".resid"
-  r
+  return(r)
 }

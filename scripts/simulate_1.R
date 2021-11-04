@@ -2,7 +2,7 @@ library(brokenstick)
 set.seed(1)
 
 control <- control_brokenstick(method = "kr", kr = list(runin = 5000L, ndraw = 1000L, par_skip = 20L))
-fit_inf <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = seq(0, 2, 0.25), control = control)
+fit_inf <- brokenstick(hgt_z ~ age | id, data = smocc_200, knots = seq(0, 2, 0.25), control = control)
 
 fit_dif <- function(f1, f2) {
   om1 <- f1$omega[-nrow(f1$omega), -nrow(f1$omega)]
@@ -16,7 +16,7 @@ testcondition <- function(runin = 100, ndraw = 10, par_skip = 10, replic = 100,
   control <- control_brokenstick(method = "kr", kr = list(runin = runin, ndraw = ndraw, par_skip = par_skip))
   result <- rep(NA, replic)
   for (i in 1:replic) {
-    fit <- brokenstick(hgt.z ~ age | id, data = smocc_200, knots = seq(0, 2, 0.25), control = control)
+    fit <- brokenstick(hgt_z ~ age | id, data = smocc_200, knots = seq(0, 2, 0.25), control = control)
     result[i] <- fit_dif(fit, truth)
   }
   median(result)

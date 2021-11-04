@@ -1,61 +1,74 @@
-context("brokenstick-edge")
-
 knots <- seq(0, 2, by = 0.25)
 boundary <- c(0, 3)
 
-# low n - method kr
-# FIXME: Fix, or turn into more informative messages
-test_that("brokenstick handles low number of cases", {
-  expect_error(brokenstick(hgt.z ~ age | id, smocc_200[1:10, ],
+# low n - method kr - EDGE cases
+test_that("brokenstick handles low number of cases - 1", {
+  expect_error(brokenstick(hgt_z ~ age | id, smocc_200[1:10, ],
                            knots = knots, boundary = boundary,
                            method = "kr", seed = 1L),
-               "invalid arguments")
-  expect_error(brokenstick(hgt.z ~ age | id, smocc_200[1:95, ],
+               "`Sigma` is symmetric but not positive")
+})
+
+test_that("brokenstick handles low number of cases - 2", {
+  expect_error(brokenstick(hgt_z ~ age | id, smocc_200[1:95, ],
                            knots = knots, boundary = boundary,
                            method = "kr", seed = 2L),
-               "invalid arguments")
-  expect_error(brokenstick(hgt.z ~ age | id, smocc_200[1:100, ],
+               "`Sigma` is symmetric but not positive")
+})
+
+test_that("brokenstick handles low number of cases - 3", {
+  expect_error(brokenstick(hgt_z ~ age | id, smocc_200[1:100, ],
                            knots = knots, boundary = boundary,
                            method = "kr", seed = 3L),
-               "the leading minor of order ")
-  }
-)
+               "`Sigma` is symmetric but not positive")
+})
 
-# # low n - method lmer
-# # FIXME: Turn into more informative messages
-test_that("brokenstick handles low number of cases", {
-  expect_error(brokenstick(hgt.z ~ age | id, smocc_200[1:10, ],
-                             knots = knots, boundary = boundary),
-                 regexp = "grouping factors must have > 1 sampled level",
-                 fixed = TRUE)
-  # commented out because this also throws warnings. Checkers don't like that.
-  # expect_message(brokenstick(hgt.z ~ age | id, smocc_200[1:11, ],
-  #                            knots = knots, boundary = boundary),
-  #                regexp = "fixed-effect model matrix is rank deficient",
-  #                fixed = TRUE)
-  expect_warning(brokenstick(hgt.z ~ age | id, smocc_200[1:11, ],
-                             knots = knots, boundary = boundary),
+test_that("brokenstick handles low number of cases - 4", {
+  expect_silent(brokenstick(hgt_z ~ age | id, smocc_200[1:200, ],
+                            knots = knots, boundary = boundary,
+                            method = "kr", seed = 4L))
+})
+
+
+# # low n - method lmer - EDGE cases
+test_that("brokenstick handles low number of cases - 1", {
+  expect_error(brokenstick(hgt_z ~ age | id, smocc_200[1:10, ],
+                           knots = knots, boundary = boundary,
+                           method = "lmer"),
+               regexp = "grouping factors must have > 1 sampled level",
+               fixed = TRUE)
+})
+
+test_that("brokenstick handles low number of cases - 2", {
+  expect_warning(brokenstick(hgt_z ~ age | id, smocc_200[1:11, ],
+                             knots = knots, boundary = boundary,
+                             method = "lmer"),
                  regexp = "number of observations (=11) <= number of random effects (=20)",
                  fixed = TRUE)
-  # commented out because this does not reproduce on the rhub() Lunix flavours
-  # expect_message(brokenstick(hgt.z ~ age | id, smocc_200[1:30, ],
-  #                            knots = knots, boundary = boundary),
-  #                regexp = "boundary (singular) fit: see ?isSingular",
-  #                fixed = TRUE)
-  expect_warning(brokenstick(hgt.z ~ age | id, smocc_200[1:30, ],
-                             knots = knots, boundary = boundary),
+})
+
+test_that("brokenstick handles low number of cases - 3", {
+  expect_warning(brokenstick(hgt_z ~ age | id, smocc_200[1:30, ],
+                             knots = knots, boundary = boundary,
+                             method = "lmer"),
                  regexp = "number of observations (=30) <= number of random effects (=40)",
                  fixed = TRUE)
-  expect_silent(brokenstick(hgt.z ~ age | id, smocc_200[1:200, ],
-                             boundary = c(0, 3)))
+})
+
+test_that("brokenstick handles low number of cases - 4", {
+  expect_warning(brokenstick(hgt_z ~ age | id, smocc_200[1:200, ],
+                            knots = knots, boundary = boundary,
+                            method = "lmer"),
+                 regexp = "number of observations (=199) <= number of random effects (=210)",
+                 fixed = TRUE)
   }
 )
 
-context("brokenstick - boundary")
-test_that("warns if right boundary is lower than max(age)", {
-  expect_warning(brokenstick(hgt.z ~ age | id, smocc_200,
-                           knots = 1:2, boundary = c(0, 1)),
-               regexp = "some 'x' values beyond boundary knots may cause ill-conditioned bases",
-               fixed = TRUE)
+test_that("warns that right boundary is lower than max(age)", {
+  expect_warning(brokenstick(hgt_z ~ age | id, smocc_200,
+                             knots = 1:2, boundary = c(0, 1),
+                             warn_splines = TRUE),
+                 regexp = "some 'x' values beyond boundary knots may cause ill-conditioned bases",
+                 fixed = TRUE)
 })
 
