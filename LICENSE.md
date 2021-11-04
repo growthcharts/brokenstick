@@ -1,6 +1,6 @@
 # MIT License
 
-Copyright (c) 2020 Stef van Buuren
+Copyright (c) 2021 Stef van Buuren
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
