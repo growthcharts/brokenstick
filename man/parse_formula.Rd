@@ -18,12 +18,6 @@ A bare bones formula parser to extract variables names from
 formulas of \code{y ~ x | g}. It return the name of
 the first variable mentioned in each formula component.
 }
-\examples{
-# examples that yield identical result
-brokenstick:::parse_formula(y ~ x | z)
-brokenstick:::parse_formula(y + a ~ x + x1 | z + b)
-brokenstick:::parse_formula(y + a + log(b) ~ x + x1 * c | z + d)
-}
 \author{
 Stef van Buuren, 2020
 }

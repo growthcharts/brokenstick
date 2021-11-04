@@ -42,11 +42,6 @@ at a user-specific set of break points.
 Before version 0.54, it was standard practice that the \code{knots}
 array always included \code{boundary[1L]}.
 }
-\examples{
-knots <- c(58, 64, 68, 72)
-d1 <- brokenstick:::make_basis(women$height, xname = "hgt", internal = knots)
-d0 <- brokenstick:::make_basis(women$height, xname = "hgt", internal = knots, degree = 0)
-}
 \author{
 Stef van Buuren, 2020
 }
