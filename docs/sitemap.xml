@@ -16,19 +16,22 @@
     <loc>https://growthcharts.org/brokenstick/reference/brokenstick.html</loc>
   </url>
   <url>
-    <loc>https://growthcharts.org/brokenstick/reference/control_brokenstick.html</loc>
-  </url>
-  <url>
     <loc>https://growthcharts.org/brokenstick/reference/control_kr.html</loc>
   </url>
   <url>
     <loc>https://growthcharts.org/brokenstick/reference/fit_200.html</loc>
   </url>
   <url>
+    <loc>https://growthcharts.org/brokenstick/reference/fit_200_light.html</loc>
+  </url>
+  <url>
     <loc>https://growthcharts.org/brokenstick/reference/fitted.brokenstick.html</loc>
   </url>
   <url>
     <loc>https://growthcharts.org/brokenstick/reference/get_knots.html</loc>
+  </url>
+  <url>
+    <loc>https://growthcharts.org/brokenstick/reference/get_omega.html</loc>
   </url>
   <url>
     <loc>https://growthcharts.org/brokenstick/reference/get_r2.html</loc>
@@ -53,6 +56,9 @@
   </url>
   <url>
     <loc>https://growthcharts.org/brokenstick/reference/residuals.brokenstick.html</loc>
+  </url>
+  <url>
+    <loc>https://growthcharts.org/brokenstick/reference/set_control.html</loc>
   </url>
   <url>
     <loc>https://growthcharts.org/brokenstick/reference/smocc_200.html</loc>

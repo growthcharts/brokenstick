@@ -75,7 +75,7 @@ user-specified grid of break ages." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -168,39 +168,34 @@ program of the Bill &amp; Melinda Gates Foundation.</p>
 
 <p>The main functions are:</p><table class='table'>
 <tr><td><code><a href='brokenstick.html'>brokenstick()</a></code></td><td>Fit a broken stick model to irregular data</td></tr>
-<tr><td><code><a href='https://rdrr.io/r/stats/predict.html'>predict()</a></code></td><td>Obtain predictions on new data</td></tr>
 <tr><td><code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code></td><td>Plot observed and fitted trajectories by group</td></tr>
+<tr><td><code><a href='https://rdrr.io/r/stats/predict.html'>predict()</a></code></td><td>Obtain predictions on new data</td></tr>
+<tr><td><code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code></td><td>Extract object summaries</td></tr>
 </table>
 
 
 <p>The following functions are user-oriented helpers:</p><table class='table'>
+<tr><td><code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code></td><td>Extract estimated parameters</td></tr>
 <tr><td><code><a href='https://rdrr.io/r/stats/fitted.values.html'>fitted()</a></code></td><td>Calculate fitted values</td></tr>
 <tr><td><code><a href='get_knots.html'>get_knots()</a></code></td><td>Obtain the knots from a broken stick model</td></tr>
+<tr><td><code><a href='get_omega.html'>get_omega()</a></code></td><td>Extract variance-covariance of random effects</td></tr>
 <tr><td><code><a href='get_r2.html'>get_r2()</a></code></td><td>Obtain proportion of explained variance</td></tr>
+<tr><td><code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame()</a></code></td><td>Extract model frame</td></tr>
+<tr><td><code><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix()</a></code></td><td>Extract design matrix</td></tr>
 <tr><td><code><a href='https://rdrr.io/r/stats/residuals.html'>residuals()</a></code></td><td>Extract residuals from broken stick model</td></tr>
 </table>
 
 
-<p>The following functions perform the calculations:</p><table class='table'>
-<tr><td><code><a href='control_brokenstick.html'>control_brokenstick()</a></code></td><td>Set controls to steer calculations</td></tr>
-<tr><td><code><a href='EB.html'>EB()</a></code></td><td>Empirical Bayes predictor for random effects</td></tr>
-<tr><td><code><a href='kr.html'>kr()</a></code></td><td>Kasim-Raudenbush sampler for two-level normal model</td></tr>
-<tr><td><code><a href='make_basis.html'>make_basis()</a></code></td><td>Create linear splines basis</td></tr>
+<p>The following functions perform calculations:</p><table class='table'>
+<tr><td><code><a href='set_control.html'>set_control()</a></code></td><td>Set controls to steer calculations</td></tr>
+<tr><td><code><a href='control_kr.html'>control_kr()</a></code></td><td>Set controls for the <code>kr</code> method</td></tr>
 </table>
 
 
-<p>The package follows the <code>tidymodels</code> conventions
-<a href='https://tidymodels.github.io/model-implementation-principles/'>https://tidymodels.github.io/model-implementation-principles/</a>.
-For example, training data are not stored in the modelling object and
-calculated variables are named after the convention. The
-package architecture borrows important ideas from the <code>hardhat</code>
-package.(Vaughan, 2020)</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
     <p>van Buuren, S. (2018). <em>Flexible Imputation of Missing Data. Second Edition</em>. Chapman &amp; Hall/CRC. Chapter 11.
 <a href='https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick'>https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick</a></p>
-<p>Vaughan, D. and Kuhn, M. (2020). <em>hardhat: Construct Modeling Packages</em>.
-R package version 0.1.4. <a href='https://CRAN.R-project.org/package=hardhat'>https://CRAN.R-project.org/package=hardhat</a></p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='brokenstick.html'>brokenstick</a></code>,

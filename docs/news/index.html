@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -138,6 +138,48 @@
       <small>Source: <a href='https://github.com/growthcharts/brokenstick/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
+    <div id="brokenstick-200" class="section level1">
+<h1 class="page-header" data-toc-text="2.0.0">
+<a href="#brokenstick-200" class="anchor"></a>brokenstick 2.0.0<small> Unreleased </small>
+</h1>
+<div id="main-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#main-changes" class="anchor"></a>Main changes</h2>
+<ol>
+<li><p>Function <code><a href="../reference/brokenstick.html">brokenstick()</a></code> in version <code>2.0.0</code> sets the Kasim-Raudenbush sampler as the default method. The former method <code><a href="https://rdrr.io/pkg/lme4/man/lmer.html">lme4::lmer()</a></code> remains available by setting <code>method = "lmer"</code> argument.</p></li>
+<li><p>Version <code>2.0.0</code> adopts the variable names of the <code>coda</code> package (e.g., <code>start</code>, <code>end</code>, <code>thin</code>, <code>niter</code>, and so on) and stores the results of the Kasim-Raudenbush sampler as objects of class <code>mcmc</code>.</p></li>
+<li><p>For <code>method = "kr"</code> one may now inspect the solution of the sampler by standard functions from the <code>coda</code> package. For <code>method = "lmer"</code> we can apply functions from the <code>lme4</code> package for <code>merMod</code> objects.</p></li>
+<li><p>Version <code>2.0.0</code> redefines the <code>brokenstick</code> class. New entries include <code>call</code>, <code>formula</code>, <code>internal</code>, <code>sample</code>, <code>light</code>, <code>data</code>, <code>imp</code> and <code>mod</code>. Removed entries are <code>knots</code> (renamed to <code>internal</code>) and <code>draws</code> (renamed to <code>imp</code>). We may omit the <code>newdata</code> argument for the training data. Setting <code>light = TRUE</code> creates a small version of the <code>brokenstick</code> object. Objects of class <code>brokenstick</code> are not backwards compatible, so one should regenerate objects of class <code>brokenstick</code> in order use newer features in <code>2.0.0</code>.</p></li>
+<li><p>Version <code>2.0.0</code> conforms to classic model fitting interface in <code>R</code>. Renames the <code>new_data</code> argument to <code>newdata</code> to conform to <code><a href="https://rdrr.io/r/stats/predict.lm.html">predict.lm()</a></code>. Methods <code><a href="https://rdrr.io/r/graphics/plot.default.html">plot()</a></code> and <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> no longer require a <code>newdata</code> argument. All special cases of <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> updated and explained in documentation and examples.</p></li>
+<li><p>Version <code>2.0.0</code> adds methods <code><a href="https://rdrr.io/r/stats/coef.html">coef()</a></code>, <code><a href="https://rdrr.io/r/stats/fitted.values.html">fitted()</a></code>, <code><a href="https://rdrr.io/r/stats/model.frame.html">model.frame()</a></code>, <code><a href="https://rdrr.io/r/stats/model.matrix.html">model.matrix()</a></code>, <code><a href="https://rdrr.io/r/base/print.html">print()</a></code> and <code>summary</code> for the <code>brokenstick</code> object.</p></li>
+<li><p>Simplifies algorithmic control. Renames <code>control_brokenstick()</code> to <code><a href="../reference/set_control.html">set_control()</a></code> and removes a layer in the control list.</p></li>
+</ol>
+</div>
+<div id="minor-changes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#minor-changes" class="anchor"></a>Minor changes</h2>
+<ul>
+<li>Stabilises the <code><a href="https://rdrr.io/r/stats/GammaDist.html">rgamma()</a></code> calls in KR-algorithm for edge cases.</li>
+<li>
+<code>predict_brokenstick()</code> can now work with the both (internal) training and (external) test data.</li>
+<li>Removes the superfluous <code>type</code> argument from <code><a href="../reference/predict.brokenstick.html">predict.brokenstick()</a></code>
+</li>
+<li>Adds a function <code><a href="../reference/get_omega.html">get_omega()</a></code> to extract the variance-covariance matrix of the broken stick estimates</li>
+<li>Adds choice <code>"dropfirst"</code> to <code><a href="../reference/get_knots.html">get_knots()</a></code>
+</li>
+<li>Improves error messages of edge cases in <code>test-brokenstick_edge.R</code>
+</li>
+<li>Perform stricter tests on arguments of <code><a href="../reference/brokenstick.html">brokenstick()</a></code>
+</li>
+<li>Introduces argument <code>warn_splines</code> in <code><a href="../reference/make_basis.html">make_basis()</a></code> to suppress uninteresting warns from <code><a href="https://rdrr.io/r/splines/bs.html">splines::bs()</a></code>
+</li>
+<li>Removes superfluous <code>knotnames</code> argument in <code><a href="../reference/make_basis.html">make_basis()</a></code>
+</li>
+<li>Argument <code>x</code> in <code><a href="../reference/make_basis.html">make_basis()</a></code> is now a vector instead of a column vector</li>
+<li>Introduces new <code>xname</code> argument in <code><a href="../reference/make_basis.html">make_basis()</a></code> to set the xname</li>
+</ul>
+</div>
+</div>
     <div id="brokenstick-111" class="section level1">
 <h1 class="page-header" data-toc-text="1.1.1">
 <a href="#brokenstick-111" class="anchor"></a>brokenstick 1.1.1<small> Unreleased </small>
@@ -231,7 +273,7 @@
 <a href="#brokenstick-0721" class="anchor"></a>brokenstick 0.72.1<small> Unreleased </small>
 </h1>
 <ul>
-<li>Imports <code><a href="https://recipes.tidymodels.org/reference/recipe.html">recipes::recipe()</a></code> to inform R package installation process</li>
+<li>Imports <code>recipes::recipe()</code> to inform R package installation process</li>
 </ul>
 </div>
     <div id="brokenstick-0720" class="section level1">

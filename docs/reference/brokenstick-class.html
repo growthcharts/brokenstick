@@ -73,7 +73,7 @@ brokenstick. This object collects the fitted broken stick model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -151,47 +151,56 @@ brokenstick. This object collects the fitted broken stick model." />
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The package exports S3 methods for the <code>brokenstick</code> class for the following
-generic functions: <code><a href='https://rdrr.io/r/stats/fitted.values.html'>fitted()</a></code>, <code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame()</a></code>, <code><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix()</a></code>, <code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>,
-<code><a href='https://rdrr.io/r/stats/predict.html'>predict()</a></code>, <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code>, <code><a href='https://rdrr.io/r/stats/residuals.html'>residuals()</a></code>.</p>
-<p>The package documents methods <code><a href='fitted.brokenstick.html'>fitted.brokenstick()</a></code>, <code><a href='plot.brokenstick.html'>plot.brokenstick()</a></code>,
-<code><a href='predict.brokenstick.html'>predict.brokenstick()</a></code> and <code><a href='residuals.brokenstick.html'>residuals.brokenstick()</a></code>. The package exports
-two helper functions for <code>brokenstick</code> objects: <code><a href='get_knots.html'>get_knots()</a></code> and <code><a href='get_r2.html'>get_r2()</a></code>.</p>
+generic functions: <code><a href='https://rdrr.io/r/stats/coef.html'>coef()</a></code>, <code><a href='https://rdrr.io/r/stats/fitted.values.html'>fitted()</a></code>, <code><a href='https://rdrr.io/r/stats/model.frame.html'>model.frame()</a></code>, <code><a href='https://rdrr.io/r/stats/model.matrix.html'>model.matrix()</a></code>,
+<code><a href='https://rdrr.io/r/graphics/plot.default.html'>plot()</a></code>, <code><a href='https://rdrr.io/r/stats/predict.html'>predict()</a></code>, <code><a href='https://rdrr.io/r/base/print.html'>print()</a></code>, <code><a href='https://rdrr.io/r/stats/residuals.html'>residuals()</a></code> and <code><a href='https://rdrr.io/r/base/summary.html'>summary()</a></code>.</p>
+<p>The package exports the following helper functions for <code>brokenstick</code> objects:
+<code><a href='get_knots.html'>get_knots()</a></code>, <code><a href='get_omega.html'>get_omega()</a></code> and <code><a href='get_r2.html'>get_r2()</a></code>.</p>
 <p>A <code>brokenstick</code> object is a list with the following named elements:</p>
     <h2 class="hasAnchor" id="elements"><a class="anchor" href="#elements"></a>Elements</h2>
 
     
 
 <dl>
-<dt><code>names</code></dt><dd><p>A list with elements named <code>x</code>, <code>y</code> and <code>g</code> providing the
-variables names for the time, outcome and subject columns, respectively.</p></dd>
-<dt><code>knots</code></dt><dd><p>Numeric vector of with the internal knots. Use <code><a href='get_knots.html'>get_knots()</a></code>
-to extract knots.</p></dd>
-<dt><code>boundary</code></dt><dd><p>Numeric vector of length 2 with the boundary knots. Use
-<code><a href='get_knots.html'>get_knots()</a></code> to extract knots.</p></dd>
-<dt><code>degree</code></dt><dd><p>The <code>degree</code> of the B-spline. See <code><a href='https://rdrr.io/r/splines/bs.html'>splines::bs()</a></code>. Either
-0 (constant model) or 1 (broken stick model).</p></dd>
-<dt><code>model</code></dt><dd><p>Not used.</p></dd>
-<dt><code>method</code></dt><dd><p>Either <code>lmer</code> or <code>kr</code>, identifying the fitting model.</p></dd>
-<dt><code>control</code></dt><dd><p>List of control option returned by <code><a href='control_brokenstick.html'>control_brokenstick()</a></code>.</p></dd>
+<dt><code>call</code></dt><dd><p>Call that created the object</p></dd>
+<dt><code>formula</code></dt><dd><p>A formula with the model specification,
+e.g. <code><a href='https://rdrr.io/r/stats/formula.html'>formula(y ~ x | group)</a></code></p></dd>
+<dt><code>names</code></dt><dd><p>A named list with three elements (<code>"x"</code>, <code>"y"</code>, <code>"g"</code>)
+providing the variable name for time, outcome and subject, respectively.</p></dd>
+<dt><code>internal</code></dt><dd><p>Numeric vector of with internal knots.</p></dd>
+<dt><code>boundary</code></dt><dd><p>Numeric vector of length 2 with the boundary knots.</p></dd>
+<dt><code>degree</code></dt><dd><p>The <code>degree</code> of the B-spline. See <code><a href='https://rdrr.io/r/splines/bs.html'>splines::bs()</a></code>. Support
+only the values of 0 (step model) or 1 (broken stick model).</p></dd>
+<dt><code>method</code></dt><dd><p>String, either <code>"kr"</code> or <code>"lmer"</code>, identifying the fitting model.</p></dd>
+<dt><code>control</code></dt><dd><p>List of control options returned by <code><a href='set_control.html'>set_control()</a></code> used
+to set algorithmic details.</p></dd>
 <dt><code>beta</code></dt><dd><p>Numeric vector with fixed effect estimates.</p></dd>
 <dt><code>omega</code></dt><dd><p>Numeric matrix with variance-covariance estimates of the
-random effect.</p></dd>
+broken stick estimates.</p></dd>
 <dt><code>sigma2j</code></dt><dd><p>Numeric vector with estimates of the residual variance per
-group. Only used by method <code>kr</code>.</p></dd>
+group. Only used by method <code>"kr"</code>.</p></dd>
 <dt><code>sigma2</code></dt><dd><p>Numeric scalar with the mean residual variance.</p></dd>
-<dt><code>draws</code></dt><dd><p>Numeric matrix with multiple imputations. The number of
-rows is equal to the number of missing values in <code>y</code>. The number of columns
-depends on <code>imp_skip</code>. Only used by <code>kr</code> if <code>imp_skip</code> is set.</p></dd>
+<dt><code>sample</code></dt><dd><p>A numeric vector with descriptives of the training data.</p></dd>
+<dt><code>light</code></dt><dd><p>Should the returned object be lighter? If <code>light = TRUE</code>
+the returned object will contain only the model settings and parameter
+estimates and not store the <code>sample</code>, <code>data</code>, <code>imp</code> and <code>mod</code> elements.
+The light object can be used to predict broken stick estimates for
+new data, but does not disclose the training data and is small.</p></dd>
+<dt><code>data</code></dt><dd><p>The training data used to fit the model.</p></dd>
+<dt><code>imp</code></dt><dd><p>The imputations generated for the missing outcome data. Only
+for <code>method = "kr"</code>.</p></dd>
+<dt><code>mod</code></dt><dd><p>For <code>method = "kr"</code>: A named list with four components, each of
+class <a href='https://rdrr.io/pkg/coda/man/mcmc.html'>coda::mcmc</a>. For <code>method = "lmer"</code>: An object of class
+<a href='https://rdrr.io/pkg/lme4/man/merMod-class.html'>lme4::merMod</a>.</p></dd>
 
 </dl>
 
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>van Buuren S (2020).
+    <p>van Buuren S (2021).
 Broken Stick Model for Irregular Longitudinal Data. <em>In preparation</em>.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
-    <p>Stef van Buuren, 2020</p>
+    <p>Stef van Buuren, 2021</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

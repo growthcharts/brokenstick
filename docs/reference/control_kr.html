@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -136,7 +136,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Set controls for Kasim-Raudenbush sampler</h1>
-    <small class="dont-index">Source: <a href='https://github.com/growthcharts/brokenstick/blob/master/R/control_brokenstick.R'><code>R/control_brokenstick.R</code></a></small>
+    <small class="dont-index">Source: <a href='https://github.com/growthcharts/brokenstick/blob/master/R/set_control.R'><code>R/set_control.R</code></a></small>
     <div class="hidden name"><code>control_kr.Rd</code></div>
     </div>
 
@@ -145,41 +145,55 @@
     </div>
 
     <pre class="usage"><span class='fu'>control_kr</span><span class='op'>(</span>
-  model <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"argyle"</span>, <span class='st'>"cole"</span>, <span class='st'>"none"</span><span class='op'>)</span>,
-  runin <span class='op'>=</span> <span class='fl'>100L</span>,
-  ndraw <span class='op'>=</span> <span class='fl'>200L</span>,
-  par_skip <span class='op'>=</span> <span class='fl'>1L</span>,
-  imp_skip <span class='op'>=</span> <span class='cn'>Inf</span>
+  niter <span class='op'>=</span> <span class='fl'>200L</span>,
+  nimp <span class='op'>=</span> <span class='fl'>0L</span>,
+  start <span class='op'>=</span> <span class='fl'>101L</span>,
+  thin <span class='op'>=</span> <span class='fl'>1L</span>,
+  seed <span class='op'>=</span> <span class='cn'>NA_integer_</span>,
+  cormodel <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"none"</span>, <span class='st'>"argyle"</span>, <span class='st'>"cole"</span><span class='op'>)</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>model</th>
-      <td><p>Correlation model: <code>argyle</code> (default), <code>cole</code> or <code>none</code></p></td>
+      <th>niter</th>
+      <td><p>Integer. Number of samples from posterior. Default:  <code>200</code>.</p></td>
     </tr>
     <tr>
-      <th>runin</th>
-      <td><p>Number of run-in iterations</p></td>
+      <th>nimp</th>
+      <td><p>Integer. Number of multiple imputations. Default: <code>0</code>.</p></td>
     </tr>
     <tr>
-      <th>ndraw</th>
-      <td><p>Number of parameter draws</p></td>
+      <th>start</th>
+      <td><p>Integer. The iteration number of the first observation</p></td>
     </tr>
     <tr>
-      <th>par_skip</th>
-      <td><p>Number of iterations to next parameter draw</p></td>
+      <th>thin</th>
+      <td><p>Integer. The thinning interval between consecutive observations</p></td>
     </tr>
     <tr>
-      <th>imp_skip</th>
-      <td><p>Number of iterations to next outcome draw</p></td>
+      <th>seed</th>
+      <td><p>Integer. Seed number for <code><a href='https://rdrr.io/r/base/Random.html'>base::set.seed()</a></code>. Use <code>NA</code> to
+bypass seed setting.</p></td>
+    </tr>
+    <tr>
+      <th>cormodel</th>
+      <td><p>String indicating the correlation model:
+<code>"none"</code> (default), <code>"argyle"</code> or <code>"cole"</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Allow for dot parameters</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A list with five components</p>
+    <p>A list with eight components. The function calculates parameters
+<code>end</code> (the iteration number of the last iteration) and <code>thin_imp</code>
+(thinning factor for multiple imputations) from the other inputs.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

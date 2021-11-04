@@ -40,8 +40,7 @@
 
 
 <meta property="og:title" content="Plot observed and fitted trajectories from fitted brokenstick model — plot_trajectory" />
-<meta property="og:description" content="This function is called by plot.brokenstick. Normally we wouldn't
-call plot_trajectory() directly." />
+<meta property="og:description" content="Plot observed and fitted trajectories from fitted brokenstick model" />
 
 
 
@@ -73,7 +72,7 @@ call plot_trajectory() directly." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
       </span>
     </div>
 
@@ -142,13 +141,15 @@ call plot_trajectory() directly." />
     </div>
 
     <div class="ref-description">
-    <p>This function is called by <code>plot.brokenstick</code>. Normally we wouldn't
-call <code>plot_trajectory()</code> directly.</p>
+    <p>Plot observed and fitted trajectories from fitted brokenstick model</p>
     </div>
 
     <pre class="usage"><span class='fu'>plot_trajectory</span><span class='op'>(</span>
   <span class='va'>x</span>,
-  <span class='va'>data</span>,
+  newdata <span class='op'>=</span> <span class='cn'>NULL</span>,
+  what <span class='op'>=</span> <span class='st'>"droplast"</span>,
+  .x <span class='op'>=</span> <span class='cn'>NULL</span>,
+  group <span class='op'>=</span> <span class='cn'>NULL</span>,
   color_y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/hcl.html'>hcl</a></span><span class='op'>(</span><span class='fl'>240</span>, <span class='fl'>100</span>, <span class='fl'>40</span>, <span class='fl'>0.7</span><span class='op'>)</span>, <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/hcl.html'>hcl</a></span><span class='op'>(</span><span class='fl'>240</span>, <span class='fl'>100</span>, <span class='fl'>40</span>, <span class='fl'>0.8</span><span class='op'>)</span><span class='op'>)</span>,
   size_y <span class='op'>=</span> <span class='fl'>2</span>,
   color_yhat <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/hcl.html'>hcl</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>100</span>, <span class='fl'>40</span>, <span class='fl'>0.7</span><span class='op'>)</span>, <span class='fu'>grDevices</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/r/grDevices/hcl.html'>hcl</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>100</span>, <span class='fl'>40</span>, <span class='fl'>0.8</span><span class='op'>)</span><span class='op'>)</span>,
@@ -160,8 +161,11 @@ call <code>plot_trajectory()</code> directly.</p>
   ylab <span class='op'>=</span> <span class='cn'>NULL</span>,
   xlim <span class='op'>=</span> <span class='cn'>NULL</span>,
   ylim <span class='op'>=</span> <span class='cn'>NULL</span>,
+  show <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='cn'>TRUE</span>, <span class='cn'>TRUE</span>, <span class='cn'>FALSE</span><span class='op'>)</span>,
+  n_plot <span class='op'>=</span> <span class='fl'>3L</span>,
   scales <span class='op'>=</span> <span class='st'>"fixed"</span>,
-  theme <span class='op'>=</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_light</a></span><span class='op'>(</span><span class='op'>)</span>
+  theme <span class='op'>=</span> <span class='fu'>ggplot2</span><span class='fu'>::</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_light</a></span><span class='op'>(</span><span class='op'>)</span>,
+  <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -172,9 +176,21 @@ call <code>plot_trajectory()</code> directly.</p>
       <td><p>An object of class <code>brokenstick</code>.</p></td>
     </tr>
     <tr>
-      <th>data</th>
-      <td><p>A <code>data.frame</code> with columns names <code>x$names</code>, <code>".source"</code>
-and <code>".pred"</code>, and possibly <code>".imp"</code></p></td>
+      <th>newdata</th>
+      <td><p>A <code>data.frame</code> or <code>matrix</code></p></td>
+    </tr>
+    <tr>
+      <th>what</th>
+      <td><p>Which knots to plot? See <code><a href='get_knots.html'>get_knots()</a></code>. The default,
+<code>what = "droplast"</code>, does not plot the right boundary knot.</p></td>
+    </tr>
+    <tr>
+      <th>.x</th>
+      <td><p>The <code>x</code> argument of the <code><a href='predict.brokenstick.html'>predict.brokenstick()</a></code> function.</p></td>
+    </tr>
+    <tr>
+      <th>group</th>
+      <td><p>A vector with group identifications</p></td>
     </tr>
     <tr>
       <th>color_y</th>
@@ -221,12 +237,31 @@ and <code>".pred"</code>, and possibly <code>".imp"</code></p></td>
       <td><p>Vector of length 2 with range of y-axis</p></td>
     </tr>
     <tr>
+      <th>show</th>
+      <td><p>A logical vector of length 3. Element 1 specifies
+whether the observed data are plotted, element 2 specifies
+whether the broken stick are plotted, element 3 specifies
+whether imputations are plotted. The default is
+<code><a href='https://rdrr.io/r/base/c.html'>c(TRUE, TRUE, FALSE)</a></code>.</p></td>
+    </tr>
+    <tr>
+      <th>n_plot</th>
+      <td><p>A integer indicating the number of individual plots.
+The default is 3, which plots the trajectories of the first three
+groups. The <code>n_plot</code> is a safety measure to prevent unintended
+plots of the entire data set.</p></td>
+    </tr>
+    <tr>
       <th>scales</th>
       <td><p>Axis scaling, e.g. <code>"fixed"</code>, <code>"free"</code>, and so on</p></td>
     </tr>
     <tr>
       <th>theme</th>
       <td><p>Plotting theme</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Extra arguments passed down to <code><a href='predict.brokenstick.html'>predict.brokenstick()</a></code>.</p></td>
     </tr>
     </table>
 
