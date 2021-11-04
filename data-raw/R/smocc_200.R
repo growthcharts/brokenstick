@@ -1,10 +1,21 @@
-library(donorloader)
+library(donorloader)  # local package with data
 library(brokenstick)
+library(AGD)
 
 # get data
-data <- load_data(dnr = "smocc", ids = 10001:11120)
+data <- donorloader::load_data(dnr = "smocc", ids = 10001:11120)
 smocc_200 <- data$time[, c("id", "age", "sex", "ga", "bw" ,
                            "hgt", "hgt_z")]
+
+# The stored smocc$hgt_z uses the preterm references for Z-score calculation.
+# Here we use the AGD package, which does not support the preterm references.
+# For consistency, we overwrite hgt_z as calculated by the AGD package
+hgt_z <- with(smocc_200,
+              AGD::y2z(y = hgt,
+                       x = age,
+                       sex = ifelse(sex == "male", "M", "F"),
+                       ref = nl4.hgt))
+smocc_200$hgt_z <- hgt_z
 
 # fit the brokenstick model
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
