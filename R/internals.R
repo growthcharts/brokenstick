@@ -190,11 +190,6 @@ smooth_covariance <- function(grid, cov, method = c("none", "argyle", "cole")) {
 #' @return A `list` with elements `x`, `y` and `g`.
 #' Each element has length 1.
 #' @author Stef van Buuren, 2020
-#' @examples
-#' # examples that yield identical result
-#' brokenstick:::parse_formula(y ~ x | z)
-#' brokenstick:::parse_formula(y + a ~ x + x1 | z + b)
-#' brokenstick:::parse_formula(y + a + log(b) ~ x + x1 * c | z + d)
 parse_formula <- function(f) {
 
   stopifnot(inherits(f, "formula"))
@@ -237,10 +232,6 @@ parse_formula <- function(f) {
 #' @author Stef van Buuren, 2020
 #' @note Before version 0.54, it was standard practice that the \code{knots}
 #' array always included \code{boundary[1L]}.
-#' @examples
-#' knots <- c(58, 64, 68, 72)
-#' d1 <- brokenstick:::make_basis(women$height, xname = "hgt", internal = knots)
-#' d0 <- brokenstick:::make_basis(women$height, xname = "hgt", internal = knots, degree = 0)
 make_basis <- function(x,
                        xname = "x",
                        internal = NULL,
