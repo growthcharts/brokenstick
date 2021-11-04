@@ -39,7 +39,7 @@ The latest version (revision branch) can be installed from GitHub as follows:
 
 ```{r eval = FALSE}
 install.packages("remotes")
-remotes::install_github("growthcharts/brokenstick@revision")
+remotes::install_github("growthcharts/brokenstick")
 ```
 
 ## Overview

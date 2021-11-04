@@ -4,7 +4,7 @@
 \alias{kr}
 \title{Kasim-Raudenbush sampler for two-level normal model}
 \usage{
-kr(y, x, g, control)
+kr(y, x, g, control = control_kr())
 }
 \arguments{
 \item{y}{Vector with outcome value}
@@ -13,18 +13,21 @@ kr(y, x, g, control)
 
 \item{g}{Vector with group values}
 
-\item{control}{A list created by \code{\link[=control_kr]{control_kr()}}}
+\item{control}{A list created by \code{\link[=control_kr]{control_kr()}} that sets algorithmic options
+of the sampler and correlation model.}
 }
 \value{
-A list with components:\preformatted{* `beta`  Fixed effects
+An object of class \code{kr}, basically a list with components:\preformatted{* `beta`  Fixed effects
 * `omega` Variance-covariance of random effects
 * `sigma2_j` Residual variance per group
 * `sigma2` Average residual variance
-* `imputes` Numeric matrix with `nimp` multiple imputations.
+* `sample` Descriptive statistics about the data
+* `imp`   Numeric matrix with `nimp` multiple imputations.
+* `mod`   A list of objects of class [coda::mcmc()]
 }
 
-\code{imputes}: The number of rows is equal to the number of missing values in the outcome
-vector \code{y}. The number of columns equals \code{nimp}.
+The number of rows in \code{imp} is equal to the number of missing values in the
+outcome vector \code{y}. The number of columns equals \code{nimp}.
 }
 \description{
 Simulates posterior distributions of parameters from a two-level
@@ -35,7 +38,7 @@ extra step to the algorithm.
 \details{
 The speed of the Kasim-Raudenbush sampler is almost
 independent of the number of random effect, and foremost depends
-on the \emph{total number of iterations}.
+on the total number of iterations.
 
 The defaults \code{start = 100}, \code{n = 200} and \code{thin = 1} provide 200 parameter
 draws with a \emph{reasonable} approximation to the variance-covariance
@@ -46,7 +49,7 @@ For a closer approximations with 200 draws set \code{control = control_kr(thin =
 time. Drawing fewer than 50 observations is not recommended, and such
 results are best treated as \emph{indicative}.
 
-It is possible to draw multiple imputations by setting the \code{m} parameters.
+It is possible to draw multiple imputations by setting the \code{nimp} parameter.
 For example, to draw five imputations for each missing outcome specify
 \code{control = control_kr(nimp = 5)}.
 }

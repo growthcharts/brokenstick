@@ -34,7 +34,7 @@ follows:
 
 ``` r
 install.packages("remotes")
-remotes::install_github("growthcharts/brokenstick@revision")
+remotes::install_github("growthcharts/brokenstick")
 ```
 
 ## Overview
@@ -148,7 +148,7 @@ Regression*. Cambridge: Cambridge University Press.
 <div id="ref-vanbuuren2018" class="csl-entry">
 
 van Buuren, S. 2018. *Flexible Imputation of Missing Data. Second
-Edition*. Boca Raton, FL.: CRC Press.
+Edition*. Boca Raton, FL: CRC Press.
 
 </div>
 

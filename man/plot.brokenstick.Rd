@@ -29,6 +29,7 @@ first three groups in the data. The default setting drops the fitted value
 at the right boundary knot from the display.
 }
 \examples{
+\dontrun{
 # fit model on raw hgt with knots at 0, 1, 2 and 3 years
 fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:3)
 gp <- c(10001, 10005, 10022)
@@ -40,6 +41,7 @@ plot(fit2, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
 
 # built-in model with 11 knots
 plot(fit_200, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
+}
 }
 \seealso{
 \link{predict.brokenstick}, \link{plot_trajectory}.
