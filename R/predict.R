@@ -107,7 +107,6 @@
 #' # Predict without newdata, not possible for light object
 #' \dontrun{
 #' predict(fit_light)
-#' Error: Light brokenstick object expects a `newdata` argument.
 #' }
 #'
 #' # Use test data
@@ -264,7 +263,7 @@ predict.brokenstick <- function(object, newdata = NULL,
       newdata <- object$data
       }
     }
-    newdata <- append_data(newdata, object$names, x = x, y = y, group = group)
+    newdata <- append_data(newdata, object[["names"]], x = x, y = y, group = group)
     reset <- TRUE
   }
 
