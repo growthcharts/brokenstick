@@ -125,7 +125,6 @@ identical(nrow(train), nrow(pred))
 # Predict without newdata, not possible for light object
 \dontrun{
 predict(fit_light)
-Error: Light brokenstick object expects a `newdata` argument.
 }
 
 # Use test data
@@ -194,10 +193,6 @@ pred
 pred_all <- predict(fit, x = c(0.5, 1, 1.25), group = c(10001, 10005, 10022),
                     strip_data = FALSE)
 pred_all \%>\% dplyr::filter(id == 10001) \%>\% dplyr::arrange(age)
-
-# Case 4: Runs also with light object, but finds no matches
-pred_light <- predict(fit_light, x = c(0.5, 1, 1.25), group = c(10001, 10005, 10022))
-pred_light
 
 # Case 4: Applies also to test sample
 pred <- predict(fit, test, x = c(0.5, 1, 1.25), group = c(11045, 11120, 999))
