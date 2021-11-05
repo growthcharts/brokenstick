@@ -1,19 +1,15 @@
 cran-comments
 ================
 
-## Resubmission 1
+## New version
 
-This is a resubmission. In this version I have
-
-  - Added a link to the JSS manuscript in the `description` field
-  - Removed unnecessary `\dontrun{}` directives
-  - Exported `parse_formula()` to remove `:::` from examples
+This is a major update of the package.
 
 ## Test environments
 
-  - local OS X install, 10.15.7, R 4.0.2
-  - win-builder, using `devtools::check_win_devel()`
-  - rhub
+-   local OS X install, 11.6, R 4.1.1
+-   win-builder, using `devtools::check_win_devel()`
+-   rhub
 
 ### Local build
 
@@ -25,12 +21,12 @@ build(manual = TRUE)
 ```
 
 ``` bash
-R CMD CHECK brokenstick_1.0.0.tar.gz
+R CMD CHECK brokenstick_2.0.0.tar.gz
 
 Status: OK
 ```
 
-### WIN\_DEVEL
+### WIN_DEVEL
 
 `devtools::check_win_devel()` resulted in:
 
@@ -42,31 +38,29 @@ Status: OK
 check_rhub()
 ```
 
-The result is:
+`check_rhub()` produces two notes:
 
-    Build ID:   brokenstick_0.78.0.tar.gz-61572f5f668243edae78a65a4cb5259d
-    Platform:   Windows Server 2008 R2 SP1, R-devel, 32/64 bit
-    Submitted:  7 minutes 11 seconds ago
-    Build time: 6 minutes 32.2 seconds
-    
-    ...
-    Error in loadNamespace(name) : there is no package called 'utf8'
+    > checking CRAN incoming feasibility ... NOTE
+      
+      Size of tarball: 9171284 bytes
+      Maintainer: 'Stef van Buuren <stef.vanbuuren@tno.nl>'
 
-The solution of this problem is outside my reach.
+    > checking examples ... NOTE
+      Examples with CPU (user + system) or elapsed time > 5s
+                  user system elapsed
+      predict      7.5   0.00    7.50
+      brokenstick  6.2   0.05    6.25
 
-    Build ID:   brokenstick_0.78.0.tar.gz-498bf3a054274ed69819b3c32a4d65af
-    Platform:   Ubuntu Linux 16.04 LTS, R-release, GCC
-    Submitted:  26 minutes 35.1 seconds ago
-    Build time: 26 minutes 14.8 seconds
+Comment:
 
-Status: Success. Just a “new submission” note.
-
-    Build ID:   brokenstick_0.78.0.tar.gz-ce06a5c3e53d45f0bdf64595537d0c12
-    Platform:   Fedora Linux, R-devel, clang, gfortran
-    Submitted:  32 minutes 31.7 seconds ago
-    Build time: 31 minutes 52.9 seconds
-
-Status: Success. Just a “new submission” note.
+The size of the tarball is about 9Mb. This is primarily due to one
+extensive vignette html (2.8Mb) that includes lots of plots. This
+vignette is a useful resource for the end user. I therefore suggest that
+the CRAN maintainers accept the package as is, but please let me know of
+any alternative options to reduce package size. Also, I would ask the
+CRAN maintainer to see through the slightly above threshold CPU time, as
+both example sections demonstrate many capabilities of these functions
+to the end user.
 
 ## Downstream dependencies
 
