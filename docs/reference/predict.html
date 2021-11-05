@@ -267,7 +267,247 @@ made.</p></li>
 
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"></pre>
+    <pre class="examples"><span class='r-in'><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://dplyr.tidyverse.org'>dplyr</a></span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Attaching package: ‘dplyr’</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:stats’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     filter, lag</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span>     intersect, setdiff, setequal, union</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># -- Data</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>train</span> <span class='op'>&lt;-</span> <span class='va'>smocc_200</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>1198</span>, <span class='op'>]</span></span>
+<span class='r-in'><span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>smocc_200</span><span class='op'>[</span><span class='fl'>1199</span><span class='op'>:</span><span class='fl'>1940</span>, <span class='op'>]</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># -- Fit model</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>fit</span> <span class='op'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span><span class='op'>(</span><span class='va'>hgt_z</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>|</span> <span class='va'>id</span>, data <span class='op'>=</span> <span class='va'>train</span>, knots <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>3</span>, seed <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>fit_light</span> <span class='op'>&lt;-</span> <span class='fu'><a href='brokenstick.html'>brokenstick</a></span><span class='op'>(</span><span class='va'>hgt_z</span> <span class='op'>~</span> <span class='va'>age</span> <span class='op'>|</span> <span class='va'>id</span>, data <span class='op'>=</span> <span class='va'>train</span>, knots <span class='op'>=</span> <span class='fl'>0</span><span class='op'>:</span><span class='fl'>3</span>,</span>
+<span class='r-in'>      light <span class='op'>=</span> <span class='cn'>TRUE</span>, seed <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># -- Predict, standard cases</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Use train data, return column with predictions</span></span>
+<span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>train</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>pred</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Predict without newdata, not possible for light object</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit_light</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Use test data</span></span>
+<span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, newdata <span class='op'>=</span> <span class='va'>test</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>test</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>pred</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Predict, same but using newdata with the light object</span></span>
+<span class='r-in'><span class='va'>pred_light</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit_light</span>, newdata <span class='op'>=</span> <span class='va'>test</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>pred</span>, <span class='va'>pred_light</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># -- Predict, special cases</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># -- Case 1: x, -y, -group</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 1: x as "knots", standard estimates, train sample (n = 124)</span></span>
+<span class='r-in'><span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, x <span class='op'>=</span> <span class='st'>"knots"</span>, shape <span class='op'>=</span> <span class='st'>"wide"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 3 × 5</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      id    `0`      `1`     `2`   `3`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> <span style='text-decoration: underline;'>10</span>001  0.722 -<span style='color: #BB0000;'>0.002</span><span style='color: #BB0000; text-decoration: underline;'>89</span>  0.034<span style='text-decoration: underline;'>7</span>  1.99</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> <span style='text-decoration: underline;'>10</span>002 -<span style='color: #BB0000;'>0.236</span> -<span style='color: #BB0000;'>0.358</span>   -<span style='color: #BB0000;'>0.527</span>   1.61</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> <span style='text-decoration: underline;'>10</span>003  1.90   1.34     1.11    4.05</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 1: x as values, linearly interpolated, train sample (n = 124)</span></span>
+<span class='r-in'><span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span><span class='op'>)</span>, shape <span class='op'>=</span> <span class='st'>"wide"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 3 × 4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      id  `0.5`      `1`   `1.5`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>    <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> <span style='text-decoration: underline;'>10</span>001  0.360 -<span style='color: #BB0000;'>0.002</span><span style='color: #BB0000; text-decoration: underline;'>89</span>  0.015<span style='text-decoration: underline;'>9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> <span style='text-decoration: underline;'>10</span>002 -<span style='color: #BB0000;'>0.297</span> -<span style='color: #BB0000;'>0.358</span>   -<span style='color: #BB0000;'>0.443</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> <span style='text-decoration: underline;'>10</span>003  1.62   1.34     1.22  </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 1: x as values, linearly interpolated, test sample (n = 76)</span></span>
+<span class='r-in'><span class='va'>z</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, <span class='va'>test</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.5</span><span class='op'>)</span>, shape <span class='op'>=</span> <span class='st'>"wide"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>z</span>, <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 3 × 4</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      id   `0.5`    `1`  `1.5`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> <span style='text-decoration: underline;'>11</span>041  0.374   0.434  0.354</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> <span style='text-decoration: underline;'>11</span>042  0.110   0.424  0.800</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> <span style='text-decoration: underline;'>11</span>043 -<span style='color: #BB0000;'>0.031</span><span style='color: #BB0000; text-decoration: underline;'>4</span> -<span style='color: #BB0000;'>0.132</span> -<span style='color: #BB0000;'>0.267</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># -- Case 2: x, y, -group</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 2: form one new group with id = 0</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, x <span class='op'>=</span> <span class='st'>"knots"</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span>, <span class='fl'>0</span><span class='op'>)</span>, shape <span class='op'>=</span> <span class='st'>"wide"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 5</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      id   `0`   `1`   `2`    `3`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>     0 0.896 0.734 0.638 0.028<span style='text-decoration: underline;'>5</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 2: works also for a light object</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit_light</span>, x <span class='op'>=</span> <span class='st'>"knots"</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>0.5</span>, <span class='fl'>0</span><span class='op'>)</span>, shape <span class='op'>=</span> <span class='st'>"wide"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 1 × 5</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>      id   `0`   `1`   `2`    `3`</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span>     0 0.896 0.734 0.638 0.028<span style='text-decoration: underline;'>5</span></span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># -- Case 3: -x, -y, group</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 3: Predict at observed age for subset of groups, training sample</span></span>
+<span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10001</span>, <span class='fl'>10005</span>, <span class='fl'>10022</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>pred</span>, <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .source    id    age    sex ga   bw  hgt hgt_z     .pred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    data 10001 0.0000 female 40 3960 52.0 0.575 0.7222277</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    data 10001 0.0821 female 40 3960 55.6 0.888 0.6626959</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3    data 10001 0.1588 female 40 3960 58.2 0.797 0.6070797</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 3: Of course, we cannot do this for light objects</span></span>
+<span class='r-in'><span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span></span>
+<span class='r-in'><span class='va'>pred_light</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit_light</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10001</span>, <span class='fl'>10005</span>, <span class='fl'>10022</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='op'>}</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 3: We can use another sample. Note there is no child 999</span></span>
+<span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, <span class='va'>test</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>999</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>tail</a></span><span class='op'>(</span><span class='va'>pred</span>, <span class='fl'>3</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 3 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .source    id   age sex      ga    bw   hgt hgt_z .pred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> data    <span style='text-decoration: underline;'>11</span>120 0.750 male     39  <span style='text-decoration: underline;'>2</span>780  68   -<span style='color: #BB0000;'>1.77</span> -<span style='color: #BB0000;'>1.70</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> data    <span style='text-decoration: underline;'>11</span>120 0.980 male     39  <span style='text-decoration: underline;'>2</span>780  72   -<span style='color: #BB0000;'>1.55</span> -<span style='color: #BB0000;'>1.65</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> data    <span style='text-decoration: underline;'>11</span>120 1.23  male     39  <span style='text-decoration: underline;'>2</span>780  74.5 -<span style='color: #BB0000;'>1.82</span> -<span style='color: #BB0000;'>1.63</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 3: Works also for a light object</span></span>
+<span class='r-in'><span class='va'>pred_light</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit_light</span>, <span class='va'>test</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>999</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>pred</span>, <span class='va'>pred_light</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># -- Case 4: x, -y, group</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 4: Predict at specified x, only in selected groups, train sample</span></span>
+<span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.25</span><span class='op'>)</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10001</span>, <span class='fl'>10005</span>, <span class='fl'>10022</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pred</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .source    id  age  sex ga bw hgt hgt_z        .pred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   added 10001 0.50 &lt;NA&gt; NA NA  NA    NA  0.359671094</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2   added 10001 1.00 &lt;NA&gt; NA NA  NA    NA -0.002885472</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3   added 10001 1.25 &lt;NA&gt; NA NA  NA    NA  0.006516156</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4   added 10005 0.50 &lt;NA&gt; NA NA  NA    NA  1.433812340</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5   added 10005 1.00 &lt;NA&gt; NA NA  NA    NA  1.703556517</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6   added 10005 1.25 &lt;NA&gt; NA NA  NA    NA  1.776153634</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7   added 10022 0.50 &lt;NA&gt; NA NA  NA    NA -0.592753593</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8   added 10022 1.00 &lt;NA&gt; NA NA  NA    NA -0.344038299</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9   added 10022 1.25 &lt;NA&gt; NA NA  NA    NA -0.301847797</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 4: strip_data = FALSE provides access to the observed data</span></span>
+<span class='r-in'><span class='va'>pred_all</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.25</span><span class='op'>)</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10001</span>, <span class='fl'>10005</span>, <span class='fl'>10022</span><span class='op'>)</span>,</span>
+<span class='r-in'>                    strip_data <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pred_all</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>id</span> <span class='op'>==</span> <span class='fl'>10001</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>age</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>    .source    id    age    sex ga   bw  hgt  hgt_z        .pred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1     data 10001 0.0000 female 40 3960 52.0  0.575  0.722227660</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     data 10001 0.0821 female 40 3960 55.6  0.888  0.662695872</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3     data 10001 0.1588 female 40 3960 58.2  0.797  0.607079695</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4     data 10001 0.2546 female 40 3960 61.2  0.661  0.537613857</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5    added 10001 0.5000   &lt;NA&gt; NA   NA   NA     NA  0.359671094</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6     data 10001 0.5038 female 40 3960 67.2  0.290  0.356915664</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 7     data 10001 0.7529 female 40 3960 70.2 -0.398  0.176289983</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 8    added 10001 1.0000   &lt;NA&gt; NA   NA   NA     NA -0.002885472</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 9     data 10001 1.0021 female 40 3960 75.7  0.202 -0.002806499</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 10    data 10001 1.1745 female 40 3960 78.5  0.268  0.003676865</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 11   added 10001 1.2500   &lt;NA&gt; NA   NA   NA     NA  0.006516156</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 12    data 10001 1.5661 female 40 3960 81.8 -0.332  0.018403576</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 13    data 10001 2.0096 female 40 3960 88.3  0.227  0.053526474</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 4: Applies also to test sample</span></span>
+<span class='r-in'><span class='va'>pred</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, <span class='va'>test</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.25</span><span class='op'>)</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>999</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>pred</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 6 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .source    id   age sex      ga    bw   hgt hgt_z  .pred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> added   <span style='text-decoration: underline;'>11</span>045  0.5  <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>0.453</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> added   <span style='text-decoration: underline;'>11</span>045  1    <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>0.656</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> added   <span style='text-decoration: underline;'>11</span>045  1.25 <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>0.578</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span> added   <span style='text-decoration: underline;'>11</span>120  0.5  <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>1.75</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>5</span> added   <span style='text-decoration: underline;'>11</span>120  1    <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>1.65</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>6</span> added   <span style='text-decoration: underline;'>11</span>120  1.25 <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span> -<span style='color: #BB0000;'>1.63</span> </span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 4: Works also with light object</span></span>
+<span class='r-in'><span class='va'>pred_light</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit_light</span>, <span class='va'>test</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>1</span>, <span class='fl'>1.25</span><span class='op'>)</span>,</span>
+<span class='r-in'>                      group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>999</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>pred_light</span>, <span class='va'>pred</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># -- Case 5: x, y, group</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 5: Add new data to training sample, and refreshes broken stick</span></span>
+<span class='r-in'><span class='co'># estimate at age x.</span></span>
+<span class='r-in'><span class='co'># Note that novel child (not in train) 999 has one data point</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.9</span>, <span class='fl'>0.9</span>, <span class='fl'>0.9</span><span class='op'>)</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span>,</span>
+<span class='r-in'>        group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>10001</span>, <span class='fl'>10005</span>, <span class='fl'>999</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .source    id age  sex ga bw hgt hgt_z     .pred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   added 10001 0.9 &lt;NA&gt; NA NA  NA     1 0.2324117</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2   added 10005 0.9 &lt;NA&gt; NA NA  NA     1 1.5371700</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3   added   999 0.9 &lt;NA&gt; NA NA  NA     1 0.7992121</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 5: Same, but now for test sample. Novel child 899 has two data points</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, <span class='va'>test</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.9</span>, <span class='fl'>0.6</span>, <span class='fl'>0.9</span><span class='op'>)</span>,</span>
+<span class='r-in'>        y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.5</span>, <span class='fl'>0.5</span>, <span class='fl'>0.6</span><span class='op'>)</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>899</span>, <span class='fl'>899</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 4 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .source    id   age sex      ga    bw   hgt hgt_z  .pred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> added   <span style='text-decoration: underline;'>11</span>045   0.5 <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   0   -<span style='color: #BB0000;'>0.400</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> added   <span style='text-decoration: underline;'>11</span>120   0.9 <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   0.5 -<span style='color: #BB0000;'>1.21</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> added     899   0.6 <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   0.5  0.471</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span> added     899   0.9 <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   0.6  0.503</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 5: Also works for light object</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit_light</span>, <span class='va'>test</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.9</span>, <span class='fl'>0.6</span>, <span class='fl'>0.9</span><span class='op'>)</span>,</span>
+<span class='r-in'>        y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.5</span>, <span class='fl'>0.5</span>, <span class='fl'>0.6</span><span class='op'>)</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>899</span>, <span class='fl'>899</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #949494;'># A tibble: 4 × 9</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .source    id   age sex      ga    bw   hgt hgt_z  .pred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span>   <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;chr&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span> <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span>  <span style='color: #949494; font-style: italic;'>&lt;dbl&gt;</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>1</span> added   <span style='text-decoration: underline;'>11</span>045   0.5 <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   0   -<span style='color: #BB0000;'>0.400</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>2</span> added   <span style='text-decoration: underline;'>11</span>120   0.9 <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   0.5 -<span style='color: #BB0000;'>1.21</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>3</span> added     899   0.6 <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   0.5  0.471</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> <span style='color: #BCBCBC;'>4</span> added     899   0.9 <span style='color: #BB0000;'>NA</span>       <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>    <span style='color: #BB0000;'>NA</span>   0.6  0.503</span>
+<span class='r-in'></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># -- Case 6: As Case 5, but without previous data</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># Case 6: Same call as last, but now without newdata = test</span></span>
+<span class='r-in'><span class='co'># All children are de facto novel as they do not occur in the training sample.</span></span>
+<span class='r-in'><span class='co'># Note: Predictions for 11045 and 11120 differ from prediction in Case 5.</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.9</span>, <span class='fl'>0.6</span>, <span class='fl'>0.9</span><span class='op'>)</span>,</span>
+<span class='r-in'>        y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.5</span>, <span class='fl'>0.5</span>, <span class='fl'>0.6</span><span class='op'>)</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>899</span>, <span class='fl'>899</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .source    id age  sex ga bw hgt hgt_z       .pred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   added 11045 0.5 &lt;NA&gt; NA NA  NA   0.0 0.001312908</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2   added 11120 0.9 &lt;NA&gt; NA NA  NA   0.5 0.402302756</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3   added   899 0.6 &lt;NA&gt; NA NA  NA   0.5 0.471162944</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4   added   899 0.9 &lt;NA&gt; NA NA  NA   0.6 0.503015032</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># This also work for the light brokenstick object</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/stats/predict.html'>predict</a></span><span class='op'>(</span><span class='va'>fit_light</span>, x <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.5</span>, <span class='fl'>0.9</span>, <span class='fl'>0.6</span>, <span class='fl'>0.9</span><span class='op'>)</span>,</span>
+<span class='r-in'>        y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0</span>, <span class='fl'>0.5</span>, <span class='fl'>0.5</span>, <span class='fl'>0.6</span><span class='op'>)</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11045</span>, <span class='fl'>11120</span>, <span class='fl'>899</span>, <span class='fl'>899</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   .source age hgt_z    id       .pred</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   added 0.5   0.0 11045 0.001312908</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2   added 0.9   0.5 11120 0.402302756</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3   added 0.6   0.5   899 0.471162944</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4   added 0.9   0.6   899 0.503015032</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

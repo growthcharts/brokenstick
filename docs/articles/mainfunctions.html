@@ -97,7 +97,7 @@
       <h1 data-toc-skip>Overview of main functions</h1>
                         <h4 class="author">Stef van Buuren</h4>
             
-            <h4 class="date">2021-11-04</h4>
+            <h4 class="date">2021-11-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/growthcharts/brokenstick/blob/master/vignettes/mainfunctions.Rmd"><code>vignettes/mainfunctions.Rmd</code></a></small>
       <div class="hidden name"><code>mainfunctions.Rmd</code></div>
@@ -186,17 +186,17 @@ img {
 ## Data         1942 (n), 36 (nmis), 200 (groups)
 ## Parameters   16 (total), 4 (fixed), 4 (variance), 6 (covariance), 2 (error)
 ## Knots        0 1 2 3 
-## Means        0.0975118 0.0337222 0.0955856 0.0550886 
-## Residuals    0.1137216 0.1455506 0.1685254 0.2041739 0.4089257 (min, P25, P50, P75, max)
-## Mean resid   0.1833278 
-## R-squared    0.8499017 
+## Means        -0.0488973 0.0276084 0.0489799 0.2445802 
+## Residuals    0.120809 0.1508419 0.1693026 0.1992395 0.3927382 (min, P25, P50, P75, max)
+## Mean resid   0.1821095 
+## R-squared    0.8667319 
 ## 
 ## Variance-covariance matrix
-##           age_0     age_1     age_2     age_3
-## age_0 0.8646209                              
-## age_1 0.4587882 0.8460962                    
-## age_2 0.4543087 0.7848607 0.8534132          
-## age_3 -0.117266 0.3212627 0.2265134 1.3789905</code></pre>
+##           age_0     age_1      age_2     age_3
+## age_0 1.2099555                               
+## age_1 0.4765224 0.8611429                     
+## age_2 0.4557815  0.800493  0.8694947          
+## age_3 0.4077837 0.2443387 -0.1582104 7.3362765</code></pre>
 <p>The console output lists the knots of the model, including the left and right boundary knots at 0 and 3. The row of <code>means</code> correspond to the fixed effect estimates of the linear mixed model. We may interpret these as the global means. Next, the output lists the variance-covariance matrix of the random effects. The model contains 4 random effects (3 visits + 1 end knot). Finally, the residual variance is the model error at the subject level. These three set of parameters are enough to reconstruct the broken stick model.</p>
 </div>
 <div id="extend-to-nine-lines" class="section level2">
@@ -219,12 +219,12 @@ img {
 <code class="sourceCode R"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></code></pre></div>
 <pre><code>##       .pred
-## 1 0.7080733
-## 2 0.6491664
-## 3 0.5941341
-## 4 0.5253974
-## 5 0.3465961
-## 6 0.1678664</code></pre>
+## 1 0.7183916
+## 2 0.6590848
+## 3 0.6036788
+## 4 0.5344755
+## 5 0.3544602
+## 6 0.1745172</code></pre>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/identical.html">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
@@ -234,12 +234,12 @@ img {
 <code class="sourceCode R"><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></code></pre></div>
 <pre><code>##   .source    id age  sex ga bw hgt hgt_z        .pred
-## 1   added 10001   0 &lt;NA&gt; NA NA  NA    NA  0.708073324
-## 2   added 10001   1 &lt;NA&gt; NA NA  NA    NA -0.009428191
-## 3   added 10001   2 &lt;NA&gt; NA NA  NA    NA  0.076608624
-## 4   added 10001   3 &lt;NA&gt; NA NA  NA    NA -0.248579507
-## 5   added 10002   0 &lt;NA&gt; NA NA  NA    NA -0.219364027
-## 6   added 10002   1 &lt;NA&gt; NA NA  NA    NA -0.397547369</code></pre>
+## 1   added 10001   0 &lt;NA&gt; NA NA  NA    NA  0.718391617
+## 2   added 10001   1 &lt;NA&gt; NA NA  NA    NA -0.003981157
+## 3   added 10001   2 &lt;NA&gt; NA NA  NA    NA  0.042961066
+## 4   added 10001   3 &lt;NA&gt; NA NA  NA    NA  0.478864260
+## 5   added 10002   0 &lt;NA&gt; NA NA  NA    NA -0.230643864
+## 6   added 10002   1 &lt;NA&gt; NA NA  NA    NA -0.381720863</code></pre>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] 800</code></pre>
@@ -260,21 +260,21 @@ img {
 <p>The proportion of the variance of the outcome explained by the two-line model is</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_r2.html">get_r2</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0.8499017</code></pre>
+<pre><code>## [1] 0.8667319</code></pre>
 <p>For the second model we get</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/get_r2.html">get_r2</a></span><span class="op">(</span><span class="va">fit9</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] 0.9897138</code></pre>
-<p>so the nine-line broken stick model explains about 99 percent of the variance of the height SDS.</p>
+<pre><code>## [1] 0.9846596</code></pre>
+<p>so the nine-line broken stick model explains about 98 percent of the variance of the height SDS.</p>
 </div>
 <div id="subject-level-analysis" class="section level2">
 <h2 class="hasAnchor">
 <a href="#subject-level-analysis" class="anchor"></a>Subject level analysis</h2>
 <p>Suppose we are interest in knowing the effect of sex, gestational age and birth weight on the height SDS at the age of 2 years. This is an analysis at the subject level. Let us first extract the subject-level data with variables that vary over subjects only.</p>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">subj</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op">%&gt;%</span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">sex</span>, <span class="va">ga</span>, <span class="va">bw</span><span class="op">)</span> <span class="op">%&gt;%</span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op">%&gt;%</span> 
+<code class="sourceCode R"><span class="va">subj</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span>
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">sex</span>, <span class="va">ga</span>, <span class="va">bw</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
+  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html">%&gt;%</a></span> 
   <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">subj</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
 <pre><code>## # A tibble: 3 × 4
@@ -293,9 +293,9 @@ img {
 ## # Groups:   id [3]
 ##      id sex       ga    bw    `0` `0.0833` `0.1667` `0.25`  `0.5` `0.75`    `1`
 ##   &lt;dbl&gt; &lt;chr&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;
-## 1 10001 female    40  3960  0.571    0.872    0.740  0.660  0.258 -0.251  0.143
-## 2 10002 male      38  3210 -0.170   -0.352   -0.237 -0.336 -0.200 -0.275 -0.346
-## 3 10003 female    40  4170  1.13     2.14     1.97   2.02   2.07   1.88   1.31 
+## 1 10001 female    40  3960  0.571    0.871    0.737  0.662  0.233 -0.191  0.130
+## 2 10002 male      38  3210 -0.182   -0.330   -0.254 -0.320 -0.216 -0.279 -0.341
+## 3 10003 female    40  4170  1.16     2.12     1.98   2.03   2.04   1.83   1.33 
 ## # … with 4 more variables: 1.25 &lt;dbl&gt;, 1.5 &lt;dbl&gt;, 2 &lt;dbl&gt;, 3 &lt;dbl&gt;</code></pre>
 <p>The names of the columns in <code>bs</code> correspond to the knot values.</p>
 <p>The effect of the subject’s sex, gestational age and birth weight on the height SDS at the age of 2 years (here denoted by the variable named <code>2</code>) can be estimated as</p>
@@ -308,20 +308,20 @@ img {
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -2.88766 -0.51384  0.06532  0.63748  2.06296 
+## -2.96585 -0.46305  0.06656  0.63552  2.05131 
 ## 
 ## Coefficients:
 ##             Estimate Std. Error t value Pr(&gt;|t|)    
-## (Intercept)  1.93970    1.51399   1.281 0.201643    
-## sexmale     -0.01521    0.13226  -0.115 0.908563    
-## ga          -0.09430    0.04459  -2.115 0.035700 *  
-## I(bw/1000)   0.55945    0.14621   3.826 0.000175 ***
+## (Intercept)  1.30186    1.48019   0.880  0.38020    
+## sexmale      0.01451    0.12930   0.112  0.91078    
+## ga          -0.07418    0.04359  -1.702  0.09038 .  
+## I(bw/1000)   0.50933    0.14295   3.563  0.00046 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.9051 on 196 degrees of freedom
-## Multiple R-squared:  0.07308,    Adjusted R-squared:  0.05889 
-## F-statistic: 5.151 on 3 and 196 DF,  p-value: 0.001895</code></pre>
+## Residual standard error: 0.8849 on 196 degrees of freedom
+## Multiple R-squared:  0.06722,    Adjusted R-squared:  0.05294 
+## F-statistic: 4.708 on 3 and 196 DF,  p-value: 0.003386</code></pre>
 <p>Note that the analysis shows there is a substantial effect of birth weight. Of course, it might be that birth weight is directly related to height at the age of 2 years. Alternatively, the relation could be mediated by birth length. The following model adds birth length (the variable named <code>0</code>) to the model:</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">fit2_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">`2`</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">ga</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">bw</span> <span class="op">/</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">+</span> <span class="va">`0`</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span>
@@ -332,21 +332,21 @@ img {
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -3.15492 -0.50211  0.05214  0.60887  1.94694 
+## -3.00784 -0.50862  0.05078  0.62563  1.89610 
 ## 
 ## Coefficients:
-##             Estimate Std. Error t value Pr(&gt;|t|)  
-## (Intercept)  1.93727    1.49234   1.298   0.1958  
-## sexmale     -0.01726    0.13037  -0.132   0.8948  
-## ga          -0.06712    0.04518  -1.486   0.1390  
-## I(bw/1000)   0.25379    0.18615   1.363   0.1743  
-## `0`          0.20711    0.07983   2.594   0.0102 *
+##              Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)  3.427186   1.673835   2.048   0.0419 *
+## sexmale      0.003071   0.127536   0.024   0.9808  
+## ga          -0.093100   0.043585  -2.136   0.0339 *
+## I(bw/1000)   0.131026   0.202911   0.646   0.5192  
+## `0`          0.236379   0.091229   2.591   0.0103 *
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.8921 on 195 degrees of freedom
-## Multiple R-squared:  0.104,  Adjusted R-squared:  0.08562 
-## F-statistic: 5.658 on 4 and 195 DF,  p-value: 0.0002494</code></pre>
+## Residual standard error: 0.8723 on 195 degrees of freedom
+## Multiple R-squared:  0.09826,    Adjusted R-squared:  0.07976 
+## F-statistic: 5.312 on 4 and 195 DF,  p-value: 0.0004414</code></pre>
 <p>The effect of birth length on length at age 2 is very strong. There is no separate effect of birth weight anymore, so this analysis suggests that the relation between birth weight and length at age 2 can be explained by their mutual associations to birth length.</p>
 </div>
 <div id="conclusion" class="section level2">

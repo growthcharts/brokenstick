@@ -97,7 +97,7 @@
       <h1 data-toc-skip>Check perfect model</h1>
                         <h4 class="author">Stef van Buuren</h4>
             
-            <h4 class="date">2021-11-04</h4>
+            <h4 class="date">2021-11-05</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/growthcharts/brokenstick/blob/master/vignettes/perfectmodel.Rmd"><code>vignettes/perfectmodel.Rmd</code></a></small>
       <div class="hidden name"><code>perfectmodel.Rmd</code></div>
@@ -260,7 +260,7 @@
 <li>If <span class="math inline">\(\sigma^2=0\)</span>, then the off-diagonal elements of <span class="math inline">\(\Omega\)</span> reproduce the correlations among the <span class="math inline">\(y\)</span>’s. The estimate of <span class="math inline">\(\sigma^2\)</span> is too high (about 0.13 instead of 0).</li>
 <li>If <span class="math inline">\(\sigma^2 &gt; 0\)</span>, then <span class="math inline">\(\hat C = \Omega + \hat\sigma^2 I(n_i)\)</span> reproduces the sample covariance matrix between <span class="math inline">\(y\)</span>’s exactly.</li>
 <li>
-<code><a href="https://rdrr.io/r/stats/cor.html">cov2cor(hatC)</a></code> reproduces the sample time-to-time correlation matrix.</li>
+<code>cov2cor(hatC)</code> reproduces the sample time-to-time correlation matrix.</li>
 </ol>
 </div>
 <div id="further-reading" class="section level2">
