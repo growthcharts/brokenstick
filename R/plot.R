@@ -38,8 +38,9 @@ plot.brokenstick <- function(x,
   nms <- unname(unlist(x$names))
   if (!all(nms %in% colnames(newdata))) {
     stop("Variable(s) not found: ",
-         paste(nms[!nms %in% colnames(newdata)], collapse = ", "),
-         call. = FALSE)
+      paste(nms[!nms %in% colnames(newdata)], collapse = ", "),
+      call. = FALSE
+    )
   }
 
   g <- plot_trajectory(x = x, newdata = newdata, ...)
@@ -109,8 +110,10 @@ plot_trajectory <- function(x,
                             scales = "fixed",
                             theme = ggplot2::theme_light(),
                             ...) {
-  stopifnot(inherits(x, "brokenstick"),
-            any(show))
+  stopifnot(
+    inherits(x, "brokenstick"),
+    any(show)
+  )
   newdata <- get_newdata(x, newdata)
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
@@ -138,7 +141,7 @@ plot_trajectory <- function(x,
     colnames(imp) <- paste(".imp", 1:ncol(imp), sep = "_")
     imputed <- newdata %>%
       filter(newdata_isna) %>%
-      select(- x$names$y) %>%
+      select(-x$names$y) %>%
       bind_cols(as.data.frame(imp)) %>%
       mutate(.source = "imputed") %>%
       pivot_longer(
@@ -162,14 +165,14 @@ plot_trajectory <- function(x,
   if (!is.null(ylim)) {
     idx <- idx &
       ((data[[".source"]] == "data" &
+        data[[x$names$y]] >= ylim[1L] &
+        data[[x$names$y]] <= ylim[2L]) |
+        (data[[".source"]] == "added" &
+          data[[".pred"]] >= ylim[1L] &
+          data[[".pred"]] <= ylim[2L]) |
+        (data[[".source"]] == "imputed" &
           data[[x$names$y]] >= ylim[1L] &
-          data[[x$names$y]] <= ylim[2L]) |
-         (data[[".source"]] == "added" &
-            data[[".pred"]] >= ylim[1L] &
-            data[[".pred"]] <= ylim[2L]) |
-         (data[[".source"]] == "imputed" &
-            data[[x$names$y]] >= ylim[1L] &
-            data[[x$names$y]] <= ylim[2L]))
+          data[[x$names$y]] <= ylim[2L]))
   }
 
   # safety measure, restrict to first n_plot cases if no groups are specified
@@ -201,10 +204,12 @@ plot_trajectory <- function(x,
   if (any(k)) {
     g <- g +
       ggplot2::geom_line(ggplot2::aes_string(group = ".imp"),
-                         data = data[k, ], color = color_imp[2L]) +
+        data = data[k, ], color = color_imp[2L]
+      ) +
       ggplot2::geom_point(ggplot2::aes_string(y = "hgt_z"),
-                          data = data[k, ], color = color_imp[1L],
-                          size = size_imp)
+        data = data[k, ], color = color_imp[1L],
+        size = size_imp
+      )
   }
 
   # add observed data points and lines
@@ -220,16 +225,16 @@ plot_trajectory <- function(x,
   if (any(k)) {
     if (x$degree == 0L) {
       g <- g + ggplot2::geom_step(ggplot2::aes_string(y = ".pred"),
-                                  data = data[k, ], color = color_yhat[2L]
+        data = data[k, ], color = color_yhat[2L]
       )
     } else {
       g <- g +
         ggplot2::geom_line(ggplot2::aes_string(y = ".pred"),
-                           data = data[k, ], color = color_yhat[2L]
+          data = data[k, ], color = color_yhat[2L]
         ) +
         ggplot2::geom_point(ggplot2::aes_string(y = ".pred"),
-                            data = data[k, ], color = color_yhat[1L],
-                            size = size_yhat
+          data = data[k, ], color = color_yhat[1L],
+          size = size_yhat
         )
     }
   }
@@ -237,8 +242,8 @@ plot_trajectory <- function(x,
   # split out according to subjid
   g <- g +
     ggplot2::facet_wrap(as.formula(paste("~", x$names$g)),
-                        ncol = ncol,
-                        scales = scales
+      ncol = ncol,
+      scales = scales
     ) +
     theme
 

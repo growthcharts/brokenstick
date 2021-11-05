@@ -1,5 +1,4 @@
 append_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
-
   if (is.null(data)) stop("`data` not found.")
   if (is.null(x) && is.null(y) && is.null(group)) {
     return(data)
@@ -19,13 +18,15 @@ append_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
 
   # Case 2: create new group with x and y
   if (!is.null(x) && !is.null(y) && is.null(group)) {
-    if (length(x) != length(y))
+    if (length(x) != length(y)) {
       stop("Incompatible length of `x` and `y`.", call. = FALSE)
+    }
     reset <- data.frame(
       s = "added",
       x = x,
       y = y,
-      g = 0)
+      g = 0
+    )
     colnames(reset) <- c(".source", names$x, names$y, names$g)
     # message("Reset newdata: new group with `x` and `y`.")
   }
@@ -50,26 +51,33 @@ append_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
       g = groups
     )
     colnames(reset) <- c(".source", names$x, names$y, names$g)
-    reset <- bind_rows(data = data[data[[names$g]] %in% groups, , drop = FALSE],
-                       added = reset, .id = ".source") %>%
+    reset <- bind_rows(
+      data = data[data[[names$g]] %in% groups, , drop = FALSE],
+      added = reset, .id = ".source"
+    ) %>%
       relocate(".source")
     # message("Reset newdata: predict at `x` in subset of groups.")
   }
 
   # Case 5: create data.frame from vectors x, y and group
   if (!is.null(x) && !is.null(y) && !is.null(group)) {
-    if (length(x) != length(y))
+    if (length(x) != length(y)) {
       stop("Incompatible length of `x` and `y`.", call. = FALSE)
-    if (length(x) != length(group))
+    }
+    if (length(x) != length(group)) {
       stop("Incompatible length of `x` and `group`.", call. = FALSE)
+    }
     groups <- intersect(data[[names$g]], group)
     reset <- data.frame(
       x = x,
       y = y,
-      g = group)
+      g = group
+    )
     colnames(reset) <- c(names$x, names$y, names$g)
-    reset <- bind_rows(data = data[data[[names$g]] %in% groups, , drop = FALSE],
-                       added = reset, .id = ".source") %>%
+    reset <- bind_rows(
+      data = data[data[[names$g]] %in% groups, , drop = FALSE],
+      added = reset, .id = ".source"
+    ) %>%
       relocate(".source")
     # message("Reset newdata: predict from vectors `x`, `y` and `group`.")
   }
@@ -78,7 +86,6 @@ append_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
 }
 
 calculate_knots <- function(x, k, internal, boundary) {
-
   k_orig <- k
   knots_orig <- internal
   boundary_orig <- boundary
@@ -106,13 +113,12 @@ calculate_knots <- function(x, k, internal, boundary) {
     if (k_orig >= 0L && k_orig <= 50L) {
       k <- k_orig
       knots <- quantile(x,
-                        probs = seq(0, 1, length.out = k + 2L),
-                        na.rm = TRUE)[-c(1L, k + 2L)]
-    }
-    else {
+        probs = seq(0, 1, length.out = k + 2L),
+        na.rm = TRUE
+      )[-c(1L, k + 2L)]
+    } else {
       stop("Number of internal knots `k` outside range 0-50")
     }
-
   }
   return(list(k = k, internal = knots, boundary = boundary))
 }
@@ -121,7 +127,9 @@ install.on.demand <- function(pkg, quiet = FALSE, ...) {
   # internal function that checks whether package pkg is
   # in the library. If not found, it asks the user permission
   # to install from CRAN.
-  if (requireNamespace(pkg, quietly = TRUE)) return()
+  if (requireNamespace(pkg, quietly = TRUE)) {
+    return()
+  }
   answer <- askYesNo(paste("Package", pkg, "needed. Install from CRAN?"))
   if (answer) install.packages(pkg, repos = "https://cloud.r-project.org/", quiet = quiet)
   return()
@@ -158,7 +166,9 @@ cov2vec <- function(cov) {
 }
 
 smooth_covariance <- function(grid, cov, method = c("none", "argyle", "cole")) {
-  if (method == "none") return(cov)
+  if (method == "none") {
+    return(cov)
+  }
   d <- cov2vec(cov)
   grid$r <- d$vec
 
@@ -170,9 +180,10 @@ smooth_covariance <- function(grid, cov, method = c("none", "argyle", "cole")) {
 
   # Cole correlation model
   if (method == "cole") {
-    grid$y <- log((1 + grid$r)/(1 - grid$r)) / 2
-    fit <- lm(y ~ I(log((t1+t2)/2)) + I(log(t2-t1)) + I(1/(t2-t1)) + I(log((t1+t2)/2)*log(t2-t1)) + I(log((t1+t2)/2)^2),
-              data = grid)
+    grid$y <- log((1 + grid$r) / (1 - grid$r)) / 2
+    fit <- lm(y ~ I(log((t1 + t2) / 2)) + I(log(t2 - t1)) + I(1 / (t2 - t1)) + I(log((t1 + t2) / 2) * log(t2 - t1)) + I(log((t1 + t2) / 2)^2),
+      data = grid
+    )
     yhat <- predict(fit)
     rhat <- (exp(2 * yhat) - 1) / (exp(2 * yhat) + 1)
   }
@@ -191,12 +202,13 @@ smooth_covariance <- function(grid, cov, method = c("none", "argyle", "cole")) {
 #' Each element has length 1.
 #' @author Stef van Buuren, 2020
 parse_formula <- function(f) {
-
   stopifnot(inherits(f, "formula"))
-  if (length(f[[3L]]) != 3L)
+  if (length(f[[3L]]) != 3L) {
     stop(call. = FALSE, "Can't find RHS expansion in formula.")
-  if (f[[3L]][[1L]] != "|")
+  }
+  if (f[[3L]][[1L]] != "|") {
     stop(call. = FALSE, "Can't find `|` operator in formula.")
+  }
 
   # Just take first variables - no support for `+` and friends
   y_name <- all.vars(f[[2L]], max.names = 1L)
@@ -204,10 +216,12 @@ parse_formula <- function(f) {
   g_name <- all.vars(f[[3L]][[3L]], max.names = 1L)
 
   vec <- c(x_name, y_name, g_name)
-  if (any(duplicated(vec)))
+  if (any(duplicated(vec))) {
     stop(call. = FALSE, "Found duplicate names in formula.")
-  if (any(vec == "."))
+  }
+  if (any(vec == ".")) {
     stop(call. = FALSE, "No support for `.` in formula.")
+  }
 
   return(list(x = x_name, y = y_name, g = g_name))
 }
@@ -250,10 +264,13 @@ make_basis <- function(x,
   # dummy coding if degree is zero
   if (degree == 0L) {
     df <- data.frame(x = cut(x,
-                             breaks = c(boundary[1L], internal, boundary[2L]),
-                             right = FALSE, include.lowest = TRUE))
-    X <- model.matrix(as.formula("~ 0 + x"),
-                      model.frame(~ ., df, na.action = na.pass))
+      breaks = c(boundary[1L], internal, boundary[2L]),
+      right = FALSE, include.lowest = TRUE
+    ))
+    X <- model.matrix(
+      as.formula("~ 0 + x"),
+      model.frame(~., df, na.action = na.pass)
+    )
   }
 
   # fuzzy coding by linear spline
@@ -273,8 +290,7 @@ make_basis <- function(x,
           Boundary.knots = boundary,
           degree = degree
         )
-      }
-      )
+      })
     }
   }
 

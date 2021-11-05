@@ -3,7 +3,7 @@ data <- data_orig
 f <- as.formula("hgt_z ~ age | id")
 
 test_that("silent when data is tibble", {
-   expect_silent(brokenstick(f, data, knots = 0:3))
+  expect_silent(brokenstick(f, data, knots = 0:3))
 })
 
 data$id <- factor(data$id)

@@ -134,7 +134,6 @@
 #' library(lme4)
 #' summary(f2$mod)
 #' plot(f2$mod)
-#'
 #' \donttest{
 #' # a model with more knots
 #' knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24, 36) / 12, 4)
@@ -167,9 +166,11 @@ brokenstick <- function(formula,
   )
   data <- data.frame(data)
   method <- match.arg(method)
-  obj <- brokenstick_bridge(formula, data, knots, boundary, k, degree,
-                            method, control, na.action, light, call,
-                            ...)
+  obj <- brokenstick_bridge(
+    formula, data, knots, boundary, k, degree,
+    method, control, na.action, light, call,
+    ...
+  )
   return(obj)
 }
 
@@ -179,13 +180,13 @@ brokenstick <- function(formula,
 brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
                                method, control, na.action, light, call,
                                warn_splines = FALSE, ...) {
-
   names <- parse_formula(formula)
   nms <- unname(unlist(names))
   if (!all(nms %in% colnames(data))) {
     stop("Variable(s) not found: ",
-         paste(nms[!nms %in% colnames(data)], collapse = ", "),
-         call. = FALSE)
+      paste(nms[!nms %in% colnames(data)], collapse = ", "),
+      call. = FALSE
+    )
   }
 
   y <- data[[names[["y"]]]]
@@ -200,11 +201,11 @@ brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
 
   l <- calculate_knots(x, k, knots, boundary)
   X <- make_basis(x,
-                  xname = names$x,
-                  internal = l$internal,
-                  boundary = l$boundary,
-                  degree = degree,
-                  warn = warn_splines
+    xname = names$x,
+    internal = l$internal,
+    boundary = l$boundary,
+    degree = degree,
+    warn = warn_splines
   )
 
   if (method == "kr") {
@@ -273,8 +274,10 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
     omega = as.matrix(as.data.frame(VarCorr(mod)[[names(slot(mod, "cnms"))]])),
     sigma2j = numeric(),
     sigma2 = df[df$grp == "Residual", "vcov"],
-    sample = c(length(y), sum(!is.na(y)), sum(is.na(y)), as.integer(ngrps(mod)),
-               0L)
+    sample = c(
+      length(y), sum(!is.na(y)), sum(is.na(y)), as.integer(ngrps(mod)),
+      0L
     )
+  )
   return(obj)
 }

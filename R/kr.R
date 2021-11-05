@@ -52,11 +52,10 @@ kr <- function(y,
                x,
                g,
                control = control_kr()) {
-
   if (!is.na(control$seed)) set.seed(control$seed)
 
   ry <- !is.na(y)
-  g <- as.integer(factor(g))  # convert character into integer
+  g <- as.integer(factor(g)) # convert character into integer
   xg <- cbind(x, g)
   type <- c(rep(2L, ncol(x)), -2L)
 
@@ -67,14 +66,18 @@ kr <- function(y,
   omega[lower.tri(omega, diag = TRUE)] <- res$omega
   omega[upper.tri(omega)] <- t(omega)[upper.tri(t(omega))]
   row.names(omega) <- colnames(omega) <- colnames(x)
-  obj <- list(beta = res$beta,
-              omega = omega,
-              sigma2j = res$sigma2j,
-              sigma2 = res$sigma2,
-              sample = c(length(res$y), sum(res$ry), sum(!res$ry), res$nclass,
-                         ncol(res$imputes)),
-              imp = res$imputes,
-              mod = res$mcmc)
+  obj <- list(
+    beta = res$beta,
+    omega = omega,
+    sigma2j = res$sigma2j,
+    sigma2 = res$sigma2,
+    sample = c(
+      length(res$y), sum(res$ry), sum(!res$ry), res$nclass,
+      ncol(res$imputes)
+    ),
+    imp = res$imputes,
+    mod = res$mcmc
+  )
   class(obj) <- "kr"
   return(obj)
 }
@@ -195,8 +198,8 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     G <- exp(mean(log(1 / inv.sigma2))) # Geometric mean
     shape <- max(n.class / 2 - 1, 0.01) # Prevent negative shape
     rg <- rgamma(1,
-                 shape = shape,
-                 scale = 2 / (n.class * (sigma2.0 / H - log(sigma2.0) + log(G) - 1))
+      shape = shape,
+      scale = 2 / (n.class * (sigma2.0 / H - log(sigma2.0) + log(G) - 1))
     )
     rg <- max(rg, 0.00001) # Prevent extreme
     theta <- 1 / rg

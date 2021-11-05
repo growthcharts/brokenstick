@@ -40,9 +40,11 @@ print.summary.brokenstick <- function(x,
   cat("\n")
   cat("Variables   ", x$names$y, "(outcome),", x$names$x, "(predictor),", x$names$g, "(group)\n")
   cat("Data        ", x$sample[1L], "(n),", x$sample[3], "(nmis),", x$sample[4], "(groups)\n")
-  cat("Parameters  ", x$model$npar, "(total),", x$model$nfixed,"(fixed),",
-      x$model$nvar, "(variance),", x$model$ncov, "(covariance),",
-      x$model$nerr, "(error)\n")
+  cat(
+    "Parameters  ", x$model$npar, "(total),", x$model$nfixed, "(fixed),",
+    x$model$nvar, "(variance),", x$model$ncov, "(covariance),",
+    x$model$nerr, "(error)\n"
+  )
   cat("Knots       ", x$knots, "\n")
   cat("Means       ", x$beta, "\n")
   if (length(x$sigma2j)) {
@@ -72,7 +74,7 @@ localsummary.model <- function(x) {
   if (x$method == "kr") {
     mdl <- list(
       model = "kr",
-      npar = (k^2 + 5 * k + 6)/2 + 1,
+      npar = (k^2 + 5 * k + 6) / 2 + 1,
       nfixed = k + 1,
       nvar = k + 1,
       ncov = (k + 1) * k / 2,

@@ -23,4 +23,3 @@ weightloss$condition <- factor(codes, labels = c("Control", "Diet", "Activity"))
 # weightloss <- weightloss[!is.na(weightloss$body_weight), ]
 
 usethis::use_data(weightloss, overwrite = TRUE)
-

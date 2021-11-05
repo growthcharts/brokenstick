@@ -86,9 +86,11 @@ test_that("accepts unordered x", {
   )
 })
 
-xz <- data.frame(id = c(NA_real_, NA_real_),
-                 age = c(NA_real_, NA_real_),
-                 hgt_z = c(NA_real_, NA_real_))
+xz <- data.frame(
+  id = c(NA_real_, NA_real_),
+  age = c(NA_real_, NA_real_),
+  hgt_z = c(NA_real_, NA_real_)
+)
 test_that("accepts all NA's in newdata", {
   expect_silent(predict(exp, newdata = xz, x = "knots"))
 })

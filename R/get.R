@@ -12,8 +12,7 @@
 #' get_knots(fit_200, "internal")
 #' @export
 get_knots <- function(object,
-                      what = c("all", "internal", "boundary", "dropfirst", "droplast")
-) {
+                      what = c("all", "internal", "boundary", "dropfirst", "droplast")) {
   stopifnot(inherits(object, c("brokenstick")))
 
   what <- match.arg(what)
@@ -24,11 +23,11 @@ get_knots <- function(object,
   internal <- internal[internal > boundary[1L] & internal < boundary[2L]]
 
   result <- switch(what,
-                   all = c(boundary[1L], internal, boundary[2L]),
-                   internal = internal,
-                   boundary = boundary,
-                   dropfirst = c(internal, boundary[2L]),
-                   droplast = c(boundary[1L], internal)
+    all = c(boundary[1L], internal, boundary[2L]),
+    internal = internal,
+    boundary = boundary,
+    dropfirst = c(internal, boundary[2L]),
+    droplast = c(boundary[1L], internal)
   )
   return(result)
 }
@@ -83,8 +82,12 @@ get_omega <- function(x, what = c("cov", "cor"), names = NULL) {
   } else {
     omega <- matrix(NA_real_, 0L, 0L)
   }
-  if (what == "cov") return(omega)
-  if (dim(omega)[1L]) return(cov2cor(omega))
+  if (what == "cov") {
+    return(omega)
+  }
+  if (dim(omega)[1L]) {
+    return(cov2cor(omega))
+  }
   return(omega)
 }
 

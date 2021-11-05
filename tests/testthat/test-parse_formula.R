@@ -27,4 +27,3 @@ test_that("throws error", {
   expect_error(parse_formula(f7))
   expect_error(parse_formula(f8))
 })
-

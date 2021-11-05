@@ -24,9 +24,10 @@
 #' Prediction in multilevel generalized linear models.
 #' J. R. Statist. Soc. A, 172, 3, 659-687.
 EB <- function(model, y, X, Z = X, BS = TRUE) {
-
-  stopifnot(inherits(model, "brokenstick"),
-            is.matrix(X))
+  stopifnot(
+    inherits(model, "brokenstick"),
+    is.matrix(X)
+  )
 
   # eliminate missing outcomes
   select <- !(is.na(y) | is.na(X[, 1]))
@@ -45,8 +46,10 @@ EB <- function(model, y, X, Z = X, BS = TRUE) {
   beta <- matrix(model$beta, ncol = 1)
 
   # calculate random effect by EB estimate
-  R <- solve(Z %*% model$omega %*% t(Z) + diag(model$sigma2, nrow(Z)),
-             y - X %*% beta)
+  R <- solve(
+    Z %*% model$omega %*% t(Z) + diag(model$sigma2, nrow(Z)),
+    y - X %*% beta
+  )
   re <- model$omega %*% t(Z) %*% R
 
   # calculate broken stick estimate by summing fixed and random parts

@@ -55,9 +55,11 @@ NULL
 
 new_brokenstick <- function(call = match.call(),
                             formula = formula(),
-                            names = list(x = character(),
-                                         y = character(),
-                                         g = character()),
+                            names = list(
+                              x = character(),
+                              y = character(),
+                              g = character()
+                            ),
                             internal = numeric(0),
                             boundary = numeric(0),
                             degree = 1L,
@@ -72,20 +74,22 @@ new_brokenstick <- function(call = match.call(),
                             data = numeric(0),
                             imp = numeric(0),
                             mod = list()) {
-  result <- list(call = call,
-                 formula = formula,
-                 names = names,
-                 internal = internal,
-                 boundary = boundary,
-                 degree = degree,
-                 method = method,
-                 control = control,
-                 beta = beta,
-                 omega = omega,
-                 sigma2j = sigma2j,
-                 sigma2 = sigma2,
-                 sample = sample,
-                 light = light)
+  result <- list(
+    call = call,
+    formula = formula,
+    names = names,
+    internal = internal,
+    boundary = boundary,
+    degree = degree,
+    method = method,
+    control = control,
+    beta = beta,
+    omega = omega,
+    sigma2j = sigma2j,
+    sigma2 = sigma2,
+    sample = sample,
+    light = light
+  )
   if (!light) {
     result$data <- data
     result$imp <- imp
