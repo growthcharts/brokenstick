@@ -11,7 +11,7 @@ Description: The broken stick model describes a set of individual curves by a
     a broken stick model to data, for predicting broken stick curves in new data,
     and for plotting the broken stick estimates. For additional documentation on 
     background, methodology and applications of the broken stick model see
-    <https://stefvanbuuren.name/publications/2020_Brokenstick_JSS_manuscript.pdf>.
+    <https://stefvanbuuren.name/publications/2021_brokenstick_JSS_manuscript.pdf>.
 Depends:
     R (>= 3.5.0)
 Imports:
