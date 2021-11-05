@@ -154,7 +154,6 @@ plot(f2, data, n_plot = 9)
 library(lme4)
 summary(f2$mod)
 plot(f2$mod)
-
 \donttest{
 # a model with more knots
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24, 36) / 12, 4)

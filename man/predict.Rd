@@ -113,8 +113,10 @@ test <- smocc_200[1199:1940, ]
 # -- Fit model
 
 fit <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:3, seed = 1)
-fit_light <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:3,
-      light = TRUE, seed = 1)
+fit_light <- brokenstick(hgt_z ~ age | id,
+  data = train, knots = 0:3,
+  light = TRUE, seed = 1
+)
 
 # -- Predict, standard cases
 
@@ -190,17 +192,23 @@ pred <- predict(fit, x = c(0.5, 1, 1.25), group = c(10001, 10005, 10022))
 pred
 
 # Case 4: strip_data = FALSE provides access to the observed data
-pred_all <- predict(fit, x = c(0.5, 1, 1.25), group = c(10001, 10005, 10022),
-                    strip_data = FALSE)
-pred_all \%>\% dplyr::filter(id == 10001) \%>\% dplyr::arrange(age)
+pred_all <- predict(fit,
+  x = c(0.5, 1, 1.25), group = c(10001, 10005, 10022),
+  strip_data = FALSE
+)
+pred_all \%>\%
+  dplyr::filter(id == 10001) \%>\%
+  dplyr::arrange(age)
 
 # Case 4: Applies also to test sample
 pred <- predict(fit, test, x = c(0.5, 1, 1.25), group = c(11045, 11120, 999))
 pred
 
 # Case 4: Works also with light object
-pred_light <- predict(fit_light, test, x = c(0.5, 1, 1.25),
-                      group = c(11045, 11120, 999))
+pred_light <- predict(fit_light, test,
+  x = c(0.5, 1, 1.25),
+  group = c(11045, 11120, 999)
+)
 identical(pred_light, pred)
 
 
@@ -209,16 +217,22 @@ identical(pred_light, pred)
 # Case 5: Add new data to training sample, and refreshes broken stick
 # estimate at age x.
 # Note that novel child (not in train) 999 has one data point
-predict(fit, x = c(0.9, 0.9, 0.9), y = c(1, 1, 1),
-        group = c(10001, 10005, 999))
+predict(fit,
+  x = c(0.9, 0.9, 0.9), y = c(1, 1, 1),
+  group = c(10001, 10005, 999)
+)
 
 # Case 5: Same, but now for test sample. Novel child 899 has two data points
-predict(fit, test, x = c(0.5, 0.9, 0.6, 0.9),
-        y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899))
+predict(fit, test,
+  x = c(0.5, 0.9, 0.6, 0.9),
+  y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899)
+)
 
 # Case 5: Also works for light object
-predict(fit_light, test, x = c(0.5, 0.9, 0.6, 0.9),
-        y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899))
+predict(fit_light, test,
+  x = c(0.5, 0.9, 0.6, 0.9),
+  y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899)
+)
 
 
 # -- Case 6: As Case 5, but without previous data
@@ -226,11 +240,14 @@ predict(fit_light, test, x = c(0.5, 0.9, 0.6, 0.9),
 # Case 6: Same call as last, but now without newdata = test
 # All children are de facto novel as they do not occur in the training sample.
 # Note: Predictions for 11045 and 11120 differ from prediction in Case 5.
-predict(fit, x = c(0.5, 0.9, 0.6, 0.9),
-        y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899))
+predict(fit,
+  x = c(0.5, 0.9, 0.6, 0.9),
+  y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899)
+)
 
 # This also work for the light brokenstick object
-predict(fit_light, x = c(0.5, 0.9, 0.6, 0.9),
-        y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899))
-
+predict(fit_light,
+  x = c(0.5, 0.9, 0.6, 0.9),
+  y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899)
+)
 }
