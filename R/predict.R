@@ -166,7 +166,7 @@
 #' pred_light <- predict(fit_light, test, group = c(11045, 11120, 999))
 #' identical(pred, pred_light)
 #'
-#'
+#' \dontrun{
 #' # -- Case 4: x, -y, group
 #'
 #' # Case 4: Predict at specified x, only in selected groups, train sample
@@ -192,7 +192,6 @@
 #'   group = c(11045, 11120, 999)
 #' )
 #' identical(pred_light, pred)
-#'
 #'
 #' # -- Case 5: x, y, group
 #'
@@ -232,6 +231,7 @@
 #'   x = c(0.5, 0.9, 0.6, 0.9),
 #'   y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899)
 #' )
+#' }
 #' @rdname predict
 #' @export
 predict.brokenstick <- function(object, newdata = NULL,
