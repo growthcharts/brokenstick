@@ -13,3 +13,4 @@
 ^scripts$
 _cache
 _files
+^CRAN-RELEASE$
