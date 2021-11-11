@@ -10,7 +10,7 @@ Description: The broken stick model describes a set of individual curves by a
     can be treated as separate problems. This package contains functions for fitting
     a broken stick model to data, for predicting broken stick curves in new data,
     and for plotting the broken stick estimates. For additional documentation on 
-    background, methodology and applications of the broken stick model see
+    background, methodology and applications see
     <https://stefvanbuuren.name/publications/2021_brokenstick_JSS_manuscript.pdf>.
 Depends:
     R (>= 3.5.0)
