@@ -10,7 +10,7 @@ link-citations: yes
 vignette: >
   %\VignetteIndexEntry{Overview of main functions}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
