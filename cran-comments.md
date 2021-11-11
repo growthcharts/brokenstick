@@ -1,13 +1,14 @@
 cran-comments
 ================
 
-## New version
+## Resubmission to CRAN
 
-This is a major update of the package.
+-   This submission reduces package size from 9.2Mb to 3.7Mb by taking
+    out temporary files that should not be in the distribution
 
 ## Test environments
 
--   local OS X install, 11.6, R 4.1.1
+-   local OS X install, 11.6, R 4.1.2
 -   win-builder, using `devtools::check_win_devel()`
 -   rhub
 
@@ -35,32 +36,20 @@ Status: OK
 ### RHUB
 
 ``` r
-check_rhub()
+rhub::check_for_cran()
 ```
 
-`check_rhub()` produces two notes:
+`rhub::check_for_cran()` produces “SUCCESS” (three times) and one note:
 
-    > checking CRAN incoming feasibility ... NOTE
-      
-      Size of tarball: 9171284 bytes
-      Maintainer: 'Stef van Buuren <stef.vanbuuren@tno.nl>'
+    N  checking examples
+       Examples with CPU (user + system) or elapsed time > 5s
+                   user system elapsed
+       predict     7.83   0.02    7.84
+       brokenstick 6.06   0.02    6.08
 
-    > checking examples ... NOTE
-      Examples with CPU (user + system) or elapsed time > 5s
-                  user system elapsed
-      predict      7.5   0.00    7.50
-      brokenstick  6.2   0.05    6.25
-
-Comment:
-
-The size of the tarball is about 9Mb. This is primarily due to one
-extensive vignette html (2.8Mb) that includes lots of plots. This
-vignette is a useful resource for the end user. I therefore suggest that
-the CRAN maintainers accept the package as is, but please let me know of
-any alternative options to reduce package size. Also, I would ask the
-CRAN maintainer to see through the slightly above threshold CPU time, as
-both example sections demonstrate many capabilities of these functions
-to the end user.
+Comment: Both example sections demonstrate many capabilities of these
+functions to the end user. I would ask the CRAN maintainer to see
+through the slightly above threshold CPU time.
 
 ## Downstream dependencies
 
