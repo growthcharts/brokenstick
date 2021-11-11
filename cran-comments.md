@@ -1,7 +1,13 @@
 cran-comments
 ================
 
-## Resubmission to CRAN
+## Resubmission 2 to CRAN
+
+-   The submission changes a URL classified as 502 “Bad Gateway”
+-   The submission wraps examples in `\dontrun` from `predict()` to
+    reduce CPU
+
+## Resubmission 1 to CRAN
 
 -   This submission reduces package size from 9.2Mb to 3.7Mb by taking
     out temporary files that should not be in the distribution
