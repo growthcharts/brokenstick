@@ -73,7 +73,7 @@ brokenstick. This object collects the fitted broken stick model." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">brokenstick</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">2.0.1</span>
       </span>
     </div>
 
@@ -176,15 +176,16 @@ to set algorithmic details.</p></dd>
 <dt><code>beta</code></dt><dd><p>Numeric vector with fixed effect estimates.</p></dd>
 <dt><code>omega</code></dt><dd><p>Numeric matrix with variance-covariance estimates of the
 broken stick estimates.</p></dd>
-<dt><code>sigma2j</code></dt><dd><p>Numeric vector with estimates of the residual variance per
-group. Only used by method <code>"kr"</code>.</p></dd>
 <dt><code>sigma2</code></dt><dd><p>Numeric scalar with the mean residual variance.</p></dd>
 <dt><code>sample</code></dt><dd><p>A numeric vector with descriptives of the training data.</p></dd>
 <dt><code>light</code></dt><dd><p>Should the returned object be lighter? If <code>light = TRUE</code>
 the returned object will contain only the model settings and parameter
-estimates and not store the <code>sample</code>, <code>data</code>, <code>imp</code> and <code>mod</code> elements.
+estimates and not store the <code>sigma2j</code>, <code>sample</code>, <code>data</code>, <code>imp</code> and
+<code>mod</code> elements.
 The light object can be used to predict broken stick estimates for
 new data, but does not disclose the training data and is small.</p></dd>
+<dt><code>sigma2j</code></dt><dd><p>Numeric vector with estimates of the residual variance per
+group. Only used by method <code>"kr"</code>.</p></dd>
 <dt><code>data</code></dt><dd><p>The training data used to fit the model.</p></dd>
 <dt><code>imp</code></dt><dd><p>The imputations generated for the missing outcome data. Only
 for <code>method = "kr"</code>.</p></dd>
