@@ -35,15 +35,16 @@ to set algorithmic details.}
 \item{\code{beta}}{Numeric vector with fixed effect estimates.}
 \item{\code{omega}}{Numeric matrix with variance-covariance estimates of the
 broken stick estimates.}
-\item{\code{sigma2j}}{Numeric vector with estimates of the residual variance per
-group. Only used by method \code{"kr"}.}
 \item{\code{sigma2}}{Numeric scalar with the mean residual variance.}
 \item{\code{sample}}{A numeric vector with descriptives of the training data.}
 \item{\code{light}}{Should the returned object be lighter? If \code{light = TRUE}
 the returned object will contain only the model settings and parameter
-estimates and not store the \code{sample}, \code{data}, \code{imp} and \code{mod} elements.
+estimates and not store the \code{sigma2j}, \code{sample}, \code{data}, \code{imp} and
+\code{mod} elements.
 The light object can be used to predict broken stick estimates for
 new data, but does not disclose the training data and is small.}
+\item{\code{sigma2j}}{Numeric vector with estimates of the residual variance per
+group. Only used by method \code{"kr"}.}
 \item{\code{data}}{The training data used to fit the model.}
 \item{\code{imp}}{The imputations generated for the missing outcome data. Only
 for \code{method = "kr"}.}
