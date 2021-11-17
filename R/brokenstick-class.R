@@ -15,8 +15,6 @@
 #' @section Elements:
 #' \describe{
 #'    \item{`call`}{Call that created the object}
-#'    \item{`formula`}{A formula with the model specification,
-#'    e.g. `formula(y ~ x | group)`}
 #'    \item{`names`}{A named list with three elements (`"x"`, `"y"`, `"g"`)
 #'    providing the variable name for time, outcome and subject, respectively.}
 #'    \item{`internal`}{Numeric vector of with internal knots.}
@@ -55,7 +53,6 @@
 NULL
 
 new_brokenstick <- function(call = match.call(),
-                            formula = formula(),
                             names = list(
                               x = character(),
                               y = character(),
@@ -77,7 +74,6 @@ new_brokenstick <- function(call = match.call(),
                             mod = list()) {
   result <- list(
     call = call,
-    formula = formula,
     names = names,
     internal = internal,
     boundary = boundary,

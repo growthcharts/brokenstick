@@ -21,8 +21,6 @@ A \code{brokenstick} object is a list with the following named elements:
 
 \describe{
 \item{\code{call}}{Call that created the object}
-\item{\code{formula}}{A formula with the model specification,
-e.g. \code{formula(y ~ x | group)}}
 \item{\code{names}}{A named list with three elements (\code{"x"}, \code{"y"}, \code{"g"})
 providing the variable name for time, outcome and subject, respectively.}
 \item{\code{internal}}{Numeric vector of with internal knots.}

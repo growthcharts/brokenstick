@@ -231,7 +231,6 @@ brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
 
   obj <- new_brokenstick(
     call = call,
-    formula = formula,
     names = names,
     internal = l$internal,
     boundary = l$boundary,
