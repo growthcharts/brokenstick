@@ -1,3 +1,7 @@
+# brokenstick 2.0.2
+
+- Shrinks the size of brokenstick object by removing the `formula` list element
+
 # brokenstick 2.0.1
 
 - Shrinks the size of light objects by removing the `sigma2j` vector from the light `brokenstick` class
