@@ -1,9 +1,13 @@
 #' @export
-model.frame.brokenstick <- function(formula, ...) {
+model.frame.brokenstick <- function(formula, data = NULL, ...) {
   if (formula$light) {
     return(NULL)
   }
-  return(formula$data)
+  names <- unlist(formula$names)
+  if (is.null(data)) data <- formula$data
+  ff <- paste(names[["y"]], "~", names[["x"]], "+", names[["g"]])
+  form <- as.formula(ff)
+  return(model.frame.default(formula = form, data = data, ...))
 }
 
 #' @export
