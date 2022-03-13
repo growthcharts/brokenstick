@@ -47,11 +47,11 @@ and sparse matrix.}
 The default, \code{NULL}, calculates all knots.}
 }
 \value{
-If \code{shape == "long"} a long tibble of predictions. If \code{x}, \code{y} and \code{group}
-are not specified, the number of rows in the tibble is guaranteed to
-be the same as the number of rows in \code{newdata}.
+If \code{shape == "long"} a long \code{data.frame} of predictions. If \code{x}, \code{y} and \code{group}
+are not specified, the number of rows in the data frame is guaranteed to
+be the same as the number of rows in \code{newdata}. If
 
-If \code{shape == "wide"} a wide tibble of prediction, one record per group. Note
+If \code{shape == "wide"} a wide \code{data.frame} of predictions, one record per group. Note
 that this format could be inefficient, depending on the data.
 
 If \code{shape == "vector"} a vector of predicted values, of all x-values and groups.

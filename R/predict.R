@@ -75,11 +75,11 @@
 #' made.
 #' @return
 #'
-#' If `shape == "long"` a long tibble of predictions. If `x`, `y` and `group`
-#' are not specified, the number of rows in the tibble is guaranteed to
-#' be the same as the number of rows in `newdata`.
+#' If `shape == "long"` a long `data.frame` of predictions. If `x`, `y` and `group`
+#' are not specified, the number of rows in the data frame is guaranteed to
+#' be the same as the number of rows in `newdata`. If
 #'
-#' If `shape == "wide"` a wide tibble of prediction, one record per group. Note
+#' If `shape == "wide"` a wide `data.frame` of predictions, one record per group. Note
 #' that this format could be inefficient, depending on the data.
 #'
 #' If `shape == "vector"` a vector of predicted values, of all x-values and groups.

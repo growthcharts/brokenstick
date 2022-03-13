@@ -16,7 +16,9 @@ if \code{object$light} is \code{FALSE}.}
 \item{\dots}{Additional arguments. Ignored.}
 }
 \value{
-A data.frame with a column named \code{.resid}
+A numerical vector with residuals The number of elements equals the
+number of rows in \code{newdata}. If \code{newdata} is not specified, the function
+looks for the training data in \code{object} as the element named \code{data}.
 }
 \description{
 Extract residuals from brokenstick model

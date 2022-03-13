@@ -16,7 +16,9 @@ if \code{object$light} is \code{FALSE}.}
 \item{\dots}{Additional arguments. Ignored.}
 }
 \value{
-See \code{\link[=predict.brokenstick]{predict.brokenstick()}}.
+A numerical vector with predictions. The number of elements equals the
+number of rows in \code{newdata}. If \code{newdata} is not specified, the function
+looks for the training data in \code{object} as the element named \code{data}.
 }
 \description{
 Calculate fitted values

@@ -3,14 +3,13 @@
 #' @aliases residuals.brokenstick
 #' @inheritParams predict.brokenstick
 #' @param \dots Additional arguments. Ignored.
-#' @return A data.frame with a column named `.resid`
+#' @return
+#' A numerical vector with residuals The number of elements equals the
+#' number of rows in `newdata`. If `newdata` is not specified, the function
+#' looks for the training data in `object` as the element named `data`.
 #' @family brokenstick
 #' @export
 residuals.brokenstick <- function(object, newdata = NULL, ...) {
   newdata <- get_newdata(object, newdata)
-  pred <- predict(object, newdata)
-  y <- newdata[[object$names$y]]
-  r <- y - pred
-  colnames(r) <- ".resid"
-  return(r)
+  return(newdata[[object$names$y]] - fitted(object, newdata))
 }
