@@ -56,7 +56,6 @@ print.summary.brokenstick <- function(x,
   if (x$what == "cov") cat("Variance-covariance matrix\n")
   if (x$what == "cor") cat("Correlation matrix\n")
   print(x$omega)
-  cat("\n")
   return(invisible(x))
 }
 
@@ -65,7 +64,15 @@ print.brokenstick <- function(x,
                               digits = max(3L, getOption("digits") - 3L),
                               ...) {
   stopifnot(inherits(x, "brokenstick"))
-  return(print(summary(x)))
+  x <- summary(x)
+  cat(paste0("Class        brokenstick (", x$method, ")"))
+  if (x$light) cat(" light")
+  cat("\n")
+  cat("Variables   ", x$names$y, "(outcome),", x$names$x, "(predictor),", x$names$g, "(group)\n")
+  cat("Knots       ", x$knots, "\n")
+  cat("Mean resid  ", x$sigma2, "\n")
+  if (!is.null(x$r2)) cat("R-squared   ", x$r2, "\n")
+  return(invisible(x))
 }
 
 # summary helpers
