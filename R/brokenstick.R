@@ -131,7 +131,6 @@
 #' plot(f2, data, n_plot = 9)
 #'
 #' # drill down into merMod object with standard diagnostics in lme4
-#' library(lme4)
 #' summary(f2$mod)
 #' plot(f2$mod)
 #' \donttest{
