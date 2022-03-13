@@ -103,7 +103,7 @@ made.
 }
 }
 \examples{
-library(dplyr)
+library("dplyr")
 
 # -- Data
 

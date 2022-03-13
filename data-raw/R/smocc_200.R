@@ -1,6 +1,6 @@
-library(donorloader) # local package with data
-library(brokenstick)
-library(AGD)
+library("donorloader") # local package with data
+library("brokenstick")
+library("AGD")
 
 # get data
 data <- donorloader::load_data(dnr = "smocc", ids = 10001:11120)

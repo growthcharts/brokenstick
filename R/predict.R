@@ -85,7 +85,7 @@
 #' If `shape == "vector"` a vector of predicted values, of all x-values and groups.
 #'
 #' @examples
-#' library(dplyr)
+#' library("dplyr")
 #'
 #' # -- Data
 #'

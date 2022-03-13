@@ -17,7 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, include=FALSE}
-library(brokenstick)
+library("brokenstick")
 ```
 
 # Background
@@ -66,7 +66,7 @@ This document summarises the main changes in `brokenstick 2.0.0`. See "Help for 
 We recommend changing your code to reflect the above changes. If needed, version `1.1.1` can be installed as
 
 ```{r eval=FALSE}
-library(devtools)
+library("devtools")
 install_github("growthcharts/brokenstick@9b969af")
 ```
 

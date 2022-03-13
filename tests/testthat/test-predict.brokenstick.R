@@ -1,4 +1,4 @@
-library(brokenstick)
+library("brokenstick")
 context("predict.brokenstick()")
 
 obj <- fit_200

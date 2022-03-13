@@ -142,7 +142,7 @@ f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, seed = 123)
 plot(f1, data, n_plot = 9)
 
 # study sampling behaviour of the sigma2 parameter with coda
-library(coda)
+library("coda")
 plot(f1$mod$sigma2)
 acfplot(f1$mod$sigma2)
 

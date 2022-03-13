@@ -1,4 +1,4 @@
-library(brokenstick)
+library("brokenstick")
 
 fit_lm <- brokenstick(hgt_z ~ age | id, data = smocc_200, knots = seq(0, 2, 0.25))
 

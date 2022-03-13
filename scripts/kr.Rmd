@@ -18,7 +18,7 @@ vignette: >
   
   
   ```{r setup}
-  library(brokenstick)
+  library("brokenstick")
 ```
 
 
@@ -33,7 +33,7 @@ attr(data2, "terms") <- NULL
 attr(data2, "na.action") <- NULL
 attr(data2, "formula") <- NULL
 
-# library(micemd) - does not work
+# library("micemd") - does not work
 #fit3 <- mice.impute.2l.2stage.norm(y = data2$y, 
 #                                   ry = !is.na(data2$y),
 #                                   x = data2[, -1],
@@ -96,7 +96,7 @@ plot(z0[, 1], zs[, 1]); abline(0, 1)
 ```
 
 ```{r}
-library(micemd)
+library("micemd")
 fit3 <- mice.impute.2l.2stage.norm(y = data2$y, 
                                    ry = !is.na(data2$y), 
                                    x = data2[, -1], 

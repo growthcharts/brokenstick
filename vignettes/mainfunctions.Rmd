@@ -33,9 +33,9 @@ img {
 This vignette demonstrates three major functions in the `brokenstick` package: `brokenstick()`, `predict()` and `plot()`. We also need `dplyr` and `ggplot2`.
 
 ```{r message = FALSE}
-require(brokenstick)
-require(dplyr)
-library(ggplot2)
+require("brokenstick")
+require("dplyr")
+library("ggplot2")
 ```
 
 ## Plot trajectories

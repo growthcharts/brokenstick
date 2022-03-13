@@ -1,5 +1,5 @@
-library(microbenchmark)
-library(brokenstick)
+library("microbenchmark")
+library("brokenstick")
 
 lm1 <- microbenchmark(brokenstick(hgt_z ~ age | id, data = smocc_200, knots = 0:3), times = 10)
 lm2 <- microbenchmark(brokenstick(hgt_z ~ age | id, data = smocc_200, knots = seq(0, 2, 0.5)), times = 10)
@@ -20,7 +20,7 @@ summaryRprof("test.out")
 
 
 # better matrix inverse?
-library(microbenchmark)
+library("microbenchmark")
 data <- matrix(c(1, 0, 0, 0,
                  0.5, 0.5, 0, 0,
                  0, 0.5, 0.5, 0,
@@ -40,7 +40,7 @@ microbenchmark(chol2inv(chol.default(vv)), times = 1000)
 # chol2inv(chol(vv) is about twice as fast as solve()
 
 # Using sparseMatrix
-library(Matrix)
+library("Matrix")
 # NOTE: side effect: loading Matrix made chol2inv(chol(vv)) slower
 microbenchmark(solve(vv), times = 1000)
 microbenchmark(chol2inv(chol(vv)), times = 1000)

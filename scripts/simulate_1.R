@@ -1,4 +1,4 @@
-library(brokenstick)
+library("brokenstick")
 set.seed(1)
 
 control <- control_brokenstick(method = "kr", kr = list(runin = 5000L, ndraw = 1000L, par_skip = 20L))
