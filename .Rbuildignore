@@ -14,3 +14,4 @@
 _cache
 _files
 ^CRAN-RELEASE$
+^Meta$

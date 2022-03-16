@@ -26,6 +26,7 @@ Imports:
     tidyr
 Suggests:
     AGD,
+    bookdown,
     ggplot2,
     grDevices,
     gridExtra,
