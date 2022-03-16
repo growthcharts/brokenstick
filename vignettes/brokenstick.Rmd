@@ -45,45 +45,4 @@ The `brokenstick` package contains functions to fit, predict and plot data. See 
 
 Development of the `brokenstick` package was kindly supported by the *Healthy Birth Growth and Development knowledge integration* (HBGDki) program of the Bill & Melinda Gates Foundation.
 
-## Further reading
-
-* [Main functions](mainfunctions.html)
-    + Plot trajectories
-    + Orginal scale and $Z$-score scale
-    + 1-line model
-    + 2-line broken stick model
-    + 9-line broken stick model
-    + Prediction
-    + Subject-level analysis
-
-* [Broken Stick Model for Irregular Longitudinal Data](brokenstick-article.html)
-    + Irregular observation times
-    + Literature overview
-    + Definition of the model
-    + Interpretation of the model
-    + Estimation by `lmer` and `kr` methods
-    + Software overview
-    + `brokenstick()` for model fitting
-    + `predict()` for trajectory plotting
-    + Conversion back and forth to the $Z$-score scale
-    + Predict growth curve of new subjects
-    + Assess the quality of the model
-    + Knot placement strategies
-    + Critical periods
-    + Time-to-time correlations
-    + Profile analysis
-    + Curve interpolation
-    + Multiple imputation
-    + Curve matching
-    + Discussion
-
-* [Perfect model](perfectmodel.html)
-    + Properties of the perfect model
-    + Estimating time-to-time correlations
-
-* [Help for old friends](oldfriends.html)
-    + Properties of the perfect model
-    + Estimating time-to-time correlations
-
-
 

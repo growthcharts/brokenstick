@@ -228,33 +228,3 @@ The effect of birth length on length at age 2 is very strong. There is no separa
 ## Conclusion
 
 This vignette illustrated the use of the `brokenstick()`, `plot()` and `predict()` functions. Other vignettes highlight various other capabilities of the package. 
-
-* [Broken Stick Model for Irregular Longitudinal Data](brokenstick-article.html)
-    + Irregular observation times
-    + Literature overview
-    + Definition of the model
-    + Interpretation of the model
-    + Estimation by `lmer` and `kr` methods
-    + Software overview
-    + `brokenstick()` for model fitting
-    + `predict()` for trajectory plotting
-    + Conversion back and forth to the $Z$-score scale
-    + Predict growth curve of new subjects
-    + Assess the quality of the model
-    + Knot placement strategies
-    + Critical periods
-    + Time-to-time correlations
-    + Profile analysis
-    + Curve interpolation
-    + Multiple imputation
-    + Curve matching
-    + Discussion
-
-* [Perfect model](perfectmodel.html)
-    + Properties of the perfect model
-    + Estimating time-to-time correlations
-
-* [Help for old friends](oldfriends.html)
-    + Properties of the perfect model
-    + Estimating time-to-time correlations
-
