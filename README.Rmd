@@ -1,7 +1,7 @@
 ---
 output: github_document
 always_allow_html: yes
-bibliography: [vignettes/bibliography.bib]
+bibliography: [vignettes/manual/bibliography.bib]
 biblio-style: apalike
 link-citations: yes
 ---
@@ -19,9 +19,10 @@ knitr::opts_chunk$set(
 # brokenstick
 
 <!-- badges: start -->
-[![Lifecycle: maturing](https://img.shields.io/badge/lifecycle-maturing-blue.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
-[![](https://img.shields.io/badge/github%20version-2.0.2-orange.svg)](https://growthcharts.org/brokenstick/)
+[![](https://img.shields.io/badge/github%20version-2.1.0-orange.svg)](https://growthcharts.org/brokenstick/)
+
 <!-- badges: end -->
 
 The broken stick model describes a set of individual curves by a linear mixed model using second-order linear B-splines. The main use of the model is to align irregularly observed data to a user-specified grid of break ages.
@@ -88,6 +89,6 @@ The `brokenstick` package contains functions for
 ### Instructive materials
 
 - [Companion site](https://growthcharts.org/brokenstick/) contains vignettes and articles that explain the model and the use of the software;
-- Paper in preparation: *Broken Stick Model for Irregular Longitudinal Data*: [pdf](https://stefvanbuuren.name/publications/2021_brokenstick_JSS_manuscript.pdf), [html](https://growthcharts.org/brokenstick/articles/brokenstick-article.html).
+- Paper in preparation: *Broken Stick Model for Irregular Longitudinal Data*: [pdf](https://stefvanbuuren.name/publications/2021_brokenstick_JSS_manuscript.pdf), [html](https://growthcharts.org/brokenstick/articles/manual.html).
 
 ### References
