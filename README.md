@@ -118,7 +118,7 @@ The `brokenstick` package contains functions for
 -   Paper in preparation: *Broken Stick Model for Irregular Longitudinal
     Data*:
     [pdf](https://stefvanbuuren.name/publications/2021_brokenstick_JSS_manuscript.pdf),
-    [html](https://growthcharts.org/brokenstick/articles/manual.html).
+    [html](https://growthcharts.org/brokenstick/articles/manual/manual.html).
 
 ### References
 
