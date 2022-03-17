@@ -1,9 +1,13 @@
 ---
 title: "Broken Stick Model for Irregular Longitudinal Data"
+pkgdown:
+  as_is: true
 output: 
-  bookdown::html_vignette2:
+  bookdown::html_document2:
     number_sections: true
     global_numbering: true
+    toc: true
+    floating_toc: true
 vignette: >
   %\VignetteIndexEntry{Broken Stick Model for Irregular Longitudinal Data}
   %\VignetteEngine{knitr::rmarkdown}
@@ -1087,27 +1091,27 @@ If we wish the curves of the matches during the first six months to be closer to
 
 # Conclusion
 
-### Overview
+## Overview
 
 This paper introduces a new approach to solve the problem of irregular longitudinal data. The method absorbs the time-dependent information into a set of broken stick estimates at the subject level. The primary advantage is that it simplifies the analysis by splitting the modelling problem into two steps. First, solve the timing problem, and then solve the substantive/scientific problem. The method is mathematically simple, using a linear $B$-spline, conceptually simple, yet principled. 
 
-### Distinctive features
+## Distinctive features
 
 The assumptions of the model cover many cases of practical interest: a straight line between breakpoints, a multivariate normal distribution for the random effects, and the MAR assumption including future data. Despite the relatively low number of model parameters, it is possible to obtain a close fit to the data, sometimes almost up to perfect reconstruction (c.f., Figure 9). There is no need to specify equidistant breakpoints. Applications in human growth and development are often more natural using non-uniformly spaced knots, which is very easy to model. Many people find it easier to understand the raw data values than the summaries. The broken stick model invites visualisation of the actual data points against time and makes it is easy to portray uncertainty as a bundle of curves. Such direct visualisation options contribute to the explainable and responsible personalised analyses that appeal to a broad user group.
 
-### Current limitations
+## Current limitations
 
 The broken stick model, as presented here, uses just three variables: time, measurement and group. This design choice simplifies interpretation and estimation. The lack of covariates in the model implies that the transformation from irregular data to repeated measures is identical for every subject. As long as the residual error is small, the relations with not-in-the-model variables thus remain intact. The possibility to include covariate in a second-round enhances modular modern analytic pipelines. Yet, some will prefer the direct estimation of all effects in one more extensive analysis. The current package does not support covariates. However, an experienced **R** user will have no difficulty in extending the code in Section 4.2 to include the covariates of interest.
 
 The method that requires that all subject share the same time axis and breakpoints. In our applications, synchronisation at the start was most natural (e.g., birth, start of experiment), which is easy to do. In some cases, one might wish to anchor in the middle, e.g., at menarche, which occurs at different ages for different individuals.[@naumova2001] It could also make sense to fasten the end, e.g., at death. However, it will be hard to do meaningful predictive analysis as we cannot anchor alive subjects. The choice of the anchor may matter less for cyclic processes. The broken stick model is not suited for applications where breakpoints vary between individuals. In those cases, it is better to use the linear mixed model directly.
 
-### Software
+## Software
 
 The Kasim-Raudenbush sampler [@kasim1998] is both fast and flexible. It produces estimates of the residual error variance per subject, can accommodate for correlation models and supports multiple imputation out-of-the-box. More research needed to establish its statistical properties especially compared to `lmer()` and other established methods. It would also be interesting to study the suitability of the  correlation models implemented in the **lme4qtl** package [@ziyatdinov2018]. As no training data are stored, instances of the **brokenstick** model class are tiny, often 15--20k. 
 
 Features not implemented, but that could be useful in future versions include a separate `impute()` function that inputs class **brokenstick** and returns class `mids`, a Trelliscope [@hafen2020] viewer to quickly peruse hundreds of individuals model fits, an extension to multivariate time-varying and child-level data, and a generalisation to `degree > 1` to support quadratic and cubic splines.
 
-### Methodological advances
+## Methodological advances
 
 The primary modelling task for the user is to set the proper knot locations. One might envision scenarios where we want to search for the "best" places. It is not yet clear how we should do this, and how far we could automate knot placement strategies. 
 
@@ -1115,7 +1119,7 @@ We need more insight into the statistical properties of procedures that execute 
 
 The current procedure assumes that the within-person error is constant across all time points. However, we might expect that observing more data close to the breakpoint will reduce the uncertainty of its estimate. In some applications, we might require that the estimate should equal the observed data value when the observation time coincides with the breakpoints. While models for such scenarios are considerably more complicated, they could also increase efficiency.
 
-### Conclusion
+## Conclusion
 
 This paper highlighted various applications of the broken stick model: critical periods, time-to-time correlation, profile analysis, curve interpolation, multiple imputation and personalised prediction. These applications certainly do not exhaust the potential of the model. My hope is that the availability of the software will stimulate creative uses, ideas and experiments.
 

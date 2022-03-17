@@ -1,7 +1,5 @@
 ---
 title: "Check perfect model"
-author: "Stef van Buuren"
-date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Check perfect model}

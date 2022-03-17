@@ -1,12 +1,7 @@
 ---
 title: "Overview of main functions"
-author: "Stef van Buuren"
-date: "`r Sys.Date()`"
 output: 
   rmarkdown::html_vignette
-bibliography: [bibliography.bib]
-biblio-style: apalike
-link-citations: yes
 vignette: >
   %\VignetteIndexEntry{Overview of main functions}
   %\VignetteEngine{knitr::rmarkdown}
@@ -37,6 +32,8 @@ require("brokenstick")
 require("dplyr")
 library("ggplot2")
 ```
+
+For more elaborate documentation, visit <https://growthcharts.org/brokenstick/articles/manual.html>.
 
 ## Plot trajectories
 

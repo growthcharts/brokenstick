@@ -2,10 +2,9 @@ destination: docs
 title: brokenstick
 url: https://growthcharts.org/brokenstick
 template:
+  bootstrap: 5
   params:
-    bootswatch: flatly
-navbar:
-  type: inverse
+    bootswatch: lumen
 authors:
   Stef van Buuren:
     href: https://stefvanbuuren.name
@@ -15,18 +14,18 @@ reference:
       Functions to fit, predict and visualise the broken stick model.
     contents:
       - brokenstick
-      - fitted.brokenstick
       - plot.brokenstick
       - predict.brokenstick
+      - fitted.brokenstick
       - residuals.brokenstick
   - title: "Helper functions"
     desc: >
       Functions to set algorithmic options for model fitting or to extract
       components of the fitted object.
     contents:
-      - control_brokenstick
       - control_kr
       - get_knots
+      - get_omega
       - get_r2
       - parse_formula
   - title: "Numerical functions"
@@ -38,6 +37,7 @@ reference:
       - kr
       - make_basis
       - plot_trajectory
+      - set_control
   - title: "Class documentation"
     desc: >
       Package-level documentation.
@@ -50,12 +50,13 @@ reference:
     contents:
       - smocc_200
       - fit_200
+      - fit_200_light
       - weightloss
 articles:
 - title: Main verbs
   navbar: ~
   contents:
   - mainfunctions
-  - brokenstick-article
+  - manual/manual
   - perfectmodel
   - oldfriends
