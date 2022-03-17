@@ -16,3 +16,4 @@ _files
 ^CRAN-RELEASE$
 ^Meta$
 ^vignettes/manual$
+^CRAN-SUBMISSION$
