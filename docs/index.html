@@ -42,7 +42,7 @@
     
     <a class="navbar-brand me-2" href="index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -93,6 +93,7 @@
 </h1></div>
 <!-- badges: start -->
 
+<!-- badges: end -->
 <p>The broken stick model describes a set of individual curves by a linear mixed model using second-order linear B-splines. The main use of the model is to align irregularly observed data to a user-specified grid of break ages.</p>
 <p>All fitting can done in the Z-score scale, so nonlinearities and irregular data can be treated as separate problems. This package contains functions for fitting a broken stick model to data, for exporting the parameters of the model for independent use outside this package, and for predicting broken stick curves for new data.</p>
 <div class="section level2">
@@ -125,7 +126,7 @@
 <li>Missing data are missing at random (MAR);</li>
 <li>Individuals are exchangeable and uncorrelated.</li>
 </ul>
-<p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (<em>Z</em>) scale. Unique feature of the broken stick model are:</p>
+<p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (<img src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;Z" title="Z" alt="Z">) scale. Unique feature of the broken stick model are:</p>
 <ul>
 <li>
 <em>Modular</em>: Issues related to non-linearity of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;</li>
@@ -165,7 +166,7 @@
 <ul>
 <li>
 <a href="https://growthcharts.org/brokenstick/">Companion site</a> contains vignettes and articles that explain the model and the use of the software;</li>
-<li>Paper in preparation: <em>Broken Stick Model for Irregular Longitudinal Data</em>: <a href="https://stefvanbuuren.name/publications/2021_brokenstick_JSS_manuscript.pdf" class="external-link">pdf</a>, <a href="https://growthcharts.org/brokenstick/articles/brokenstick-article.html">html</a>.</li>
+<li>Paper in preparation: <em>Broken Stick Model for Irregular Longitudinal Data</em>: <a href="https://stefvanbuuren.name/publications/2021_brokenstick_JSS_manuscript.pdf" class="external-link">pdf</a>, <a href="https://growthcharts.org/brokenstick/articles/manual.html">html</a>.</li>
 </ul>
 </div>
 <div class="section level3">
@@ -182,7 +183,7 @@ de Kroon, M. L. A., C. M. Renders, J. P. van Wouwe, S. van Buuren, and R. A. Hir
 Ruppert, D., M. P. Wand, and R. J. Carroll. 2003. <em>Semiparametric Regression</em>. Cambridge: Cambridge University Press.
 </div>
 <div id="ref-vanbuuren2018" class="csl-entry">
-van Buuren, S. 2018. <em>Flexible Imputation of Missing Data. Second Edition</em>. Boca Raton, FL: CRC Press.
+van Buuren, S. 2018. <em>Flexible Imputation of Missing Data. 2nd Edition</em>. Boca Raton, FL: CRC Press.
 </div>
 </div>
 </div>
@@ -224,9 +225,9 @@ van Buuren, S. 2018. <em>Flexible Imputation of Missing Data. Second Edition</em
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://lifecycle.r-lib.org/articles/stages.html" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-blue.svg" alt="Lifecycle: maturing"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://cran.r-project.org/package=brokenstick" class="external-link"><img src="https://www.r-pkg.org/badges/version/brokenstick" alt="CRAN_Status_Badge"></a></li>
-<li><a href="https://growthcharts.org/brokenstick/"><img src="https://img.shields.io/badge/github%20version-2.0.2-orange.svg"></a></li>
+<li><a href="https://growthcharts.org/brokenstick/"><img src="https://img.shields.io/badge/github%20version-2.1.0-orange.svg"></a></li>
 </ul>
 </div>
 
