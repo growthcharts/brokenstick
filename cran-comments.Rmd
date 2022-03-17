@@ -3,6 +3,12 @@ title: "cran-comments"
 output: github_document
 ---
 
+## Resubmission 3 to CRAN
+
+* We are now at version `brokenstick 2.1.0`
+* Incorporates changes asked for by J Stat Soft (see package NEWS)
+* Reduces package size from 3.7 Mb to 1.1 Mb by transferring large vignette to GitHub site
+
 ## Resubmission 2 to CRAN
 
 * The submission changes a URL classified as 502 "Bad Gateway"
@@ -14,7 +20,7 @@ output: github_document
 
 ## Test environments
 
-* local OS X install, 11.6, R 4.1.2
+* local OS X install, 12.2.1, R 4.1.3
 * win-builder, using `devtools::check_win_devel()`
 * rhub
 
@@ -28,7 +34,7 @@ build(manual = TRUE)
 ```
 
 ```{bash eval=FALSE}
-R CMD CHECK brokenstick_2.0.0.tar.gz
+R CMD CHECK brokenstick_2.1.0.tar.gz
 
 Status: OK
 ```

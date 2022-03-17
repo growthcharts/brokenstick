@@ -1,3 +1,17 @@
+# brokenstick 2.1.0
+
+## Incorporate changes and updates required by JSS
+
+- Reorganises the vignettes
+- Renames `brokenstick-article.Rmd` to `manual/manual.Rmd`, include high-res version on the site and take out of the package to save space
+- Updates `vignettes/bibliography.bib` to title case
+- Removes superfluous navigation from vigettes
+- Defines an `model.frame.brokenstick()` function that adheres to conventions
+- Changes return values by `fitted()` and `residuals()` to vectors
+- Defines a less verbose `print.brokenstick()` helper
+- Make all calls to `library()` to character argument
+- Removes `library(lme4)` from code to evade changing the search path
+
 # brokenstick 2.0.2
 
 - Shrinks the size of brokenstick object by removing the `formula` list element
