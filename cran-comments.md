@@ -1,6 +1,11 @@
 cran-comments
 ================
 
+## Resubmission 4 to CRAN
+
+-   Wrap example section of `predict()` and `brokenstick()` in
+    `\donttest{}` to reduce CPU time
+
 ## Resubmission 3 to CRAN
 
 -   We are now at version `brokenstick 2.1.0`
