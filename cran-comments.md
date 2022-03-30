@@ -1,6 +1,10 @@
 cran-comments
 ================
 
+## Resubmission 5 to CRAN
+
+-   Repairs a broken link in `vignettes/mainfunctions.Rmd`
+
 ## Resubmission 4 to CRAN
 
 -   Wrap example section of `predict()` and `brokenstick()` in
@@ -49,7 +53,7 @@ Status: OK
 
 `devtools::check_win_devel()` resulted in:
 
-    Note: CPU time > 10s for predict example section
+    OK
 
 ### RHUB
 
@@ -59,15 +63,7 @@ rhub::check_for_cran()
 
 `rhub::check_for_cran()` produces “SUCCESS” (three times) and one note:
 
-    *  checking examples ... NOTE
-       Examples with CPU (user + system) or elapsed time > 5s
-                   user system elapsed
-       predict     7.44   0.02    7.48
-       brokenstick 4.96   0.02    5.15
-
-Comment: Slightly above the threshold of 5 seconds. Both example
-sections demonstrate many capabilities of these functions to the end
-user. For clarity, I think these examples should remain as they are.
+    Success
 
 ## Downstream dependencies
 
