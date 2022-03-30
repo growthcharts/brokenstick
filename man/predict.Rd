@@ -103,6 +103,7 @@ made.
 }
 }
 \examples{
+\dontrun{
 library("dplyr")
 
 # -- Data
@@ -125,9 +126,7 @@ pred <- predict(fit)
 identical(nrow(train), nrow(pred))
 
 # Predict without newdata, not possible for light object
-\dontrun{
 predict(fit_light)
-}
 
 # Use test data
 pred <- predict(fit, newdata = test)
@@ -170,12 +169,8 @@ predict(fit_light, x = "knots", y = c(1, 1, 0.5, 0), shape = "wide")
 # Case 3: Predict at observed age for subset of groups, training sample
 pred <- predict(fit, group = c(10001, 10005, 10022))
 head(pred, 3)
-
 # Case 3: Of course, we cannot do this for light objects
-\dontrun{
 pred_light <- predict(fit_light, group = c(10001, 10005, 10022))
-}
-
 # Case 3: We can use another sample. Note there is no child 999
 pred <- predict(fit, test, group = c(11045, 11120, 999))
 tail(pred, 3)
@@ -184,7 +179,6 @@ tail(pred, 3)
 pred_light <- predict(fit_light, test, group = c(11045, 11120, 999))
 identical(pred, pred_light)
 
-\dontrun{
 # -- Case 4: x, -y, group
 
 # Case 4: Predict at specified x, only in selected groups, train sample
