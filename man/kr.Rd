@@ -17,14 +17,16 @@ kr(y, x, g, control = control_kr())
 of the sampler and correlation model.}
 }
 \value{
-An object of class \code{kr}, basically a list with components:\preformatted{* `beta`  Fixed effects
+An object of class \code{kr}, basically a list with components:
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{* `beta`  Fixed effects
 * `omega` Variance-covariance of random effects
 * `sigma2_j` Residual variance per group
 * `sigma2` Average residual variance
 * `sample` Descriptive statistics about the data
 * `imp`   Numeric matrix with `nimp` multiple imputations.
 * `mod`   A list of objects of class [coda::mcmc()]
-}
+}\if{html}{\out{</div>}}
 
 The number of rows in \code{imp} is equal to the number of missing values in the
 outcome vector \code{y}. The number of columns equals \code{nimp}.
