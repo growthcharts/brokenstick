@@ -10,8 +10,10 @@ vignette: >
 
 
 ```{r setup, include=FALSE}
+old <- options(digits = 3)
 knitr::opts_chunk$set(echo = TRUE, 
                       fig.width = 7, fig.height = 3,
+                      
                       dev = "png")
 ```
 
@@ -79,60 +81,66 @@ The `brokenstick` package contains tools to approximate the observed data by a s
 
 ## Fit broken stick model with one line
 
-We fit a trivial broken stick model with just one line anchored at the minimum and maximum age, and plot the trajectories of three selected children as follows: 
+We fit a trivial broken stick model with just one line on ages between birth and two years, and plot the trajectories of three selected children as follows: 
 
 ```{r figure1, warning = FALSE}
 set.seed(123)
-fit <- brokenstick(hgt ~ age | id, data)
+fit <- brokenstick(hgt ~ age | id, data, knots = c(0, 2))
 ids <- c(10001, 10005, 10022)
-plot(fit, group = ids, what = "all",
+plot(fit, group = ids, 
      xlab = "Age (years)", ylab = "Length (cm)")
 ```
 
 The following plot displays the same data, but in standardised units so as to increase the analytic resolution:
 
 ```{r zscore, warning = FALSE}
-fit0 <- brokenstick(hgt_z ~ age | id, data)
-plot(fit0, group = ids, what = "all", 
+fit0 <- brokenstick(hgt_z ~ age | id, data, knots = c(0, 2))
+plot(fit0, group = ids,
      xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
-Note that both approximations are quite bad. 
+Note that both approximations describe the individual trend in the data, but do not address any systematic deviations from the trend.
 
 ## Fit broken stick model with two lines
 
 The *broken stick model* describes a trajectory by a series of connected straight lines. We first calculate a model with two connected lines. The first line starts at birth and end at the age of exactly 1 years. The second line spans the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate and plot the model as follows:
 
 ```{r plotfit2, cache = TRUE, warning=FALSE}
-fit2 <- brokenstick(hgt_z ~ age | id, data = data, knots = 0:3)
+fit2 <- brokenstick(hgt_z ~ age | id, data = data, knots = c(0, 1, 2))
 plot(fit2, group = ids, xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
-The `fit2` object holds the parameter estimates of the model:
+The plot shows that the two-line model is still fairly crude. The `fit2` object holds the parameter estimates of the model:
 
 ```{r}
-fit2
+summary(fit2)
 ```
 
-The console output lists the knots of the model, including the left and right boundary knots at 0 and 3. The row of `means` correspond to the fixed effect estimates of the linear mixed model. We may interpret these as the global means. Next, the output lists the variance-covariance matrix of the random effects. The model contains 4 random effects (3 visits + 1 end knot). Finally, the residual variance is the model error at the subject level. These three set of parameters are enough to reconstruct the broken stick model.
+The console output lists the knots of the model, including the left and right boundary knots at 0 and 2.6776. The row of `means` correspond to the fixed effect estimates of the linear mixed model. We may interpret these as the global means. Next, the output lists the variance-covariance matrix of the random effects. The model contains 16 parameters in total: four fixed effects (means), four random effects (diagonal elements), 6 covariance (off-diagonal elements) and 2 error variances (one for the residual error variance, one for the variability of the error per cluster). These parameters are enough to reconstruct the broken stick model, and to apply it to new data.
 
 ## Extend to nine lines
 
-The plot shows that the two-line model is still fairly crude. We refine the model in the first two years by adding a knot for each age at which a visit was scheduled. This model can be run as
+We refine the model in the first two years by adding a knot for each age at which a visit was scheduled. This model can be run as
 
 ```{r fit9, cache = TRUE, warning = FALSE}
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
-fit9 <- brokenstick(hgt_z ~ age | id, data = data, 
-                    knots = knots, boundary = c(0, 3))
+fit9 <- brokenstick(hgt_z ~ age | id, data = data, knots = knots)
 ```
 
-This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. While these may appear a little discomforting, we have found that the warnings are generally somewhat at the conservative side, so the parameter estimates are probably still OK.
+This optimization problem is more difficult, so it takes slightly longer to run. The results are
+
+
+```{r}
+summary(fit9)
+```
+
+There nine-line model summarises the data by 79 parameters. This model fits substantially better. The model residuals are substantially smaller (0.075 instead of 0.179) and the proportions of explained variance is much higher (0.983 instead of 0.867).
 
 ```{r plotfit9, echo = FALSE, warning = FALSE}
 plot(fit9, group = ids, xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
-The nine-line broken stick model fits the observed data very well.
+The figure shows that the nine-line broken stick model fits the observed data very well.
 
 ## Obtain predicted values
 
@@ -156,7 +164,7 @@ nrow(p2)
 
 The output is more verbose and includes the grid of knots for each child (`id`, `age`). The column `.source` is equal to `added` as rows are added to the data.
 
-Note there are also knots at ages 0.00 and 3.00 years. These are boundary knots, and added by the `brokenstick()` function. By default, the boundary knots span the age range in the data. The estimate for the knot at the maximum age has no useful interpretation, and should be ignored. 
+Note there are also knots at ages 0.00 and 2.68 years. These are boundary knots, and added by the `brokenstick()` function. The boundary knots effectively filter the observations that enter the calculations. By default, the boundary knots span the age range in the data. For technical reasons, the broken stick model also defines and estimates parameters for these knots, but these may in general be ignored, especially when the data near the boundary knots are sparse.
 
 If we wish to obtain estimates at both the knots and the observed data use:
 
@@ -225,3 +233,8 @@ The effect of birth length on length at age 2 is very strong. There is no separa
 ## Conclusion
 
 This vignette illustrated the use of the `brokenstick()`, `plot()` and `predict()` functions. Other vignettes highlight various other capabilities of the package. 
+
+```{r echo=FALSE}
+options(old)
+```
+
