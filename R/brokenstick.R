@@ -33,7 +33,10 @@
 #' specifying `k = 1` puts a knot at the 50th quantile (median),
 #' setting `k = 3` puts knots at the 25th, 50th and 75th quantiles,
 #' and so on. If the user specifies both `k` and `knots` arguments
-#' then `knots` takes precedence.
+#' then `knots` takes precedence. The default is `k = 5`, so if the user
+#' does not specify any of `knots`, `boundary` or `k`, then the knots
+#' will be at the 16th, 33th, 50th, 66th and 84th quantile of the
+#' predictor.
 #'
 #' @param degree the degree of the spline. The broken stick model
 #' requires linear splines, so the default is `degree = 1`.
@@ -151,7 +154,7 @@ brokenstick <- function(formula,
                         data,
                         knots = NULL,
                         boundary = NULL,
-                        k = NULL,
+                        k = 5L,
                         degree = 1L,
                         method = c("kr", "lmer"),
                         control = set_control(method = method, ...),
