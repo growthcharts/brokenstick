@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,87 +63,132 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plot_trajectory</span><span class="op">(</span>
-  <span class="va">x</span>,
-  newdata <span class="op">=</span> <span class="cn">NULL</span>,
-  what <span class="op">=</span> <span class="st">"droplast"</span>,
-  .x <span class="op">=</span> <span class="cn">NULL</span>,
-  group <span class="op">=</span> <span class="cn">NULL</span>,
-  color_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/hcl.html" class="external-link">hcl</a></span><span class="op">(</span><span class="fl">240</span>, <span class="fl">100</span>, <span class="fl">40</span>, <span class="fl">0.7</span><span class="op">)</span>, <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/hcl.html" class="external-link">hcl</a></span><span class="op">(</span><span class="fl">240</span>, <span class="fl">100</span>, <span class="fl">40</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span>,
-  size_y <span class="op">=</span> <span class="fl">2</span>,
-  color_yhat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/hcl.html" class="external-link">hcl</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">40</span>, <span class="fl">0.7</span><span class="op">)</span>, <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/hcl.html" class="external-link">hcl</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">40</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span>,
-  size_yhat <span class="op">=</span> <span class="fl">2</span>,
-  color_imp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grey80"</span>, <span class="st">"grey80"</span><span class="op">)</span>,
-  size_imp <span class="op">=</span> <span class="fl">2</span>,
-  ncol <span class="op">=</span> <span class="fl">3L</span>,
-  xlab <span class="op">=</span> <span class="cn">NULL</span>,
-  ylab <span class="op">=</span> <span class="cn">NULL</span>,
-  xlim <span class="op">=</span> <span class="cn">NULL</span>,
-  ylim <span class="op">=</span> <span class="cn">NULL</span>,
-  show <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,
-  n_plot <span class="op">=</span> <span class="fl">3L</span>,
-  scales <span class="op">=</span> <span class="st">"fixed"</span>,
-  theme <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_light</a></span><span class="op">(</span><span class="op">)</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_trajectory</span><span class="op">(</span></span>
+<span>  <span class="va">x</span>,</span>
+<span>  newdata <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"droplast"</span>,</span>
+<span>  .x <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  color_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/hcl.html" class="external-link">hcl</a></span><span class="op">(</span><span class="fl">240</span>, <span class="fl">100</span>, <span class="fl">40</span>, <span class="fl">0.7</span><span class="op">)</span>, <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/hcl.html" class="external-link">hcl</a></span><span class="op">(</span><span class="fl">240</span>, <span class="fl">100</span>, <span class="fl">40</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  size_y <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  color_yhat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/hcl.html" class="external-link">hcl</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">40</span>, <span class="fl">0.7</span><span class="op">)</span>, <span class="fu">grDevices</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/grDevices/hcl.html" class="external-link">hcl</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">100</span>, <span class="fl">40</span>, <span class="fl">0.8</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  size_yhat <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  color_imp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"grey80"</span>, <span class="st">"grey80"</span><span class="op">)</span>,</span>
+<span>  size_imp <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  ncol <span class="op">=</span> <span class="fl">3L</span>,</span>
+<span>  xlab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylab <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  xlim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  ylim <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  show <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="cn">TRUE</span>, <span class="cn">TRUE</span>, <span class="cn">FALSE</span><span class="op">)</span>,</span>
+<span>  n_plot <span class="op">=</span> <span class="fl">3L</span>,</span>
+<span>  scales <span class="op">=</span> <span class="st">"fixed"</span>,</span>
+<span>  theme <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_light</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>x</dt>
 <dd><p>An object of class <code>brokenstick</code>.</p></dd>
+
+
 <dt>newdata</dt>
 <dd><p>A <code>data.frame</code> or <code>matrix</code></p></dd>
+
+
 <dt>what</dt>
 <dd><p>Which knots to plot? See <code><a href="get_knots.html">get_knots()</a></code>. The default,
 <code>what = "droplast"</code>, does not plot the right boundary knot.</p></dd>
+
+
 <dt>.x</dt>
 <dd><p>The <code>x</code> argument of the <code><a href="predict.html">predict.brokenstick()</a></code> function.</p></dd>
+
+
 <dt>group</dt>
 <dd><p>A vector with group identifications</p></dd>
+
+
 <dt>color_y</dt>
 <dd><p>A character vector with two elements specifying the symbol and line color of the measured data points</p></dd>
+
+
 <dt>size_y</dt>
 <dd><p>Dot size of measured data points</p></dd>
+
+
 <dt>color_yhat</dt>
 <dd><p>A character vector with two elements specifying the symbol and line color of the predicted data points</p></dd>
+
+
 <dt>size_yhat</dt>
 <dd><p>Dot size of predicted data points</p></dd>
+
+
 <dt>color_imp</dt>
 <dd><p>A character vector with two elements specifying the symbol and line color of the imputed data</p></dd>
+
+
 <dt>size_imp</dt>
 <dd><p>Dot size of imputed data</p></dd>
+
+
 <dt>ncol</dt>
 <dd><p>Number of columns in plot</p></dd>
+
+
 <dt>xlab</dt>
 <dd><p>The label of the x-axis</p></dd>
+
+
 <dt>ylab</dt>
 <dd><p>The label of the y-axis</p></dd>
+
+
 <dt>xlim</dt>
 <dd><p>Vector of length 2 with range of x-axis</p></dd>
+
+
 <dt>ylim</dt>
 <dd><p>Vector of length 2 with range of y-axis</p></dd>
+
+
 <dt>show</dt>
 <dd><p>A logical vector of length 3. Element 1 specifies
 whether the observed data are plotted, element 2 specifies
 whether the broken stick are plotted, element 3 specifies
 whether imputations are plotted. The default is
 <code>c(TRUE, TRUE, FALSE)</code>.</p></dd>
+
+
 <dt>n_plot</dt>
 <dd><p>A integer indicating the number of individual plots.
 The default is 3, which plots the trajectories of the first three
 groups. The <code>n_plot</code> is a safety measure to prevent unintended
 plots of the entire data set.</p></dd>
+
+
 <dt>scales</dt>
 <dd><p>Axis scaling, e.g. <code>"fixed"</code>, <code>"free"</code>, and so on</p></dd>
+
+
 <dt>theme</dt>
 <dd><p>Plotting theme</p></dd>
+
+
 <dt>...</dt>
 <dd><p>Extra arguments passed down to <code><a href="predict.html">predict.brokenstick()</a></code>.</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>An object of class <code>ggplot</code></p>
+    
+
+<p>An object of class <code>ggplot</code></p>
+
+
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -159,7 +204,7 @@ plots of the entire data set.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer></div>

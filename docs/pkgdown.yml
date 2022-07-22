@@ -1,5 +1,5 @@
-pandoc: 2.14.0.3
-pkgdown: 2.0.2
+pandoc: '2.18'
+pkgdown: 2.0.6
 pkgdown_sha: ~
 articles:
   brokenstick: brokenstick.html
@@ -7,7 +7,7 @@ articles:
   manual: manual/manual.html
   oldfriends: oldfriends.html
   perfectmodel: perfectmodel.html
-last_built: 2022-03-31T10:03Z
+last_built: 2022-07-22T14:21Z
 urls:
   reference: https://growthcharts.org/brokenstick/reference
   article: https://growthcharts.org/brokenstick/articles

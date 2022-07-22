@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Overview of main functions</h1>
             
       
@@ -95,234 +95,379 @@ img {
 <div class="section level2">
 <h2 id="objective">Objective<a class="anchor" aria-label="anchor" href="#objective"></a>
 </h2>
-<p>This vignette demonstrates three major functions in the <code>brokenstick</code> package: <code><a href="../reference/brokenstick.html">brokenstick()</a></code>, <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>. We also need <code>dplyr</code> and <code>ggplot2</code>.</p>
+<p>This vignette demonstrates three major functions in the
+<code>brokenstick</code> package: <code><a href="../reference/brokenstick.html">brokenstick()</a></code>,
+<code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>. We also need
+<code>dplyr</code> and <code>ggplot2</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/growthcharts/brokenstick" class="external-link">"brokenstick"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org" class="external-link">"dplyr"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/growthcharts/brokenstick" class="external-link">"brokenstick"</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org" class="external-link">"dplyr"</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span></span></code></pre></div>
 <p>For more elaborate documentation, visit <a href="https://growthcharts.org/brokenstick/articles/manual/manual.html" class="uri">https://growthcharts.org/brokenstick/articles/manual/manual.html</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="plot-trajectories">Plot trajectories<a class="anchor" aria-label="anchor" href="#plot-trajectories"></a>
 </h2>
-<p>The <code>smocc_200</code> data in the <code>brokenstick</code> package contain the heights of 200 Dutch children measured on 10 visits at ages 0-2 years.</p>
+<p>The <code>smocc_200</code> data in the <code>brokenstick</code>
+package contain the heights of 200 Dutch children measured on 10 visits
+at ages 0-2 years.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="fu">::</span><span class="va"><a href="../reference/smocc_200.html">smocc_200</a></span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 3 × 7</span></span>
-<span class="co">##      id    age sex       ga    bw   hgt hgt_z</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">10</span>001 0      female    40  <span style="text-decoration: underline;">3</span>960  52   0.575</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">10</span>001 0.082<span style="text-decoration: underline;">1</span> female    40  <span style="text-decoration: underline;">3</span>960  55.6 0.888</span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">10</span>001 0.159  female    40  <span style="text-decoration: underline;">3</span>960  58.2 0.797</span></code></pre>
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="fu">::</span><span class="va"><a href="../reference/smocc_200.html">smocc_200</a></span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 7</span></span></span>
+<span><span class="co">##      id    age sex       ga    bw   hgt hgt_z</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">10</span>001 0      female    40  <span style="text-decoration: underline;">3</span>960  52   0.575</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">10</span>001 0.082<span style="text-decoration: underline;">1</span> female    40  <span style="text-decoration: underline;">3</span>960  55.6 0.888</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">10</span>001 0.159  female    40  <span style="text-decoration: underline;">3</span>960  58.2 0.797</span></span></code></pre>
 <p><img src="mainfunctions_files/figure-html/plotcm-1.png" width="672"></p>
-<p>Figure 1 dispays the data from the first 500 rows as a set of growth curves of Dutch children. Curves are steeper during the first few months, so child growth is faster for young infants. Note also there are more cross-overs during the first half year, whereas fewer occur later. This means that the relative positions have been settled by the age of 2 years, or - put differently - that the correlation between time points at those ages is high.</p>
+<p>Figure 1 dispays the data from the first 500 rows as a set of growth
+curves of Dutch children. Curves are steeper during the first few
+months, so child growth is faster for young infants. Note also there are
+more cross-overs during the first half year, whereas fewer occur later.
+This means that the relative positions have been settled by the age of 2
+years, or - put differently - that the correlation between time points
+at those ages is high.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">hgt_z</span>, group <span class="op">=</span> <span class="va">id</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span> 
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_d</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"cividis"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Age (years)"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Length SDS"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_light</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">500</span>, <span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">age</span>, y <span class="op">=</span> <span class="va">hgt_z</span>, group <span class="op">=</span> <span class="va">id</span>, color <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html" class="external-link">scale_colour_viridis_d</a></span><span class="op">(</span>option <span class="op">=</span> <span class="st">"cividis"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">xlab</a></span><span class="op">(</span><span class="st">"Age (years)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ylab</a></span><span class="op">(</span><span class="st">"Length SDS"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html" class="external-link">theme_light</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mainfunctions_files/figure-html/plotsds-1.png" width="672"></p>
-<p>Figure 2 dispays the same data, but with the vertical axis changed to Standard Deviation Scores (SDS), or <span class="math inline">\(Z\)</span>-score. The <span class="math inline">\(Z\)</span>-score is the height corrected for age relative to the Dutch height reference from the Fourth Dutch Growth Study. The <span class="math inline">\(Z\)</span>-score transformation takes away the major time trend, so all curves are more or less flat. This allows us to see a more detailed assessment of individual growth.</p>
-<p>The plots also show how the measurements are clustered around ten ages: birth, 1, 2, 3, 6, 9, 12, 15, 18 and 24 months. While the design was followed rigorously in the study, some variation in timing is inevitable because of weekends, holidays, sickness, and other events. The timing variation poses a problem because we cannot directly compare the measurement between different children (especially for figure 1). Also, we cannot easily construct the “broad” matrix with 10 time point per child.</p>
-<p>Of course, we can divide the time axis into ten age groups, and treat all point within the same age group as being measured at the same point. This is probably a good strategy for nicely looking data - as we have here -, but this approach is problematic in data with irregular time intervals, of there are multiple measurement per age group, if the measurement schedules vary by child, or in data combined from studies that employed different designs.</p>
-<p>The <code>brokenstick</code> package contains tools to approximate the observed data by a series of connecting straight lines. When these lines closely follow the data, we may replace each trajectory by its values at the breakpoints. The statistical analysis can then be done on the regularised trajectories, which is easier than working with the observed data.</p>
+<p>Figure 2 dispays the same data, but with the vertical axis changed to
+Standard Deviation Scores (SDS), or <span class="math inline">\(Z\)</span>-score. The <span class="math inline">\(Z\)</span>-score is the height corrected for age
+relative to the Dutch height reference from the Fourth Dutch Growth
+Study. The <span class="math inline">\(Z\)</span>-score transformation
+takes away the major time trend, so all curves are more or less flat.
+This allows us to see a more detailed assessment of individual
+growth.</p>
+<p>The plots also show how the measurements are clustered around ten
+ages: birth, 1, 2, 3, 6, 9, 12, 15, 18 and 24 months. While the design
+was followed rigorously in the study, some variation in timing is
+inevitable because of weekends, holidays, sickness, and other events.
+The timing variation poses a problem because we cannot directly compare
+the measurement between different children (especially for figure 1).
+Also, we cannot easily construct the “broad” matrix with 10 time point
+per child.</p>
+<p>Of course, we can divide the time axis into ten age groups, and treat
+all point within the same age group as being measured at the same point.
+This is probably a good strategy for nicely looking data - as we have
+here -, but this approach is problematic in data with irregular time
+intervals, of there are multiple measurement per age group, if the
+measurement schedules vary by child, or in data combined from studies
+that employed different designs.</p>
+<p>The <code>brokenstick</code> package contains tools to approximate
+the observed data by a series of connecting straight lines. When these
+lines closely follow the data, we may replace each trajectory by its
+values at the breakpoints. The statistical analysis can then be done on
+the regularised trajectories, which is easier than working with the
+observed data.</p>
 </div>
 <div class="section level2">
 <h2 id="fit-broken-stick-model-with-one-line">Fit broken stick model with one line<a class="anchor" aria-label="anchor" href="#fit-broken-stick-model-with-one-line"></a>
 </h2>
-<p>We fit a trivial broken stick model with just one line anchored at the minimum and maximum age, and plot the trajectories of three selected children as follows:</p>
+<p>We fit a trivial broken stick model with just one line on ages
+between birth and two years, and plot the trajectories of three selected
+children as follows:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span>
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span><span class="op">)</span>
-<span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit</span>, group <span class="op">=</span> <span class="va">ids</span>, what <span class="op">=</span> <span class="st">"all"</span>,
-     xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (cm)"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span>, knots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">ids</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit</span>, group <span class="op">=</span> <span class="va">ids</span>, </span>
+<span>     xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (cm)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mainfunctions_files/figure-html/figure1-1.png" width="672"></p>
-<p>The following plot displays the same data, but in standardised units so as to increase the analytic resolution:</p>
+<p>The following plot displays the same data, but in standardised units
+so as to increase the analytic resolution:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit0</span>, group <span class="op">=</span> <span class="va">ids</span>, what <span class="op">=</span> <span class="st">"all"</span>, 
-     xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fit0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span>, knots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit0</span>, group <span class="op">=</span> <span class="va">ids</span>,</span>
+<span>     xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mainfunctions_files/figure-html/zscore-1.png" width="672"></p>
-<p>Note that both approximations are quite bad.</p>
+<p>Note that both approximations describe the individual trend in the
+data, but do not address any systematic deviations from the trend.</p>
 </div>
 <div class="section level2">
 <h2 id="fit-broken-stick-model-with-two-lines">Fit broken stick model with two lines<a class="anchor" aria-label="anchor" href="#fit-broken-stick-model-with-two-lines"></a>
 </h2>
-<p>The <em>broken stick model</em> describes a trajectory by a series of connected straight lines. We first calculate a model with two connected lines. The first line starts at birth and end at the age of exactly 1 years. The second line spans the period between 1 to 2 years. In addition, the lines must connect at the age of 1 year. We estimate and plot the model as follows:</p>
+<p>The <em>broken stick model</em> describes a trajectory by a series of
+connected straight lines. We first calculate a model with two connected
+lines. The first line starts at birth and end at the age of exactly 1
+years. The second line spans the period between 1 to 2 years. In
+addition, the lines must connect at the age of 1 year. We estimate and
+plot the model as follows:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">data</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span>, group <span class="op">=</span> <span class="va">ids</span>, xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">fit2</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">data</span>, knots <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">fit2</span>, group <span class="op">=</span> <span class="va">ids</span>, xlab <span class="op">=</span> <span class="st">"Age (years)"</span>, ylab <span class="op">=</span> <span class="st">"Length (SDS)"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="mainfunctions_files/figure-html/plotfit2-1.png" width="672"></p>
-<p>The <code>fit2</code> object holds the parameter estimates of the model:</p>
+<p>The plot shows that the two-line model is still fairly crude. The
+<code>fit2</code> object holds the parameter estimates of the model:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit2</span></code></pre></div>
-<pre><code><span class="co">## Class        brokenstick (kr)</span>
-<span class="co">## Variables    hgt_z (outcome), age (predictor), id (group)</span>
-<span class="co">## Knots        0 1 2 3 </span>
-<span class="co">## Mean resid   0.1821095 </span>
-<span class="co">## R-squared    0.8667319</span></code></pre>
-<p>The console output lists the knots of the model, including the left and right boundary knots at 0 and 3. The row of <code>means</code> correspond to the fixed effect estimates of the linear mixed model. We may interpret these as the global means. Next, the output lists the variance-covariance matrix of the random effects. The model contains 4 random effects (3 visits + 1 end knot). Finally, the residual variance is the model error at the subject level. These three set of parameters are enough to reconstruct the broken stick model.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Class        brokenstick (kr)</span></span>
+<span><span class="co">## Variables    hgt_z (outcome), age (predictor), id (group)</span></span>
+<span><span class="co">## Data         1942 (n), 36 (nmis), 200 (groups)</span></span>
+<span><span class="co">## Parameters   16 (total), 4 (fixed), 4 (variance), 6 (covariance), 2 (error)</span></span>
+<span><span class="co">## Knots        0 1 2 2.68 </span></span>
+<span><span class="co">## Means        -0.039 0.028 0.065 0.17 </span></span>
+<span><span class="co">## Residuals    0.113 0.146 0.168 0.195 0.383 (min, P25, P50, P75, max)</span></span>
+<span><span class="co">## Mean resid   0.179 </span></span>
+<span><span class="co">## R-squared    0.867 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Variance-covariance matrix</span></span>
+<span><span class="co">##             age_0  age_1  age_2 age_2.6776</span></span>
+<span><span class="co">## age_0       1.218                         </span></span>
+<span><span class="co">## age_1       0.481  0.823                  </span></span>
+<span><span class="co">## age_2       0.485  0.782  0.884           </span></span>
+<span><span class="co">## age_2.6776 -0.175 -0.013 -0.131      2.302</span></span></code></pre>
+<p>The console output lists the knots of the model, including the left
+and right boundary knots at 0 and 2.6776. The row of <code>means</code>
+correspond to the fixed effect estimates of the linear mixed model. We
+may interpret these as the global means. Next, the output lists the
+variance-covariance matrix of the random effects. The model contains 16
+parameters in total: four fixed effects (means), four random effects
+(diagonal elements), 6 covariance (off-diagonal elements) and 2 error
+variances (one for the residual error variance, one for the variability
+of the error per cluster). These parameters are enough to reconstruct
+the broken stick model, and to apply it to new data.</p>
 </div>
 <div class="section level2">
 <h2 id="extend-to-nine-lines">Extend to nine lines<a class="anchor" aria-label="anchor" href="#extend-to-nine-lines"></a>
 </h2>
-<p>The plot shows that the two-line model is still fairly crude. We refine the model in the first two years by adding a knot for each age at which a visit was scheduled. This model can be run as</p>
+<p>We refine the model in the first two years by adding a knot for each
+age at which a visit was scheduled. This model can be run as</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">4</span><span class="op">)</span>
-<span class="va">fit9</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">data</span>, 
-                    knots <span class="op">=</span> <span class="va">knots</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<p>This optimization problem is more difficult, so it takes longer to run. In addition, it is common that the optimization routines issue a number of warnings related to the number of random effects relative to the number of observations. While these may appear a little discomforting, we have found that the warnings are generally somewhat at the conservative side, so the parameter estimates are probably still OK.</p>
+<code class="sourceCode R"><span><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">fit9</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">data</span>, knots <span class="op">=</span> <span class="va">knots</span><span class="op">)</span></span></code></pre></div>
+<p>This optimization problem is more difficult, so it takes slightly
+longer to run. The results are</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit9</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Class        brokenstick (kr)</span></span>
+<span><span class="co">## Variables    hgt_z (outcome), age (predictor), id (group)</span></span>
+<span><span class="co">## Data         1942 (n), 36 (nmis), 200 (groups)</span></span>
+<span><span class="co">## Parameters   79 (total), 11 (fixed), 11 (variance), 55 (covariance), 2 (error)</span></span>
+<span><span class="co">## Knots        0 0.0833 0.167 0.25 0.5 0.75 1 1.25 1.5 2 2.68 </span></span>
+<span><span class="co">## Means        -0.186 0.022 0.003 0.066 0.063 -0.02 0.008 0.032 -0.027 0.115 -0.007 </span></span>
+<span><span class="co">## Residuals    0.0176 0.0268 0.0329 0.0494 4.52 (min, P25, P50, P75, max)</span></span>
+<span><span class="co">## Mean resid   0.0752 </span></span>
+<span><span class="co">## R-squared    0.983 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Variance-covariance matrix</span></span>
+<span><span class="co">##            age_0 age_0.0833 age_0.1667 age_0.25 age_0.5 age_0.75 age_1 age_1.25</span></span>
+<span><span class="co">## age_0       1.74                                                               </span></span>
+<span><span class="co">## age_0.0833 1.118      1.337                                                    </span></span>
+<span><span class="co">## age_0.1667 1.077      1.095      1.246                                         </span></span>
+<span><span class="co">## age_0.25     0.9      1.005      0.999    1.052                                </span></span>
+<span><span class="co">## age_0.5    0.627      0.821      0.822    0.815   0.943                        </span></span>
+<span><span class="co">## age_0.75   0.597      0.696      0.693    0.718   0.867    0.938               </span></span>
+<span><span class="co">## age_1      0.495      0.611      0.579    0.606   0.786    0.819 0.869         </span></span>
+<span><span class="co">## age_1.25   0.432      0.614      0.575    0.601   0.757    0.807 0.834    0.953</span></span>
+<span><span class="co">## age_1.5    0.455      0.614      0.624    0.604   0.808    0.824 0.836    0.914</span></span>
+<span><span class="co">## age_2      0.361      0.483      0.517    0.539    0.72    0.753 0.783    0.883</span></span>
+<span><span class="co">## age_2.6776 0.818      0.791      0.584    0.731   0.498    0.561  0.41    0.567</span></span>
+<span><span class="co">##            age_1.5 age_2 age_2.6776</span></span>
+<span><span class="co">## age_0                              </span></span>
+<span><span class="co">## age_0.0833                         </span></span>
+<span><span class="co">## age_0.1667                         </span></span>
+<span><span class="co">## age_0.25                           </span></span>
+<span><span class="co">## age_0.5                            </span></span>
+<span><span class="co">## age_0.75                           </span></span>
+<span><span class="co">## age_1                              </span></span>
+<span><span class="co">## age_1.25                           </span></span>
+<span><span class="co">## age_1.5      1.039                 </span></span>
+<span><span class="co">## age_2        0.919 1.058           </span></span>
+<span><span class="co">## age_2.6776   0.452 0.017      8.922</span></span></code></pre>
+<p>There nine-line model summarises the data by 79 parameters. This
+model fits substantially better. The model residuals are substantially
+smaller (0.075 instead of 0.179) and the proportions of explained
+variance is much higher (0.983 instead of 0.867).</p>
 <p><img src="mainfunctions_files/figure-html/plotfit9-1.png" width="672"></p>
-<p>The nine-line broken stick model fits the observed data very well.</p>
+<p>The figure shows that the nine-line broken stick model fits the
+observed data very well.</p>
 </div>
 <div class="section level2">
 <h2 id="obtain-predicted-values">Obtain predicted values<a class="anchor" aria-label="anchor" href="#obtain-predicted-values"></a>
 </h2>
-<p>The <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> function allows us to obtain various types of predictions from the broken stick model. The simplest call</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##       .pred</span>
-<span class="co">## 1 0.7183916</span>
-<span class="co">## 2 0.6590848</span>
-<span class="co">## 3 0.6036788</span>
-<span class="co">## 4 0.5344755</span>
-<span class="co">## 5 0.3544602</span>
-<span class="co">## 6 0.1745172</span></code></pre>
+<p>The <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> function allows us to obtain various types
+of predictions from the broken stick model. The simplest call</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] TRUE</span></code></pre>
-<p>produces a <code>tibble</code> with the one column called <code>.pred</code> for each row in <code>data</code>. We can bind column <code>.pred</code> to <code>data</code> for further processing.</p>
-<p>Sometimes, we also want the prediction at the knot values, for example, to create graphs that contain observed and modelled trajectories. We obtain predictions at the knots by the special <code>x = "knots"</code> argument, e.g.</p>
+<code class="sourceCode R"><span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   .pred</span></span>
+<span><span class="co">## 1 0.720</span></span>
+<span><span class="co">## 2 0.660</span></span>
+<span><span class="co">## 3 0.604</span></span>
+<span><span class="co">## 4 0.534</span></span>
+<span><span class="co">## 5 0.352</span></span>
+<span><span class="co">## 6 0.171</span></span></code></pre>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##   .source    id age  sex ga bw hgt hgt_z        .pred</span>
-<span class="co">## 1   added 10001   0 &lt;NA&gt; NA NA  NA    NA  0.718391617</span>
-<span class="co">## 2   added 10001   1 &lt;NA&gt; NA NA  NA    NA -0.003981157</span>
-<span class="co">## 3   added 10001   2 &lt;NA&gt; NA NA  NA    NA  0.042961066</span>
-<span class="co">## 4   added 10001   3 &lt;NA&gt; NA NA  NA    NA  0.478864260</span>
-<span class="co">## 5   added 10002   0 &lt;NA&gt; NA NA  NA    NA -0.230643864</span>
-<span class="co">## 6   added 10002   1 &lt;NA&gt; NA NA  NA    NA -0.381720863</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">p1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] TRUE</span></span></code></pre>
+<p>produces a <code>tibble</code> with the one column called
+<code>.pred</code> for each row in <code>data</code>. We can bind column
+<code>.pred</code> to <code>data</code> for further processing.</p>
+<p>Sometimes, we also want the prediction at the knot values, for
+example, to create graphs that contain observed and modelled
+trajectories. We obtain predictions at the knots by the special
+<code>x = "knots"</code> argument, e.g.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] 800</span></code></pre>
-<p>The output is more verbose and includes the grid of knots for each child (<code>id</code>, <code>age</code>). The column <code>.source</code> is equal to <code>added</code> as rows are added to the data.</p>
-<p>Note there are also knots at ages 0.00 and 3.00 years. These are boundary knots, and added by the <code><a href="../reference/brokenstick.html">brokenstick()</a></code> function. By default, the boundary knots span the age range in the data. The estimate for the knot at the maximum age has no useful interpretation, and should be ignored.</p>
-<p>If we wish to obtain estimates at both the knots and the observed data use:</p>
+<code class="sourceCode R"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   .source    id  age  sex ga bw hgt hgt_z    .pred</span></span>
+<span><span class="co">## 1   added 10001 0.00 &lt;NA&gt; NA NA  NA    NA  0.71989</span></span>
+<span><span class="co">## 2   added 10001 1.00 &lt;NA&gt; NA NA  NA    NA -0.00939</span></span>
+<span><span class="co">## 3   added 10001 2.00 &lt;NA&gt; NA NA  NA    NA  0.05785</span></span>
+<span><span class="co">## 4   added 10001 2.68 &lt;NA&gt; NA NA  NA    NA  0.05481</span></span>
+<span><span class="co">## 5   added 10002 0.00 &lt;NA&gt; NA NA  NA    NA -0.23264</span></span>
+<span><span class="co">## 6   added 10002 1.00 &lt;NA&gt; NA NA  NA    NA -0.37772</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">p3</span><span class="op">$</span><span class="va">.source</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## </span>
-<span class="co">## added  data </span>
-<span class="co">##   800  1942</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 800</span></span></code></pre>
+<p>The output is more verbose and includes the grid of knots for each
+child (<code>id</code>, <code>age</code>). The column
+<code>.source</code> is equal to <code>added</code> as rows are added to
+the data.</p>
+<p>Note there are also knots at ages 0.00 and 2.68 years. These are
+boundary knots, and added by the <code><a href="../reference/brokenstick.html">brokenstick()</a></code> function.
+The boundary knots effectively filter the observations that enter the
+calculations. By default, the boundary knots span the age range in the
+data. For technical reasons, the broken stick model also defines and
+estimates parameters for these knots, but these may in general be
+ignored, especially when the data near the boundary knots are
+sparse.</p>
+<p>If we wish to obtain estimates at both the knots and the observed
+data use:</p>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">p3</span><span class="op">$</span><span class="va">.source</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## added  data </span></span>
+<span><span class="co">##   800  1942</span></span></code></pre>
 <p>This return 1942 rows for the data and 800 rows for the knots.</p>
 </div>
 <div class="section level2">
 <h2 id="explained-variance">Explained variance<a class="anchor" aria-label="anchor" href="#explained-variance"></a>
 </h2>
-<p>The proportion of the variance of the outcome explained by the two-line model is</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_r2.html">get_r2</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] 0.8667319</span></code></pre>
-<p>For the second model we get</p>
+<p>The proportion of the variance of the outcome explained by the
+two-line model is</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="../reference/get_r2.html">get_r2</a></span><span class="op">(</span><span class="va">fit9</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] 0.9846596</span></code></pre>
-<p>so the nine-line broken stick model explains about 98 percent of the variance of the height SDS.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_r2.html">get_r2</a></span><span class="op">(</span><span class="va">fit2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0.867</span></span></code></pre>
+<p>For the second model we get</p>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/get_r2.html">get_r2</a></span><span class="op">(</span><span class="va">fit9</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 0.983</span></span></code></pre>
+<p>so the nine-line broken stick model explains about 98 percent of the
+variance of the height SDS.</p>
 </div>
 <div class="section level2">
 <h2 id="subject-level-analysis">Subject level analysis<a class="anchor" aria-label="anchor" href="#subject-level-analysis"></a>
 </h2>
-<p>Suppose we are interest in knowing the effect of sex, gestational age and birth weight on the height SDS at the age of 2 years. This is an analysis at the subject level. Let us first extract the subject-level data with variables that vary over subjects only.</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">subj</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">sex</span>, <span class="va">ga</span>, <span class="va">bw</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> 
-  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">subj</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 3 × 4</span></span>
-<span class="co">## <span style="color: #949494;"># Groups:   id [3]</span></span>
-<span class="co">##      id sex       ga    bw</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">10</span>001 female    40  <span style="text-decoration: underline;">3</span>960</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">10</span>002 male      38  <span style="text-decoration: underline;">3</span>210</span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">10</span>003 female    40  <span style="text-decoration: underline;">4</span>170</span></code></pre>
-<p>We also need the outcome variable. We take it from the broken stick estimates from the nine line solution and append it to the subject level data.</p>
+<p>Suppose we are interest in knowing the effect of sex, gestational age
+and birth weight on the height SDS at the age of 2 years. This is an
+analysis at the subject level. Let us first extract the subject-level
+data with variables that vary over subjects only.</p>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit9</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span>
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">subj</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bs</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## <span style="color: #949494;"># A tibble: 3 × 15</span></span>
-<span class="co">## <span style="color: #949494;"># Groups:   id [3]</span></span>
-<span class="co">##      id sex       ga    bw    `0` `0.0833` `0.1667` `0.25`  `0.5` `0.75`    `1`</span>
-<span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span>
-<span class="co">## <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">10</span>001 female    40  <span style="text-decoration: underline;">3</span>960  0.571    0.871    0.737  0.662  0.233 -<span style="color: #BB0000;">0.191</span>  0.130</span>
-<span class="co">## <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">10</span>002 male      38  <span style="text-decoration: underline;">3</span>210 -<span style="color: #BB0000;">0.182</span>   -<span style="color: #BB0000;">0.330</span>   -<span style="color: #BB0000;">0.254</span> -<span style="color: #BB0000;">0.320</span> -<span style="color: #BB0000;">0.216</span> -<span style="color: #BB0000;">0.279</span> -<span style="color: #BB0000;">0.341</span></span>
-<span class="co">## <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">10</span>003 female    40  <span style="text-decoration: underline;">4</span>170  1.16     2.12     1.98   2.03   2.04   1.83   1.33 </span>
-<span class="co">## <span style="color: #949494;"># … with 4 more variables: `1.25` &lt;dbl&gt;, `1.5` &lt;dbl&gt;, `2` &lt;dbl&gt;, `3` &lt;dbl&gt;</span></span></code></pre>
-<p>The names of the columns in <code>bs</code> correspond to the knot values.</p>
-<p>The effect of the subject’s sex, gestational age and birth weight on the height SDS at the age of 2 years (here denoted by the variable named <code>2</code>) can be estimated as</p>
+<code class="sourceCode R"><span><span class="va">subj</span> <span class="op">&lt;-</span> <span class="va">data</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">sex</span>, <span class="va">ga</span>, <span class="va">bw</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html" class="external-link">group_by</a></span><span class="op">(</span><span class="va">id</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">subj</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 4</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Groups:   id [3]</span></span></span>
+<span><span class="co">##      id sex       ga    bw</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">10</span>001 female    40  <span style="text-decoration: underline;">3</span>960</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">10</span>002 male      38  <span style="text-decoration: underline;">3</span>210</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">10</span>003 female    40  <span style="text-decoration: underline;">4</span>170</span></span></code></pre>
+<p>We also need the outcome variable. We take it from the broken stick
+estimates from the nine line solution and append it to the subject level
+data.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit1_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">`2`</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">ga</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">bw</span> <span class="op">/</span> <span class="fl">1000</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit1_lm</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## </span>
-<span class="co">## Call:</span>
-<span class="co">## lm(formula = `2` ~ sex + ga + I(bw/1000), data = data)</span>
-<span class="co">## </span>
-<span class="co">## Residuals:</span>
-<span class="co">##      Min       1Q   Median       3Q      Max </span>
-<span class="co">## -2.96585 -0.46305  0.06656  0.63552  2.05131 </span>
-<span class="co">## </span>
-<span class="co">## Coefficients:</span>
-<span class="co">##             Estimate Std. Error t value Pr(&gt;|t|)    </span>
-<span class="co">## (Intercept)  1.30186    1.48019   0.880  0.38020    </span>
-<span class="co">## sexmale      0.01451    0.12930   0.112  0.91078    </span>
-<span class="co">## ga          -0.07418    0.04359  -1.702  0.09038 .  </span>
-<span class="co">## I(bw/1000)   0.50933    0.14295   3.563  0.00046 ***</span>
-<span class="co">## ---</span>
-<span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class="co">## </span>
-<span class="co">## Residual standard error: 0.8849 on 196 degrees of freedom</span>
-<span class="co">## Multiple R-squared:  0.06722,    Adjusted R-squared:  0.05294 </span>
-<span class="co">## F-statistic: 4.708 on 3 and 196 DF,  p-value: 0.003386</span></code></pre>
-<p>Note that the analysis shows there is a substantial effect of birth weight. Of course, it might be that birth weight is directly related to height at the age of 2 years. Alternatively, the relation could be mediated by birth length. The following model adds birth length (the variable named <code>0</code>) to the model:</p>
+<code class="sourceCode R"><span><span class="va">bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit9</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">subj</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bs</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 15</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># Groups:   id [3]</span></span></span>
+<span><span class="co">##      id sex       ga    bw    `0` `0.0833` `0.1667` `0.25`  `0.5` `0.75`    `1`</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">10</span>001 female    40  <span style="text-decoration: underline;">3</span>960  0.569    0.865    0.735  0.657  0.232 -<span style="color: #BB0000;">0.172</span>  0.118</span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">10</span>002 male      38  <span style="text-decoration: underline;">3</span>210 -<span style="color: #BB0000;">0.184</span>   -<span style="color: #BB0000;">0.329</span>   -<span style="color: #BB0000;">0.252</span> -<span style="color: #BB0000;">0.319</span> -<span style="color: #BB0000;">0.218</span> -<span style="color: #BB0000;">0.281</span> -<span style="color: #BB0000;">0.344</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">10</span>003 female    40  <span style="text-decoration: underline;">4</span>170  1.17     2.11     1.97   2.04   2.03   1.81   1.32 </span></span>
+<span><span class="co">## <span style="color: #949494;"># … with 4 more variables: `1.25` &lt;dbl&gt;, `1.5` &lt;dbl&gt;, `2` &lt;dbl&gt;, `2.6776` &lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ Use `colnames()` to see all variable names</span></span></span></code></pre>
+<p>The names of the columns in <code>bs</code> correspond to the knot
+values.</p>
+<p>The effect of the subject’s sex, gestational age and birth weight on
+the height SDS at the age of 2 years (here denoted by the variable named
+<code>2</code>) can be estimated as</p>
 <div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">fit2_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">`2`</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">ga</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">bw</span> <span class="op">/</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">+</span> <span class="va">`0`</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit2_lm</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## </span>
-<span class="co">## Call:</span>
-<span class="co">## lm(formula = `2` ~ sex + ga + I(bw/1000) + `0`, data = data)</span>
-<span class="co">## </span>
-<span class="co">## Residuals:</span>
-<span class="co">##      Min       1Q   Median       3Q      Max </span>
-<span class="co">## -3.00784 -0.50862  0.05078  0.62563  1.89610 </span>
-<span class="co">## </span>
-<span class="co">## Coefficients:</span>
-<span class="co">##              Estimate Std. Error t value Pr(&gt;|t|)  </span>
-<span class="co">## (Intercept)  3.427186   1.673835   2.048   0.0419 *</span>
-<span class="co">## sexmale      0.003071   0.127536   0.024   0.9808  </span>
-<span class="co">## ga          -0.093100   0.043585  -2.136   0.0339 *</span>
-<span class="co">## I(bw/1000)   0.131026   0.202911   0.646   0.5192  </span>
-<span class="co">## `0`          0.236379   0.091229   2.591   0.0103 *</span>
-<span class="co">## ---</span>
-<span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span>
-<span class="co">## </span>
-<span class="co">## Residual standard error: 0.8723 on 195 degrees of freedom</span>
-<span class="co">## Multiple R-squared:  0.09826,    Adjusted R-squared:  0.07976 </span>
-<span class="co">## F-statistic: 5.312 on 4 and 195 DF,  p-value: 0.0004414</span></code></pre>
-<p>The effect of birth length on length at age 2 is very strong. There is no separate effect of birth weight anymore, so this analysis suggests that the relation between birth weight and length at age 2 can be explained by their mutual associations to birth length.</p>
+<code class="sourceCode R"><span><span class="va">fit1_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">`2`</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">ga</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">bw</span> <span class="op">/</span> <span class="fl">1000</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit1_lm</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Call:</span></span>
+<span><span class="co">## lm(formula = `2` ~ sex + ga + I(bw/1000), data = data)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Residuals:</span></span>
+<span><span class="co">##     Min      1Q  Median      3Q     Max </span></span>
+<span><span class="co">## -2.8965 -0.4525  0.0817  0.6424  2.0369 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Coefficients:</span></span>
+<span><span class="co">##             Estimate Std. Error t value Pr(&gt;|t|)    </span></span>
+<span><span class="co">## (Intercept)   1.0361     1.4705    0.70  0.48187    </span></span>
+<span><span class="co">## sexmale       0.0109     0.1285    0.08  0.93249    </span></span>
+<span><span class="co">## ga           -0.0700     0.0433   -1.62  0.10752    </span></span>
+<span><span class="co">## I(bw/1000)    0.5343     0.1420    3.76  0.00022 ***</span></span>
+<span><span class="co">## ---</span></span>
+<span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Residual standard error: 0.879 on 196 degrees of freedom</span></span>
+<span><span class="co">## Multiple R-squared:  0.0757, Adjusted R-squared:  0.0616 </span></span>
+<span><span class="co">## F-statistic: 5.35 on 3 and 196 DF,  p-value: 0.00145</span></span></code></pre>
+<p>Note that the analysis shows there is a substantial effect of birth
+weight. Of course, it might be that birth weight is directly related to
+height at the age of 2 years. Alternatively, the relation could be
+mediated by birth length. The following model adds birth length (the
+variable named <code>0</code>) to the model:</p>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">fit2_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">`2`</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">ga</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html" class="external-link">I</a></span><span class="op">(</span><span class="va">bw</span> <span class="op">/</span> <span class="fl">1000</span><span class="op">)</span> <span class="op">+</span> <span class="va">`0`</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">fit2_lm</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Call:</span></span>
+<span><span class="co">## lm(formula = `2` ~ sex + ga + I(bw/1000) + `0`, data = data)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Residuals:</span></span>
+<span><span class="co">##     Min      1Q  Median      3Q     Max </span></span>
+<span><span class="co">## -2.9375 -0.5326  0.0426  0.6292  1.8792 </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Coefficients:</span></span>
+<span><span class="co">##              Estimate Std. Error t value Pr(&gt;|t|)   </span></span>
+<span><span class="co">## (Intercept)  3.226719   1.662005    1.94   0.0536 . </span></span>
+<span><span class="co">## sexmale     -0.000703   0.126542   -0.01   0.9956   </span></span>
+<span><span class="co">## ga          -0.089472   0.043247   -2.07   0.0399 * </span></span>
+<span><span class="co">## I(bw/1000)   0.143924   0.201777    0.71   0.4765   </span></span>
+<span><span class="co">## `0`          0.245522   0.091492    2.68   0.0079 **</span></span>
+<span><span class="co">## ---</span></span>
+<span><span class="co">## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## Residual standard error: 0.865 on 195 degrees of freedom</span></span>
+<span><span class="co">## Multiple R-squared:  0.109,  Adjusted R-squared:  0.0904 </span></span>
+<span><span class="co">## F-statistic: 5.94 on 4 and 195 DF,  p-value: 0.000156</span></span></code></pre>
+<p>The effect of birth length on length at age 2 is very strong. There
+is no separate effect of birth weight anymore, so this analysis suggests
+that the relation between birth weight and length at age 2 can be
+explained by their mutual associations to birth length.</p>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
 </h2>
-<p>This vignette illustrated the use of the <code><a href="../reference/brokenstick.html">brokenstick()</a></code>, <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> and <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> functions. Other vignettes highlight various other capabilities of the package.</p>
+<p>This vignette illustrated the use of the <code><a href="../reference/brokenstick.html">brokenstick()</a></code>,
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> and <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> functions. Other
+vignettes highlight various other capabilities of the package.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -337,7 +482,7 @@ img {
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>

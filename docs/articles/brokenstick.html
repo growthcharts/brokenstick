@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Getting started</h1>
             
       
@@ -89,7 +89,9 @@
 <div class="section level2">
 <h2 id="what-is-the-broken-stick-model">What is the broken stick model?<a class="anchor" aria-label="anchor" href="#what-is-the-broken-stick-model"></a>
 </h2>
-<p>The <em>broken stick model</em> describes a set of individual curves by a linear mixed model using second-order linear B-splines. The model can be used to</p>
+<p>The <em>broken stick model</em> describes a set of individual curves
+by a linear mixed model using second-order linear B-splines. The model
+can be used to</p>
 <ul>
 <li>smooth growth curves by a series of connected straight lines;</li>
 <li>align irregularly observed curves to a common age grid;</li>
@@ -97,7 +99,10 @@
 <li>estimate the time-to-time correlation matrix;</li>
 <li>predict future observations.</li>
 </ul>
-<p>The user specifies a set of break ages at which the straight lines connect. Each individual obtains an estimate at each break age, so the set of estimates of the individual form a smoothed version of the observed trajectory.</p>
+<p>The user specifies a set of break ages at which the straight lines
+connect. Each individual obtains an estimate at each break age, so the
+set of estimates of the individual form a smoothed version of the
+observed trajectory.</p>
 </div>
 <div class="section level2">
 <h2 id="what-are-the-main-model-assumptions">What are the main model assumptions?<a class="anchor" aria-label="anchor" href="#what-are-the-main-model-assumptions"></a>
@@ -105,9 +110,13 @@
 <p>The main assumptions of the broken stick model are:</p>
 <ul>
 <li>The development between the break ages follows a straight line;</li>
-<li>Broken stick estimates follow a common multivariate normal distribution;</li>
+<li>Broken stick estimates follow a common multivariate normal
+distribution;</li>
 </ul>
-<p>In order to conform to the assumption of multivariate normality, the user may fit the broken stick model on suitably transformed data that yield the standard normal (<span class="math inline">\(Z\)</span>) scale.</p>
+<p>In order to conform to the assumption of multivariate normality, the
+user may fit the broken stick model on suitably transformed data that
+yield the standard normal (<span class="math inline">\(Z\)</span>)
+scale.</p>
 </div>
 <div class="section level2">
 <h2 id="why-should-i-want-to-use-the-broken-stick-model">Why should I want to use the broken stick model?<a class="anchor" aria-label="anchor" href="#why-should-i-want-to-use-the-broken-stick-model"></a>
@@ -115,22 +124,32 @@
 <p>Three unique features of the broken stick model are:</p>
 <ul>
 <li>
-<em>Modular</em>: Issues related to nonlinearities of the growth curves in the observed scale can be treated separately, i.e., outside the broken stick model;</li>
+<em>Modular</em>: Issues related to nonlinearities of the growth
+curves in the observed scale can be treated separately, i.e., outside
+the broken stick model;</li>
 <li>
-<em>Local</em>: A given data point will contribute only to the estimates corresponding to the closest break ages;</li>
+<em>Local</em>: A given data point will contribute only to the
+estimates corresponding to the closest break ages;</li>
 <li>
-<em>Exportable</em>: The broken stick model can be exported and reused for prediction for new data in alternative computing environments.</li>
+<em>Exportable</em>: The broken stick model can be exported and
+reused for prediction for new data in alternative computing
+environments.</li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="what-is-in-the-package">What is in the package?<a class="anchor" aria-label="anchor" href="#what-is-in-the-package"></a>
 </h2>
-<p>The <code>brokenstick</code> package contains functions to fit, predict and plot data. See the <a href="https://growthcharts.org/brokenstick/reference/index.html">reference page</a> for an overview.</p>
+<p>The <code>brokenstick</code> package contains functions to fit,
+predict and plot data. See the <a href="https://growthcharts.org/brokenstick/reference/index.html">reference
+page</a> for an overview.</p>
 </div>
 <div class="section level2">
 <h2 id="acknowledgement">Acknowledgement<a class="anchor" aria-label="anchor" href="#acknowledgement"></a>
 </h2>
-<p>Development of the <code>brokenstick</code> package was kindly supported by the <em>Healthy Birth Growth and Development knowledge integration</em> (HBGDki) program of the Bill &amp; Melinda Gates Foundation.</p>
+<p>Development of the <code>brokenstick</code> package was kindly
+supported by the <em>Healthy Birth Growth and Development knowledge
+integration</em> (HBGDki) program of the Bill &amp; Melinda Gates
+Foundation.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
@@ -145,7 +164,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>

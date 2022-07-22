@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -76,7 +76,7 @@
 
 
 <div class="row">
-  <main id="main"><div class="page-header">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="" class="logo" alt=""><h1>Check perfect model</h1>
             
       
@@ -89,158 +89,173 @@
 <div class="section level2">
 <h2 id="objective">Objective<a class="anchor" aria-label="anchor" href="#objective"></a>
 </h2>
-<p>In general, the broken stick model smoothes the observed growth trajectory. What happens of all observations are already aligned to the break ages? Does the model perfectly represent the data? Is the covariance matrix of the random effects (<span class="math inline">\(\Omega)\)</span> equal to the covariance between the measurements? Is <span class="math inline">\(\sigma^2\)</span> equal to zero?</p>
+<p>In general, the broken stick model smoothes the observed growth
+trajectory. What happens of all observations are already aligned to the
+break ages? Does the model perfectly represent the data? Is the
+covariance matrix of the random effects (<span class="math inline">\(\Omega)\)</span> equal to the covariance between
+the measurements? Is <span class="math inline">\(\sigma^2\)</span> equal
+to zero?</p>
 </div>
 <div class="section level2">
 <h2 id="data-generation">Data generation<a class="anchor" aria-label="anchor" href="#data-generation"></a>
 </h2>
-<p>We adapt code from <a href="http://www.davekleinschmidt.com/sst-mixed-effects-simulation/simulations_slides.pdf" class="external-link uri">http://www.davekleinschmidt.com/sst-mixed-effects-simulation/simulations_slides.pdf</a> to generate test data:</p>
+<p>We adapt code from <a href="http://www.davekleinschmidt.com/sst-mixed-effects-simulation/simulations_slides.pdf" class="external-link uri">http://www.davekleinschmidt.com/sst-mixed-effects-simulation/simulations_slides.pdf</a>
+to generate test data:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="http://had.co.nz/plyr" class="external-link">"plyr"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="http://mvtnorm.R-forge.R-project.org" class="external-link">"mvtnorm"</a></span><span class="op">)</span>
-<span class="va">make_data_generator</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">resid_var</span> <span class="op">=</span> <span class="fl">1</span>,
-                                <span class="va">ranef_covar</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">100</span>
-                                <span class="op">)</span> <span class="op">{</span>
-  <span class="va">ni</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ranef_covar</span><span class="op">)</span>
-  <span class="va">generate_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span>
-    <span class="co"># sample data set under mixed effects model with random slope/intercepts </span>
-    <span class="va">simulated_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/plyr/man/rdply.html" class="external-link">rdply</a></span><span class="op">(</span><span class="va">n</span>, <span class="op">{</span>
-      <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/mvtnorm/man/Mvnorm.html" class="external-link">rmvnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, sigma <span class="op">=</span> <span class="va">ranef_covar</span><span class="op">)</span><span class="op">)</span>
-      <span class="va">epsilon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">resid_var</span><span class="op">)</span><span class="op">)</span>
-      <span class="va">b</span> <span class="op">+</span> <span class="va">epsilon</span>
-    <span class="op">}</span><span class="op">)</span>
-  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
-    subject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span>, each <span class="op">=</span> <span class="va">ni</span><span class="op">)</span>,
-    age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">ni</span>, <span class="va">n</span><span class="op">)</span>,
-    <span class="va">simulated_data</span><span class="op">)</span>
-  <span class="op">}</span>
-<span class="op">}</span></code></pre></div>
-<p>Let us first model the perfect situation where <span class="math inline">\(\sigma^2 = 0\)</span> (so we set <code>resid_var</code> to zero) and where the ages align perfectly.</p>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="http://had.co.nz/plyr" class="external-link">"plyr"</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="http://mvtnorm.R-forge.R-project.org" class="external-link">"mvtnorm"</a></span><span class="op">)</span></span>
+<span><span class="va">make_data_generator</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">resid_var</span> <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                                <span class="va">ranef_covar</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">100</span></span>
+<span>                                <span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ni</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">ranef_covar</span><span class="op">)</span></span>
+<span>  <span class="va">generate_data</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="co"># sample data set under mixed effects model with random slope/intercepts </span></span>
+<span>    <span class="va">simulated_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/plyr/man/rdply.html" class="external-link">rdply</a></span><span class="op">(</span><span class="va">n</span>, <span class="op">{</span></span>
+<span>      <span class="va">b</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/mvtnorm/man/Mvnorm.html" class="external-link">rmvnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span>, sigma <span class="op">=</span> <span class="va">ranef_covar</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="va">epsilon</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">b</span><span class="op">)</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">resid_var</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="va">b</span> <span class="op">+</span> <span class="va">epsilon</span></span>
+<span>    <span class="op">}</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>    subject <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n</span>, each <span class="op">=</span> <span class="va">ni</span><span class="op">)</span>,</span>
+<span>    age <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">ni</span>, <span class="va">n</span><span class="op">)</span>,</span>
+<span>    <span class="va">simulated_data</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<p>Let us first model the perfect situation where <span class="math inline">\(\sigma^2 = 0\)</span> (so we set
+<code>resid_var</code> to zero) and where the ages align perfectly.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">77711</span><span class="op">)</span>
-<span class="va">covar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>,
-                  <span class="fl">0.7</span>, <span class="fl">1</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>,
-                  <span class="fl">0.5</span>, <span class="fl">0.8</span>, <span class="fl">1</span>, <span class="fl">0.6</span>,
-                  <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
-<span class="va">gen_dat</span> <span class="op">&lt;-</span> <span class="fu">make_data_generator</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10000</span>, 
-                               ranef_covar <span class="op">=</span> <span class="va">covar</span>,
-                               resid_var <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
-<span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">gen_dat</span><span class="op">(</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##   subject age .n          X1</span>
-<span class="co">## 1       1   1  1 -0.95843228</span>
-<span class="co">## 2       1   2  1 -2.28067938</span>
-<span class="co">## 3       1   3  1 -2.71322094</span>
-<span class="co">## 4       1   4  1 -2.67658325</span>
-<span class="co">## 5       2   1  2  0.01657697</span>
-<span class="co">## 6       2   2  2 -1.51680763</span></code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">77711</span><span class="op">)</span></span>
+<span><span class="va">covar</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.7</span>, <span class="fl">0.5</span>, <span class="fl">0.3</span>,</span>
+<span>                  <span class="fl">0.7</span>, <span class="fl">1</span>, <span class="fl">0.8</span>, <span class="fl">0.5</span>,</span>
+<span>                  <span class="fl">0.5</span>, <span class="fl">0.8</span>, <span class="fl">1</span>, <span class="fl">0.6</span>,</span>
+<span>                  <span class="fl">0.3</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">1</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">gen_dat</span> <span class="op">&lt;-</span> <span class="fu">make_data_generator</span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10000</span>, </span>
+<span>                               ranef_covar <span class="op">=</span> <span class="va">covar</span>,</span>
+<span>                               resid_var <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">gen_dat</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   subject age .n          X1</span></span>
+<span><span class="co">## 1       1   1  1 -0.95843228</span></span>
+<span><span class="co">## 2       1   2  1 -2.28067938</span></span>
+<span><span class="co">## 3       1   3  1 -2.71322094</span></span>
+<span><span class="co">## 4       1   4  1 -2.67658325</span></span>
+<span><span class="co">## 5       2   1  2  0.01657697</span></span>
+<span><span class="co">## 6       2   2  2 -1.51680763</span></span></code></pre>
 <p>Check the correlation matrix of the <span class="math inline">\(y\)</span>’s.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://tidyr.tidyverse.org" class="external-link">"tidyr"</a></span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org" class="external-link">"dplyr"</a></span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## </span>
-<span class="co">## Attaching package: 'dplyr'</span></code></pre>
-<pre><code><span class="co">## The following objects are masked from 'package:plyr':</span>
-<span class="co">## </span>
-<span class="co">##     arrange, count, desc, failwith, id, mutate, rename, summarise,</span>
-<span class="co">##     summarize</span></code></pre>
-<pre><code><span class="co">## The following objects are masked from 'package:stats':</span>
-<span class="co">## </span>
-<span class="co">##     filter, lag</span></code></pre>
-<pre><code><span class="co">## The following objects are masked from 'package:base':</span>
-<span class="co">## </span>
-<span class="co">##     intersect, setdiff, setequal, union</span></code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://tidyr.tidyverse.org" class="external-link">"tidyr"</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org" class="external-link">"dplyr"</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## Attaching package: 'dplyr'</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:plyr':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     arrange, count, desc, failwith, id, mutate, rename, summarise,</span></span>
+<span><span class="co">##     summarize</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:stats':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     filter, lag</span></span></code></pre>
+<pre><code><span><span class="co">## The following objects are masked from 'package:base':</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##     intersect, setdiff, setequal, union</span></span></code></pre>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span>
-<span class="va">broad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html" class="external-link">spread</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">subject</span>, <span class="va">X1</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>,<span class="op">]</span>
-<span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##           [,1]      [,2]      [,3]      [,4]</span>
-<span class="co">## [1,] 1.0000000 0.2322704 0.1683649 0.1150505</span>
-<span class="co">## [2,] 0.2322704 1.0000000 0.2701451 0.1605367</span>
-<span class="co">## [3,] 0.1683649 0.2701451 1.0000000 0.2187383</span>
-<span class="co">## [4,] 0.1150505 0.1605367 0.2187383 1.0000000</span></code></pre>
+<code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">broad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html" class="external-link">spread</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">subject</span>, <span class="va">X1</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>,<span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##           [,1]      [,2]      [,3]      [,4]</span></span>
+<span><span class="co">## [1,] 1.0000000 0.2322704 0.1683649 0.1150505</span></span>
+<span><span class="co">## [2,] 0.2322704 1.0000000 0.2701451 0.1605367</span></span>
+<span><span class="co">## [3,] 0.1683649 0.2701451 1.0000000 0.2187383</span></span>
+<span><span class="co">## [4,] 0.1150505 0.1605367 0.2187383 1.0000000</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="fit-model">Fit model<a class="anchor" aria-label="anchor" href="#fit-model"></a>
 </h2>
-<p>Fit broken stick model, with knots specified at ages <code>1:4</code>.</p>
+<p>Fit broken stick model, with knots specified at ages
+<code>1:4</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/growthcharts/brokenstick" class="external-link">"brokenstick"</a></span><span class="op">)</span>
-<span class="va">knots</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>
-<span class="va">boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span>
-<span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">X1</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">subject</span>, <span class="va">data</span>, 
-                   knots <span class="op">=</span> <span class="va">knots</span>, boundary <span class="op">=</span> <span class="va">boundary</span>,
-                   method <span class="op">=</span> <span class="st">"lmer"</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## Warning: number of observations (=40000) &lt;= number of random effects (=40000)</span>
-<span class="co">## for term (0 + age_1 + age_2 + age_3 + age_4 | subject); the random-effects</span>
-<span class="co">## parameters and the residual variance (or scale parameter) are probably</span>
-<span class="co">## unidentifiable</span></code></pre>
-<pre><code><span class="co">## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :</span>
-<span class="co">## Model failed to converge with max|grad| = 0.0025362 (tol = 0.002, component 1)</span></code></pre>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">omega</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">omega</span>
-<span class="va">beta</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">beta</span>
-<span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">sigma2</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">beta</span>, <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## age_1 age_2 age_3 age_4 </span>
-<span class="co">## -0.03 -0.03  0.02  0.01</span></code></pre>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sigma2</span>, <span class="fl">4</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">## [1] 1.3392</span></code></pre>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># correlation random effects</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">covar</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##      [,1] [,2] [,3] [,4]</span>
-<span class="co">## [1,]  1.0  0.7  0.5  0.3</span>
-<span class="co">## [2,]  0.7  1.0  0.8  0.5</span>
-<span class="co">## [3,]  0.5  0.8  1.0  0.6</span>
-<span class="co">## [4,]  0.3  0.5  0.6  1.0</span></code></pre>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">omega</span>, <span class="fl">2</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##       age_1 age_2 age_3 age_4</span>
-<span class="co">## age_1  1.72  0.70  0.51  0.35</span>
-<span class="co">## age_2  0.70  1.62  0.81  0.48</span>
-<span class="co">## age_3  0.51  0.81  1.70  0.66</span>
-<span class="co">## age_4  0.35  0.48  0.66  1.65</span></code></pre>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># covariances measured data</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">omega</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">sigma2</span>, <span class="fl">4</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##       age_1 age_2 age_3 age_4</span>
-<span class="co">## age_1 3.057 0.699 0.513 0.348</span>
-<span class="co">## age_2 0.699 2.959 0.810 0.477</span>
-<span class="co">## age_3 0.513 0.810 3.040 0.659</span>
-<span class="co">## age_4 0.348 0.477 0.659 2.988</span></code></pre>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
-<span class="co">## [1,] 3.057 0.699 0.513 0.348</span>
-<span class="co">## [2,] 0.699 2.959 0.810 0.477</span>
-<span class="co">## [3,] 0.513 0.810 3.040 0.659</span>
-<span class="co">## [4,] 0.348 0.477 0.659 2.988</span></code></pre>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># convert to time-to-time correlation matrix</span>
-<span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov2cor</a></span><span class="op">(</span><span class="va">omega</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">sigma2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##       age_1 age_2 age_3 age_4</span>
-<span class="co">## age_1 1.000 0.232 0.168 0.115</span>
-<span class="co">## age_2 0.232 1.000 0.270 0.161</span>
-<span class="co">## age_3 0.168 0.270 1.000 0.219</span>
-<span class="co">## age_4 0.115 0.161 0.219 1.000</span></code></pre>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></code></pre></div>
-<pre><code><span class="co">##       [,1]  [,2]  [,3]  [,4]</span>
-<span class="co">## [1,] 1.000 0.232 0.168 0.115</span>
-<span class="co">## [2,] 0.232 1.000 0.270 0.161</span>
-<span class="co">## [3,] 0.168 0.270 1.000 0.219</span>
-<span class="co">## [4,] 0.115 0.161 0.219 1.000</span></code></pre>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://github.com/growthcharts/brokenstick" class="external-link">"brokenstick"</a></span><span class="op">)</span></span>
+<span><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span></span>
+<span><span class="va">boundary</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span><span class="op">)</span></span>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">X1</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">subject</span>, <span class="va">data</span>, </span>
+<span>                   knots <span class="op">=</span> <span class="va">knots</span>, boundary <span class="op">=</span> <span class="va">boundary</span>,</span>
+<span>                   method <span class="op">=</span> <span class="st">"lmer"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: number of observations (=40000) &lt;= number of random effects (=40000)</span></span>
+<span><span class="co">## for term (0 + age_1 + age_2 + age_3 + age_4 | subject); the random-effects</span></span>
+<span><span class="co">## parameters and the residual variance (or scale parameter) are probably</span></span>
+<span><span class="co">## unidentifiable</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :</span></span>
+<span><span class="co">## unable to evaluate scaled gradient</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :</span></span>
+<span><span class="co">## Model failed to converge: degenerate Hessian with 1 negative eigenvalues</span></span></code></pre>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">omega</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">omega</span></span>
+<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">beta</span></span>
+<span><span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">sigma2</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">beta</span>, <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## age_1 age_2 age_3 age_4 </span></span>
+<span><span class="co">## -0.03 -0.03  0.02  0.01</span></span></code></pre>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sigma2</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] 1.3392</span></span></code></pre>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># correlation random effects</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">covar</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##      [,1] [,2] [,3] [,4]</span></span>
+<span><span class="co">## [1,]  1.0  0.7  0.5  0.3</span></span>
+<span><span class="co">## [2,]  0.7  1.0  0.8  0.5</span></span>
+<span><span class="co">## [3,]  0.5  0.8  1.0  0.6</span></span>
+<span><span class="co">## [4,]  0.3  0.5  0.6  1.0</span></span></code></pre>
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">omega</span>, <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##       age_1 age_2 age_3 age_4</span></span>
+<span><span class="co">## age_1  1.72  0.70  0.51  0.35</span></span>
+<span><span class="co">## age_2  0.70  1.62  0.81  0.48</span></span>
+<span><span class="co">## age_3  0.51  0.81  1.70  0.66</span></span>
+<span><span class="co">## age_4  0.35  0.48  0.66  1.65</span></span></code></pre>
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># covariances measured data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">omega</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">sigma2</span>, <span class="fl">4</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##       age_1 age_2 age_3 age_4</span></span>
+<span><span class="co">## age_1 3.057 0.699 0.513 0.348</span></span>
+<span><span class="co">## age_2 0.699 2.959 0.810 0.477</span></span>
+<span><span class="co">## age_3 0.513 0.810 3.040 0.659</span></span>
+<span><span class="co">## age_4 0.348 0.477 0.659 2.988</span></span></code></pre>
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##       [,1]  [,2]  [,3]  [,4]</span></span>
+<span><span class="co">## [1,] 3.057 0.699 0.513 0.348</span></span>
+<span><span class="co">## [2,] 0.699 2.959 0.810 0.477</span></span>
+<span><span class="co">## [3,] 0.513 0.810 3.040 0.659</span></span>
+<span><span class="co">## [4,] 0.348 0.477 0.659 2.988</span></span></code></pre>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># convert to time-to-time correlation matrix</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov2cor</a></span><span class="op">(</span><span class="va">omega</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">sigma2</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##       age_1 age_2 age_3 age_4</span></span>
+<span><span class="co">## age_1 1.000 0.232 0.168 0.115</span></span>
+<span><span class="co">## age_2 0.232 1.000 0.270 0.161</span></span>
+<span><span class="co">## age_3 0.168 0.270 1.000 0.219</span></span>
+<span><span class="co">## age_4 0.115 0.161 0.219 1.000</span></span></code></pre>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##       [,1]  [,2]  [,3]  [,4]</span></span>
+<span><span class="co">## [1,] 1.000 0.232 0.168 0.115</span></span>
+<span><span class="co">## [2,] 0.232 1.000 0.270 0.161</span></span>
+<span><span class="co">## [3,] 0.168 0.270 1.000 0.219</span></span>
+<span><span class="co">## [4,] 0.115 0.161 0.219 1.000</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="conclusions">Conclusions<a class="anchor" aria-label="anchor" href="#conclusions"></a>
 </h2>
 <ol style="list-style-type: decimal">
-<li>If <span class="math inline">\(\sigma^2=0\)</span>, then the off-diagonal elements of <span class="math inline">\(\Omega\)</span> reproduce the correlations among the <span class="math inline">\(y\)</span>’s. The estimate of <span class="math inline">\(\sigma^2\)</span> is too high (about 0.13 instead of 0).</li>
-<li>If <span class="math inline">\(\sigma^2 &gt; 0\)</span>, then <span class="math inline">\(\hat C = \Omega + \hat\sigma^2 I(n_i)\)</span> reproduces the sample covariance matrix between <span class="math inline">\(y\)</span>’s exactly.</li>
+<li>If <span class="math inline">\(\sigma^2=0\)</span>, then the
+off-diagonal elements of <span class="math inline">\(\Omega\)</span>
+reproduce the correlations among the <span class="math inline">\(y\)</span>’s. The estimate of <span class="math inline">\(\sigma^2\)</span> is too high (about 0.13 instead
+of 0).</li>
+<li>If <span class="math inline">\(\sigma^2 &gt; 0\)</span>, then <span class="math inline">\(\hat C = \Omega + \hat\sigma^2 I(n_i)\)</span>
+reproduces the sample covariance matrix between <span class="math inline">\(y\)</span>’s exactly.</li>
 <li>
-<code>cov2cor(hatC)</code> reproduces the sample time-to-time correlation matrix.</li>
+<code>cov2cor(hatC)</code> reproduces the sample time-to-time
+correlation matrix.</li>
 </ol>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -256,7 +271,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>
