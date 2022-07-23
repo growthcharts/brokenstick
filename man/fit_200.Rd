@@ -18,7 +18,7 @@ The dataset was constructed as
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 fit_200 <- brokenstick(hgt_z ~ age | id, data = smocc_200,
-                       knots = knots, boundary = c(0, 3), seed = 1)
+                       knots = knots, seed = 1)
 }\if{html}{\out{</div>}}
 }
 \keyword{datasets}

@@ -1,3 +1,5 @@
+- Updates objects `fit_200` and `fit_200_light` to use automatic boundary (2.68y) instead of 3 yrs
+
 # brokenstick 2.1.1
 
 - Changes the default number of knots in `brokenstick()` to 5 by setting `k = 5`. The old setting (`k = NULL`) produced a solution without internal knots. The setting produces a more informative starting model in cases where the user does not specify the knots, or the number of knots.
