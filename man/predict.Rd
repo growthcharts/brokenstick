@@ -103,7 +103,6 @@ made.
 }
 }
 \examples{
-\dontrun{
 library("dplyr")
 
 # -- Data
@@ -125,6 +124,7 @@ fit_light <- brokenstick(hgt_z ~ age | id,
 pred <- predict(fit)
 identical(nrow(train), nrow(pred))
 
+\dontrun{
 # Predict without newdata, not possible for light object
 predict(fit_light)
 
@@ -154,6 +154,8 @@ head(z, 3)
 z <- predict(fit, test, x = c(0.5, 1, 1.5), shape = "wide")
 head(z, 3)
 
+# Case 1: x, not possible for light object
+z <- predict(fit_light, x = "knots")
 
 # -- Case 2: x, y, -group
 
@@ -169,8 +171,10 @@ predict(fit_light, x = "knots", y = c(1, 1, 0.5, 0), shape = "wide")
 # Case 3: Predict at observed age for subset of groups, training sample
 pred <- predict(fit, group = c(10001, 10005, 10022))
 head(pred, 3)
+
 # Case 3: Of course, we cannot do this for light objects
 pred_light <- predict(fit_light, group = c(10001, 10005, 10022))
+
 # Case 3: We can use another sample. Note there is no child 999
 pred <- predict(fit, test, group = c(11045, 11120, 999))
 tail(pred, 3)

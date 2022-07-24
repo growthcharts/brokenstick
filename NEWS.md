@@ -1,3 +1,4 @@
+- Expression `predict(fit_light, x = "knots")` now produced the correct error message
 - Updates objects `fit_200` and `fit_200_light` to use automatic boundary (2.68y) instead of 3 yrs
 
 # brokenstick 2.1.1

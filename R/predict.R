@@ -85,7 +85,6 @@
 #' If `shape == "vector"` a vector of predicted values, of all x-values and groups.
 #'
 #' @examples
-#' \dontrun{
 #' library("dplyr")
 #'
 #' # -- Data
@@ -107,6 +106,7 @@
 #' pred <- predict(fit)
 #' identical(nrow(train), nrow(pred))
 #'
+#' \dontrun{
 #' # Predict without newdata, not possible for light object
 #' predict(fit_light)
 #'
@@ -136,6 +136,8 @@
 #' z <- predict(fit, test, x = c(0.5, 1, 1.5), shape = "wide")
 #' head(z, 3)
 #'
+#' # Case 1: x, not possible for light object
+#' z <- predict(fit_light, x = "knots")
 #'
 #' # -- Case 2: x, y, -group
 #'
@@ -151,8 +153,10 @@
 #' # Case 3: Predict at observed age for subset of groups, training sample
 #' pred <- predict(fit, group = c(10001, 10005, 10022))
 #' head(pred, 3)
+#'
 #' # Case 3: Of course, we cannot do this for light objects
 #' pred_light <- predict(fit_light, group = c(10001, 10005, 10022))
+#'
 #' # Case 3: We can use another sample. Note there is no child 999
 #' pred <- predict(fit, test, group = c(11045, 11120, 999))
 #' tail(pred, 3)
@@ -243,16 +247,21 @@ predict.brokenstick <- function(object, newdata = NULL,
     }
   }
 
+  # check for light object
+  if ((is.null(x) && is.null(y) && is.null(group)) ||
+      is.null(x) && !is.null(y) ||
+      !is.null(x) && is.null(y)) {
+    if (is.null(newdata) && object$light) {
+      stop("Argument 'newdata' is required for a light brokenstick object.", call. = FALSE)
+    }
+  }
+
   # Default case: return prediction for every row in newdata
   # if:
   # 1. the user did not specify y, x and group
   # 2. or, the user specified y but not x
   # Note: Sets NULL newdata to internal data in object for non-light object
-  if ((is.null(x) && is.null(y) && is.null(group)) ||
-    is.null(x) && !is.null(y)) {
-    if (is.null(newdata) && object$light) {
-      stop("Argument 'newdata' is required for a light brokenstick object.", call. = FALSE)
-    }
+  if ((is.null(x) && is.null(y) && is.null(group)) || is.null(x) && !is.null(y)) {
     if (is.null(newdata) && !object$light) {
       # use internal data
       newdata <- object$data
@@ -294,11 +303,11 @@ predict.brokenstick <- function(object, newdata = NULL,
     }
     if (shape == "wide") {
       return(bind_cols(newdata, p) %>%
-        pivot_wider(
-          id_cols = object$names$g,
-          names_from = object$names$x,
-          values_from = ".pred"
-        ))
+               pivot_wider(
+                 id_cols = object$names$g,
+                 names_from = object$names$x,
+                 values_from = ".pred"
+               ))
     }
   }
 
@@ -315,9 +324,9 @@ predict.brokenstick <- function(object, newdata = NULL,
   }
   if (shape == "wide") {
     return(pivot_wider(ret,
-      id_cols = object$names$g,
-      names_from = object$names$x,
-      values_from = ".pred"
+                       id_cols = object$names$g,
+                       names_from = object$names$x,
+                       values_from = ".pred"
     ))
   }
   stop("Internal error")
@@ -359,10 +368,10 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
   y_s <- split(y, f = g)
 
   blup <- mapply(EB,
-    y = y_s,
-    X = X_s,
-    MoreArgs = list(model = object),
-    SIMPLIFY = TRUE
+                 y = y_s,
+                 X = X_s,
+                 MoreArgs = list(model = object),
+                 SIMPLIFY = TRUE
   )
   if (!length(blup)) {
     return(data.frame(.pred = rep(NA_real_, length(x))))
