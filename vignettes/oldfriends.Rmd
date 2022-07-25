@@ -112,7 +112,7 @@ fit1 <- brokenstick(hgt_z ~ age | id, data)
 
 Predict model, version `0.75.0` - `1.1.1`:
 
-```{r predict-v1}
+```{r predict-v1, eval = FALSE}
 # predict at observed data
 p1 <- predict(fit1, data)
 
@@ -133,10 +133,10 @@ Predict model, version `2.0.0`:
 p1 <- predict(fit1)
 
 # predict at knots
-p2 <- predict(fit1, x = "knots")
+p2 <- predict(fit1, x = "knots", include_data = FALSE)
 
 # predict at both observed data and knots
-p3 <- predict(fit1, x = "knots", strip_data = FALSE)
+p3 <- predict(fit1, x = "knots")
 
 # predict knots, broad matrix
 p4 <- predict(fit1, x = "knots", shape = "wide")

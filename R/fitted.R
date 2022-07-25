@@ -10,5 +10,5 @@
 #' @family brokenstick
 #' @export
 fitted.brokenstick <- function(object, newdata = NULL, ...) {
-  return(predict(object, newdata, shape = "vector"))
+  return(predict(object, newdata, shape = "vector", include_data = FALSE))
 }

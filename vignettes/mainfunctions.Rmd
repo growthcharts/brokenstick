@@ -13,7 +13,6 @@ vignette: >
 old <- options(digits = 3)
 knitr::opts_chunk$set(echo = TRUE, 
                       fig.width = 7, fig.height = 3,
-                      
                       dev = "png")
 ```
 
@@ -154,22 +153,22 @@ identical(nrow(data), nrow(p1))
 
 produces a `tibble` with the one column called `.pred` for each row in `data`. We can bind column `.pred` to `data` for further processing.
 
-Sometimes, we also want the prediction at the knot values, for example, to create graphs that contain observed and modelled trajectories. We obtain  predictions at the knots by the special `x = "knots"` argument, e.g.
+Sometimes, we also want the prediction at the knot values, for example, to create graphs that contain observed and modelled trajectories. We obtain predictions at the knots by the special `x = "knots"` argument, e.g.
 
 ```{r}
-p2 <- predict(fit2, x = "knots")
+p2 <- predict(fit2, x = "knots", include_data = FALSE)
 head(p2)
 nrow(p2)
 ```
 
-The output is more verbose and includes the grid of knots for each child (`id`, `age`). The column `.source` is equal to `added` as rows are added to the data.
+We use the `include_data = FALSE` argument to remove predictions for the observed data. The output is more verbose and includes the grid of knots for each child (`id`, `age`). The column `.source` is equal to `added` as all rows are non-observed data.
 
 Note there are also knots at ages 0.00 and 2.68 years. These are boundary knots, and added by the `brokenstick()` function. The boundary knots effectively filter the observations that enter the calculations. By default, the boundary knots span the age range in the data. For technical reasons, the broken stick model also defines and estimates parameters for these knots, but these may in general be ignored, especially when the data near the boundary knots are sparse.
 
 If we wish to obtain estimates at both the knots and the observed data use:
 
 ```{r}
-p3 <- predict(fit2, x = "knots", strip_data = FALSE)
+p3 <- predict(fit2, x = "knots")
 table(p3$.source)
 ```
 
@@ -207,7 +206,7 @@ head(subj, 3)
 We also need the outcome variable. We take it from the broken stick estimates from the nine line solution and append it to the subject level data.
 
 ```{r predictatknots}
-bs <- predict(fit9, x = "knots", shape = "wide")
+bs <- predict(fit9, x = "knots", shape = "wide", include_data = FALSE)
 data <- bind_cols(subj, select(bs, -id))
 head(data, 3)
 ```

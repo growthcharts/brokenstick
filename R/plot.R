@@ -119,7 +119,7 @@ plot_trajectory <- function(x,
   if (show[2L] && missing(.x)) .x <- "knots"
   data <- predict(
     object = x, newdata = newdata, what = what, ...,
-    x = .x, group = group, strip_data = FALSE
+    x = .x, group = group
   )
   if (ncol(data) == 1L) data <- bind_cols(.source = "data", newdata, data)
 

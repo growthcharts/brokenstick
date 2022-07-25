@@ -39,6 +39,7 @@ get_knots <- function(object,
 #' @return Proportion of explained variance
 #' @examples
 #' get_r2(fit_200)
+#' get_r2(fit_200_light, newdata = smocc_200)
 #' @export
 get_r2 <- function(object, newdata = NULL) {
   newdata <- get_newdata(object, newdata)

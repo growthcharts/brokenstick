@@ -19,4 +19,5 @@ Obtain proportion of explained variance from a broken stick model
 }
 \examples{
 get_r2(fit_200)
+get_r2(fit_200_light, newdata = smocc_200)
 }
