@@ -23,22 +23,25 @@
 #'
 #' @param group A vector with group identifications
 #'
-#' @param include_data A logical indicating whether the observed data
-#'  from `object$data` and `newdata` should be included into the
-#'  return value. The default is `TRUE`. Use `include_data = FALSE` to
-#'  keep only added data points (e.g. knots or observed data specified
-#'  by `x` and `y`). Setting `include_data = FALSE` is useful in
-#'  combination with `shape = "wide"` to avoid the warning
-#'  `Values from '.pred' are not uniquely identified.`
+#' @param what A string: `"all"` (default), `"internal"`, `"boundary"`,
+#' `"dropfirst"` or `"droplast"` to specify the set of knots to predict.
+#' The default, `NULL`, calculates all knots.
 #'
 #' @param shape A string: `"long"` (default), `"wide"` or `"vector"`
 #' specifying the shape of the return value. Note that use of `"wide"`
 #' with many unique values in `x` creates an unwieldy, large
 #' and sparse matrix.
 #'
-#' @param what A string: `"all"` (default), `"internal"`, `"boundary"`,
-#' `"dropfirst"` or `"droplast"` to specify the set of knots to predict.
-#' The default, `NULL`, calculates all knots.
+#' @param include_data A logical indicating whether the observed data
+#'  from `object$data` and `newdata` should be included into the
+#'  return value. The default is `TRUE`. Use `include_data = FALSE` to
+#'  keep only added data points (e.g. knots or observed data specified
+#'  by `x` and `y`). Setting `include_data = FALSE` is useful in
+#'  combination with `shape = "wide"` to avoid the warning
+#'  `Values from '.pred' are not uniquely identified.` For convenience,
+#'  in the special case `x = "knots"` the function overwrites
+#'  `include_data` to `FALSE` to evade observed ages to show up in the
+#'  wide matrix.
 #'
 #' @param strip_data Deprecated. Use `include_data` instead.
 #'
@@ -135,7 +138,7 @@
 #' # -- Case 1: x, -y, -group
 #'
 #' # Case 1: x as "knots", standard estimates, train sample (n = 124)
-#' z <- predict(fit, x = "knots", shape = "wide", include_data = FALSE)
+#' z <- predict(fit, x = "knots", shape = "wide")
 #' head(z, 3)
 #'
 #' # Case 1: x as values, linearly interpolated, train sample (n = 124)
@@ -238,9 +241,9 @@
 predict.brokenstick <- function(object, newdata = NULL,
                                 ...,
                                 x = NULL, y = NULL, group = NULL,
-                                include_data = TRUE,
-                                shape = c("long", "wide", "vector"),
                                 what = "all",
+                                shape = c("long", "wide", "vector"),
+                                include_data = TRUE,
                                 strip_data = TRUE) {
   shape <- match.arg(shape)
   if (!missing(strip_data)) {
@@ -251,9 +254,11 @@ predict.brokenstick <- function(object, newdata = NULL,
   rm(strip_data)
 
   # handle special case: x = "knots"
+  # convenience: overwrite include_data when wide
   if (length(x)) {
     if (!is.na(x[1L]) && x[1L] == "knots") {
       x <- get_knots(object, what = what)
+      if (shape == "wide") include_data <- FALSE
     }
   }
 

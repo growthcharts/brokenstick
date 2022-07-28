@@ -11,9 +11,9 @@
   x = NULL,
   y = NULL,
   group = NULL,
-  include_data = TRUE,
-  shape = c("long", "wide", "vector"),
   what = "all",
+  shape = c("long", "wide", "vector"),
+  include_data = TRUE,
   strip_data = TRUE
 )
 }
@@ -34,22 +34,25 @@ positions of the knots.}
 
 \item{group}{A vector with group identifications}
 
-\item{include_data}{A logical indicating whether the observed data
-from \code{object$data} and \code{newdata} should be included into the
-return value. The default is \code{TRUE}. Use \code{include_data = FALSE} to
-keep only added data points (e.g. knots or observed data specified
-by \code{x} and \code{y}). Setting \code{include_data = FALSE} is useful in
-combination with \code{shape = "wide"} to avoid the warning
-\verb{Values from '.pred' are not uniquely identified.}}
+\item{what}{A string: \code{"all"} (default), \code{"internal"}, \code{"boundary"},
+\code{"dropfirst"} or \code{"droplast"} to specify the set of knots to predict.
+The default, \code{NULL}, calculates all knots.}
 
 \item{shape}{A string: \code{"long"} (default), \code{"wide"} or \code{"vector"}
 specifying the shape of the return value. Note that use of \code{"wide"}
 with many unique values in \code{x} creates an unwieldy, large
 and sparse matrix.}
 
-\item{what}{A string: \code{"all"} (default), \code{"internal"}, \code{"boundary"},
-\code{"dropfirst"} or \code{"droplast"} to specify the set of knots to predict.
-The default, \code{NULL}, calculates all knots.}
+\item{include_data}{A logical indicating whether the observed data
+from \code{object$data} and \code{newdata} should be included into the
+return value. The default is \code{TRUE}. Use \code{include_data = FALSE} to
+keep only added data points (e.g. knots or observed data specified
+by \code{x} and \code{y}). Setting \code{include_data = FALSE} is useful in
+combination with \code{shape = "wide"} to avoid the warning
+\verb{Values from '.pred' are not uniquely identified.} For convenience,
+in the special case \code{x = "knots"} the function overwrites
+\code{include_data} to \code{FALSE} to evade observed ages to show up in the
+wide matrix.}
 
 \item{strip_data}{Deprecated. Use \code{include_data} instead.}
 }
@@ -156,7 +159,7 @@ identical(pred, pred_light)
 # -- Case 1: x, -y, -group
 
 # Case 1: x as "knots", standard estimates, train sample (n = 124)
-z <- predict(fit, x = "knots", shape = "wide", include_data = FALSE)
+z <- predict(fit, x = "knots", shape = "wide")
 head(z, 3)
 
 # Case 1: x as values, linearly interpolated, train sample (n = 124)
