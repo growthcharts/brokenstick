@@ -30,7 +30,8 @@ is allowed in each model term (additional variables will be ignored).}
 predictor (numeric) and group (numeric, factor, character) variable.}
 
 \item{knots}{Optional, but recommended. Numerical vector with the
-locations of the internal knots to be placed on the values of the predictor.}
+locations of the internal knots to be placed on the values of the predictor.
+The function sorts the internal knots in increasing order.}
 
 \item{boundary}{Optional, but recommended. Numerical vector of
 length 2 with the left and right boundary knot. The \code{boundary}

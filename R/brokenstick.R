@@ -19,6 +19,7 @@
 #'
 #' @param knots Optional, but recommended. Numerical vector with the
 #' locations of the internal knots to be placed on the values of the predictor.
+#' The function sorts the internal knots in increasing order.
 #'
 #' @param boundary Optional, but recommended. Numerical vector of
 #' length 2 with the left and right boundary knot. The `boundary`

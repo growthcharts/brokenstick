@@ -87,8 +87,8 @@ append_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
 
 calculate_knots <- function(x, k, internal, boundary) {
   k_orig <- k
-  knots_orig <- internal
-  boundary_orig <- boundary
+  knots_orig <- sort(internal)
+  boundary_orig <- sort(boundary)
 
   # for NULL or length not 2, set boundary to data range
   if (length(boundary_orig) != 2L) {

@@ -1,6 +1,7 @@
 - Major change: Replaces the `strip_data` argument in `predict()` by the more intuitive `include_data` argument. By default, observed data are now included in the result.
 - Expression `predict(fit_light, x = "knots")` now produced the correct error message
 - Updates objects `fit_200` and `fit_200_light` to use automatic boundary (2.68y) instead of 3 yrs
+- Sorts the values specified by the `knots` argument in increasing order
 
 # brokenstick 2.1.1
 
