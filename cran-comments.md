@@ -1,36 +1,14 @@
 cran-comments
 ================
 
-## Resubmission 5 to CRAN
+## Submission 1 to CRAN
 
--   Repairs a broken link in `vignettes/mainfunctions.Rmd`
-
-## Resubmission 4 to CRAN
-
--   Wrap example section of `predict()` and `brokenstick()` in
-    `\donttest{}` to reduce CPU time
-
-## Resubmission 3 to CRAN
-
--   We are now at version `brokenstick 2.1.0`
--   Incorporates changes asked for by J Stat Soft (see package NEWS)
--   Reduces package size from 3.7 Mb to 1.1 Mb by transferring large
-    vignette to GitHub site
-
-## Resubmission 2 to CRAN
-
--   The submission changes a URL classified as 502 “Bad Gateway”
--   The submission wraps examples in `\dontrun` from `predict()` to
-    reduce CPU
-
-## Resubmission 1 to CRAN
-
--   This submission reduces package size from 9.2Mb to 3.7Mb by taking
-    out temporary files that should not be in the distribution
+-   `brokenstick 2.2.0` incorporates various updates and fixes. See
+    NEWS.md for an overview.
 
 ## Test environments
 
--   local OS X install, 12.2.1, R 4.1.3
+-   local OS X, 12.4, R 4.2.1
 -   win-builder, using `devtools::check_win_devel()`
 -   rhub
 
@@ -44,7 +22,7 @@ build(manual = TRUE)
 ```
 
 ``` bash
-R CMD CHECK brokenstick_2.1.0.tar.gz
+R CMD CHECK brokenstick_2.2.0.tar.gz
 
 Status: OK
 ```

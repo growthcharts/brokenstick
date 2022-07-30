@@ -8,7 +8,7 @@
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
-[![](https://img.shields.io/badge/github%20version-2.1.1-orange.svg)](https://growthcharts.org/brokenstick/)
+[![](https://img.shields.io/badge/github%20version-2.2.0-orange.svg)](https://growthcharts.org/brokenstick/)
 
 <!-- badges: end -->
 
@@ -117,7 +117,6 @@ The `brokenstick` package contains functions for
     software;
 -   Paper in preparation: *Broken Stick Model for Irregular Longitudinal
     Data*:
-    [pdf](https://stefvanbuuren.name/publications/2021_brokenstick_JSS_manuscript.pdf),
     [html](https://growthcharts.org/brokenstick/articles/manual/manual.html).
 
 ### References
