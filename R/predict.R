@@ -99,6 +99,7 @@
 #'
 #' If the function finds no data, it throws a warnings and returns `NULL`.
 #' @examples
+#' \dontrun{
 #' library("dplyr")
 #'
 #' # -- Data
@@ -113,7 +114,7 @@
 #'   data = train, knots = 0:3,
 #'   light = TRUE, seed = 1
 #' )
-#' \dontrun{
+#'
 #' # -- Predict, standard cases
 #'
 #' # Use train data, return column with predictions
