@@ -1,11 +1,20 @@
-- Major change: Replaces the `strip_data` argument in `predict()` by the more intuitive `include_data` argument. By default, observed data are now included in the result.
-- Expression `predict(fit_light, x = "knots")` now produced the correct error message
+# brokenstick 2.2.0
+
+## Major changes:
+
+1. Changes the default number of knots in `brokenstick()` to 5. The former default produced a solution without internal knots. The new default produces a generally more informative starting model when the user does not specify knots (using `knots = c(..., ...)`) or the number of knots (using `k = ...`).
+2. Replaces the `strip_data` argument in `predict()` by the a more intuitive `include_data` argument. By default, observed data are now included into the predictions, similar to `predict.lm()`.
+3. Turns error `Argument 'newdata' is required for a light brokenstick object.` of `brokenstick()` into a warning and returns `NULL`.
+4. Updates the vignette [Broken Stick Model for Irregular Longitudinal Data](https://growthcharts.org/brokenstick/articles/manual/manual.html) to sync with revision for JSS.
+
+## Minor changes:
+
+- Expression `predict(fit_200_light, x = "knots")` now produces warning message instead of crashing
 - Updates objects `fit_200` and `fit_200_light` to use automatic boundary (2.68y) instead of 3 yrs
-- Sorts the values specified by the `knots` argument in increasing order
+- Automatically sorts any user-specified values for knots in increasing order to evade problems with `predict()`
 
 # brokenstick 2.1.1
 
-- Changes the default number of knots in `brokenstick()` to 5 by setting `k = 5`. The old setting (`k = NULL`) produced a solution without internal knots. The setting produces a more informative starting model in cases where the user does not specify the knots, or the number of knots.
 
 # brokenstick 2.1.0
 
