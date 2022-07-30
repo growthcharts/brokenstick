@@ -99,14 +99,13 @@
 #'
 #' If the function finds no data, it throws a warnings and returns `NULL`.
 #' @examples
-#' \dontrun{
 #' library("dplyr")
 #'
 #' # -- Data
 #'
 #' train <- smocc_200[1:1198, ]
 #' test <- smocc_200[1199:1940, ]
-#'
+#' \dontrun{
 #' # -- Fit model
 #'
 #' fit <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:3, seed = 1)

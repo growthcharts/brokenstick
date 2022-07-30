@@ -126,7 +126,7 @@ library("dplyr")
 
 train <- smocc_200[1:1198, ]
 test <- smocc_200[1199:1940, ]
-
+\dontrun{
 # -- Fit model
 
 fit <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:3, seed = 1)
@@ -134,7 +134,7 @@ fit_light <- brokenstick(hgt_z ~ age | id,
   data = train, knots = 0:3,
   light = TRUE, seed = 1
 )
-\dontrun{
+
 # -- Predict, standard cases
 
 # Use train data, return column with predictions
