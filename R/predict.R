@@ -113,7 +113,7 @@
 #'   data = train, knots = 0:3,
 #'   light = TRUE, seed = 1
 #' )
-#'
+#' \dontrun{
 #' # -- Predict, standard cases
 #'
 #' # Use train data, return column with predictions
@@ -236,6 +236,7 @@
 #' predict(fit_light,
 #'   x = c(0.5, 0.9, 0.6, 0.9),
 #'   y = c(0, 0.5, 0.5, 0.6), group = c(11045, 11120, 899, 899))
+#' }
 #' @rdname predict
 #' @export
 predict.brokenstick <- function(object, newdata = NULL,
