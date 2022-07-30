@@ -13,9 +13,6 @@
 - Updates objects `fit_200` and `fit_200_light` to use automatic boundary (2.68y) instead of 3 yrs
 - Automatically sorts any user-specified values for knots in increasing order to evade problems with `predict()`
 
-# brokenstick 2.1.1
-
-
 # brokenstick 2.1.0
 
 ## Incorporate changes and updates required by JSS

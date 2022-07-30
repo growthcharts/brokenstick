@@ -12,7 +12,7 @@ the model settings and parameter estimates."><!-- mathjax --><script src="https:
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,7 +75,7 @@ the model settings and parameter estimates.</p>
     <p>The datasets was constructed as</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="va">knots</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">6</span>, <span class="fl">9</span>, <span class="fl">12</span>, <span class="fl">15</span>, <span class="fl">18</span>, <span class="fl">24</span><span class="op">)</span><span class="op">/</span><span class="fl">12</span>, <span class="fl">4</span><span class="op">)</span></span>
 <span><span class="va">fit_200_light</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">smocc_200</span>,</span>
-<span>                       knots <span class="op">=</span> <span class="va">knots</span>, boundary <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>                       knots <span class="op">=</span> <span class="va">knots</span>,</span>
 <span>                       light <span class="op">=</span> <span class="cn">TRUE</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre><p></p></div>
     </div>
 

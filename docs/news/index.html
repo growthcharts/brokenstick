@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,9 +57,22 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.1.1" id="brokenstick-211">brokenstick 2.1.1<a class="anchor" aria-label="anchor" href="#brokenstick-211"></a></h2>
-<ul><li>Changes the default number of knots in <code><a href="../reference/brokenstick.html">brokenstick()</a></code> to 5 by setting <code>k = 5</code>. The old setting (<code>k = NULL</code>) produced a solution without internal knots. The setting produces a more informative starting model in cases where the user does not specify the knots, or the number of knots.</li>
+<h2 class="pkg-version" data-toc-text="2.2.0" id="brokenstick-220">brokenstick 2.2.0<a class="anchor" aria-label="anchor" href="#brokenstick-220"></a></h2>
+<div class="section level3">
+<h3 id="major-changes-2-2-0">Major changes:<a class="anchor" aria-label="anchor" href="#major-changes-2-2-0"></a></h3>
+<ol style="list-style-type: decimal"><li>Changes the default number of knots in <code><a href="../reference/brokenstick.html">brokenstick()</a></code> to 5. The former default produced a solution without internal knots. The new default produces a generally more informative starting model when the user does not specify knots (using <code>knots = c(..., ...)</code>) or the number of knots (using <code>k = ...</code>).</li>
+<li>Replaces the <code>strip_data</code> argument in <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> by the a more intuitive <code>include_data</code> argument. By default, observed data are now included into the predictions, similar to <code><a href="https://rdrr.io/r/stats/predict.lm.html" class="external-link">predict.lm()</a></code>.</li>
+<li>Turns error <code>Argument 'newdata' is required for a light brokenstick object.</code> of <code><a href="../reference/brokenstick.html">brokenstick()</a></code> into a warning and returns <code>NULL</code>.</li>
+<li>Updates the vignette <a href="https://growthcharts.org/brokenstick/articles/manual/manual.html">Broken Stick Model for Irregular Longitudinal Data</a> to sync with revision for JSS.</li>
+</ol></div>
+<div class="section level3">
+<h3 id="minor-changes-2-2-0">Minor changes:<a class="anchor" aria-label="anchor" href="#minor-changes-2-2-0"></a></h3>
+<ul><li>Expression <code>predict(fit_200_light, x = "knots")</code> now produces warning message instead of crashing</li>
+<li>Updates objects <code>fit_200</code> and <code>fit_200_light</code> to use automatic boundary (2.68y) instead of 3 yrs</li>
+<li>Automatically sorts any user-specified values for knots in increasing order to evade problems with <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>
+</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.1.0" id="brokenstick-210">brokenstick 2.1.0<a class="anchor" aria-label="anchor" href="#brokenstick-210"></a></h2><p class="text-muted">CRAN release: 2022-03-30</p>
 <div class="section level3">

@@ -20,7 +20,7 @@ the fitted model, through the x and y arguments."><!-- mathjax --><script src="h
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,9 +86,10 @@ the fitted model, through the <code>x</code> and <code>y</code> arguments.</p>
 <span>  x <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  y <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  group <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  strip_data <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  what <span class="op">=</span> <span class="st">"all"</span>,</span>
 <span>  shape <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"long"</span>, <span class="st">"wide"</span>, <span class="st">"vector"</span><span class="op">)</span>,</span>
-<span>  what <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  include_data <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  strip_data <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -122,11 +123,10 @@ positions of the knots.</p></dd>
 <dd><p>A vector with group identifications</p></dd>
 
 
-<dt>strip_data</dt>
-<dd><p>A logical indicating whether the row with the
-observed data from <code>newdata</code> should be stripped from the
-return value. The default is <code>TRUE</code>. Set to <code>FALSE</code> to infer which data
-points are extracted from <code>newdata</code>. Works best for <code>shape = "long"</code>.</p></dd>
+<dt>what</dt>
+<dd><p>A string: <code>"all"</code> (default), <code>"internal"</code>, <code>"boundary"</code>,
+<code>"dropfirst"</code> or <code>"droplast"</code> to specify the set of knots to predict.
+The default, <code>NULL</code>, calculates all knots.</p></dd>
 
 
 <dt>shape</dt>
@@ -136,9 +136,21 @@ with many unique values in <code>x</code> creates an unwieldy, large
 and sparse matrix.</p></dd>
 
 
-<dt>what</dt>
-<dd><p>Which knots to predict when <code>x = "knots"</code>? See <code><a href="get_knots.html">get_knots()</a></code>.
-The default, <code>NULL</code>, calculates all knots.</p></dd>
+<dt>include_data</dt>
+<dd><p>A logical indicating whether the observed data
+from <code>object$data</code> and <code>newdata</code> should be included into the
+return value. The default is <code>TRUE</code>. Use <code>include_data = FALSE</code> to
+keep only added data points (e.g. knots or observed data specified
+by <code>x</code> and <code>y</code>). Setting <code>include_data = FALSE</code> is useful in
+combination with <code>shape = "wide"</code> to avoid the warning
+<code>Values from '.pred' are not uniquely identified.</code> For convenience,
+in the special case <code>x = "knots"</code> the function overwrites
+<code>include_data</code> to <code>FALSE</code> to evade observed ages to show up in the
+wide matrix.</p></dd>
+
+
+<dt>strip_data</dt>
+<dd><p>Deprecated. Use <code>include_data</code> instead.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -149,22 +161,29 @@ The default, <code>NULL</code>, calculates all knots.</p></dd>
 
 
 <p>are not specified, the number of rows in the data frame is guaranteed to
-be the same as the number of rows in <code>newdata</code>. If</p>
+be the same as the number of rows in <code>newdata</code>.</p>
 
 
 <p>If <code>shape == "wide"</code> a wide <code>data.frame</code> of predictions, one record per group. Note
-that this format could be inefficient, depending on the data.</p>
+that this format could be inefficient if observations times vary between
+subjects.</p>
 
 
 <p>If <code>shape == "vector"</code> a vector of predicted values, of all x-values and groups.</p>
+
+
+<p>If the function finds no data, it throws a warnings and returns <code>NULL</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
-    <p>By default, <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> calculates predictions for every row in
+    <p>The function <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> calculates predictions for every row in
 <code>newdata</code>. If the user specifies no <code>newdata</code> argument, then the
-function searches <code>object</code> for the training data (which are only
-available if <code>object$light</code> is <code>FALSE</code>).
-It is possible to tailor the behaviour of <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> through the
+function sets <code>newdata</code> equal to the training data (<code>object$data</code>
+if <code>object$light</code> is <code>FALSE</code>). For a light object without a
+<code>newdata</code> argument, the function throws the warning
+"Argument 'newdata' is required for a light brokenstick object." and
+returns <code>NULL</code>.</p>
+<p>It is possible to tailor the behaviour of <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> through the
 <code>x</code>, <code>y</code> and <code>group</code> arguments. What exactly happens depends on
 which of these arguments is specified:</p><ol><li><p>If the user specifies <code>x</code>, but no <code>y</code> and <code>group</code>, the function
 returns - for every group in <code>newdata</code> - predictions at the
@@ -197,8 +216,15 @@ made.</p></li>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org" class="external-link">"dplyr"</a></span><span class="op">)</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org" class="external-link">"dplyr"</a></span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Attaching package: ‘dplyr’</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:stats’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     filter, lag</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> The following objects are masked from ‘package:base’:</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>     intersect, setdiff, setequal, union</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># -- Data</span></span></span>
 <span class="r-in"><span></span></span>
@@ -212,7 +238,7 @@ made.</p></li>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">train</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">3</span>,</span></span>
 <span class="r-in"><span>  light <span class="op">=</span> <span class="cn">TRUE</span>, seed <span class="op">=</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># -- Predict, standard cases</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Use train data, return column with predictions</span></span></span>
@@ -241,13 +267,15 @@ made.</p></li>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">z</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case 1: x as values, linearly interpolated, train sample (n = 124)</span></span></span>
-<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.5</span><span class="op">)</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.5</span><span class="op">)</span>, shape <span class="op">=</span> <span class="st">"wide"</span>, include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">z</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case 1: x as values, linearly interpolated, test sample (n = 76)</span></span></span>
-<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">test</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.5</span><span class="op">)</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">test</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.5</span><span class="op">)</span>, shape <span class="op">=</span> <span class="st">"wide"</span>, include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">z</span>, <span class="fl">3</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Case 1: x, not possible for light object</span></span></span>
+<span class="r-in"><span><span class="va">z</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_light</span>, x <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># -- Case 2: x, y, -group</span></span></span>
 <span class="r-in"><span></span></span>
@@ -263,8 +291,10 @@ made.</p></li>
 <span class="r-in"><span><span class="co"># Case 3: Predict at observed age for subset of groups, training sample</span></span></span>
 <span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pred</span>, <span class="fl">3</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case 3: Of course, we cannot do this for light objects</span></span></span>
 <span class="r-in"><span><span class="va">pred_light</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_light</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case 3: We can use another sample. Note there is no child 999</span></span></span>
 <span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">test</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">999</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">pred</span>, <span class="fl">3</span><span class="op">)</span></span></span>
@@ -276,27 +306,23 @@ made.</p></li>
 <span class="r-in"><span><span class="co"># -- Case 4: x, -y, group</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case 4: Predict at specified x, only in selected groups, train sample</span></span></span>
-<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.25</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.25</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pred</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Case 4: strip_data = FALSE provides access to the observed data</span></span></span>
+<span class="r-in"><span><span class="co"># Case 4: Same, but include observed data and sort</span></span></span>
 <span class="r-in"><span><span class="va">pred_all</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>,</span></span>
-<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.25</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  strip_data <span class="op">=</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">pred_all</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html" class="external-link">filter</a></span><span class="op">(</span><span class="va">id</span> <span class="op">==</span> <span class="fl">10001</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
-<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">age</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.25</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">10022</span><span class="op">)</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span></span>
+<span class="r-in"><span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html" class="external-link">arrange</a></span><span class="op">(</span><span class="va">id</span>, <span class="va">age</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case 4: Applies also to test sample</span></span></span>
-<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">test</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.25</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">999</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">test</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.25</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">999</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span> include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">pred</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case 4: Works also with light object</span></span></span>
-<span class="r-in"><span><span class="va">pred_light</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_light</span>, <span class="va">test</span>,</span></span>
-<span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.25</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">999</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">pred_light</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_light</span>, <span class="va">test</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">1</span>, <span class="fl">1.25</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">999</span><span class="op">)</span>, include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/identical.html" class="external-link">identical</a></span><span class="op">(</span><span class="va">pred_light</span>, <span class="va">pred</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># -- Case 5: x, y, group</span></span></span>
@@ -306,37 +332,35 @@ made.</p></li>
 <span class="r-in"><span><span class="co"># Note that novel child (not in train) 999 has one data point</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">0.9</span>, <span class="fl">0.9</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">999</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span>  group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10001</span>, <span class="fl">10005</span>, <span class="fl">999</span><span class="op">)</span>, include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case 5: Same, but now for test sample. Novel child 899 has two data points</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">test</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">899</span>, <span class="fl">899</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">899</span>, <span class="fl">899</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case 5: Also works for light object</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_light</span>, <span class="va">test</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">899</span>, <span class="fl">899</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">899</span>, <span class="fl">899</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># -- Case 6: As Case 5, but without previous data</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Case 6: Same call as last, but now without newdata = test</span></span></span>
-<span class="r-in"><span><span class="co"># All children are de facto novel as they do not occur in the training sample.</span></span></span>
+<span class="r-in"><span><span class="co"># All children are de facto novel as they do not occur in the training</span></span></span>
+<span class="r-in"><span><span class="co"># or test samples.</span></span></span>
 <span class="r-in"><span><span class="co"># Note: Predictions for 11045 and 11120 differ from prediction in Case 5.</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">899</span>, <span class="fl">899</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">899</span>, <span class="fl">899</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># This also work for the light brokenstick object</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit_light</span>,</span></span>
 <span class="r-in"><span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.9</span>, <span class="fl">0.6</span>, <span class="fl">0.9</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">899</span>, <span class="fl">899</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.6</span><span class="op">)</span>, group <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11045</span>, <span class="fl">11120</span>, <span class="fl">899</span>, <span class="fl">899</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 </code></pre></div>
     </div>

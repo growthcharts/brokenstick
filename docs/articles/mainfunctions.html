@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -315,7 +315,7 @@ example, to create graphs that contain observed and modelled
 trajectories. We obtain predictions at the knots by the special
 <code>x = "knots"</code> argument, e.g.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span>, include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">##   .source    id  age  sex ga bw hgt hgt_z    .pred</span></span>
 <span><span class="co">## 1   added 10001 0.00 &lt;NA&gt; NA NA  NA    NA  0.71989</span></span>
@@ -327,10 +327,11 @@ trajectories. We obtain predictions at the knots by the special
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## [1] 800</span></span></code></pre>
-<p>The output is more verbose and includes the grid of knots for each
-child (<code>id</code>, <code>age</code>). The column
-<code>.source</code> is equal to <code>added</code> as rows are added to
-the data.</p>
+<p>We use the <code>include_data = FALSE</code> argument to remove
+predictions for the observed data. The output is more verbose and
+includes the grid of knots for each child (<code>id</code>,
+<code>age</code>). The column <code>.source</code> is equal to
+<code>added</code> as all rows are non-observed data.</p>
 <p>Note there are also knots at ages 0.00 and 2.68 years. These are
 boundary knots, and added by the <code><a href="../reference/brokenstick.html">brokenstick()</a></code> function.
 The boundary knots effectively filter the observations that enter the
@@ -342,7 +343,7 @@ sparse.</p>
 <p>If we wish to obtain estimates at both the knots and the observed
 data use:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span>, strip_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">p3</span><span class="op">$</span><span class="va">.source</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## added  data </span></span>
@@ -388,7 +389,7 @@ data with variables that vary over subjects only.</p>
 estimates from the nine line solution and append it to the subject level
 data.</p>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit9</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit9</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span>, include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">subj</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bs</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 15</span></span></span>
