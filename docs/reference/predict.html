@@ -230,7 +230,7 @@ made.</p></li>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">train</span> <span class="op">&lt;-</span> <span class="va">smocc_200</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1198</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span><span class="va">test</span> <span class="op">&lt;-</span> <span class="va">smocc_200</span><span class="op">[</span><span class="fl">1199</span><span class="op">:</span><span class="fl">1940</span>, <span class="op">]</span></span></span>
-<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
 <span class="r-in"><span><span class="co"># -- Fit model</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="brokenstick.html">brokenstick</a></span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, data <span class="op">=</span> <span class="va">train</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">3</span>, seed <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></span>
@@ -238,7 +238,7 @@ made.</p></li>
 <span class="r-in"><span>  data <span class="op">=</span> <span class="va">train</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">3</span>,</span></span>
 <span class="r-in"><span>  light <span class="op">=</span> <span class="cn">TRUE</span>, seed <span class="op">=</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># -- Predict, standard cases</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Use train data, return column with predictions</span></span></span>
