@@ -45,9 +45,12 @@ rhub::check_for_cran()
 `rhub::check_for_cran()` produces "SUCCESS" (three times) and one note:
 
 ```
-Success
+* checking for detritus in the temp directory ... NOTE
+Found the following files/directories:
+  'lastMiKTeXException'
 ```
 
+I believe this note is not related to the brokenstick package.
 
 ## Downstream dependencies
 
