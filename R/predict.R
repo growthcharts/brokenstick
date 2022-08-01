@@ -23,10 +23,6 @@
 #'
 #' @param group A vector with group identifications
 #'
-#' @param what A string: `"all"` (default), `"internal"`, `"boundary"`,
-#' `"dropfirst"` or `"droplast"` to specify the set of knots to predict.
-#' The default, `NULL`, calculates all knots.
-#'
 #' @param shape A string: `"long"` (default), `"wide"` or `"vector"`
 #' specifying the shape of the return value. Note that use of `"wide"`
 #' with many unique values in `x` creates an unwieldy, large
@@ -44,6 +40,8 @@
 #'  wide matrix.
 #'
 #' @param strip_data Deprecated. Use `include_data` instead.
+#'
+#' @inheritParams get_knots
 #'
 #' @details
 #'
@@ -242,7 +240,7 @@
 predict.brokenstick <- function(object, newdata = NULL,
                                 ...,
                                 x = NULL, y = NULL, group = NULL,
-                                what = "all",
+                                kset = "all",
                                 shape = c("long", "wide", "vector"),
                                 include_data = TRUE,
                                 strip_data = TRUE) {
@@ -258,7 +256,7 @@ predict.brokenstick <- function(object, newdata = NULL,
   # convenience: overwrite include_data when wide
   if (length(x)) {
     if (!is.na(x[1L]) && x[1L] == "knots") {
-      x <- get_knots(object, what = what)
+      x <- get_knots(object, kset = kset)
       if (shape == "wide") include_data <- FALSE
     }
   }
@@ -394,7 +392,7 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
     return(data.frame(.pred = rep(NA_real_, length(x))))
   }
 
-  xv <- get_knots(object, what = "all")
+  xv <- get_knots(object, kset = "all")
   if (object$degree == 0L) xv <- xv[-length(xv)]
   long1 <- data.frame(
     group = rep(colnames(blup), each = nrow(blup)),

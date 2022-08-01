@@ -58,8 +58,8 @@ plot.brokenstick <- function(x,
 #' @inheritParams predict.brokenstick
 #' @param x An object of class `brokenstick`.
 #' @param newdata A `data.frame` or `matrix`
-#' @param what Which knots to plot? See [get_knots()]. The default,
-#' `what = "droplast"`, does not plot the right boundary knot.
+#' @param kset Which knots to plot? See [get_knots()]. The default,
+#' `kset = "droplast"`, does not plot the right boundary knot.
 #' @param .x The `x` argument of the [predict.brokenstick()] function.
 #' @param color_y A character vector with two elements specifying the symbol and line color of the measured data points
 #' @param size_y Dot size of measured data points
@@ -94,7 +94,7 @@ plot.brokenstick <- function(x,
 #' @export
 plot_trajectory <- function(x,
                             newdata = NULL,
-                            what = "droplast",
+                            kset = "droplast",
                             .x = NULL,
                             group = NULL,
                             color_y = c(
@@ -131,7 +131,7 @@ plot_trajectory <- function(x,
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"
   data <- predict(
-    object = x, newdata = newdata, what = what, ...,
+    object = x, newdata = newdata, kset = kset, ...,
     x = .x, group = group
   )
   if (ncol(data) == 1L) data <- bind_cols(.source = "data", newdata, data)
