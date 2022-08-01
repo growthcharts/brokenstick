@@ -30,11 +30,11 @@ get_knots <- function(object,
   internal <- internal[internal > boundary[1L] & internal < boundary[2L]]
 
   result <- switch(kset,
-    all = c(boundary[1L], internal, boundary[2L]),
-    internal = internal,
-    boundary = boundary,
-    dropfirst = c(internal, boundary[2L]),
-    droplast = c(boundary[1L], internal)
+                   all = c(boundary[1L], internal, boundary[2L]),
+                   internal = internal,
+                   boundary = boundary,
+                   dropfirst = c(internal, boundary[2L]),
+                   droplast = c(boundary[1L], internal)
   )
   return(result)
 }
@@ -69,24 +69,36 @@ get_r2 <- function(object, newdata = NULL) {
 #' @param names  A vector of column names of. If not specified, the function
 #'  automatically drops the entries corresponding to the right boundary. Specify
 #'  `names = "all"` to prevent dropping.
+#' @inheritParams get_knots
 #' @return A numeric matrix, possibly with zero rows and columns if no names match
 #' @examples
 #' f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:2, seed = 1)
-#' get_omega(f1, "cor", c("age_1", "age_2"))
+#' get_omega(f1, what = "cor", names = c("age_1", "age_2"))
 #' @export
-get_omega <- function(x, what = c("cov", "cor"), names = NULL) {
+get_omega <- function(x,
+                      what = c("cov", "cor"),
+                      kset = c("all", "internal", "boundary", "dropfirst", "droplast"),
+                      names = NULL) {
   stopifnot(inherits(x, "brokenstick"))
   what <- match.arg(what)
+  kset <- match.arg(kset)
+
   omega <- x$omega
+  v <- colnames(omega)
+  nameset <- switch(kset,
+                    all = v,
+                    internal = v[c(-1L, -length(v))],
+                    boundary = v[c(1L, length(v))],
+                    dropfirst = v[-1L],
+                    droplast = v[-length(v)])
+  if (!is.null(names)) {
+    nameset <- intersect(names, v)
+  }
   if (length(names) == 1L && names == "all") {
-    names <- colnames(omega)
+    nameset <- v
   }
-  if (is.null(names)) {
-    names <- colnames(omega)[1L:length(colnames(omega)) - 1L]
-  }
-  names <- intersect(names, colnames(omega))
-  if (length(names)) {
-    omega <- omega[names, names, drop = FALSE]
+  if (length(nameset)) {
+    omega <- omega[nameset, nameset, drop = FALSE]
   } else {
     omega <- matrix(NA_real_, 0L, 0L)
   }
