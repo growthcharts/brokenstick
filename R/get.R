@@ -64,7 +64,7 @@ get_r2 <- function(object, newdata = NULL) {
 #'  `names = "all"` to prevent dropping.
 #' @return A numeric matrix, possibly with zero rows and columns if no names match
 #' @examples
-#' f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:3, seed = 1)
+#' f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:2, seed = 1)
 #' get_omega(f1, "cor", c("age_1", "age_2"))
 #' @export
 get_omega <- function(x, what = c("cov", "cor"), names = NULL) {

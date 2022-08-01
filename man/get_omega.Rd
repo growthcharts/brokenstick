@@ -24,6 +24,6 @@ Extracts variance-covariance or correlation matrix from a
 \code{brokenstick} object.
 }
 \examples{
-f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:3, seed = 1)
+f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:2, seed = 1)
 get_omega(f1, "cor", c("age_1", "age_2"))
 }

@@ -129,9 +129,9 @@ test <- smocc_200[1199:1940, ]
 \dontrun{
 # -- Fit model
 
-fit <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:3, seed = 1)
+fit <- brokenstick(hgt_z ~ age | id, data = train, knots = 0:2, seed = 1)
 fit_light <- brokenstick(hgt_z ~ age | id,
-  data = train, knots = 0:3,
+  data = train, knots = 0:2,
   light = TRUE, seed = 1
 )
 

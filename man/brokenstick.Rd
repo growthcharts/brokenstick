@@ -143,7 +143,7 @@ to other  data sets. Fixing the model requires specifying both \code{knots} and
 data <- smocc_200[1:1198, ]
 
 # using kr method, default
-f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, seed = 123)
+f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:2, seed = 123)
 plot(f1, data, n_plot = 9)
 
 # study sampling behaviour of the sigma2 parameter with coda
@@ -152,7 +152,7 @@ plot(f1$mod$sigma2)
 acfplot(f1$mod$sigma2)
 
 # using lmer method
-f2 <- brokenstick(hgt_z ~ age | id, data, knots = 0:3, method = "lmer")
+f2 <- brokenstick(hgt_z ~ age | id, data, knots = 0:2, method = "lmer")
 plot(f2, data, n_plot = 9)
 
 # drill down into merMod object with standard diagnostics in lme4
