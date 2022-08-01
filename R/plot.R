@@ -18,16 +18,21 @@
 #' @examples
 #' \dontrun{
 #' # fit model on raw hgt with knots at 0, 1, 2 and 3 years
-#' fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:3)
+#' fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:2)
 #' gp <- c(10001, 10005, 10022)
 #' plot(fit1, group = gp, xlab = "Age (years)", ylab = "Length (cm)")
 #'
 #' # fit model on standard deviation score
-#' fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:3)
+#' fit2 <- brokenstick(hgt_z ~ age | id, smocc_200)
 #' plot(fit2, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
 #'
 #' # built-in model with 11 knots
 #' plot(fit_200, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
+#'
+#' # black and white version
+#' plot(fit_200, group = gp, xlab = "Age (years)", ylab = "Length (SDS)",
+#'     color_y = rep("black", 2), shape_y = 1, linetype_y = 3,
+#'     color_yhat = rep("grey20", 2), shape_yhat = NA)
 #' }
 #' @export
 plot.brokenstick <- function(x,
@@ -58,8 +63,12 @@ plot.brokenstick <- function(x,
 #' @param .x The `x` argument of the [predict.brokenstick()] function.
 #' @param color_y A character vector with two elements specifying the symbol and line color of the measured data points
 #' @param size_y Dot size of measured data points
+#' @param linetype_y Line type of data points
+#' @param shape_y Symbol for data points
 #' @param color_yhat A character vector with two elements specifying the symbol and line color of the predicted data points
 #' @param size_yhat Dot size of predicted data points
+#' @param linetype_yhat Line type of predicted data
+#' @param shape_yhat Symbol for predicted data
 #' @param color_imp A character vector with two elements specifying the symbol and line color of the imputed data
 #' @param size_imp Dot size of imputed data
 #' @param ncol Number of columns in plot
@@ -93,11 +102,15 @@ plot_trajectory <- function(x,
                               grDevices::hcl(240, 100, 40, 0.8)
                             ),
                             size_y = 2,
+                            linetype_y = 1,
+                            shape_y = 19,
                             color_yhat = c(
                               grDevices::hcl(0, 100, 40, 0.7),
                               grDevices::hcl(0, 100, 40, 0.8)
                             ),
                             size_yhat = 2,
+                            linetype_yhat = 1,
+                            shape_yhat = 19,
                             color_imp = c("grey80", "grey80"),
                             size_imp = 2,
                             ncol = 3L,
@@ -216,8 +229,10 @@ plot_trajectory <- function(x,
   k <- data$.source == "data"
   if (any(k)) {
     g <- g +
-      ggplot2::geom_line(data = data[k, ], color = color_y[2L]) +
-      ggplot2::geom_point(data = data[k, ], color = color_y[1L], size = size_y)
+      ggplot2::geom_line(data = data[k, ], color = color_y[2L],
+                         linetype = linetype_y) +
+      ggplot2::geom_point(data = data[k, ], color = color_y[1L],
+                          size = size_y, shape = shape_y)
   }
 
   # add broken stick points and lines
@@ -225,16 +240,16 @@ plot_trajectory <- function(x,
   if (any(k)) {
     if (x$degree == 0L) {
       g <- g + ggplot2::geom_step(ggplot2::aes_string(y = ".pred"),
-        data = data[k, ], color = color_yhat[2L]
+        data = data[k, ], color = color_yhat[2L], linetype = linetype_yhat
       )
     } else {
       g <- g +
         ggplot2::geom_line(ggplot2::aes_string(y = ".pred"),
-          data = data[k, ], color = color_yhat[2L]
+          data = data[k, ], color = color_yhat[2L], linetype = linetype_yhat
         ) +
         ggplot2::geom_point(ggplot2::aes_string(y = ".pred"),
           data = data[k, ], color = color_yhat[1L],
-          size = size_yhat
+          size = size_yhat, shape = shape_yhat
         )
     }
   }

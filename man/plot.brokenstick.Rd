@@ -31,16 +31,21 @@ at the right boundary knot from the display.
 \examples{
 \dontrun{
 # fit model on raw hgt with knots at 0, 1, 2 and 3 years
-fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:3)
+fit1 <- brokenstick(hgt ~ age | id, smocc_200, knots = 0:2)
 gp <- c(10001, 10005, 10022)
 plot(fit1, group = gp, xlab = "Age (years)", ylab = "Length (cm)")
 
 # fit model on standard deviation score
-fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:3)
+fit2 <- brokenstick(hgt_z ~ age | id, smocc_200)
 plot(fit2, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
 
 # built-in model with 11 knots
 plot(fit_200, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
+
+# black and white version
+plot(fit_200, group = gp, xlab = "Age (years)", ylab = "Length (SDS)",
+    color_y = rep("black", 2), shape_y = 1, linetype_y = 3,
+    color_yhat = rep("grey20", 2), shape_yhat = NA)
 }
 }
 \seealso{

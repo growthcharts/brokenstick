@@ -12,8 +12,12 @@ plot_trajectory(
   group = NULL,
   color_y = c(grDevices::hcl(240, 100, 40, 0.7), grDevices::hcl(240, 100, 40, 0.8)),
   size_y = 2,
+  linetype_y = 1,
+  shape_y = 19,
   color_yhat = c(grDevices::hcl(0, 100, 40, 0.7), grDevices::hcl(0, 100, 40, 0.8)),
   size_yhat = 2,
+  linetype_yhat = 1,
+  shape_yhat = 19,
   color_imp = c("grey80", "grey80"),
   size_imp = 2,
   ncol = 3L,
@@ -44,9 +48,17 @@ plot_trajectory(
 
 \item{size_y}{Dot size of measured data points}
 
+\item{linetype_y}{Line type of data points}
+
+\item{shape_y}{Symbol for data points}
+
 \item{color_yhat}{A character vector with two elements specifying the symbol and line color of the predicted data points}
 
 \item{size_yhat}{Dot size of predicted data points}
+
+\item{linetype_yhat}{Line type of predicted data}
+
+\item{shape_yhat}{Symbol for predicted data}
 
 \item{color_imp}{A character vector with two elements specifying the symbol and line color of the imputed data}
 
