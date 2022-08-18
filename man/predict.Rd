@@ -11,7 +11,7 @@
   x = NULL,
   y = NULL,
   group = NULL,
-  kset = "all",
+  whatknots = "all",
   shape = c("long", "wide", "vector"),
   include_data = TRUE,
   strip_data = TRUE
@@ -34,10 +34,10 @@ positions of the knots.}
 
 \item{group}{A vector with group identifications}
 
-\item{kset}{A character vector of length 1 specifies the knot set.
+\item{whatknots}{A character vector of length 1 specifies the knot set.
 Valid values are \code{"all"}, \code{"internal"}, \code{"boundary"},
 \code{"dropfirst"} and \code{"droplast"}. The default is
-\code{kset = "all"}}
+\code{whatknots = "all"}}
 
 \item{shape}{A string: \code{"long"} (default), \code{"wide"} or \code{"vector"}
 specifying the shape of the return value. Note that use of \code{"wide"}

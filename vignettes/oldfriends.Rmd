@@ -148,12 +148,12 @@ Plot trajectories, version `0.75.0` - `1.1.1`:
 
 ```{r plot-v1, fig.height=3, fig.width=7}
 ids <- c(10001, 10005, 10022)
-plot(fit1, data, group = ids, kset = "all")
+plot(fit1, data, group = ids, whatknots = "all")
 ```
 
 Plot trajectories, version `2.0.0`:
 
 ```{r plot-v2, fig.height=3, fig.width=7}
 ids <- c(10001, 10005, 10022)
-plot(fit1, group = ids, kset = "all")
+plot(fit1, group = ids, whatknots = "all")
 ```

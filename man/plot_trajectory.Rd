@@ -7,7 +7,7 @@
 plot_trajectory(
   x,
   newdata = NULL,
-  kset = "droplast",
+  whatknots = "droplast",
   .x = NULL,
   group = NULL,
   color_y = c(grDevices::hcl(240, 100, 40, 0.7), grDevices::hcl(240, 100, 40, 0.8)),
@@ -37,8 +37,8 @@ plot_trajectory(
 
 \item{newdata}{A \code{data.frame} or \code{matrix}}
 
-\item{kset}{Which knots to plot? See \code{\link[=get_knots]{get_knots()}}. The default,
-\code{kset = "droplast"}, does not plot the right boundary knot.}
+\item{whatknots}{Which knots to plot? See \code{\link[=get_knots]{get_knots()}}. The default,
+\code{whatknots = "droplast"}, does not plot the right boundary knot.}
 
 \item{.x}{The \code{x} argument of the \code{\link[=predict.brokenstick]{predict.brokenstick()}} function.}
 

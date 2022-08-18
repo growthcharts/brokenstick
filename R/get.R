@@ -1,11 +1,11 @@
 #' Obtain the knots from a broken stick model
 #'
 #' @param object An object of class \code{brokenstick}
-#' @param kset A character vector of length 1 specifies the knot set.
+#' @param whatknots A character vector of length 1 specifies the knot set.
 #' Valid values are \code{"all"}, \code{"internal"}, \code{"boundary"},
 #' \code{"dropfirst"} and \code{"droplast"}. The default is
-#' \code{kset = "all"}
-#' @param what Deprecated. Use `kset` instead.
+#' \code{whatknots = "all"}
+#' @param what Deprecated. Use `whatknots` instead.
 #' @return A vector with knot locations, either both, internal only or
 #' boundary only. The result is \code{NULL} if \code{object} does not
 #' have proper class. Returns \code{numeric(0)} if
@@ -14,22 +14,22 @@
 #' get_knots(fit_200, "internal")
 #' @export
 get_knots <- function(object,
-                      kset = c("all", "internal", "boundary", "dropfirst", "droplast"),
+                      whatknots = c("all", "internal", "boundary", "dropfirst", "droplast"),
                       what = "all") {
   stopifnot(inherits(object, c("brokenstick")))
   if (!missing(what)) {
-    warning("argument what is deprecated; please use kset instead.",
+    warning("argument what is deprecated; please use whatknots instead.",
             call. = FALSE)
-    kset <- what
+    whatknots <- what
   }
-  kset <- match.arg(kset)
+  whatknots <- match.arg(whatknots)
   internal <- object$internal
   # legacy for objects created before v2.0
   if (is.null(internal)) internal <- object$knots
   boundary <- object$boundary
   internal <- internal[internal > boundary[1L] & internal < boundary[2L]]
 
-  result <- switch(kset,
+  result <- switch(whatknots,
                    all = c(boundary[1L], internal, boundary[2L]),
                    internal = internal,
                    boundary = boundary,
@@ -77,15 +77,15 @@ get_r2 <- function(object, newdata = NULL) {
 #' @export
 get_omega <- function(x,
                       what = c("cov", "cor"),
-                      kset = c("all", "internal", "boundary", "dropfirst", "droplast"),
+                      whatknots = c("all", "internal", "boundary", "dropfirst", "droplast"),
                       names = NULL) {
   stopifnot(inherits(x, "brokenstick"))
   what <- match.arg(what)
-  kset <- match.arg(kset)
+  whatknots <- match.arg(whatknots)
 
   omega <- x$omega
   v <- colnames(omega)
-  nameset <- switch(kset,
+  nameset <- switch(whatknots,
                     all = v,
                     internal = v[c(-1L, -length(v))],
                     boundary = v[c(1L, length(v))],

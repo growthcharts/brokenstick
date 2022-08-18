@@ -240,7 +240,7 @@
 predict.brokenstick <- function(object, newdata = NULL,
                                 ...,
                                 x = NULL, y = NULL, group = NULL,
-                                kset = "all",
+                                whatknots = "all",
                                 shape = c("long", "wide", "vector"),
                                 include_data = TRUE,
                                 strip_data = TRUE) {
@@ -256,7 +256,7 @@ predict.brokenstick <- function(object, newdata = NULL,
   # convenience: overwrite include_data when wide
   if (length(x)) {
     if (!is.na(x[1L]) && x[1L] == "knots") {
-      x <- get_knots(object, kset = kset)
+      x <- get_knots(object, whatknots = whatknots)
       if (shape == "wide") include_data <- FALSE
     }
   }
@@ -392,7 +392,7 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
     return(data.frame(.pred = rep(NA_real_, length(x))))
   }
 
-  xv <- get_knots(object, kset = "all")
+  xv <- get_knots(object, whatknots = "all")
   if (object$degree == 0L) xv <- xv[-length(xv)]
   long1 <- data.frame(
     group = rep(colnames(blup), each = nrow(blup)),

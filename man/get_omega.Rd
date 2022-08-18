@@ -7,7 +7,7 @@
 get_omega(
   x,
   what = c("cov", "cor"),
-  kset = c("all", "internal", "boundary", "dropfirst", "droplast"),
+  whatknots = c("all", "internal", "boundary", "dropfirst", "droplast"),
   names = NULL
 )
 }
@@ -17,10 +17,10 @@ get_omega(
 \item{what}{Either \code{"cov"} (default) for the covariance matrix,  or \code{"cor"}
 for the correlation matrix.}
 
-\item{kset}{A character vector of length 1 specifies the knot set.
+\item{whatknots}{A character vector of length 1 specifies the knot set.
 Valid values are \code{"all"}, \code{"internal"}, \code{"boundary"},
 \code{"dropfirst"} and \code{"droplast"}. The default is
-\code{kset = "all"}}
+\code{whatknots = "all"}}
 
 \item{names}{A vector of column names of. If not specified, the function
 automatically drops the entries corresponding to the right boundary. Specify
