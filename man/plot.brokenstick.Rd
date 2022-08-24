@@ -36,7 +36,7 @@ gp <- c(10001, 10005, 10022)
 plot(fit1, group = gp, xlab = "Age (years)", ylab = "Length (cm)")
 
 # fit model on standard deviation score
-fit2 <- brokenstick(hgt_z ~ age | id, smocc_200)
+fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:2)
 plot(fit2, group = gp, xlab = "Age (years)", ylab = "Length (SDS)")
 
 # built-in model with 11 knots

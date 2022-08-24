@@ -6,15 +6,19 @@
 \usage{
 get_knots(
   object,
-  what = c("all", "internal", "boundary", "dropfirst", "droplast")
+  whatknots = c("all", "internal", "boundary", "dropfirst", "droplast"),
+  what = "all"
 )
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick}}
 
-\item{what}{A character vector of length 1. Valid values are
-\code{"all"}, \code{"internal"}, \code{"boundary"}, \code{"dropfirst"}
-or \code{"droplast"}. The default is \code{what = "all"}.}
+\item{whatknots}{A character vector of length 1 specifies the knot set.
+Valid values are \code{"all"}, \code{"internal"}, \code{"boundary"},
+\code{"dropfirst"} and \code{"droplast"}. The default is
+\code{whatknots = "all"}}
+
+\item{what}{Deprecated. Use \code{whatknots} instead.}
 }
 \value{
 A vector with knot locations, either both, internal only or

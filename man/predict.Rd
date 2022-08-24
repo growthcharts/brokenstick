@@ -11,7 +11,7 @@
   x = NULL,
   y = NULL,
   group = NULL,
-  what = "all",
+  whatknots = "all",
   shape = c("long", "wide", "vector"),
   include_data = TRUE,
   strip_data = TRUE
@@ -34,9 +34,10 @@ positions of the knots.}
 
 \item{group}{A vector with group identifications}
 
-\item{what}{A string: \code{"all"} (default), \code{"internal"}, \code{"boundary"},
-\code{"dropfirst"} or \code{"droplast"} to specify the set of knots to predict.
-The default, \code{NULL}, calculates all knots.}
+\item{whatknots}{A character vector of length 1 specifies the knot set.
+Valid values are \code{"all"}, \code{"internal"}, \code{"boundary"},
+\code{"dropfirst"} and \code{"droplast"}. The default is
+\code{whatknots = "all"}}
 
 \item{shape}{A string: \code{"long"} (default), \code{"wide"} or \code{"vector"}
 specifying the shape of the return value. Note that use of \code{"wide"}

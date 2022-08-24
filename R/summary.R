@@ -8,7 +8,7 @@ summary.brokenstick <- function(object, ...,
 
   ans <- list()
   ans$names <- object$names
-  ans$knots <- get_knots(object, what = "all")
+  ans$knots <- get_knots(object, whatknots = "all")
   ans$control <- object$control
   ans$model <- localsummary.model(object)
   ans$method <- object$method
@@ -77,7 +77,7 @@ print.brokenstick <- function(x,
 
 # summary helpers
 localsummary.model <- function(x) {
-  k <- length(get_knots(x, what = "all")) - 1
+  k <- length(get_knots(x, whatknots = "all")) - 1
   if (x$method == "kr") {
     mdl <- list(
       model = "kr",

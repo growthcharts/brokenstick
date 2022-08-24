@@ -4,13 +4,23 @@
 \alias{get_omega}
 \title{Extract Variance and Correlation Components}
 \usage{
-get_omega(x, what = c("cov", "cor"), names = NULL)
+get_omega(
+  x,
+  what = c("cov", "cor"),
+  whatknots = c("all", "internal", "boundary", "dropfirst", "droplast"),
+  names = NULL
+)
 }
 \arguments{
 \item{x}{Object of class \code{brokenstick}}
 
 \item{what}{Either \code{"cov"} (default) for the covariance matrix,  or \code{"cor"}
 for the correlation matrix.}
+
+\item{whatknots}{A character vector of length 1 specifies the knot set.
+Valid values are \code{"all"}, \code{"internal"}, \code{"boundary"},
+\code{"dropfirst"} and \code{"droplast"}. The default is
+\code{whatknots = "all"}}
 
 \item{names}{A vector of column names of. If not specified, the function
 automatically drops the entries corresponding to the right boundary. Specify
@@ -25,5 +35,5 @@ Extracts variance-covariance or correlation matrix from a
 }
 \examples{
 f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:2, seed = 1)
-get_omega(f1, "cor", c("age_1", "age_2"))
+get_omega(f1, what = "cor", names = c("age_1", "age_2"))
 }
