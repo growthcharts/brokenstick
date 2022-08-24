@@ -4,7 +4,7 @@ of measurements onto a user-specified grid of points (knots).
 The model codes the grid by a series of linear B-splines.
 Each modelled trajectory consists of straight lines that join at
 the chosen knots and look like a broken stick. Differences between
-observations are expressed by a random effect per knot."><title>Fit a brokenstick model to irregular data — brokenstick • brokenstick</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Fit a brokenstick model to irregular data — brokenstick"><meta property="og:description" content="The brokenstick() function fits an irregularly observed series
+observations are expressed by a random effect per knot."><title>Fit a brokenstick model to irregular data — brokenstick • brokenstick</title><script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"><link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet"><script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous"><!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Fit a brokenstick model to irregular data — brokenstick"><meta property="og:description" content="The brokenstick() function fits an irregularly observed series
 of measurements onto a user-specified grid of points (knots).
 The model codes the grid by a series of linear B-splines.
 Each modelled trajectory consists of straight lines that join at
@@ -20,7 +20,7 @@ observations are expressed by a random effect per knot."><!-- mathjax --><script
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.2.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -237,7 +237,7 @@ to other  data sets. Fixing the model requires specifying both <code>knots</code
 <span class="r-in"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">smocc_200</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">1198</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using kr method, default</span></span></span>
-<span class="r-in"><span><span class="va">f1</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">3</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">f1</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">2</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">f1</span>, <span class="va">data</span>, n_plot <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="brokenstick-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -249,49 +249,45 @@ to other  data sets. Fixing the model requires specifying both <code>knots</code
 <span class="r-plt img"><img src="brokenstick-3.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using lmer method</span></span></span>
-<span class="r-in"><span><span class="va">f2</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">3</span>, method <span class="op">=</span> <span class="st">"lmer"</span><span class="op">)</span></span></span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model failed to converge with max|grad| = 0.00940367 (tol = 0.002, component 1)</span>
+<span class="r-in"><span><span class="va">f2</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">2</span>, method <span class="op">=</span> <span class="st">"lmer"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">f2</span>, <span class="va">data</span>, n_plot <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="brokenstick-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># drill down into merMod object with standard diagnostics in lme4</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">f2</span><span class="op">$</span><span class="va">mod</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Linear mixed model fit by REML ['lmerMod']</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Formula: hgt_z ~ 0 + age_0 + age_1 + age_2 + age_3 + (0 + age_0 + age_1 +  </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     age_2 + age_3 | id)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Formula: hgt_z ~ 0 + age_0 + age_1 + age_2 + age_2.6776 + (0 + age_0 +  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     age_1 + age_2 + age_2.6776 | id)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>    Data: data</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Control: control</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> REML criterion at convergence: 2087.9</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> REML criterion at convergence: 2088.7</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Scaled residuals: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Min      1Q  Median      3Q     Max </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.8279 -0.5272  0.0031  0.5705  3.4223 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -3.8278 -0.5275  0.0025  0.5653  3.4227 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Random effects:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Groups   Name  Variance Std.Dev. Corr          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  id       age_0 1.2931   1.1372                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           age_1 0.6759   0.8221   0.47          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2 0.7065   0.8405   0.45 0.94     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           age_3 5.2058   2.2816   0.44 0.52 0.65</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Residual       0.1783   0.4223                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Groups   Name       Variance Std.Dev. Corr          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  id       age_0      1.2928   1.1370                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           age_1      0.6759   0.8221   0.47          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2      0.7081   0.8415   0.45 0.94     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2.6776 3.5551   1.8855   0.45 0.58 0.63</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Residual            0.1783   0.4222                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of obs: 1185, groups:  id, 124</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed effects:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       Estimate Std. Error t value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_0 -0.02586    0.10453  -0.247</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_1  0.03509    0.07837   0.448</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_2  0.05964    0.08669   0.688</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_3  0.66582    1.08567   0.613</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            Estimate Std. Error t value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_0      -0.02595    0.10452  -0.248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_1       0.03549    0.07838   0.453</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2       0.05770    0.08689   0.664</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2.6776  0.56103    0.75707   0.741</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Correlation of Fixed Effects:</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>       age_0  age_1  age_2 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_1  0.407              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_2  0.396  0.722       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_3  0.072  0.139 -0.134</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> optimizer (nloptwrap) convergence code: 0 (OK)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Model failed to converge with max|grad| = 0.00940367 (tol = 0.002, component 1)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            age_0  age_1  age_2 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_1       0.407              </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2       0.394  0.719       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2.6776  0.089  0.167 -0.113</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">f2</span><span class="op">$</span><span class="va">mod</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="brokenstick-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -306,7 +302,7 @@ to other  data sets. Fixing the model requires specifying both <code>knots</code
 <span class="r-in"><span><span class="co"># method lmer takes about 40 seconds</span></span></span>
 <span class="r-in"><span><span class="va">f4</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span>, <span class="va">knots</span>, method <span class="op">=</span> <span class="st">"lmer"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of observations (=1185) &lt;= number of random effects (=1364) for term (0 + age_0 + age_0.0833 + age_0.1667 + age_0.25 + age_0.5 + age_0.75 + age_1 + age_1.25 + age_1.5 + age_2 + age_3 | id); the random-effects parameters and the residual variance (or scale parameter) are probably unidentifiable</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> boundary (singular) fit: see help('isSingular')</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model failed to converge with max|grad| = 0.010823 (tol = 0.002, component 1)</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">f4</span>, <span class="va">data</span>, n_plot <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="brokenstick-7.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
