@@ -8,7 +8,7 @@
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
-[![](https://img.shields.io/badge/github%20version-2.2.1-orange.svg)](https://growthcharts.org/brokenstick/)
+[![](https://img.shields.io/badge/github%20version-2.3.0-orange.svg)](https://growthcharts.org/brokenstick/)
 
 <!-- badges: end -->
 
@@ -66,9 +66,8 @@ The main assumptions of the broken stick model are:
 
 In order to conform to the assumption of multivariate normality, the
 user may fit the broken stick model on suitably transformed data that
-yield the standard normal
-(![Z](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;Z "Z"))
-scale. Unique feature of the broken stick model are:
+yield the standard normal ($Z$) scale. Unique feature of the broken
+stick model are:
 
 -   *Modular*: Issues related to non-linearity of the growth curves in
     the observed scale can be treated separately, i.e., outside the
