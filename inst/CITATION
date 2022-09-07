@@ -14,5 +14,5 @@ bibentry(
   textVersion  =
   paste("Stef van Buuren (2022)",
         "Broken Stick Model for Irregular Longitudinal Data",
-        "Journal of Statistical Software", "Submitted for pulication",
+        "Journal of Statistical Software", "Submitted for publication",
         "https://github.com/growthcharts/brokenstick.", sep = ", ")
