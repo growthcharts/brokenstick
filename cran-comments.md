@@ -1,14 +1,15 @@
 cran-comments
 ================
 
-## Submission 1 to CRAN
+## Submission to CRAN
 
--   `brokenstick 2.2.0` incorporates various updates and fixes. See
+-   `brokenstick 2.3.0` incorporates various updates and fixes. See
     NEWS.md for an overview.
+-   The version also updates the roxygen2 version
 
 ## Test environments
 
--   local OS X, 12.4, R 4.2.1
+-   local OS X, 12.5.1, R 4.2.1
 -   win-builder, using `devtools::check_win_devel()`
 -   rhub
 
@@ -22,8 +23,7 @@ build(manual = TRUE)
 ```
 
 ``` bash
-R CMD CHECK brokenstick_2.2.0.tar.gz
-
+R CMD CHECK brokenstick_2.3.0.tar.gz
 Status: OK
 ```
 
