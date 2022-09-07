@@ -1,10 +1,11 @@
-# brokenstick 2.2.1
+# brokenstick 2.3.0
 
 - Replaces `what` argument in `get_knots()` to `whatknots`
 - Adds support for `whatknots` in `get_omega()`
 - Extends capabilities of `plot_trajectory()` with `shape` and `linetype` options
 - Adds an example to `plot.brokenstick()` on how to create a decent black and white figure of trajectories
 - Replaces `knots = 0:3` by `knots = 0:2` in examples
+- Updates the perfectmodel vignette
 
 # brokenstick 2.2.0
 

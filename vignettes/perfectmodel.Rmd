@@ -41,9 +41,11 @@ make_data_generator <- function(resid_var = 1,
 }
 ```
 
-Let us first model the perfect situation where $\sigma^2 = 0$ (so we set `resid_var` to zero) and where the ages align perfectly.
+We choose between the perfect situation where $\sigma^2 = 0$ and the noisy case $\sigma^2 = 1$ and where the ages align perfectly.
 
 ```{r}
+resid_var <- 0
+resid_var <- 1
 set.seed(77711)
 covar <- matrix(c(1, 0.7, 0.5, 0.3,
                   0.7, 1, 0.8, 0.5,
@@ -51,12 +53,12 @@ covar <- matrix(c(1, 0.7, 0.5, 0.3,
                   0.3, 0.5, 0.6, 1), nrow = 4)
 gen_dat <- make_data_generator(n = 10000, 
                                ranef_covar = covar,
-                               resid_var = 2)
+                               resid_var = resid_var)
 data <- gen_dat()
 head(data)
 ```
 
-Check the correlation matrix of the $y$'s.
+We wish to reproduce the correlation matrix among the $y$'s from the mixed model estimates. The **target correlation matrix** is:
 
 ```{r}
 library("tidyr")
@@ -94,6 +96,13 @@ round(cov(broad), 3)
 # convert to time-to-time correlation matrix
 round(cov2cor(omega + diag(sigma2, 4)), 3)
 round(cor(broad), 3)
+
+z <- predict(fit, x = "knots", include_data = FALSE, shape = "wide")[, -1]
+# off-diagonal elements of covariance of broken stick estimates approach correlation
+# not enough variance in the diagonal because of smoothing
+cov(z)
+# correlations of broken stick estimates are inflated because of smoothing
+cor(z)
 ```
 
 ## Conclusions
@@ -101,4 +110,12 @@ round(cor(broad), 3)
 1. If $\sigma^2=0$, then the off-diagonal elements of $\Omega$ reproduce the correlations among the $y$'s. The estimate of $\sigma^2$ is too high (about 0.13 instead of 0).
 2. If $\sigma^2 > 0$, then $\hat C = \Omega + \hat\sigma^2 I(n_i)$ reproduces the sample covariance matrix between $y$'s exactly.
 3. `cov2cor(hatC)` reproduces the sample time-to-time correlation matrix.
+4. Conclusion: The unbiased estimate of the time-to-time correlation matrix among the (unobserved) measurements at the knots:
+
+```{r}
+cov <- get_omega(fit)
+chat <- cov + diag(fit$sigma2, nrow(cov))
+r <- cov2cor(chat)
+r
+```
 
