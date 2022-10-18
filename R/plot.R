@@ -219,7 +219,7 @@ plot_trajectory <- function(x,
       ggplot2::geom_line(ggplot2::aes_string(group = ".imp"),
         data = data[k, ], color = color_imp[2L]
       ) +
-      ggplot2::geom_point(ggplot2::aes_string(y = "hgt_z"),
+      ggplot2::geom_point(ggplot2::aes_string(y = x$names$y),
         data = data[k, ], color = color_imp[1L],
         size = size_imp
       )
