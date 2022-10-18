@@ -20,7 +20,7 @@ observations are expressed by a random effect per knot."><!-- mathjax --><script
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -265,29 +265,29 @@ to other  data sets. Fixing the model requires specifying both <code>knots</code
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Scaled residuals: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Min      1Q  Median      3Q     Max </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.8278 -0.5275  0.0025  0.5653  3.4227 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -3.8278 -0.5279  0.0025  0.5652  3.4227 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Random effects:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Groups   Name       Variance Std.Dev. Corr          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  id       age_0      1.2928   1.1370                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  id       age_0      1.2929   1.1370                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           age_1      0.6759   0.8221   0.47          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2      0.7081   0.8415   0.45 0.94     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2.6776 3.5551   1.8855   0.45 0.58 0.63</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2      0.7082   0.8415   0.45 0.94     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2.6776 3.5673   1.8887   0.45 0.58 0.63</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Residual            0.1783   0.4222                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of obs: 1185, groups:  id, 124</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed effects:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Estimate Std. Error t value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_0      -0.02595    0.10452  -0.248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_1       0.03549    0.07838   0.453</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_2       0.05770    0.08689   0.664</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_2.6776  0.56103    0.75707   0.741</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_0      -0.02596    0.10452  -0.248</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_1       0.03550    0.07838   0.453</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2       0.05766    0.08689   0.664</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2.6776  0.56284    0.75759   0.743</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Correlation of Fixed Effects:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            age_0  age_1  age_2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> age_1       0.407              </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> age_2       0.394  0.719       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_2.6776  0.089  0.167 -0.113</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2.6776  0.089  0.167 -0.114</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">f2</span><span class="op">$</span><span class="va">mod</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="brokenstick-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -302,7 +302,7 @@ to other  data sets. Fixing the model requires specifying both <code>knots</code
 <span class="r-in"><span><span class="co"># method lmer takes about 40 seconds</span></span></span>
 <span class="r-in"><span><span class="va">f4</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span>, <span class="va">knots</span>, method <span class="op">=</span> <span class="st">"lmer"</span><span class="op">)</span></span></span>
 <span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>number of observations (=1185) &lt;= number of random effects (=1364) for term (0 + age_0 + age_0.0833 + age_0.1667 + age_0.25 + age_0.5 + age_0.75 + age_1 + age_1.25 + age_1.5 + age_2 + age_3 | id); the random-effects parameters and the residual variance (or scale parameter) are probably unidentifiable</span>
-<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model failed to converge with max|grad| = 0.010823 (tol = 0.002, component 1)</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> boundary (singular) fit: see help('isSingular')</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">f4</span>, <span class="va">data</span>, n_plot <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="brokenstick-7.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
