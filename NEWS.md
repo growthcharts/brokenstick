@@ -1,3 +1,7 @@
+# brokenstick 2.3.1
+
+- Replace hard-coded variable name `hgt_z` by a dynamic name (#8)
+
 # brokenstick 2.3.0
 
 - Replaces `what` argument in `get_knots()` to `whatknots`
