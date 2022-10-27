@@ -67,9 +67,9 @@
 #'    object can be used to predict broken stick estimates for new data, but
 #'    does not disclose the training data and is very small (often <20 Kb).
 #'
-#' @param hide Should output for boundary knots be hidden in the
-#'    print, summary and plot functions? Can be `"left"`, `"right"`, `"both"`
-#'    or `"none"`. The default is `"right"`.
+#' @param hide Should output for knots be hidden in get, print, summary and plot
+#' functions? Can be `"left"`, `"right"`, `"boundary"`, `"internal"` or `"none"`.
+#' The default is `"right"`.
 #'
 #' @param \dots Forwards arguments to [brokenstick::control_kr()].
 #'
@@ -165,7 +165,7 @@ brokenstick <- function(formula,
                         control = set_control(method = method, ...),
                         na.action = na.exclude,
                         light = FALSE,
-                        hide = c("right", "left", "both", "none"),
+                        hide = c("right", "left", "boundary", "internal", "none"),
                         ...) {
   call <- match.call()
   stopifnot(

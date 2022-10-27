@@ -60,8 +60,11 @@ test_that("returns proper number of rows", {
   expect_equal(nrow(predict(exp, dat, x = c(NA, NA), include_data = FALSE)), 400L)
   expect_equal(nrow(predict(exp, dat, x = NA, y = 1)), 1L)
   expect_equal(nrow(predict(exp, dat, x = c(NA, NA), y = c(-1, 10))), 2L)
-  expect_equal(nrow(predict(exp, dat, x = "knots", include_data = FALSE)), 2200L)
-  expect_equal(nrow(predict(exp, dat, x = "knots", y = rep(1, 11))), 11L)
+  expect_equal(nrow(predict(exp, dat, x = "knots", include_data = FALSE, hide = "none")), 2200L)
+  expect_equal(nrow(predict(exp, dat, x = "knots", y = rep(1, 10))), 10L)
+  expect_equal(nrow(predict(exp, dat, x = "knots", y = rep(1, 11), hide = "none")), 11L)
+  expect_equal(nrow(predict(exp, dat, x = "knots", y = rep(1, 2), hide = "internal")), 2L)
+  expect_equal(nrow(predict(exp, dat, x = "knots", y = rep(1, 9), hide = "boundary")), 9L)
 })
 
 test_that("accepts intermediate NA in x", {

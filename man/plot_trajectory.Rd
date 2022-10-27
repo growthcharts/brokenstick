@@ -7,7 +7,7 @@
 plot_trajectory(
   x,
   newdata = NULL,
-  hide = c("right", "left", "both", "none"),
+  hide = c("right", "left", "boundary", "internal", "none"),
   .x = NULL,
   group = NULL,
   color_y = c(grDevices::hcl(240, 100, 40, 0.7), grDevices::hcl(240, 100, 40, 0.8)),

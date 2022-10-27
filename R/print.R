@@ -2,24 +2,19 @@
 print.brokenstick <- function(x,
                               digits = getOption("digits"),
                               ...,
-                              hide = c("right", "left", "both", "none")) {
+                              hide = c("right", "left", "boundary", "internal", "none")) {
   stopifnot(inherits(x, "brokenstick"))
   if (!missing(hide)) {
     hide <- match.arg(hide)
   } else {
-    hide <- x$hide
+    hide <- ifelse(is.null(x$hide), "right", x$hide)
   }
-  whatknots <- switch(hide,
-                      right = "droplast",
-                      left = "dropfirst",
-                      both = "internal",
-                      none = "all")
 
   cat(paste0("Class        brokenstick (", x$method, ")"))
   if (x$light) cat(" light")
   cat("\n")
   cat("Variables   ", x$names$y, "(outcome),", x$names$x, "(predictor),", x$names$g, "(group)\n")
-  cat("Knots       ", format(get_knots(x, whatknots = whatknots), digits = digits, ...), "\n")
+  cat("Knots       ", format(get_knots(x, hide = hide), digits = digits, ...), "\n")
   cat("Mean resid  ", format(x$sigma2, digits = digits, ...), "\n")
   if (!is.null(x$r2)) cat("R-squared   ", format(x$r2, digits = digits, ...), "\n")
   return(invisible(x))

@@ -4,27 +4,22 @@ summary.brokenstick <- function(object,
                                 ...,
                                 cor = FALSE,
                                 lower = TRUE,
-                                hide = c("right", "left", "both", "none")) {
+                                hide = c("right", "left", "boundary", "internal", "none")) {
   stopifnot(inherits(object, "brokenstick"))
   if (!missing(hide)) {
     hide <- match.arg(hide)
   } else {
-    hide <- object$hide
+    hide <- ifelse(is.null(object$hide), "right", object$hide)
   }
-  whatknots <- switch(hide,
-                      right = "droplast",
-                      left = "dropfirst",
-                      both = "internal",
-                      none = "all")
 
   ans <- list()
   ans$names <- object$names
-  ans$knots <- get_knots(object, whatknots = whatknots)
+  ans$knots <- get_knots(object, hide = hide)
   ans$control <- object$control
   ans$model <- localsummary.model(object)
   ans$method <- object$method
   ans$beta <- coef(object, hide = hide)
-  omega <- get_omega(object, cor = cor, whatknots = whatknots)
+  omega <- get_omega(object, cor = cor, hide = hide)
   if (lower) omega[upper.tri(omega)] <- NA_real_
   ans$omega <- omega
   if (length(object$sigma2j)) {
@@ -38,7 +33,7 @@ summary.brokenstick <- function(object,
   if (!object$light) {
     ans$r2 <- get_r2(object, object$data)
   }
-  ans$whatknots <- whatknots
+  ans$hide <- hide
   ans$cor <- cor
   class(ans) <- "summary.brokenstick"
   return(ans)
@@ -46,7 +41,7 @@ summary.brokenstick <- function(object,
 
 # summary helpers
 localsummary.model <- function(x) {
-  k <- length(get_knots(x, whatknots = "all")) - 1
+  k <- length(get_knots(x, hide = "none")) - 1
   if (x$method == "kr") {
     mdl <- list(
       model = "kr",

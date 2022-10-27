@@ -4,7 +4,12 @@
 \alias{coef.brokenstick}
 \title{Extract Model Coefficients from brokenstick Object}
 \usage{
-\method{coef}{brokenstick}(object, complete = TRUE, ..., hide = c("right", "left", "both", "none"))
+\method{coef}{brokenstick}(
+  object,
+  complete = TRUE,
+  ...,
+  hide = c("right", "left", "boundary", "internal", "none")
+)
 }
 \arguments{
 \item{object}{A \code{brokenstick} object}
@@ -20,7 +25,8 @@
 \item{...}{Not used}
 
 \item{hide}{Should output for boundary knots be hidden in the print,
-summary and plot functions? Can be \code{"left"}, \code{"right"}, \code{"both"} or \code{"none"}.
+summary and plot functions? Can be \code{"left"}, \code{"right"}, \code{"boundary"},
+\code{"internal"} or \code{"none"}.
 If not specified, it is read from the field \code{object$hide}.}
 }
 \description{

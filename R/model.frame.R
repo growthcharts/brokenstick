@@ -18,8 +18,8 @@ model.matrix.brokenstick <- function(object, ...) {
   x_name <- object$names$x[1L]
   obj <- make_basis(
     x = object$data[[x_name]],
-    internal = get_knots(object, whatknots = "internal"),
-    boundary = get_knots(object, whatknots = "boundary")
+    internal = get_knots(object, hide = "boundary"),
+    boundary = get_knots(object, hide = "internal")
   )
   return(obj)
 }

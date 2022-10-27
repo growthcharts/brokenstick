@@ -11,10 +11,11 @@
   x = NULL,
   y = NULL,
   group = NULL,
-  whatknots = "all",
+  hide = c("right", "left", "boundary", "internal", "none"),
   shape = c("long", "wide", "vector"),
   include_data = TRUE,
-  strip_data = TRUE
+  strip_data = TRUE,
+  whatknots = "all"
 )
 }
 \arguments{
@@ -34,10 +35,9 @@ positions of the knots.}
 
 \item{group}{A vector with group identifications}
 
-\item{whatknots}{A character vector of length 1 specifies the knot set.
-Valid values are \code{"all"}, \code{"internal"}, \code{"boundary"},
-\code{"dropfirst"} and \code{"droplast"}. The default is
-\code{whatknots = "all"}}
+\item{hide}{Should output for knots be hidden in get, print, summary and plot
+functions? Can be \code{"left"}, \code{"right"}, \code{"boundary"}, \code{"internal"} or \code{"none"}.
+The default is \code{"right"}.}
 
 \item{shape}{A string: \code{"long"} (default), \code{"wide"} or \code{"vector"}
 specifying the shape of the return value. Note that use of \code{"wide"}
@@ -56,6 +56,8 @@ in the special case \code{x = "knots"} the function overwrites
 wide matrix.}
 
 \item{strip_data}{Deprecated. Use \code{include_data} instead.}
+
+\item{whatknots}{Deprecated. Use \code{hide} instead.}
 }
 \value{
 If \code{shape == "long"} a long \code{data.frame} of predictions. If \code{x}, \code{y} and \code{group}

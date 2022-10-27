@@ -36,7 +36,8 @@
 #'    The light object can be used to predict broken stick estimates for
 #'    new data, but does not disclose the training data and is small.}
 #'    \item{`hide`}{Should the output for boundary knots be hidden? Can
-#'    be `"right"`, `"left"`, `"both"` or `"none"`. The default is `"right"`.}
+#'    be `"right"`, `"left"`, `"boundary"`, `"internal"` or `"none"`.
+#'    The default is `"right"`.}
 #'    \item{`sigma2j`}{Numeric vector with estimates of the residual variance per
 #'    group. Only used by method `"kr"`.}
 #'    \item{`data`}{The training data used to fit the model.}

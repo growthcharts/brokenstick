@@ -80,8 +80,8 @@ boundary <- c(1, 4)
 fit <- brokenstick(X1 ~ age | subject, data, 
                    knots = knots, boundary = boundary,
                    method = "lmer")
-omega <- get_omega(fit)
-beta <- coef(fit)
+omega <- get_omega(fit, hide = "no")
+beta <- coef(fit, hide = "no")
 sigma2 <- fit$sigma2
 round(beta, 2)
 round(sigma2, 4)

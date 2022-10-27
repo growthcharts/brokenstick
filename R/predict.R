@@ -240,10 +240,11 @@
 predict.brokenstick <- function(object, newdata = NULL,
                                 ...,
                                 x = NULL, y = NULL, group = NULL,
-                                whatknots = "all",
+                                hide = c("right", "left", "boundary", "internal", "none"),
                                 shape = c("long", "wide", "vector"),
                                 include_data = TRUE,
-                                strip_data = TRUE) {
+                                strip_data = TRUE,
+                                whatknots = "all") {
   shape <- match.arg(shape)
   if (!missing(strip_data)) {
     warning("Argument 'strip_data' is deprecated; please use 'include_data' instead.",
@@ -252,11 +253,27 @@ predict.brokenstick <- function(object, newdata = NULL,
   }
   rm(strip_data)
 
+  if (!missing(whatknots)) {
+    warning("argument 'whatknots' is deprecated; please use 'hide' instead.",
+            call. = FALSE)
+    object$hide <- switch(whatknots,
+                          droplast = "right",
+                          dropfirst = "left",
+                          internal = "boundary",
+                          all = "none",
+                          "none")
+  }
+  if (!missing(hide)) {
+    hide <- match.arg(hide)
+  } else {
+    hide <- ifelse(is.null(object$hide), "right", object$hide)
+  }
+
   # handle special case: x = "knots"
   # convenience: overwrite include_data when wide
   if (length(x)) {
     if (!is.na(x[1L]) && x[1L] == "knots") {
-      x <- get_knots(object, whatknots = whatknots)
+      x <- get_knots(object, hide = hide)
       if (shape == "wide") include_data <- FALSE
     }
   }
@@ -372,8 +389,8 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
 
   X <- make_basis(
     x = x,
-    internal = get_knots(object, "internal"),
-    boundary = get_knots(object, "boundary"),
+    internal = get_knots(object, hide = "boundary"),
+    boundary = get_knots(object, hide = "internal"),
     degree = object$degree,
     warn = FALSE
   )
@@ -392,7 +409,7 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
     return(data.frame(.pred = rep(NA_real_, length(x))))
   }
 
-  xv <- get_knots(object, whatknots = "all")
+  xv <- get_knots(object, hide = "none")
   if (object$degree == 0L) xv <- xv[-length(xv)]
   long1 <- data.frame(
     group = rep(colnames(blup), each = nrow(blup)),

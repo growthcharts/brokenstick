@@ -6,23 +6,26 @@
 \usage{
 get_knots(
   object,
-  whatknots = c("all", "internal", "boundary", "dropfirst", "droplast"),
+  hide = c("right", "left", "boundary", "internal", "none"),
+  whatknots = "all",
   what = "all"
 )
 }
 \arguments{
 \item{object}{An object of class \code{brokenstick}}
 
-\item{whatknots}{A character vector of length 1 specifies the knot set.
-Valid values are \code{"all"}, \code{"internal"}, \code{"boundary"},
-\code{"dropfirst"} and \code{"droplast"}. The default is
-\code{whatknots = "all"}}
+\item{hide}{Should output for knots be hidden in get, print, summary and plot
+functions? Can be \code{"left"}, \code{"right"}, \code{"boundary"}, \code{"internal"} or \code{"none"}.
+The default is \code{"right"}.}
 
-\item{what}{Deprecated. Use \code{whatknots} instead.}
+\item{whatknots}{Deprecated. Use \code{hide} instead.}
+
+\item{what}{Deprecated. Use \code{hide} instead.}
 }
 \value{
 A vector with knot locations, either both, internal only or
-boundary only. The result is \code{NULL} if \code{object} does not
+boundary only, depending on \code{hide}.
+The result is \code{NULL} if \code{object} does not
 have proper class. Returns \code{numeric(0)} if
 there are no internal knots.
 }
@@ -30,5 +33,5 @@ there are no internal knots.
 Obtain the knots from a broken stick model
 }
 \examples{
-get_knots(fit_200, "internal")
+get_knots(fit_200, hide = "bo")
 }

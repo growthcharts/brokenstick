@@ -6,21 +6,23 @@
 \usage{
 get_omega(
   x,
+  hide = c("right", "left", "boundary", "internal", "none"),
   cor = FALSE,
-  whatknots = c("all", "internal", "boundary", "dropfirst", "droplast"),
+  whatknots = "all",
   what = "cov"
 )
 }
 \arguments{
 \item{x}{Object of class \code{brokenstick}}
 
+\item{hide}{Should output for knots be hidden in get, print, summary and plot
+functions? Can be \code{"left"}, \code{"right"}, \code{"boundary"}, \code{"internal"} or \code{"none"}.
+The default is \code{"right"}.}
+
 \item{cor}{Logical. Should the function return the correlation matrix
 instead of the covariance matrix? The default is \code{FALSE}.}
 
-\item{whatknots}{A character vector of length 1 specifies the knot set.
-Valid values are \code{"all"}, \code{"internal"}, \code{"boundary"},
-\code{"dropfirst"} and \code{"droplast"}. The default is
-\code{whatknots = "all"}}
+\item{whatknots}{Deprecated.}
 
 \item{what}{Deprecated.}
 }
@@ -33,5 +35,5 @@ Extracts variance-covariance or correlation matrix from a
 }
 \examples{
 f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:2, seed = 1)
-get_omega(f1, cor = TRUE, whatknots = "internal")
+get_omega(f1, cor = TRUE, hide = "boundary")
 }
