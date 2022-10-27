@@ -6,25 +6,23 @@
 \usage{
 get_omega(
   x,
-  what = c("cov", "cor"),
+  cor = FALSE,
   whatknots = c("all", "internal", "boundary", "dropfirst", "droplast"),
-  names = NULL
+  what = "cov"
 )
 }
 \arguments{
 \item{x}{Object of class \code{brokenstick}}
 
-\item{what}{Either \code{"cov"} (default) for the covariance matrix,  or \code{"cor"}
-for the correlation matrix.}
+\item{cor}{Logical. Should the function return the correlation matrix
+instead of the covariance matrix? The default is \code{FALSE}.}
 
 \item{whatknots}{A character vector of length 1 specifies the knot set.
 Valid values are \code{"all"}, \code{"internal"}, \code{"boundary"},
 \code{"dropfirst"} and \code{"droplast"}. The default is
 \code{whatknots = "all"}}
 
-\item{names}{A vector of column names of. If not specified, the function
-automatically drops the entries corresponding to the right boundary. Specify
-\code{names = "all"} to prevent dropping.}
+\item{what}{Deprecated.}
 }
 \value{
 A numeric matrix, possibly with zero rows and columns if no names match
@@ -35,5 +33,5 @@ Extracts variance-covariance or correlation matrix from a
 }
 \examples{
 f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:2, seed = 1)
-get_omega(f1, what = "cor", names = c("age_1", "age_2"))
+get_omega(f1, cor = TRUE, whatknots = "internal")
 }

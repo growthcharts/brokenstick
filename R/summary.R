@@ -1,19 +1,32 @@
 #' @inheritParams get_omega
 #' @export
-summary.brokenstick <- function(object, ...,
-                                digits = max(3, getOption("digits")),
-                                what = c("cov", "cor")) {
+summary.brokenstick <- function(object,
+                                ...,
+                                cor = FALSE,
+                                lower = TRUE,
+                                hide = c("right", "left", "both", "none")) {
   stopifnot(inherits(object, "brokenstick"))
-  what <- match.arg(what)
+  if (!missing(hide)) {
+    hide <- match.arg(hide)
+  } else {
+    hide <- object$hide
+  }
+  whatknots <- switch(hide,
+                      right = "droplast",
+                      left = "dropfirst",
+                      both = "internal",
+                      none = "all")
 
   ans <- list()
   ans$names <- object$names
-  ans$knots <- get_knots(object, whatknots = "all")
+  ans$knots <- get_knots(object, whatknots = whatknots)
   ans$control <- object$control
   ans$model <- localsummary.model(object)
   ans$method <- object$method
-  ans$beta <- localsummary.beta(object, digits)
-  ans$omega <- localsummary.omega(object, digits, what = what)
+  ans$beta <- coef(object, hide = hide)
+  omega <- get_omega(object, cor = cor, whatknots = whatknots)
+  if (lower) omega[upper.tri(omega)] <- NA_real_
+  ans$omega <- omega
   if (length(object$sigma2j)) {
     ans$sigma2j <- summary(object$sigma2j)[c(1:3, 5, 6)]
   } else {
@@ -25,54 +38,10 @@ summary.brokenstick <- function(object, ...,
   if (!object$light) {
     ans$r2 <- get_r2(object, object$data)
   }
-  ans$what <- what
+  ans$whatknots <- whatknots
+  ans$cor <- cor
   class(ans) <- "summary.brokenstick"
   return(ans)
-}
-
-#' @export
-print.summary.brokenstick <- function(x,
-                                      digits = max(3L, getOption("digits") - 3L),
-                                      ...) {
-  stopifnot(inherits(x, "summary.brokenstick"))
-  cat(paste0("Class        brokenstick (", x$method, ")"))
-  if (x$light) cat(" light")
-  cat("\n")
-  cat("Variables   ", x$names$y, "(outcome),", x$names$x, "(predictor),", x$names$g, "(group)\n")
-  cat("Data        ", x$sample[1L], "(n),", x$sample[3], "(nmis),", x$sample[4], "(groups)\n")
-  cat(
-    "Parameters  ", x$model$npar, "(total),", x$model$nfixed, "(fixed),",
-    x$model$nvar, "(variance),", x$model$ncov, "(covariance),",
-    x$model$nerr, "(error)\n"
-  )
-  cat("Knots       ", x$knots, "\n")
-  cat("Means       ", x$beta, "\n")
-  if (length(x$sigma2j)) {
-    cat("Residuals   ", x$sigma2j, "(min, P25, P50, P75, max)\n")
-  }
-  cat("Mean resid  ", x$sigma2, "\n")
-  if (!is.null(x$r2)) cat("R-squared   ", x$r2, "\n")
-  cat("\n")
-  if (x$what == "cov") cat("Variance-covariance matrix\n")
-  if (x$what == "cor") cat("Correlation matrix\n")
-  print(x$omega)
-  return(invisible(x))
-}
-
-#' @export
-print.brokenstick <- function(x,
-                              digits = max(3L, getOption("digits") - 3L),
-                              ...) {
-  stopifnot(inherits(x, "brokenstick"))
-  x <- summary(x)
-  cat(paste0("Class        brokenstick (", x$method, ")"))
-  if (x$light) cat(" light")
-  cat("\n")
-  cat("Variables   ", x$names$y, "(outcome),", x$names$x, "(predictor),", x$names$g, "(group)\n")
-  cat("Knots       ", x$knots, "\n")
-  cat("Mean resid  ", x$sigma2, "\n")
-  if (!is.null(x$r2)) cat("R-squared   ", x$r2, "\n")
-  return(invisible(x))
 }
 
 # summary helpers
@@ -101,16 +70,4 @@ localsummary.model <- function(x) {
     )
   }
   return(mdl)
-}
-
-localsummary.beta <- function(x, digits) {
-  return(round(x$beta, digits))
-}
-
-localsummary.omega <- function(x, digits, what) {
-  omega <- get_omega(x, what = what, names = "all")
-  upper <- round(omega, digits)
-  upper[upper.tri(upper)] <- ""
-  upper <- as.data.frame(upper)
-  return(upper)
 }

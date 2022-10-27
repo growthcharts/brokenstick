@@ -58,8 +58,7 @@ plot.brokenstick <- function(x,
 #' @inheritParams predict.brokenstick
 #' @param x An object of class `brokenstick`.
 #' @param newdata A `data.frame` or `matrix`
-#' @param whatknots Which knots to plot? See [get_knots()]. The default,
-#' `whatknots = "droplast"`, does not plot the right boundary knot.
+#' @param hide Character indicating which knots should
 #' @param .x The `x` argument of the [predict.brokenstick()] function.
 #' @param color_y A character vector with two elements specifying the symbol and line color of the measured data points
 #' @param size_y Dot size of measured data points
@@ -87,6 +86,7 @@ plot.brokenstick <- function(x,
 #' plots of the entire data set.
 #' @param scales Axis scaling, e.g. `"fixed"`, `"free"`, and so on
 #' @param theme Plotting theme
+#' @param whatknots Deprecated.
 #' @param \dots Extra arguments passed down to [predict.brokenstick()].
 #' @return An object of class \code{ggplot}
 #' @rdname plot_trajectory
@@ -94,7 +94,7 @@ plot.brokenstick <- function(x,
 #' @export
 plot_trajectory <- function(x,
                             newdata = NULL,
-                            whatknots = "droplast",
+                            hide = c("right", "left", "both", "none"),
                             .x = NULL,
                             group = NULL,
                             color_y = c(
@@ -122,11 +122,33 @@ plot_trajectory <- function(x,
                             n_plot = 3L,
                             scales = "fixed",
                             theme = ggplot2::theme_light(),
+                            whatknots = "droplast",
                             ...) {
   stopifnot(
     inherits(x, "brokenstick"),
     any(show)
   )
+  if (!missing(hide)) {
+    hide <- match.arg(hide)
+  } else {
+    hide <- x$hide
+  }
+  if (!missing(whatknots)) {
+    warning("argument whatknots is deprecated; please use hide instead.",
+            call. = FALSE)
+    hide <- switch(whatknots,
+                   droplast = "right",
+                   dropfirst = "left",
+                   internal = "both",
+                   all = "none",
+                   "none")
+  }
+  whatknots <- switch(hide,
+                      right = "droplast",
+                      left = "dropfirst",
+                      both = "internal",
+                      none = "all")
+
   newdata <- get_newdata(x, newdata)
   # calculate brokenstick predictions, long format
   if (show[2L] && missing(.x)) .x <- "knots"

@@ -67,6 +67,10 @@
 #'    object can be used to predict broken stick estimates for new data, but
 #'    does not disclose the training data and is very small (often <20 Kb).
 #'
+#' @param hide Should output for boundary knots be hidden in the
+#'    print, summary and plot functions? Can be `"left"`, `"right"`, `"both"`
+#'    or `"none"`. The default is `"right"`.
+#'
 #' @param \dots Forwards arguments to [brokenstick::control_kr()].
 #'
 #' @note
@@ -161,6 +165,7 @@ brokenstick <- function(formula,
                         control = set_control(method = method, ...),
                         na.action = na.exclude,
                         light = FALSE,
+                        hide = c("right", "left", "both", "none"),
                         ...) {
   call <- match.call()
   stopifnot(
@@ -170,9 +175,10 @@ brokenstick <- function(formula,
   )
   data <- data.frame(data)
   method <- match.arg(method)
+  hide <- match.arg(hide)
   obj <- brokenstick_bridge(
     formula, data, knots, boundary, k, degree,
-    method, control, na.action, light, call,
+    method, control, na.action, light, hide, call,
     ...
   )
   return(obj)
@@ -182,7 +188,7 @@ brokenstick <- function(formula,
 # Bridge
 
 brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
-                               method, control, na.action, light, call,
+                               method, control, na.action, light, hide, call,
                                warn_splines = FALSE, ...) {
   names <- parse_formula(formula)
   nms <- unname(unlist(names))
@@ -246,6 +252,7 @@ brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
     sigma2j = fit$sigma2j,
     sigma2 = fit$sigma2,
     light = light,
+    hide = hide,
     data = data,
     sample = fit$sample,
     imp = fit$imp,

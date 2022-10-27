@@ -1,3 +1,22 @@
+# brokenstick 2.3.2
+
+## Major changes:
+
+1. Hiding knots is now more convenient and automatic by setting the `hide` 
+entry in the `brokenstick` object.
+2. 
+
+## Minor changes:
+
+- Adds `hide` field to `brokenstick` object
+- Adds `hide` arguments to `coef.brokenstick()`, `summary.brokenstick()` and `plot()`
+- Adds `cor` and `lower` arguments to `summary.brokenstick()`
+- Replaces `what` argument of `get_omega()` by `cor`
+- Deprecates `whatknots` argument in `plot()`
+- Separates `summary()` and `print()` functionality
+- Updates `smocc_200` and `fit_200` objects
+- Updates to `roxygen 7.2.1`
+
 # brokenstick 2.3.1
 
 - Replace hard-coded variable name `hgt_z` by a dynamic name (#8)

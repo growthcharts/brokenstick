@@ -15,6 +15,7 @@ brokenstick(
   control = set_control(method = method, ...),
   na.action = na.exclude,
   light = FALSE,
+  hide = c("right", "left", "both", "none"),
   ...
 )
 }
@@ -78,6 +79,10 @@ the returned object will contain only the model settings and parameter
 estimates and not store the \code{data}, \code{imp} and \code{mod} elements. The light
 object can be used to predict broken stick estimates for new data, but
 does not disclose the training data and is very small (often <20 Kb).}
+
+\item{hide}{Should output for boundary knots be hidden in the
+print, summary and plot functions? Can be \code{"left"}, \code{"right"}, \code{"both"}
+or \code{"none"}. The default is \code{"right"}.}
 
 \item{\dots}{Forwards arguments to \code{\link[=control_kr]{control_kr()}}.}
 }

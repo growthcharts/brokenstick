@@ -9,6 +9,7 @@ vignette: >
 
 
 ```{r, include = FALSE}
+old <- options(digits = 3)
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -157,3 +158,8 @@ Plot trajectories, version `2.0.0`:
 ids <- c(10001, 10005, 10022)
 plot(fit1, group = ids, whatknots = "all")
 ```
+
+```{r echo = FALSE}
+options(old)
+```
+

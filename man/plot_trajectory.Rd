@@ -7,7 +7,7 @@
 plot_trajectory(
   x,
   newdata = NULL,
-  whatknots = "droplast",
+  hide = c("right", "left", "both", "none"),
   .x = NULL,
   group = NULL,
   color_y = c(grDevices::hcl(240, 100, 40, 0.7), grDevices::hcl(240, 100, 40, 0.8)),
@@ -29,6 +29,7 @@ plot_trajectory(
   n_plot = 3L,
   scales = "fixed",
   theme = ggplot2::theme_light(),
+  whatknots = "droplast",
   ...
 )
 }
@@ -37,8 +38,7 @@ plot_trajectory(
 
 \item{newdata}{A \code{data.frame} or \code{matrix}}
 
-\item{whatknots}{Which knots to plot? See \code{\link[=get_knots]{get_knots()}}. The default,
-\code{whatknots = "droplast"}, does not plot the right boundary knot.}
+\item{hide}{Character indicating which knots should}
 
 \item{.x}{The \code{x} argument of the \code{\link[=predict.brokenstick]{predict.brokenstick()}} function.}
 
@@ -88,6 +88,8 @@ plots of the entire data set.}
 \item{scales}{Axis scaling, e.g. \code{"fixed"}, \code{"free"}, and so on}
 
 \item{theme}{Plotting theme}
+
+\item{whatknots}{Deprecated.}
 
 \item{\dots}{Extra arguments passed down to \code{\link[=predict.brokenstick]{predict.brokenstick()}}.}
 }

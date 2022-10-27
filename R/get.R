@@ -39,6 +39,61 @@ get_knots <- function(object,
   return(result)
 }
 
+#' Extract Variance and Correlation Components
+#'
+#' Extracts variance-covariance or correlation matrix from a
+#' `brokenstick` object.
+#'
+#' @param x      Object of class `brokenstick`
+#' @param cor    Logical. Should the function return the correlation matrix
+#' instead of the covariance matrix? The default is `FALSE`.
+#' @param what  Deprecated.
+#' @inheritParams get_knots
+#' @return A numeric matrix, possibly with zero rows and columns if no names match
+#' @examples
+#' f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:2, seed = 1)
+#' get_omega(f1, cor = TRUE, whatknots = "internal")
+#' @export
+get_omega <- function(x,
+                      cor = FALSE,
+                      whatknots = c("all", "internal", "boundary", "dropfirst", "droplast"),
+                      what = "cov") {
+  stopifnot(inherits(x, "brokenstick"))
+  if (!missing(what)) {
+    warning("argument what is deprecated; please use cor instead.",
+            call. = FALSE)
+    if (missing(cor)) {
+      cor <- ifelse(what == "cor", TRUE, FALSE)
+    }
+  }
+
+  whatknots <- match.arg(whatknots)
+  omega <- x$omega
+  v <- colnames(omega)
+  nameset <- switch(whatknots,
+                    all = v,
+                    internal = v[c(-1L, -length(v))],
+                    boundary = v[c(1L, length(v))],
+                    dropfirst = v[-1L],
+                    droplast = v[-length(v)])
+  if (length(nameset)) {
+    omega <- omega[nameset, nameset, drop = FALSE]
+  } else {
+    omega <- matrix(NA_real_, 0L, 0L)
+  }
+
+  # return correlation matrix if requested
+  if (cor) {
+    if (dim(omega)[1L]) {
+      return(cov2cor(omega))
+    }
+  }
+
+  # covariance matrix
+  return(omega)
+}
+
+
 #' Obtain proportion of explained variance from a broken stick model
 #'
 #' @param object An object of class \code{brokenstick}
@@ -58,58 +113,6 @@ get_r2 <- function(object, newdata = NULL) {
   return(cor(nd[[".pred"]], nd[[object$names$y]])^2)
 }
 
-#' Extract Variance and Correlation Components
-#'
-#' Extracts variance-covariance or correlation matrix from a
-#' `brokenstick` object.
-#'
-#' @param x      Object of class `brokenstick`
-#' @param what   Either `"cov"` (default) for the covariance matrix,  or `"cor"`
-#'  for the correlation matrix.
-#' @param names  A vector of column names of. If not specified, the function
-#'  automatically drops the entries corresponding to the right boundary. Specify
-#'  `names = "all"` to prevent dropping.
-#' @inheritParams get_knots
-#' @return A numeric matrix, possibly with zero rows and columns if no names match
-#' @examples
-#' f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:2, seed = 1)
-#' get_omega(f1, what = "cor", names = c("age_1", "age_2"))
-#' @export
-get_omega <- function(x,
-                      what = c("cov", "cor"),
-                      whatknots = c("all", "internal", "boundary", "dropfirst", "droplast"),
-                      names = NULL) {
-  stopifnot(inherits(x, "brokenstick"))
-  what <- match.arg(what)
-  whatknots <- match.arg(whatknots)
-
-  omega <- x$omega
-  v <- colnames(omega)
-  nameset <- switch(whatknots,
-                    all = v,
-                    internal = v[c(-1L, -length(v))],
-                    boundary = v[c(1L, length(v))],
-                    dropfirst = v[-1L],
-                    droplast = v[-length(v)])
-  if (!is.null(names)) {
-    nameset <- intersect(names, v)
-  }
-  if (length(names) == 1L && names == "all") {
-    nameset <- v
-  }
-  if (length(nameset)) {
-    omega <- omega[nameset, nameset, drop = FALSE]
-  } else {
-    omega <- matrix(NA_real_, 0L, 0L)
-  }
-  if (what == "cov") {
-    return(omega)
-  }
-  if (dim(omega)[1L]) {
-    return(cov2cor(omega))
-  }
-  return(omega)
-}
 
 get_newdata <- function(x, newdata) {
   # sets the newdata argument

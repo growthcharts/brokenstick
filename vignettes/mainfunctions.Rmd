@@ -16,7 +16,7 @@ knitr::opts_chunk$set(echo = TRUE,
                       dev = "png")
 ```
 
-```{css echo = FALSE}
+```{css css, echo = FALSE, include = FALSE}
 img {
   border: 0px;
   padding: 10px;
@@ -31,7 +31,7 @@ This vignette demonstrates three major functions in the `brokenstick` package: `
 ```{r message = FALSE, warning = FALSE}
 require("brokenstick")
 require("dplyr")
-library("ggplot2")
+require("ggplot2")
 ```
 
 For more elaborate documentation, visit <https://growthcharts.org/brokenstick/articles/manual/manual.html>.

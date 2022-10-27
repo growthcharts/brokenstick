@@ -41,6 +41,8 @@ estimates and not store the \code{sigma2j}, \code{sample}, \code{data}, \code{im
 \code{mod} elements.
 The light object can be used to predict broken stick estimates for
 new data, but does not disclose the training data and is small.}
+\item{\code{hide}}{Should the output for boundary knots be hidden? Can
+be \code{"right"}, \code{"left"}, \code{"both"} or \code{"none"}. The default is \code{"right"}.}
 \item{\code{sigma2j}}{Numeric vector with estimates of the residual variance per
 group. Only used by method \code{"kr"}.}
 \item{\code{data}}{The training data used to fit the model.}
