@@ -14,10 +14,13 @@ reference:
       Functions to fit, predict and visualise the broken stick model.
     contents:
       - brokenstick
+      - coef.brokenstick
+      - fitted.brokenstick
       - plot.brokenstick
       - predict.brokenstick
-      - fitted.brokenstick
+      - print.brokenstick
       - residuals.brokenstick
+      - summary.brokenstick
   - title: "Helper functions"
     desc: >
       Functions to set algorithmic options for model fitting or to extract

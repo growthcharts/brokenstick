@@ -22,12 +22,12 @@
     that the default \emph{differs} for \code{\link[stats]{lm}()} and
     \code{\link[stats]{aov}()} results.}
 
-\item{...}{Not used}
+\item{...}{other arguments.}
 
 \item{hide}{Should output for boundary knots be hidden in the print,
-summary and plot functions? Can be \code{"left"}, \code{"right"}, \code{"boundary"},
+summary and plot functions? Can be \code{"right"}, \code{"left"}, \code{"boundary"},
 \code{"internal"} or \code{"none"}.
-If not specified, it is read from the field \code{object$hide}.}
+If not specified, it is read from \code{object$hide}.}
 }
 \description{
 Extract Model Coefficients from brokenstick Object

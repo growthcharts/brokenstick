@@ -1,3 +1,14 @@
+#' Create summary of brokenstick object
+#'
+#' @rdname summary
+#' @param object A \code{brokenstick} object
+#' @param hide Should output for boundary knots be hidden in the print,
+#' summary and plot functions? Can be `"left"`, `"right"`, `"boundary"`,
+#' `"internal"` or `"none"`.
+#' If not specified, it is read from the field `object$hide`.
+#' @param lower Logical. Print lower triangle of correlation/covariance
+#' matrix?
+#' @inheritParams base::summary
 #' @inheritParams get_omega
 #' @export
 summary.brokenstick <- function(object,

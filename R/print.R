@@ -1,3 +1,12 @@
+#' Print brokenstick object
+#'
+#' @rdname print
+#' @param x A \code{brokenstick} object
+#' @param hide Should output for boundary knots be hidden in the print,
+#' summary and plot functions? Can be  `"right"`, `"left"`,`"boundary"`,
+#' `"internal"` or `"none"`.
+#' If not specified, it is read from the field `x$hide`.
+#' @inheritParams base::print
 #' @export
 print.brokenstick <- function(x,
                               digits = getOption("digits"),

@@ -3,10 +3,9 @@
 #' @rdname coef
 #' @param object A \code{brokenstick} object
 #' @param hide Should output for boundary knots be hidden in the print,
-#' summary and plot functions? Can be `"left"`, `"right"`, `"boundary"`,
+#' summary and plot functions? Can be `"right"`, `"left"`, `"boundary"`,
 #' `"internal"` or `"none"`.
-#' If not specified, it is read from the field `object$hide`.
-#' @param ... Not used
+#' If not specified, it is read from `object$hide`.
 #' @inheritParams stats::coef
 #' @export
 coef.brokenstick <- function(object, complete = TRUE, ...,
