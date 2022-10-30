@@ -8,7 +8,7 @@
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
-[![](https://img.shields.io/badge/github%20version-2.3.2-orange.svg)](https://growthcharts.org/brokenstick/)
+[![](https://img.shields.io/badge/github%20version-2.4.0-orange.svg)](https://growthcharts.org/brokenstick/)
 
 <!-- badges: end -->
 
@@ -142,7 +142,7 @@ and 6 Years Correlate Strongest with Adult Overweight.” *PloS ONE* 5
 <div id="ref-ruppert2003" class="csl-entry">
 
 Ruppert, D., M. P. Wand, and R. J. Carroll. 2003. *Semiparametric
-Regression*. Cambridge: Cambridge University Press.
+Regression*. Cambridge, UK: Cambridge University Press.
 
 </div>
 

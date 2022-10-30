@@ -1,7 +1,8 @@
-# brokenstick 2.3.2
+# brokenstick 2.4.0
 
 ## Major changes:
 
+- Update for the JSS manuscript version dated 30-10-2022
 - Hiding knots is now more convenient and automatic by setting the `hide` 
 entry in the `brokenstick` object. This replaces the `whatknots` argument.
 
@@ -16,9 +17,6 @@ entry in the `brokenstick` object. This replaces the `whatknots` argument.
 - Separates `summary()` and `print()` functionality
 - Updates `smocc_200` and `fit_200` objects
 - Updates to `roxygen 7.2.1`
-
-# brokenstick 2.3.1
-
 - Replace hard-coded variable name `hgt_z` by a dynamic name (#8)
 
 # brokenstick 2.3.0
