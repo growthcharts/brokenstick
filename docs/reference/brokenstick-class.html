@@ -12,7 +12,7 @@ brokenstick. This object collects the fitted broken stick model."><!-- mathjax -
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -122,6 +122,11 @@ estimates and not store the <code>sigma2j</code>, <code>sample</code>, <code>dat
 <code>mod</code> elements.
 The light object can be used to predict broken stick estimates for
 new data, but does not disclose the training data and is small.</p></dd>
+
+<dt><code>hide</code></dt>
+<dd><p>Should the output for boundary knots be hidden? Can
+be <code>"right"</code>, <code>"left"</code>, <code>"boundary"</code>, <code>"internal"</code> or <code>"none"</code>.
+The default is <code>"right"</code>.</p></dd>
 
 <dt><code>sigma2j</code></dt>
 <dd><p>Numeric vector with estimates of the residual variance per

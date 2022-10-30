@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,9 +57,30 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="2.3.1" id="brokenstick-231">brokenstick 2.3.1<a class="anchor" aria-label="anchor" href="#brokenstick-231"></a></h2>
-<ul><li>Replace hard-coded variable name <code>hgt_z</code> by a dynamic name (<a href="https://github.com/growthcharts/brokenstick/issues/8" class="external-link">#8</a>)</li>
+<h2 class="pkg-version" data-toc-text="2.4.0" id="brokenstick-240">brokenstick 2.4.0<a class="anchor" aria-label="anchor" href="#brokenstick-240"></a></h2>
+<div class="section level3">
+<h3 id="major-changes-2-4-0">Major changes:<a class="anchor" aria-label="anchor" href="#major-changes-2-4-0"></a></h3>
+<ul><li>Update for the JSS manuscript version dated 30-10-2022</li>
+<li>Hiding knots is now more convenient and automatic by setting the <code>hide</code> entry in the <code>brokenstick</code> object. This replaces the <code>whatknots</code> argument.</li>
 </ul></div>
+<div class="section level3">
+<h3 id="minor-changes-2-4-0">Minor changes:<a class="anchor" aria-label="anchor" href="#minor-changes-2-4-0"></a></h3>
+<ul><li>Adds <code>hide</code> field to <code>brokenstick</code> object</li>
+<li>Adds <code>hide</code> arguments to <code><a href="../reference/coef.html">coef.brokenstick()</a></code>, <code><a href="../reference/summary.html">summary.brokenstick()</a></code>, <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, <code><a href="../reference/get_knots.html">get_knots()</a></code> and <code>get_omega</code>
+</li>
+<li>Adds <code>cor</code> and <code>lower</code> arguments to <code><a href="../reference/summary.html">summary.brokenstick()</a></code>
+</li>
+<li>Replaces <code>what</code> argument of <code><a href="../reference/get_omega.html">get_omega()</a></code> by <code>cor</code>
+</li>
+<li>Deprecates <code>whatknots</code> argument in <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>, <code><a href="../reference/get_knots.html">get_knots()</a></code> and <code><a href="../reference/get_omega.html">get_omega()</a></code>
+</li>
+<li>Separates <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code> and <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code> functionality</li>
+<li>Updates <code>smocc_200</code> and <code>fit_200</code> objects</li>
+<li>Updates to <code>roxygen 7.2.1</code>
+</li>
+<li>Replace hard-coded variable name <code>hgt_z</code> by a dynamic name (<a href="https://github.com/growthcharts/brokenstick/issues/8" class="external-link">#8</a>)</li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="2.3.0" id="brokenstick-230">brokenstick 2.3.0<a class="anchor" aria-label="anchor" href="#brokenstick-230"></a></h2><p class="text-muted">CRAN release: 2022-09-07</p>
 <ul><li>Replaces <code>what</code> argument in <code><a href="../reference/get_knots.html">get_knots()</a></code> to <code>whatknots</code>
@@ -98,7 +119,7 @@
 <li>Removes superfluous navigation from vigettes</li>
 <li>Defines an <code>model.frame.brokenstick()</code> function that adheres to conventions</li>
 <li>Changes return values by <code><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">fitted()</a></code> and <code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code> to vectors</li>
-<li>Defines a less verbose <code>print.brokenstick()</code> helper</li>
+<li>Defines a less verbose <code><a href="../reference/print.html">print.brokenstick()</a></code> helper</li>
 <li>Make all calls to <code><a href="https://rdrr.io/r/base/library.html" class="external-link">library()</a></code> to character argument</li>
 <li>Removes <code><a href="https://github.com/lme4/lme4/" class="external-link">library(lme4)</a></code> from code to evade changing the search path</li>
 </ul></div>

@@ -49,6 +49,9 @@
     <loc>https://growthcharts.org/brokenstick/reference/brokenstick.html</loc>
   </url>
   <url>
+    <loc>https://growthcharts.org/brokenstick/reference/coef.html</loc>
+  </url>
+  <url>
     <loc>https://growthcharts.org/brokenstick/reference/control_brokenstick.html</loc>
   </url>
   <url>
@@ -94,6 +97,9 @@
     <loc>https://growthcharts.org/brokenstick/reference/predict.html</loc>
   </url>
   <url>
+    <loc>https://growthcharts.org/brokenstick/reference/print.html</loc>
+  </url>
+  <url>
     <loc>https://growthcharts.org/brokenstick/reference/residuals.brokenstick.html</loc>
   </url>
   <url>
@@ -101,6 +107,9 @@
   </url>
   <url>
     <loc>https://growthcharts.org/brokenstick/reference/smocc_200.html</loc>
+  </url>
+  <url>
+    <loc>https://growthcharts.org/brokenstick/reference/summary.html</loc>
   </url>
   <url>
     <loc>https://growthcharts.org/brokenstick/reference/weightloss.html</loc>

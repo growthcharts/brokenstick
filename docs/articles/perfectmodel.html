@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -136,13 +136,13 @@ perfectly.</p>
 <span>                               resid_var <span class="op">=</span> <span class="va">resid_var</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">gen_dat</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   subject age .n          X1</span></span>
-<span><span class="co">## 1       1   1  1 -0.94777697</span></span>
-<span><span class="co">## 2       1   2  1 -2.08372706</span></span>
-<span><span class="co">## 3       1   3  1 -2.65116213</span></span>
-<span><span class="co">## 4       1   4  1 -2.55255194</span></span>
-<span><span class="co">## 5       2   1  2 -0.08250395</span></span>
-<span><span class="co">## 6       2   2  2 -1.27072650</span></span></code></pre>
+<pre><code><span><span class="co">##   subject age .n      X1</span></span>
+<span><span class="co">## 1       1   1  1 -0.9478</span></span>
+<span><span class="co">## 2       1   2  1 -2.0837</span></span>
+<span><span class="co">## 3       1   3  1 -2.6512</span></span>
+<span><span class="co">## 4       1   4  1 -2.5526</span></span>
+<span><span class="co">## 5       2   1  2 -0.0825</span></span>
+<span><span class="co">## 6       2   2  2 -1.2707</span></span></code></pre>
 <p>We wish to reproduce the correlation matrix among the <span class="math inline">\(y\)</span>’s from the mixed model estimates. The
 <strong>target correlation matrix</strong> is:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
@@ -164,11 +164,11 @@ perfectly.</p>
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html" class="external-link">as_tibble</a></span><span class="op">(</span><span class="va">data</span><span class="op">[</span>,<span class="op">-</span><span class="fl">3</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">broad</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="fu"><a href="https://tidyr.tidyverse.org/reference/spread.html" class="external-link">spread</a></span><span class="op">(</span><span class="va">d</span>, <span class="va">subject</span>, <span class="va">X1</span><span class="op">)</span><span class="op">)</span><span class="op">[</span><span class="op">-</span><span class="fl">1</span>,<span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">broad</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##           [,1]      [,2]      [,3]      [,4]</span></span>
-<span><span class="co">## [1,] 1.0000000 0.3497654 0.2550082 0.1611466</span></span>
-<span><span class="co">## [2,] 0.3497654 1.0000000 0.4061576 0.2460109</span></span>
-<span><span class="co">## [3,] 0.2550082 0.4061576 1.0000000 0.3127620</span></span>
-<span><span class="co">## [4,] 0.1611466 0.2460109 0.3127620 1.0000000</span></span></code></pre>
+<pre><code><span><span class="co">##       [,1]  [,2]  [,3]  [,4]</span></span>
+<span><span class="co">## [1,] 1.000 0.350 0.255 0.161</span></span>
+<span><span class="co">## [2,] 0.350 1.000 0.406 0.246</span></span>
+<span><span class="co">## [3,] 0.255 0.406 1.000 0.313</span></span>
+<span><span class="co">## [4,] 0.161 0.246 0.313 1.000</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="fit-model">Fit model<a class="anchor" aria-label="anchor" href="#fit-model"></a>
@@ -189,15 +189,15 @@ perfectly.</p>
 <pre><code><span><span class="co">## Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, :</span></span>
 <span><span class="co">## Model failed to converge with max|grad| = 0.0323545 (tol = 0.002, component 1)</span></span></code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">omega</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">omega</span></span>
-<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">beta</span></span>
+<code class="sourceCode R"><span><span class="va">omega</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/get_omega.html">get_omega</a></span><span class="op">(</span><span class="va">fit</span>, hide <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span></span>
+<span><span class="va">beta</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef</a></span><span class="op">(</span><span class="va">fit</span>, hide <span class="op">=</span> <span class="st">"no"</span><span class="op">)</span></span>
 <span><span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="va">fit</span><span class="op">$</span><span class="va">sigma2</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">beta</span>, <span class="fl">2</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## age_1 age_2 age_3 age_4 </span></span>
 <span><span class="co">## -0.02 -0.02  0.01  0.01</span></span></code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">sigma2</span>, <span class="fl">4</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 0.8184</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 0.818</span></span></code></pre>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># correlation random effects</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">covar</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
@@ -248,19 +248,17 @@ perfectly.</p>
 <span><span class="co"># off-diagonal elements of covariance of broken stick estimates approach correlation</span></span>
 <span><span class="co"># not enough variance in the diagonal because of smoothing</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##           1         2         3         4</span></span>
-<span><span class="co">## 1 0.7951205 0.5945788 0.4745276 0.3057147</span></span>
-<span><span class="co">## 2 0.5945788 0.7905081 0.6806096 0.4405764</span></span>
-<span><span class="co">## 3 0.4745276 0.6806096 0.8212862 0.5362509</span></span>
-<span><span class="co">## 4 0.3057147 0.4405764 0.5362509 0.7364370</span></span></code></pre>
+<pre><code><span><span class="co">##       1     2     3</span></span>
+<span><span class="co">## 1 0.795 0.595 0.475</span></span>
+<span><span class="co">## 2 0.595 0.791 0.681</span></span>
+<span><span class="co">## 3 0.475 0.681 0.821</span></span></code></pre>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># correlations of broken stick estimates are inflated because of smoothing</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cor</a></span><span class="op">(</span><span class="va">z</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##           1         2         3         4</span></span>
-<span><span class="co">## 1 1.0000000 0.7499629 0.5872158 0.3995141</span></span>
-<span><span class="co">## 2 0.7499629 1.0000000 0.8446906 0.5774313</span></span>
-<span><span class="co">## 3 0.5872158 0.8446906 1.0000000 0.6895297</span></span>
-<span><span class="co">## 4 0.3995141 0.5774313 0.6895297 1.0000000</span></span></code></pre>
+<pre><code><span><span class="co">##       1     2     3</span></span>
+<span><span class="co">## 1 1.000 0.750 0.587</span></span>
+<span><span class="co">## 2 0.750 1.000 0.845</span></span>
+<span><span class="co">## 3 0.587 0.845 1.000</span></span></code></pre>
 </div>
 <div class="section level2">
 <h2 id="conclusions">Conclusions<a class="anchor" aria-label="anchor" href="#conclusions"></a>
@@ -283,11 +281,10 @@ matrix among the (unobserved) measurements at the knots:</li>
 <span><span class="va">chat</span> <span class="op">&lt;-</span> <span class="va">cov</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/diag.html" class="external-link">diag</a></span><span class="op">(</span><span class="va">fit</span><span class="op">$</span><span class="va">sigma2</span>, <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">cov</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">r</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html" class="external-link">cov2cor</a></span><span class="op">(</span><span class="va">chat</span><span class="op">)</span></span>
 <span><span class="va">r</span></span></code></pre></div>
-<pre><code><span><span class="co">##           age_1     age_2     age_3     age_4</span></span>
-<span><span class="co">## age_1 1.0000000 0.3497672 0.2550097 0.1611457</span></span>
-<span><span class="co">## age_2 0.3497672 1.0000000 0.4061635 0.2460088</span></span>
-<span><span class="co">## age_3 0.2550097 0.4061635 1.0000000 0.3127596</span></span>
-<span><span class="co">## age_4 0.1611457 0.2460088 0.3127596 1.0000000</span></span></code></pre>
+<pre><code><span><span class="co">##       age_1 age_2 age_3</span></span>
+<span><span class="co">## age_1 1.000 0.350 0.255</span></span>
+<span><span class="co">## age_2 0.350 1.000 0.406</span></span>
+<span><span class="co">## age_3 0.255 0.406 1.000</span></span></code></pre>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.4.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -86,12 +86,6 @@
 
     
     
-<style type="text/css">
-img {
-  border: 0px;
-  padding: 10px;
-}
-</style>
 <div class="section level2">
 <h2 id="objective">Objective<a class="anchor" aria-label="anchor" href="#objective"></a>
 </h2>
@@ -102,7 +96,7 @@ img {
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://github.com/growthcharts/brokenstick" class="external-link">"brokenstick"</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://dplyr.tidyverse.org" class="external-link">"dplyr"</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span></span></code></pre></div>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">require</a></span><span class="op">(</span><span class="st"><a href="https://ggplot2.tidyverse.org" class="external-link">"ggplot2"</a></span><span class="op">)</span></span></code></pre></div>
 <p>For more elaborate documentation, visit <a href="https://growthcharts.org/brokenstick/articles/manual/manual.html" class="uri">https://growthcharts.org/brokenstick/articles/manual/manual.html</a>.</p>
 </div>
 <div class="section level2">
@@ -211,18 +205,17 @@ plot the model as follows:</p>
 <span><span class="co">## Variables    hgt_z (outcome), age (predictor), id (group)</span></span>
 <span><span class="co">## Data         1942 (n), 36 (nmis), 200 (groups)</span></span>
 <span><span class="co">## Parameters   16 (total), 4 (fixed), 4 (variance), 6 (covariance), 2 (error)</span></span>
-<span><span class="co">## Knots        0 1 2 2.68 </span></span>
-<span><span class="co">## Means        -0.039 0.028 0.065 0.17 </span></span>
+<span><span class="co">## Knots        0 1 2 </span></span>
+<span><span class="co">## Means        -0.0394  0.0278  0.0646 </span></span>
 <span><span class="co">## Residuals    0.113 0.146 0.168 0.195 0.383 (min, P25, P50, P75, max)</span></span>
 <span><span class="co">## Mean resid   0.179 </span></span>
 <span><span class="co">## R-squared    0.867 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Variance-covariance matrix</span></span>
-<span><span class="co">##             age_0  age_1  age_2 age_2.6776</span></span>
-<span><span class="co">## age_0       1.218                         </span></span>
-<span><span class="co">## age_1       0.481  0.823                  </span></span>
-<span><span class="co">## age_2       0.485  0.782  0.884           </span></span>
-<span><span class="co">## age_2.6776 -0.175 -0.013 -0.131      2.302</span></span></code></pre>
+<span><span class="co">##       age_0 age_1 age_2</span></span>
+<span><span class="co">## age_0 1.218            </span></span>
+<span><span class="co">## age_1 0.481 0.823      </span></span>
+<span><span class="co">## age_2 0.485 0.782 0.884</span></span></code></pre>
 <p>The console output lists the knots of the model, including the left
 and right boundary knots at 0 and 2.6776. The row of <code>means</code>
 correspond to the fixed effect estimates of the linear mixed model. We
@@ -250,37 +243,35 @@ longer to run. The results are</p>
 <span><span class="co">## Variables    hgt_z (outcome), age (predictor), id (group)</span></span>
 <span><span class="co">## Data         1942 (n), 36 (nmis), 200 (groups)</span></span>
 <span><span class="co">## Parameters   79 (total), 11 (fixed), 11 (variance), 55 (covariance), 2 (error)</span></span>
-<span><span class="co">## Knots        0 0.0833 0.167 0.25 0.5 0.75 1 1.25 1.5 2 2.68 </span></span>
-<span><span class="co">## Means        -0.186 0.022 0.003 0.066 0.063 -0.02 0.008 0.032 -0.027 0.115 -0.007 </span></span>
-<span><span class="co">## Residuals    0.0176 0.0268 0.0329 0.0494 4.52 (min, P25, P50, P75, max)</span></span>
+<span><span class="co">## Knots        0.0000 0.0833 0.1667 0.2500 0.5000 0.7500 1.0000 1.2500 1.5000 2.0000 </span></span>
+<span><span class="co">## Means        -0.18618  0.02163  0.00262  0.06602  0.06346 -0.01955  0.00781  0.03233 -0.02665  0.11470 </span></span>
+<span><span class="co">## Residuals    0.0176 0.0268 0.0329 0.0494 4.5190 (min, P25, P50, P75, max)</span></span>
 <span><span class="co">## Mean resid   0.0752 </span></span>
 <span><span class="co">## R-squared    0.983 </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## Variance-covariance matrix</span></span>
 <span><span class="co">##            age_0 age_0.0833 age_0.1667 age_0.25 age_0.5 age_0.75 age_1 age_1.25</span></span>
-<span><span class="co">## age_0       1.74                                                               </span></span>
+<span><span class="co">## age_0      1.740                                                               </span></span>
 <span><span class="co">## age_0.0833 1.118      1.337                                                    </span></span>
 <span><span class="co">## age_0.1667 1.077      1.095      1.246                                         </span></span>
-<span><span class="co">## age_0.25     0.9      1.005      0.999    1.052                                </span></span>
+<span><span class="co">## age_0.25   0.900      1.005      0.999    1.052                                </span></span>
 <span><span class="co">## age_0.5    0.627      0.821      0.822    0.815   0.943                        </span></span>
 <span><span class="co">## age_0.75   0.597      0.696      0.693    0.718   0.867    0.938               </span></span>
 <span><span class="co">## age_1      0.495      0.611      0.579    0.606   0.786    0.819 0.869         </span></span>
 <span><span class="co">## age_1.25   0.432      0.614      0.575    0.601   0.757    0.807 0.834    0.953</span></span>
 <span><span class="co">## age_1.5    0.455      0.614      0.624    0.604   0.808    0.824 0.836    0.914</span></span>
-<span><span class="co">## age_2      0.361      0.483      0.517    0.539    0.72    0.753 0.783    0.883</span></span>
-<span><span class="co">## age_2.6776 0.818      0.791      0.584    0.731   0.498    0.561  0.41    0.567</span></span>
-<span><span class="co">##            age_1.5 age_2 age_2.6776</span></span>
-<span><span class="co">## age_0                              </span></span>
-<span><span class="co">## age_0.0833                         </span></span>
-<span><span class="co">## age_0.1667                         </span></span>
-<span><span class="co">## age_0.25                           </span></span>
-<span><span class="co">## age_0.5                            </span></span>
-<span><span class="co">## age_0.75                           </span></span>
-<span><span class="co">## age_1                              </span></span>
-<span><span class="co">## age_1.25                           </span></span>
-<span><span class="co">## age_1.5      1.039                 </span></span>
-<span><span class="co">## age_2        0.919 1.058           </span></span>
-<span><span class="co">## age_2.6776   0.452 0.017      8.922</span></span></code></pre>
+<span><span class="co">## age_2      0.361      0.483      0.517    0.539   0.720    0.753 0.783    0.883</span></span>
+<span><span class="co">##            age_1.5 age_2</span></span>
+<span><span class="co">## age_0                   </span></span>
+<span><span class="co">## age_0.0833              </span></span>
+<span><span class="co">## age_0.1667              </span></span>
+<span><span class="co">## age_0.25                </span></span>
+<span><span class="co">## age_0.5                 </span></span>
+<span><span class="co">## age_0.75                </span></span>
+<span><span class="co">## age_1                   </span></span>
+<span><span class="co">## age_1.25                </span></span>
+<span><span class="co">## age_1.5      1.039      </span></span>
+<span><span class="co">## age_2        0.919  1.06</span></span></code></pre>
 <p>There nine-line model summarises the data by 79 parameters. This
 model fits substantially better. The model residuals are substantially
 smaller (0.075 instead of 0.179) and the proportions of explained
@@ -317,16 +308,16 @@ trajectories. We obtain predictions at the knots by the special
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span>, include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   .source    id  age  sex ga bw hgt hgt_z    .pred</span></span>
-<span><span class="co">## 1   added 10001 0.00 &lt;NA&gt; NA NA  NA    NA  0.71989</span></span>
-<span><span class="co">## 2   added 10001 1.00 &lt;NA&gt; NA NA  NA    NA -0.00939</span></span>
-<span><span class="co">## 3   added 10001 2.00 &lt;NA&gt; NA NA  NA    NA  0.05785</span></span>
-<span><span class="co">## 4   added 10001 2.68 &lt;NA&gt; NA NA  NA    NA  0.05481</span></span>
-<span><span class="co">## 5   added 10002 0.00 &lt;NA&gt; NA NA  NA    NA -0.23264</span></span>
-<span><span class="co">## 6   added 10002 1.00 &lt;NA&gt; NA NA  NA    NA -0.37772</span></span></code></pre>
+<pre><code><span><span class="co">##   .source    id age  sex ga bw hgt hgt_z    .pred</span></span>
+<span><span class="co">## 1   added 10001   0 &lt;NA&gt; NA NA  NA    NA  0.71989</span></span>
+<span><span class="co">## 2   added 10001   1 &lt;NA&gt; NA NA  NA    NA -0.00939</span></span>
+<span><span class="co">## 3   added 10001   2 &lt;NA&gt; NA NA  NA    NA  0.05785</span></span>
+<span><span class="co">## 4   added 10002   0 &lt;NA&gt; NA NA  NA    NA -0.23264</span></span>
+<span><span class="co">## 5   added 10002   1 &lt;NA&gt; NA NA  NA    NA -0.37772</span></span>
+<span><span class="co">## 6   added 10002   2 &lt;NA&gt; NA NA  NA    NA -0.50233</span></span></code></pre>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">p2</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## [1] 800</span></span></code></pre>
+<pre><code><span><span class="co">## [1] 600</span></span></code></pre>
 <p>We use the <code>include_data = FALSE</code> argument to remove
 predictions for the observed data. The output is more verbose and
 includes the grid of knots for each child (<code>id</code>,
@@ -343,7 +334,7 @@ sparse.</p>
 <p>If we wish to obtain estimates at both the knots and the observed
 data use:</p>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit2</span>, x <span class="op">=</span> <span class="st">"knots"</span>, hide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span><span class="va">p3</span><span class="op">$</span><span class="va">.source</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## </span></span>
 <span><span class="co">## added  data </span></span>
@@ -392,14 +383,14 @@ data.</p>
 <code class="sourceCode R"><span><span class="va">bs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">fit9</span>, x <span class="op">=</span> <span class="st">"knots"</span>, shape <span class="op">=</span> <span class="st">"wide"</span>, include_data <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">subj</span>, <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">bs</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span>, <span class="fl">3</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 15</span></span></span>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 3 × 14</span></span></span>
 <span><span class="co">## <span style="color: #949494;"># Groups:   id [3]</span></span></span>
 <span><span class="co">##      id sex       ga    bw    `0` `0.0833` `0.1667` `0.25`  `0.5` `0.75`    `1`</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>    <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span>  <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="text-decoration: underline;">10</span>001 female    40  <span style="text-decoration: underline;">3</span>960  0.569    0.865    0.735  0.657  0.232 -<span style="color: #BB0000;">0.172</span>  0.118</span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">2</span> <span style="text-decoration: underline;">10</span>002 male      38  <span style="text-decoration: underline;">3</span>210 -<span style="color: #BB0000;">0.184</span>   -<span style="color: #BB0000;">0.329</span>   -<span style="color: #BB0000;">0.252</span> -<span style="color: #BB0000;">0.319</span> -<span style="color: #BB0000;">0.218</span> -<span style="color: #BB0000;">0.281</span> -<span style="color: #BB0000;">0.344</span></span></span>
 <span><span class="co">## <span style="color: #BCBCBC;">3</span> <span style="text-decoration: underline;">10</span>003 female    40  <span style="text-decoration: underline;">4</span>170  1.17     2.11     1.97   2.04   2.03   1.81   1.32 </span></span>
-<span><span class="co">## <span style="color: #949494;"># … with 4 more variables: `1.25` &lt;dbl&gt;, `1.5` &lt;dbl&gt;, `2` &lt;dbl&gt;, `2.6776` &lt;dbl&gt;</span></span></span></code></pre>
+<span><span class="co">## <span style="color: #949494;"># … with 3 more variables: `1.25` &lt;dbl&gt;, `1.5` &lt;dbl&gt;, `2` &lt;dbl&gt;</span></span></span></code></pre>
 <p>The names of the columns in <code>bs</code> correspond to the knot
 values.</p>
 <p>The effect of the subject’s sex, gestational age and birth weight on
