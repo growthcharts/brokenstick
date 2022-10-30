@@ -3,15 +3,14 @@ cran-comments
 
 ## Submission to CRAN
 
--   `brokenstick 2.3.0` incorporates various updates and fixes. See
-    NEWS.md for an overview.
--   The version also updates the roxygen2 version
+-   `brokenstick 2.4.0` incorporates many updates and fixes for
+    JSS-manuscript version 30-10-2002. See NEWS.md for an overview.
 
 ## Test environments
 
--   local OS X, 12.5.1, R 4.2.1
--   win-builder, using `devtools::check_win_devel()`
--   rhub
+-   local: OS X, 12.6, R 4.2.1, aarch64-apple-darwin20 (64-bit)
+-   win-builder: using `devtools::check_win_devel()`
+-   rhub: `rhub::check_for_cran()`
 
 ### Local build
 
@@ -23,7 +22,7 @@ build(manual = TRUE)
 ```
 
 ``` bash
-R CMD CHECK brokenstick_2.3.0.tar.gz
+R CMD CHECK brokenstick_2.4.0.tar.gz
 Status: OK
 ```
 
@@ -31,7 +30,7 @@ Status: OK
 
 `devtools::check_win_devel()` resulted in:
 
-    OK
+    Status: OK
 
 ### RHUB
 
