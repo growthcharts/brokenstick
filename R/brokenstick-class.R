@@ -50,9 +50,8 @@
 #'
 #' @name brokenstick-class
 #' @rdname brokenstick-class
-#' @author Stef van Buuren, 2021
-#' @references van Buuren S (2021).
-#' Broken Stick Model for Irregular Longitudinal Data. \emph{In preparation}.
+#' @author Stef van Buuren, 2023
+#' @references <doi:10.18637/jss.v106.i07>
 NULL
 
 new_brokenstick <- function(call = match.call(),

@@ -56,9 +56,8 @@ class \link[coda:mcmc]{coda::mcmc}. For \code{method = "lmer"}: An object of cla
 }
 
 \references{
-van Buuren S (2021).
-Broken Stick Model for Irregular Longitudinal Data. \emph{In preparation}.
+\url{doi:10.18637/jss.v106.i07}
 }
 \author{
-Stef van Buuren, 2021
+Stef van Buuren, 2023
 }
