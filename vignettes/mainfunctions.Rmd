@@ -34,7 +34,7 @@ require("dplyr")
 require("ggplot2")
 ```
 
-For more elaborate documentation, visit <https://growthcharts.org/brokenstick/articles/manual/manual.html>.
+For more elaborate documentation, see the [manual](../articles/manual/manual.html).
 
 ## Plot trajectories
 

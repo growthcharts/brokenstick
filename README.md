@@ -8,7 +8,7 @@
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
-[![](https://img.shields.io/badge/github%20version-2.4.0-orange.svg)](https://growthcharts.org/brokenstick/)
+[![](https://img.shields.io/badge/github%20version-2.4.1-orange.svg)](https://growthcharts.org/brokenstick)
 
 <!-- badges: end -->
 
@@ -44,11 +44,11 @@ remotes::install_github("growthcharts/brokenstick")
 The *broken stick model* describes a set of individual curves by a
 linear mixed model using linear B-splines. The model can be used
 
--   to smooth growth curves by a series of connected straight lines;
--   to align irregularly observed curves to a common age grid;
--   to create synthetic curves at a user-specified set of break ages;
--   to estimate the time-to-time correlation matrix;
--   to predict future observations.
+- to smooth growth curves by a series of connected straight lines;
+- to align irregularly observed curves to a common age grid;
+- to create synthetic curves at a user-specified set of break ages;
+- to estimate the time-to-time correlation matrix;
+- to predict future observations.
 
 The user specifies a set of break ages at which the straight lines
 connect. Each individual obtains an estimate at each break age, so the
@@ -57,31 +57,31 @@ observed trajectory.
 
 The main assumptions of the broken stick model are:
 
--   The trajectory between the break ages follows a straight line, and
-    is generally not of particular interest;
--   Broken stick estimates follow a common multivariate normal
-    distribution;
--   Missing data are missing at random (MAR);
--   Individuals are exchangeable and uncorrelated.
+- The trajectory between the break ages follows a straight line, and is
+  generally not of particular interest;
+- Broken stick estimates follow a common multivariate normal
+  distribution;
+- Missing data are missing at random (MAR);
+- Individuals are exchangeable and uncorrelated.
 
 In order to conform to the assumption of multivariate normality, the
 user may fit the broken stick model on suitably transformed data that
 yield the standard normal ($Z$) scale. Unique feature of the broken
 stick model are:
 
--   *Modular*: Issues related to non-linearity of the growth curves in
-    the observed scale can be treated separately, i.e., outside the
-    broken stick model;
--   *Local*: A given data point will contribute only to the estimates
-    corresponding to the closest break ages;
--   *Exportable*: The broken stick model can be exported and reused for
-    prediction for new data in alternative computing environments.
+- *Modular*: Issues related to non-linearity of the growth curves in the
+  observed scale can be treated separately, i.e., outside the broken
+  stick model;
+- *Local*: A given data point will contribute only to the estimates
+  corresponding to the closest break ages;
+- *Exportable*: The broken stick model can be exported and reused for
+  prediction for new data in alternative computing environments.
 
 The `brokenstick` package contains functions for
 
--   Fitting the broken stick model to data,
--   Plotting individual trajectories,
--   Predicting broken stick estimates for new data.
+- Fitting the broken stick model to data,
+- Plotting individual trajectories,
+- Predicting broken stick estimates for new data.
 
 ## Resources
 
@@ -111,12 +111,11 @@ The `brokenstick` package contains functions for
 
 ### Instructive materials
 
--   [Companion site](https://growthcharts.org/brokenstick/) contains
-    vignettes and articles that explain the model and the use of the
-    software;
--   Paper in preparation: *Broken Stick Model for Irregular Longitudinal
-    Data*:
-    [html](https://growthcharts.org/brokenstick/articles/manual/manual.html).
+- Companion [site](https://growthcharts.org/brokenstick) contains
+  vignettes and articles that explain the model and the use of the
+  software;
+- PDF manual [Broken Stick Model for Irregular Longitudinal
+  Data](doi:10.18637/jss.v106.i07).
 
 ### References
 
