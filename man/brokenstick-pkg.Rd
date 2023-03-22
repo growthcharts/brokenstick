@@ -16,9 +16,10 @@ fitting a broken stick model to data, for predicting broken
 stick curves for new data, and for plotting the results.
 }
 \note{
-Development of this package was kindly supported under the Healthy
-Birth, Growth and Development knowledge integration (HBGDki)
-program of the Bill & Melinda Gates Foundation.
+This work was supported by the Bill & Melinda Gates Foundation. The contents
+are the sole responsibility of the authors and may not necessarily represent
+the official views of the Bill & Melinda Gates Foundation or other agencies
+that may have supported the primary data studies used in the present study.
 }
 \section{brokenstick functions}{
 
@@ -50,7 +51,12 @@ The following functions perform calculations:
 }
 
 \references{
-van Buuren, S. (2018). \emph{Flexible Imputation of Missing Data. Second Edition}. Chapman & Hall/CRC. Chapter 11.
+van Buuren, S. (2023). Broken Stick Model for Irregular Longitudinal Data.
+\emph{Journal of Statistical Software}, 106(7), 1--51.
+\url{doi:10.18637/jss.v106.i07}
+
+van Buuren, S. (2018). \emph{Flexible Imputation of Missing Data. Second Edition}.
+Chapman & Hall/CRC. Chapter 11.
 \url{https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick}
 }
 \seealso{

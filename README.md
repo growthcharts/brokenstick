@@ -111,11 +111,19 @@ The `brokenstick` package contains functions for
 
 ### Instructive materials
 
-- Companion [site](https://growthcharts.org/brokenstick) contains
+- [Companion site](https://growthcharts.org/brokenstick) contains
   vignettes and articles that explain the model and the use of the
   software;
-- PDF manual [Broken Stick Model for Irregular Longitudinal
-  Data](doi:10.18637/jss.v106.i07).
+- Publication: [Broken Stick Model for Irregular Longitudinal
+  Data](doi:10.18637/jss.v106.i07) <doi:10.18637/jss.v106.i07>.
+
+### Acknowledgment
+
+This work was supported by the Bill & Melinda Gates Foundation. The
+contents are the sole responsibility of the authors and may not
+necessarily represent the official views of the Bill & Melinda Gates
+Foundation or other agencies that may have supported the primary data
+studies used in the present study.
 
 ### References
 

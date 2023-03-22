@@ -12,11 +12,14 @@ vignette: >
   %\VignetteIndexEntry{Broken Stick Model for Irregular Longitudinal Data}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
-bibliography: ref.bib
+bibliography: bibliography.bib
 ---
 
+```{r, include=FALSE}
+options(tinytex.verbose = TRUE)
+```
+
 ```{r setup, include=FALSE}
-if (packageVersion("brokenstick") < "2.4.0") stop("brokenstick 2.4.0 needed")
 require("brokenstick")
 require("dplyr")
 require("tidyr")
@@ -24,7 +27,7 @@ require("ggplot2")
 require("lattice")
 
 old <- options(digits = 3, width = 72)
-knitr::opts_chunk$set(echo = TRUE, cache = FALSE, fig.height = 7, fig.width = 7, out.width = "100%", fig.path = "Figures/")
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, fig.height = 7, fig.width = 7, out.width = "100%")
 colors <- c("#006CC2B3", "#B61A51B3", "gray50", "#006CC2CC", "#B61A51CC", "gray50")
 ```
 
@@ -33,42 +36,42 @@ Published as: Stef van Buuren (2023), Broken Stick Model for Irregular Longitudi
 # Abstract {-}
 
   Many longitudinal studies collect data that have irregular observation times, often requiring the application of linear mixed models with time-varying outcomes. This paper presents an alternative that splits the quantitative analysis into two steps. The first step converts irregularly observed data into a set of repeated measures through the broken stick model. The second step estimates the parameters of scientific interest from the repeated measurements at the subject level. The broken stick model approximates each subject's trajectory by a series of connected straight lines. The breakpoints, specified by the user, divide the time axis into consecutive intervals common to all subjects. Specification of the model requires just three variables: time, measurement and subject. The model is a special case of the linear mixed model, with time as a linear $B$-spline and subject as the grouping factor. The main assumptions are: subjects are exchangeable, trajectories between consecutive breakpoints are straight, random effects follow a multivariate normal distribution, and unobserved data are missing at random. The **R** package **brokenstick** v2.4.0 offers tools to calculate, predict, impute and visualise broken stick estimates. The package supports two optimisation methods, including options to constrain the variance-covariance matrix of the random effects. We demonstrate six applications of the model: detection of critical periods, estimation of the time-to-time correlations, profile analysis, curve interpolation, multiple imputation and personalised prediction of future outcomes by curve matching.
-
+  
 # Introduction
 
-Most longitudinal studies plan data collection to occur at a fixed set of time points. In practice, the realized times can differ --- sometimes substantially --- from the scheduled times. There may be many reasons for such differences. For example, we planned a visit at the weekend or during a holiday, the subject did not show up, the measurement device was out of order, or the investigator fell ill. Varying observation times may also result from combining data from multiple studies, each collected according to its own design. Timing variation can be substantial in observational studies, especially if the survey lacks a pre-specified schedule. Longitudinal data with timing differences between subjects are said to be *irregular*.
+Most longitudinal studies plan data collection to occur at a fixed set of time points. In practice, the realised times can differ - sometimes substantially - from the scheduled times. There may be many reasons for such differences. For example, we planned a visit at the weekend or during a holiday, the subject didn't show up, the measurement device was out of order, or the investigator got ill. Varying observation times may also result from combining data from multiple studies, each collected according to its own design. Timing variation can be substantial in observational studies, especially if the survey lacks a pre-specified schedule. Longitudinal data with timing differences between subjects are said to be *irregular*.
 
-Irregular observation times present significant challenges for quantitative analysis. For example, it is not easy to calculate the time-to-time correlation matrix if the data spread thinly over time. It might also be complex to predict the future from past data if subject times differ. Observation times may also relate to the process of interest. For example, more severely ill patients get measured more frequently; unmotivated cohort members respond more rarely, and so on. Conventional methods like MANOVA, regression or cluster analysis break down if observation times differ or if drop-out is selective.
+Irregular observation times present significant challenges for quantitative analysis. For example, it isn't easy to calculate the time-to-time correlation matrix if the data spread thinly over time. It might also be complex to predict the future from past data if subject times differ. Observation times may also relate to the process of interest. For example, more severe patients get more frequent measurements; unmotivated cohort members respond more rarely, and so on. Conventional methods like MANOVA, regression or cluster analysis break down if observation times differ or if drop-out is selective.
 
-While irregular observation times occur all over science, there is no universal or principled approach to resolve the problem. One straightforward fix is to take only those dates for which data are available (e.g., dates when stocks are traded), thus ignoring the times when markets are closed. One may also create bins of time intervals around the planned times, thereby ignoring within-period differences. Another ad-hoc method predicts the value at the scheduled time from neighboring data, e.g., by linear interpolation or smoothing, typically reducing the variability in the data. Some quick fixes create data sets where the timing problem seems to have "gone away", which may tempt the analyzingt to ignore the potential effects of data patch-up on the substantive conclusions. While convenient and straightforward, the thoughtless application of these fixes introduces significant spurious relations over time, especially if the spacing of observations is highly irregular [@rehfeld2011]. Binning can lead to "surprisingly large" biases [@towers2014]. If timing variation is related to the outcome of interest, these methods may result in biased estimates and exaggerated claims [@pullenayegum2016].
+While irregular observation times occur all over science, there is no universal or principled approach to resolve the problem. One straightforward fix is to take only those dates for which data are available (e.g., dates when stocks are traded), thus ignoring the times when markets are closed. One may also create bins of time intervals around the planned times, thereby ignoring within-period differences. Another ad-hoc method predicts the value at the scheduled time from neighbouring data, e.g., by linear interpolation or smoothing, typically reducing the variability in the data. Some quick fixes create data sets where the timing problem seems to have "gone away", which may tempt the analyst to ignore the potential effects of data patch-up on the substantive conclusions. While convenient and straightforward, the thoughtless application of these fixes introduces significant spurious relations over time, especially if the spacing of observations is highly irregular [@rehfeld2011]. Binning can lead to "surprisingly large" biases [@towers2014]. If timing variation is related to the outcome of interest, these methods may result in biased estimates and exaggerated claims [@pullenayegum2016].
 
-The linear mixed model for longitudinal data [@laird1982; @fitzmaurice2011] is the standard for analyzing irregular data. The model represents each subject's observed curve by a parametric function of time. The parameter estimates of this function are specific to each subject and modeled as random effects. The linear mixed model is beneficial for irregular data. It borrows strength across different realizations of the same process, summarizing each trajectory by a small number of parameters that vary over subjects. The analyst can break down the distribution of these random effects as a function of individual characteristics. The linear mixed model is attractive when the number of measurements differs between individuals or when the measurements are taken at different times.
+The linear mixed model for longitudinal data [@laird1982; @fitzmaurice2011] is the standard for analysing irregular data. The model represents each subject's observed curve by a parametric function of time. The parameter estimates of this function are specific to each subject and modelled as random effects. The linear mixed model is beneficial for irregular data. It borrows strength across different realisations of the same process, summarising each trajectory by a small number of parameters that vary over subjects. The analyst can break down the distribution of these random effects as a function of individual characteristics. The linear mixed model is attractive when the number of measurements differs between individuals or when the measurements are taken at different times.
 
-This paper explores the use of the *broken stick model* to transform irregularly observed data into *repeated measures*. The broken stick model describes a curve by a series of connected straight lines. The model has a long history and is known under many other names, among others, *segmented straight lines* [@bellman1969], *piece-wise regression* [@toms2003], *structural change models* [@bai2003], *broken line smoothing* [@koutsoyiannis2000] and *segmented regression* [@lerman1980]. The term *broken stick* goes back to at least @macarthur1957, who used it in an analogy to indicate the abundance of species. Most of the literature on the broken stick model concentrates on the problem of finding optimal times at which the lines should connect. Instead, the present paper will focus on the problem of summarizing irregular individual trajectories by estimates made at a *pre-specified time grid*. This time grid is identical for all individuals, but it need not be equidistant. Our model formulation is a special case of the linear mixed model, with time modeled as a set of random effects coded as a linear $B$-spline and subjects as the grouping factor. The output of the transformation is a set of repeated measures, where every subject obtains a score on every time point.
+This paper explores the use of the *broken stick model* to transform irregularly observed data into *repeated measures*. The broken stick model describes a curve by a series of connected straight lines. The model has a long history and is known under many other names, amongst others, *segmented straight lines* [@bellman1969], *piecewise regression* [@toms2003], *structural change models* [@bai2003], *broken line smoothing* [@koutsoyiannis2000] and *segmented regression* [@lerman1980]. The term *broken stick* goes back to at least @macarthur1957, who used it in an analogy to indicate the abundance of species. Most of the literature on the broken stick model concentrates on the problem of finding optimal times at which the lines should connect. Instead, the present paper will focus on the problem of summarising irregular individual trajectories by estimates made at a *pre-specified time grid*. This time grid is identical for all individuals, but it needs not be equidistant. Our model formulation is a special case of the linear mixed model, with time modelled as a set of random effects coded as a linear $B$-spline and subjects as the grouping factor. The output of the transformation is a set of repeated measures, where every subject obtains a score on every time point.
 
-Many **R** packages offer tools for interpolation. The **splines** package [@r2020] and the **akima** package [@akima2021] contains classic interpolation methods for one- and two-dimensional smoothing. Most contributed packages concentrate on time series or spatial interpolation. See @li2014 and @lepot2017 for overviews of the different concepts and methodologies. Most interpolation techniques rely on neighboring information, in time, space or both. The broken stick model addresses the problem where many independent replications provide short irregular multivariate time series, say of 5-30 time points. The scientific interest is to dynamically predict and update future observations. The model applies the linear mixed model to increase stability for such series by borrowing information across replicates. As there are no satisfactory solutions to this problem, the **brokenstick** package intends to fill this gap. Package **brokenstick** is available from the Comprehensive **R** Archive Network at <https://CRAN.R-project.org/package=brokenstick>.
+Many **R** packages offer tools for interpolation. The **splines** package [@r2020] and the **akima** package [@akima2021] contains classic interpolation methods for one- and two-dimensional smoothing. Most contributed packages concentrate on time series or spatial interpolation. See @li2014 and @lepot2017 for overviews of the different concepts and methodologies. Most interpolation techniques rely on neighbouring information, in time, space or both. The broken stick model addresses the problem where many independent replications provide short irregular multivariate time series, say of 5-30 time points. The scientific interest is to dynamically predict and update future observations. The model applies the linear mixed model to increase stability for such series by borrowing information across replicates. As there are no satisfactory solutions to this problem, the **brokenstick** package intends to fill this gap.
 
-Substantive researchers often favor repeated measures over the use of linear mixed models because of their simplicity. For example, we can easily fit a subject-level model to predict future outcomes conditional on earlier data with repeated measures data. While such simple regression models may be less efficient than modelling the complete data [@diggle2002, Section 6.1], increased insight may be more valuable than increased precision.
+Substantive researchers often favour repeated measures over the use of linear mixed models because of their simplicity. For example, we can easily fit a subject-level model to predict future outcomes conditional on earlier data with repeated measures data. While such simple regression models may be less efficient than modelling the complete data [@diggle2002, Section 6.1], increased insight may be more valuable than increased precision.
 
 The broken stick model requires a specification of a sensible set of time points at which the measurements ideally should have been taken. For each subject, the model predicts or imputes hypothetical observations at those times, so the substantive analysis applies to the repeated measures instead of the irregular data. This strategy is akin to Diggle's multi-stage model-fitting approach [@diggle1988]. The envisioned two-step analytic process aims to provide the best of both worlds.
 
 Some applications of the broken stick model are:
 
--   To approximate individual trajectories by a series of connected straight lines;
--   To align irregularly observed curves to a joint age grid;
--   To impute realizations of individual trajectories;
--   To estimate the time-to-time correlation matrix;
--   To predict future observations.
+-   to approximate individual trajectories by a series of connected straight lines;
+-   to align irregularly observed curves to a joint age grid;
+-   to impute realisations of individual trajectories;
+-   to estimate the time-to-time correlation matrix;
+-   to predict future observations.
 
-The original motivation for developing the broken stick model was to facilitate the statistical analysis and testing of critical ages in the onset of childhood obesity [@dekroon2010], with extensions to multiple imputation [@vanbuuren2018]. There is good support in **R** for fitting child growth data. We mention some related approaches. Methods for estimating growth references with parametric models are `gamlss()` from **gamlss** [@stasinopoulos2007] and its Bayesian incarnation `bamlss()` from **bamlss** [@umlauf2021]. Nonparametric alternatives that estimate quantiles directly are `rq()` from **quantreg** [@koenker2018] and `expectreg.ls()` from **expectreg** [@otto-sobotka2021]. Methods for modelling and smoothing growth curves fit trajectories per child include `smooth.basisPar()` from **fda** [@ramsay2021], `gam()` from **mgcv** [@wood2011], `loess()` and `smooth.spline()` from base **stats** [@r2020]. Models that smooth by borrowing strength across children are `face.sparse()` from **face** [@xiao2021], `lmer()` from **lme4** [@bates2015], and `sitar()` from **sitar** [@cole2021]. The broken stick model fits in the latter tradition, and features an intuitive parametrization of each individual growth curve as a series of connected straight lines. See @anderson2019 for an overview and comparison of these methods.
+The original motivation for developing the broken stick model was to facilitate the statistical analysis and testing of critical ages in the onset of childhood obesity [@dekroon2010], with extensions to multiple imputation [@vanbuuren2018]. There is good support in **R** for fitting child growth data. We mention some related approaches. Methods for estimating growth references with parametric models are `gamlss()` from **gamlss** [@stasinopoulos2007] and its Bayesian incarnation `bamlss()` from **bamlss** [@umlauf2021]. Nonparametric alternatives that estimate quantiles directly are `rq()` from **quantreg** [@koenker2018] and `expectreg.ls()` from **expectreg** [@otto-sobotka2021]. Methods for modelling and smoothing growth curves fit trajectories per child include `smooth.basisPar()` from **fda** [@ramsay2021], `gam()` from **mgcv** [@wood2011], `loess()` and `smooth.spline()` from base **stats** [@r2020]. Models that smooth by borrowing strength across children are `face.sparse()` from **face** [@xiao2021], `lmer()` from **lme4** [@bates2015], and `sitar()` from **sitar** [@cole2021]. The broken stick model fits in the latter tradition, and features an intuitive parametrisation of each individual growth curve as a series of connected straight lines. See @anderson2019 for an overview and comparison of these methods.
 
 The present paper highlights various computational tools from the **brokenstick** v2.4.0 package. The package contains tools to fit the broken stick model to data, export the fitted model's parameters, create imputed values of the model, and predict broken stick estimates for new data. Also, the text illustrates how the tool helps to solve various analytic problems.
 
 # Illustration of broken stick model
 
-As a first step, let us study the variation in the age of measurement of 200 children from the SMOCC study [@herngreen1994]. @lokku2020 suggest the *abacus plot* to visualize this variation.
+As a first step, let us study the variation in the age of measurement of 200 children from the SMOCC study [@herngreen1994]. @lokku2020 suggest the *abacus plot* to visualise this variation.
 
-```{r visits, fig.height = 4, fig.cap = "Abacus plot of observation times for the first 20 children of the SMOCC data. Data collection was done through 10 waves. Each dot represents the age at which an observation was made. The variability in timing between children rises with age.", echo=FALSE, set.theme = TRUE}
+```{r, visits, fig.height = 4, fig.cap = "Abacus plot of observation times for the first 20 children of the SMOCC data. Data collection was done through 10 waves. Each dot represents the age at which an observation was made. The variability in timing between children rises with age.", echo=FALSE, set.theme = TRUE}
 data <- smocc_200
 data$month <- data$age * 12
 schedule <- c(0, 0.92, 1.84, 3, 6, 9, 12, 15, 18, 24)
@@ -92,9 +95,10 @@ The blue points in Figure \@ref(fig:visits) indicate the observation times. Gene
 Let us fit two models, with two and nine lines, respectively, to body length's standard deviation score (SDS).
 
 ```{r plotfit2echo, echo = TRUE, eval = FALSE}
-fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, seed = 1, knots = 0:2)
+fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, seed = 1,
+                    knots = 0:2)
 fit9 <- brokenstick(hgt_z ~ age | id, smocc_200, seed = 1,
-knots = round(c(0:3, 6, 9, 12, 15, 18, 24)/12, 4))
+                    knots = round(c(0:3, 6, 9, 12, 15, 18, 24)/12, 4))
 ```
 
 ```{r plotfit2x, echo = FALSE, fig.height = 5, fig.cap = "Data and fitted curves for three children (blue = observed data, red = fitted curves). The broken stick model with two lines (top) gives a crude approximation of the data. The model with nine lines (bottom) follows the data quite closely.", set.theme = TRUE}
@@ -116,7 +120,7 @@ There are two fitted models. The simpler model (top) uses just two line segments
 
 We can create a better model by setting breakpoints equal to the scheduled ages. Since there are 10 scheduled ages, we construct nine straight lines. In contrast to the two-line model, the nine-line broken stick model is sensitive to small bumps in the observed trajectory and closely fits the empirical data. The residual variance of the nine-line model is low (0.059), and the proportion of explained variance in SDS is high (0.98).
 
-While the observation times in the data differ between children, the broken stick curves use identical time points across subjects. The idea is now that we can add the broken stick estimates to the child-level data by a long-to-wide conversion and analyze supplemented columns as repeated measures. A repeated measures analysis is usually simpler than the equivalent for the temporally misaligned data. For example, it is easy to calculate mean profiles for arbitrary groups, estimate the time-to-time covariance matrix, or build predictive models at the child level. See @hand1987 for a lucid overview of linear techniques for repeated measures.
+While the observation times in the data differ between children, the broken stick curves use identical time points across subjects. The idea is now that we can add the broken stick estimates to the child-level data by a long-to-wide conversion and analyse supplemented columns as repeated measures. A repeated measures analysis is usually simpler than the equivalent for the temporally misaligned data. For example, it is easy to calculate mean profiles for arbitrary groups, estimate the time-to-time covariance matrix, or build predictive models at the child level. See @hand1987 for a lucid overview of linear techniques for repeated measures.
 
 # Methodology
 
@@ -153,7 +157,7 @@ $$
 \kappa_0 = \kappa_1 < \dots < \kappa_k < \kappa_{k+1}
 $$
 
-The internal knots $\kappa_1, \dots, \kappa_k$ correspond to the set of ages for which we obtain broken stick estimates, and it could be specified by the user. The left boundary knot $\kappa_0 = \kappa_1$ is left-anchored to the minimum time $\min(t_{ij})$ in the data. This point defines the starting event of the participant, such as birth or study enrollment. The right hand boundary knot is $\kappa_{k+1} \geq \max(t_{ij})$.
+The internal knots $\kappa_1, \dots, \kappa_k$ correspond to the set of ages for which we obtain broken stick estimates, and it could be specified by the user. The left boundary knot $\kappa_0 = \kappa_1$ is left-anchored to the minimum time $\min(t_{ij})$ in the data. This point defines the starting event of the participant, such as birth or study enrolment. The right hand boundary knot is $\kappa_{k+1} \geq \max(t_{ij})$.
 
 The second-order $B$-spline [@deboor1978 pp. 32],
 
@@ -187,11 +191,11 @@ The total number of parameters for a solution with $k$ internal knots is thus eq
 
 ## Model assumptions
 
-At the person level, we assume $b_i \sim N(0, \Omega)$, i.e., the random coefficients of the subjects have a multivariate normal distribution with zero mean and a $(k+1) \times (k+1)$ covariance matrix $\Omega$. The base model allows the elements of $\Omega$ to vary freely. For time-dependent data, constrained versions for $\Omega$ are also of interest [@fitzmaurice2011, Ch. 7]. Section \@ref(estimation-steps-explained) highlights two such extensions. We also assume that the covariance between $b_i$ and $\epsilon_i$ is zero. For simplicity, this paper is restricted to the case where $X_i$ includes only time, and no other covariates.
+At the person level, we assume $b_i \sim N(0, \Omega)$, i.e., the random coefficients of the subjects have a multivariate normal distribution with zero mean and a $(k+1) \times (k+1)$ covariance matrix $\Omega$. The base model allows the elements of $\Omega$ to vary freely. For time-dependent data, constrained versions for $\Omega$ are also of interest [@fitzmaurice2011, ch. 7]. Section \@ref(estimation-steps-explained) highlights two such extensions. We also assume that the covariance between $b_i$ and $\epsilon_i$ is zero. For simplicity, this paper is restricted to the case where $X_i$ includes only time, and no other covariates.
 
 The broken stick model builds upon three main modeling assumptions:
 
--   The trajectory between break ages follows a straight line. This assumption may fail for processes that are convex or concave in time. For example, human height growth in centimeters is concave in time, so setting breakpoints far apart introduces a systematic negative bias. Modeling height SDS instead of raw height will prevent this bias.
+-   The trajectory between break ages follows a straight line. This assumption may fail for processes that are convex or concave in time. For example, human height growth in centimeters growth is concave in time, so setting breakpoints far apart introduces a systematic negative bias. Modeling height SDS instead of raw height will prevent this bias.
 -   The broken stick estimates follow a joint multivariate normal distribution. As this assumption may fail for skewed measurements, it could be beneficial to transform the outcomes so that their distribution will be closer to normal.
 -   The data are *missing at random* (MAR) given the outcomes from all subjects at all observation times. This assumption is restrictive in the sense that missingness may only depend on the observed outcomes, and not on covariates other than time. At the same time, the assumption is liberal in the sense that the missingness may depend on future outcomes. While this MAR-future assumption is unusual in the literature on drop-out and observation time models, it is a sensible strategy for creating imputations that preserve relations over time, especially for intermittent missing data. Of course, the subsequent substantive analysis on the imputed data needs to be aware of the causal direction of time.
 
@@ -199,14 +203,14 @@ The broken stick model builds upon three main modeling assumptions:
 
 Given the model estimates and the person data, we can calculate the random effect $b_i$. The *broken stick parameter* $\gamma_{is} = \beta_s + b_{is}$ is the subject-specific mean of $Y_i$ at time $\kappa_s$, $s = 1,\dots, k + 1$. The set of $\gamma_{is}$ parameters describes the mean response profile for subject $i$ by $k$ lines that connect at the $k + 1$ coordinates $(\kappa_s, \gamma_{is})$.
 
-The broken stick parameter is the most likely value of outcome $Y_i$ for subject $i$ at time $\kappa_s$ given the person's observed data and given the fitted model (which represents the evolution of trajectories from the training data). The parameter is the center of the posterior predictive distribution for normal $Y_i$. The two-sided $100(1-\alpha)\%$ prediction interval for the true, though often unobserved, value $Y_{i,\kappa_s}$ is equal to
+The broken stick parameter is the most likely value of outcome $Y_i$ for subject $i$ at time $\kappa_s$ given the person's observed data and given the fitted model (which represents the evolution of trajectories from the training data). The parameter is the centre of the posterior predictive distribution for normal $Y_i$. The two-sided $100(1-\alpha)\%$ prediction interval for the true, though often unobserved, value $Y_{i,\kappa_s}$ is equal to
 
 $$
 [Y_{i,\kappa_s}^{\rm lo}, Y_{i,\kappa_s}^{\rm hi}] = \gamma_{is} \pm t_{(1-\alpha/2;N-1)}\sigma,
 $$ 
 where $t_{(1-\alpha/2;N-1)}$ is the $100(1-\alpha/2)$ percentile of Student's $t$-distribution with $N - 1$ degrees of freedom. For example, the 50% prediction interval $\gamma_{is} \pm 0.68\sigma$ will contain 50% of true values. For normal $Y_i$, the length of the 50% prediction interval is equivalent to the interquartile range (IQR). If the residual variation $\sigma^2$ is small (say $\sigma^2 < 0.1$), the IQR is about 0.22, so half of the true values will be within 0.22 SD of $\gamma_{is}$, a small difference. For large $\sigma^2$ (e.g., $\sigma^2 > 0.2$), the $\gamma_{i}$ vector is a smoothed representation of $Y_{i}$. While smoothness amplifies low-frequency features of the trajectories, it could also introduce biases in the subsequent analysis by suppressing high-frequency variation. In that case, the analyst needs to check whether this reduction in variation does not affect the parameters of substantive interest. We may restore high-frequency variation by adding random draws from the residual distribution $N(0, \sigma^2)$. From there, it is a small step to multiple imputation, a well-developed methodology for drawing valid inferences from incomplete data [@rubin1987; @vanbuuren2018].
 
-If $n_i \gg k$ then the broken stick model provides a parsimonious representation of the measurements. Reversely, if $n_i \ll k$ then the model infers plausible values for subject $i$ by building strength across persons. The broken stick model converts $n_i$ irregularly observed measurements into a new set of $k$ values $\gamma_{is}$ at common ages $\kappa_1, ..., \kappa_k$, $s = 1,\dots, k$.
+If $n_i >> k$ then the broken stick model provides a parsimonious representation of the measurements. Reversely, if $n_i << k$ then the model infers plausible values for subject $i$ by building strength across persons. The broken stick model converts $n_i$ irregularly observed measurements into a new set of $k$ values $\gamma_{is}$ at common ages $\kappa_1, ..., \kappa_k$, $s = 1,\dots, k$.
 
 Since each row in $X_i$ sums to unity, the broken stick model does not have a global intercept. The linear $B$-spline coding effectively replaces the global random intercept term by $k + 1$ *local intercepts*, one at each break age. The local intercept summarizes the information available in the adjacent left and right age intervals and ignores any information beyond the two adjacent knots. The broken stick estimates are thus primarily local. Outcome data observed outside the two adjacent age intervals influence the broken stick estimates only through the subject-level part of the model, in particular through $\Omega$.
 
@@ -214,11 +218,11 @@ Since each row in $X_i$ sums to unity, the broken stick model does not have a gl
 
 ## Main function
 
-The `brokenstick()` function estimates the parameters of the broken stick model. The user needs to specify the outcome, the predictor and the grouping variable, as well as the location of the knots on the predictor variable. A call produces an object of class `"brokenstick"`:
+The `brokenstick()` function estimates the parameters of the broken stick model. The user needs to specify the outcome, the predictor and the grouping variable, as well as the location of the knots on the predictor variable. A call produces an object of class `brokenstick`:
 
 ```{r}
-fit <- brokenstick(hgt_z ~ age | id, data = smocc_200, knots = c(
-  0, 0.5, 1, 2), seed = 12321)
+fit <- brokenstick(hgt_z ~ age | id, data = smocc_200, 
+                   knots = c(0, 0.5, 1, 2), seed = 12321)
 summary(fit)
 ```
 
@@ -230,7 +234,7 @@ dim(bse)
 head(bse, 3)
 ```
 
-The specification `x = "knots"` uses the special keyword `"knots"` to set the predictor values equal to the knot locations used to fit the model. The argument `shape = "wide"` returns the predicted values as a wide matrix (one row per group, one column per predictor value). As a result we now have each individual trajectory summarized by six estimates.
+The specification `x = "knots"` uses the special keyword `"knots"` to set the predictor values equal to the knot locations used to fit the model. The argument `shape = "wide"` returns the predicted values as a wide matrix (one row per group, one column per predictor value). As a result we now have each individual trajectory summarised by six estimates.
 
 ## Estimation steps explained
 
@@ -246,9 +250,9 @@ colnames(X) <- paste("age", c(internal, 2.68), sep = "_")
 head(X)
 ```
 
-The numerical example shows that the `bs()` function transforms the `age` variable into five columns, the $B$-spline basis, with names like `age_0` and `age_0.5`. If `age` coincides with one of these (e.g., as in the top row), then the corresponding column receives a `1`. In all other cases, age distributes over two adjacent columns. Setting `degree = 1` specifies a $B$-spline and gives the broken stick model its name and its characteristic shape.
+The numerical example shows that the `bs()` function transforms the `age` variable into five columns, the $B$-spline basis, with names like `age_0` and `age_0.5`. If `age` coincides with one of these (e.g., as in the top row), then the corresponding column receives a `1`. In all other cases, age distributes over two adjacent columns. Setting `degree = 1` specifies a $B$-spline gives the broken stick model its name and its characteristic shape.
 
-Although not strictly needed, all applications in this paper assume that the left boundary knot marks the start of time, e.g., birth or day of enrollment. There are some subtleties in using `splines::bs()` to create a linear $B$-spline basis. Matrix `X` has values in the range $[0, 1]$ and a maximum of two non-zero values per row that sum to $1$. These conditions require that `Boundary.knots` span at least the range of the data. This requirement is easy to achieve by setting `Boundary.knots = range(data$age)`, which is done by default. Also, we need to ensure that the range of `knots` is not outside `Boundary.knots`. We may achieve that by setting `Boundary.knots` to include at least `range(knots)`. In practice, the user does not need to worry about boundaries since the `brokenstick()` function takes care of both conditions by expanding the boundary range when needed. The primary reason for setting explicit boundaries is to make them independent of the data.
+Although not strictly needed, all applications in this paper assume that the left boundary knot marks the start of time, e.g. birth or day of enrolment. There are some subtleties in using `splines::bs()` to create a linear $B$-spline basis. Matrix `X` has values in the range $[0, 1]$ and a maximum of two non-zero values per row that sum to $1$. These conditions require that `Boundary.knots` span at least the range of the data. This requirement is easy to achieve by setting `Boundary.knots = range(data$age)`, which is done by default. Also, we need to ensure that the range of `knots` is not outside `Boundary.knots`. We may achieve that by setting `Boundary.knots` to include at least `range(knots)`. In practice, the user does not need to worry about boundaries since the `brokenstick()` function takes care of both conditions by expanding the boundary range when needed. The primary reason for setting explicit boundaries is to make them independent of the data.
 
 ```{r include = FALSE, eval = FALSE, echo = FALSE}
 # inverse age coding
@@ -277,7 +281,7 @@ class(mod_lmer)
 
 The formula removes the intercept and specifies each knot as a random effect with child `id` as grouping factor. The `control` argument suppresses the warning `Model failed to converge with max|grad| = 0.0360913`. Such warnings occur often if the model has many random effects. These warnings may also be thrown if some of the child data are outliers (for example pre-terms). I found that the broken estimates generally look sound and reasonable despite the warnings. Note however that my experience derives primarily from child growth data, so there is no guarantee that this apparent robustness will hold for other types of data. Warnings from `lmer()` become more frequent with a higher number of knots, for smaller samples and for data with observations made at more irregular time points.
 
-Object `mod_lmer` has class `"lmerMod"` so we may use standard `plot()`, `predict()` and `summary` methods offered by the **lme4** package. Converting the result into broken stick estimates requires summing the fixed and random effects.
+Object `mod_lmer` has class `lmerMod` so we may use standard `plot()`, `predict()` and `summary` methods offered by the **lme4** package. Converting the result into broken stick estimates requires summing the fixed and random effects.
 
 ```{r}
 bse_lmer <- t(t(lme4::ranef(mod_lmer)$id) + lme4::fixef(mod_lmer))
@@ -293,7 +297,7 @@ ctl_kr <- control_kr()
 mod_kr <- kr(y = data$hgt_z, x = X, g = data$id, control = ctl_kr)
 ```
 
-The call to `control_kr()` produces a list with settings for the sampler according to the conventions of the **coda** package [@plummer2006]. The defaults in `control_kr()` should be reasonable across a wide range of cases. The list component `mod_kr$mod` contains various objects of class `"mcmc"` with the sampling history and detailed results. For example, inspect the fixed effect estimates as
+The call to `control_kr()` produces a list with settings for the sampler according to the conventions of the **coda** package [@plummer2006]. The defaults in `control_kr()` should be reasonable across a wide range of cases. The list component `mod_kr$mod` contains various objects of class `mcmc` with the sampling history and detailed results. For example, inspect the fixed effect estimates as
 
 ```{r}
 library("coda")
@@ -305,8 +309,9 @@ Also, we may obtain trace plots and densities. For example try `plot(mod_kr$mod$
 We obtain results for method `"lmer"` as
 
 ```{r}
-fit_lmer <- brokenstick(hgt_z ~ age | id, data = smocc_200, knots = c(
-  0, 0.5, 1, 2), method = "lmer", control = ctl_lmer)
+fit_lmer <- brokenstick(hgt_z ~ age | id, data = smocc_200,
+                        knots = c(0, 0.5, 1, 2), 
+                        method = "lmer", control = ctl_lmer)
 head(predict(fit_lmer, x = "knots", shape = "wide"), 3)
 ```
 
@@ -316,25 +321,24 @@ The argument `shape = "wide"` specifies the form of the return value. The broken
 
 2.  The Kasim-Raudenbush sampler fits the slightly more general linear-mixed model with heterogeneous within-subject variances, i.e., with a residual variance $\sigma_i^2$ per subject $i$ instead of the global residual $\sigma^2$. This makes it easier to identify, study and weight subjects based on how well they fit the model.
 
-3.  A third option is to simulate imputations as an extra step to the sampler. For subjects with large $\sigma_i^2$, the random effect estimates are a too smooth representation of the data, leading to inappropriate variance estimates when those estimates are analyzed as "just data". Section 11.3 of @vanbuuren2018 pioneered a solution that constructs multiple trajectories by adding a proper amount of residual noise to random effect estimates. The variance estimation then proceeds according to the principles of multiple imputation [@rubin1987].
+3.  A third option is to simulate imputations as an extra step to the sampler. For subject with large $\sigma_i^2$, the random effect estimates are a too smooth representation of the data, leading to inappropriate variance estimates when those estimates are analysed as "just data". Section 11.3 of @vanbuuren2018 pioneered a solution that constructs multiple trajectories by adding a proper amount of residual noise to random effect estimates. The variance estimation then proceeds according to the principles of multiple imputation [@rubin1987].
 
 # Functionality
 
 ## Overview
 
-The **brokenstick** package contains functions to fit, predict and plot data. Main functions, user-oriented helpers, and internal functions for computation used in the **brokenstick** package are summarized in Table 1.
-
-: Table 1: Main functions, user-oriented helpers, and internal functions for computation used in the `brokenstick` package.
+The **brokenstick** package contains functions to fit, predict and plot data. The main functions in the `brokenstick` package are:
 
 | Function name   | Description                                |
 |-----------------|--------------------------------------------|
-|                 |                                            |
-| *Main functions*  |                                          |
 | `brokenstick()` | Fit a broken stick model to irregular data |
 | `predict()`     | Predict broken stick estimates             |
 | `plot()`        | Plot individual trajectories               |
-|                 |                                            |
-| *Helper functions* |                                         |
+
+The following functions are user-oriented helpers:
+
+| Function name    | Description                             |
+|------------------|-----------------------------------------|
 | `coef()`         | Extract coefficients                    |
 | `fitted()`       | Calculate fitted values                 |
 | `get_knots()`    | Obtain the knots used by model          |
@@ -345,19 +349,22 @@ The **brokenstick** package contains functions to fit, predict and plot data. Ma
 | `print()`        | Print object                            |
 | `residuals()`    | Extract residuals from model            |
 | `summary()`      | Summarise object                        |
-|                  |                                         |
-| *Computation functions* |                                  |
+
+The following functions implement the calculations:
+
+| Function name   | Description                                             |
+|-----------------|---------------------------------------------------------|
 | `set_control()` | Generic control function                                |
 | `control_kr()`  | Set controls for Kasim-Raudenbush sampler               |
 | `kr()`          | Kasim-Raudenbush sampler for two-level model            |
 | `EB()`          | Empirical Bayes predictor for random effects (internal) |
 | `make_basis()`  | Create linear splines basis (internal)                  |
 
-The package exports **S3** methods for the class `"brokenstick"` for the following generic functions `coef()`, `fitted()`, `model.frame()`, `model.matrix()`, `plot()`, `predict()`, `print()`, `residuals()` and `summary()`. An object of class `"brokenstick"` stores the training data by default. When this is not desired, specify `brokenstick(..., light = TRUE)` to create a small object with just the parameter estimates. Of course, we cannot extract the original data from a light object. However, we can still use it to calculate brokenstick estimates for new cases using `predict(object, newdata = ...)`.
+The package exports S3 methods for the class `brokenstick` for the following generic functions `coef()`, `fitted()`, `model.frame()`, `model.matrix()`, `plot()`, `predict()`, `print()`, `residuals()` and `summary()`. An object of class `brokenstick` stores the training data by default. When this is not desired, specify `brokenstick(..., light = TRUE)` to create a small object with just the parameter estimates. Of course, we cannot extract the original data from a light object. However, we can still use it to calculate brokenstick estimates for new cases using `predict(object, newdata = ...)`.
 
 ## Data preparation
 
-Before we can fit the model, the data need to be in shape. The `brokenstick()` function takes tidy data in the long-form. Every row in the data corresponds to one visit. Two columns identify a visit: a subject variable and a time variable. Thus, if subject one has three visits and subject two has five visits, the combined data will have eight records. This section uses the built-in `smocc_200` data, containing the heights of 200 children measured at ten visits up to two years [@herngreen1994].
+Before we can fit the model, the data need to be in shape. The `brokenstick()` function takes tidy data in the long-form. Every row in the data corresponds to one visit. Two columns identify a visit: a subject variable and a time variable. Thus, if subject one has three visits and subject two has five visits, the combined data will have of eight records. This section uses the built-in `smocc_200` data, containing the heights of 200 children measured at ten visits up to two years [@herngreen1994].
 
 ```{r dataprep}
 library("brokenstick")
@@ -383,8 +390,10 @@ The `smocc_200` data contains the height measurement both in the original scale 
 
 ```{r y2z}
 library("AGD")
-z <- with(smocc_200, y2z(y = hgt, x = age, sex = ifelse(
-  sex == "male", "M", "F"), ref = nl4.hgt))
+z <- with(smocc_200, y2z(y = hgt, 
+                         x = age, 
+                         sex = ifelse(sex == "male", "M", "F"), 
+                         ref = nl4.hgt))
 identical(z, smocc_200$hgt_z)
 ```
 
@@ -401,8 +410,10 @@ ggplot(smocc_200, aes(hgt_z)) +
 Figure \@ref(fig:zscores) shows that, as expected, the empirical Z-score distribution is close to the standard normal. The few very extremely low heights correspond to pre-term born infants. Section \@ref(model-fitting) concentrates on modelling `hgt_z`. Function `z2y()` applies the inverse transformation of $Z$-scores to the original scale. The following snippet converts `hgt_z` into the cm scale.
 
 ```{r z2y}
-y <- with(smocc_200, AGD::z2y(z = hgt_z, x = age, sex = ifelse(
-  sex == "male", "M", "F"), ref = nl4.hgt))
+y <- with(smocc_200, AGD::z2y(z = hgt_z, 
+                              x = age, 
+                              sex = ifelse(sex == "male", "M", "F"), 
+                              ref = nl4.hgt))
 all.equal(y, smocc_200$hgt, tol = 0.0001)
 ```
 
@@ -421,7 +432,7 @@ ggplot(smocc_200[1:500, ], aes(x = age, y = hgt_z, group = id, color = as.factor
   theme(legend.position = "none")
 ```
 
-Figure \@ref(fig:plotsds) displays the growth curves of a subset of 52 children. The $Z$-score transformation takes away the major time trend, so all trajectories are more or less flat. This display allows us to see an extremely detailed assessment of individual growth. Note how the measurements cluster around ten ages: Birth, 1, 2, 3, 6, 9, 12, 15, 18 and 24 months. While the data collectors rigorously followed the study design, variation in timing is inevitable because of weekends, holidays, sickness, and other events.
+Figure \@ref(fig:plotsds) displays the growth curves of a subset of 52 children. The $Z$-score transformation takes away the major time trend, so all trajectories are more or less flat. This display allows us to see an extremely detailed assessment of individual growth. Note how the measurements cluster around ten ages: birth, 1, 2, 3, 6, 9, 12, 15, 18 and 24 months. While the data collectors rigorously followed the study design, variation in timing is inevitable because of weekends, holidays, sickness, and other events.
 
 ### Fit one line
 
@@ -447,7 +458,8 @@ We now extend to two connected lines. The first line should start at birth and e
 
 ```{r plotfit2z, warning=FALSE, eval=FALSE}
 fit2 <- brokenstick(hgt_z ~ age | id, smocc_200, knots = 0:2)
-plot(fit2, group = ids, xlab = "Age (years)", ylab = "Length (SDS)")
+plot(fit2, group = ids, 
+     xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
 The resulting plot was already shown as Figure \@ref(fig:plotfit2x) (top line). The `fit2` object holds the parameter estimates of the model:
@@ -456,7 +468,7 @@ The resulting plot was already shown as Figure \@ref(fig:plotfit2x) (top line). 
 summary(fit2)
 ```
 
-The printed output lists the knots of the model at 0, 1 and 2 years. The left and right boundaries are located at 0 and 2.68, respectively, corresponding to the lowest and highest ages in the data. The data for the right boundary are suppressed since the `brokenstick()` function sets `fit2$hide = "right"` by default. The `means` entry lists the fixed effect estimates, which we interpret as the average SDS per time point. The time-to-time variance-covariance matrix covers four random effects (3 visits + 1 end knot). The two error parameters measure the variability of the discrepancies between the model and the observed data. These three parameters (fixed, random, residual variance) are well interpretable and fully record the fitted broken stick model.
+The printed output lists the knots of the model at 0, 1 and 2 years. The left and right boundaries are located at 0 and 2.6776, respectively, corresponding to the lowest and highest ages in the data. The data for the right boundary are suppressed since the `brokenstick()` function sets `fit2$hide = "right"` by default. The `means` entry lists the fixed effect estimates, which we interpret as the average SDS per time point. The time-to-time variance-covariance matrix covers four random effects (3 visits + 1 end knot). The two error parameters measure the the variability of the discrepancies between the model and the observed data. These three parameters (fixed, random, residual variance) are well interpretable and fully record the fitted broken stick model.
 
 ### Fit nine lines
 
@@ -477,7 +489,7 @@ With a small residual variance of `r fit9$sigma2`, the nine-line broken stick mo
 plot(fit9, group = ids, xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
-Figure \@ref(fig:plotfit2x) (bottom line) illustrates that the nine-line model follows that data much better. The training set includes all subjects. Depending on the study goals, we may wish to further improve the model fit by removing children from the data. For example, there might be children for which few observations are available, children with diseases, or children with trajectories that are very unusual or faulty. The distribution of the subject-specific residuals, plotted by `hist(fit9$sigma2j)`, shows there is one severe outlier. We can locate and plot the outlier by `plot(fit9, group = unique(fit9$data$id)[which(fit9$sigma2j > 4)])`. We could remove it to increase model fit, but of course, such removals may affect external generalizability.
+Figure \@ref(fig:plotfit2x) (bottom line) illustrates that the nine-line model follows that data much better. The training set includes all subjects. Depending on the study goals, we may wish to further improve the model fit by removing children from the data. For example, there might be children for which few observations are available, children with diseases, or children with trajectories that are very unusual or faulty. The distribution of the subject-specific residuals, plotted by `hist(fit9$sigma2j)`, shows there is one severe outlier. We can locate and plot the outlier by `plot(fit9, group = unique(fit9$data$id)[which(fit9$sigma2j > 4)])`. We could remove it to increase model fit, but of course, such removals may affect external generalisability.
 
 ## Prediction
 
@@ -492,7 +504,7 @@ p1 <- predict(fit9, shape = "vector")
 head(p1)
 ```
 
-produces a vector containing `r length(p1)` predictions at the observed ages. These values represent a compromise between each person's measurement and the global mean. In general, the fewer and less extreme the data points of a person are, the closer the compromise will be toward the global mean. The compromise is called the *conditional mean* of the posterior distribution, the sum of the fixed and random effects.
+produces a vector of length `r nrow(p1)` with predictions at the observed ages. These values represent a compromise between each person's measurement and the global mean. In general, the fewer and less extreme data points of a person are, the closer the compromise will be toward the global mean. The compromise is called the *conditional mean* of the posterior distribution, the sum of the fixed and random effects.
 
 We can obtain the predictions at each knot for every person by specifying the `x = "knots"` argument, e.g.,
 
@@ -501,7 +513,7 @@ p2 <- predict(fit9, x = "knots", shape = "wide")
 head(p2, 3)
 ```
 
-The result `p2` is a table with 200 rows with the values at 10 knots. These values represent the regularized version of each observed curve, i.e., having a predicted value at each knot location. Add argument `hide = "none"` to `predict()` to calculate values for the right boundary knot.
+The result `p2` is a table with 200 rows with the values at 10 knots. These values represent the regularised version of each observed curve, i.e., having a predicted value at each knot location. Add argument `hide = "none"` to `predict()` to calculate values for the right boundary knot.
 
 We may request the combination of both types of predictions in one call as
 
@@ -516,13 +528,13 @@ The result is a long matrix with `r nrow(p3)` rows. There are two special column
 table(p3$.source)
 ```
 
-This dataset is perfectly suited to plot and summarizes data and model predictions.
+This dataset is perfectly suited to plot and summarise data and model predictions.
 
 Now suppose that we desire to predict height SDS at other ages, e.g., at 0.42, 1.33 and 4 years. We can do so by
 
 ```{r predx}
 head(predict(fit9, x = c(0.42, 1.33, 4), shape = "wide", 
-  include_data = FALSE), 3)
+             include_data = FALSE), 3)
 ```
 
 The `include_data = FALSE` argument removes the observed data from the result to prevent conversion into an overly large and inefficient wide matrix. Thus, we have considerable flexibility to work with times that are not breakpoints. Remember though that the underlying model does not change. For example, we cannot magically predict outside the model at age 4, so those values all get `NA`.
@@ -554,9 +566,10 @@ The command (case 5 in `predict()`) appends two new records to the data of child
 Suppose we have measured two new children, Fred and Alice. We wish to obtain predictions for both using the model `fit9`. The following snippet calculates predictions at both the observed ages and at the knot locations:
 
 ```{r}
-data <- data.frame(age = c(0, 0.12, 0.32, 0.62, 1.1, 0.25, 0.46),
-  hgt_z = c(-1.2, -1.8, -1.7, -1.9, -2.1, -1.9, -1.5), id = c(
-  rep("Fred", 5), rep("Alice", 2)))
+data <- data.frame(
+  age = c(0, 0.12, 0.32, 0.62, 1.1, 0.25, 0.46),
+  hgt_z = c(-1.2, -1.8, -1.7, -1.9, -2.1, -1.9, -1.5),
+  id = c(rep("Fred", 5), rep("Alice", 2)))
 p <- predict(fit9, newdata = data, x = "knots")
 ```
 
@@ -564,10 +577,10 @@ We can plot the trajectories data by
 
 ```{r echo = TRUE, fig.height=2.5, fig.width=5.2, out.width = "67%", fig.cap="Broken stick model prediction for sparse data. Alice and Fred have few observations (blue points). The broken stick model borrows information from other children to calculate fitted trajectories over the full age range (red points).", set.theme=TRUE}
 plot(fit9, newdata = data, ylim = c(-2.5, 0), 
-  xlab = "Age (years)", ylab = "Length (SDS)")
+     xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
-Alice contributes only two data points in the first half-year. The model expects that her height SDS will be around $-$1 SD at the age of two years. Using the data up to 1.1 years, the model predicts that Fred's growth curve remains around -2.0 SD until Fred is 1.5 years, and then increases to around -1.8 SD. While both predicted trajectories are extreme extrapolations, the example illustrates that it is possible to make informed predictions using just a handful of data points.
+Alice contributes only two data points in the first half-year. The model expects that her height SDS will be around -1 SD at the age of two years. Using the data up to 1.1 years, the model predicts that Fred's growth curve remains around -2.0 SD until Fred is 1.5 years, and then increases to around -1.8 SD. While both predicted trajectories are extreme extrapolations, the example illustrates that it is possible to make informed predictions using just a handful of data points.
 
 The `brokenstick:::EB()` function implements the empirical Bayes (EB) estimate (@skrondal2009, p. 683). The procedure is the workhorse underlying the `predict()` method.
 
@@ -580,7 +593,7 @@ oldpar <- par(mfrow = c(1, 2))
 MASS::eqscplot(x = smocc_200$hgt_z, xlab = "Height (SDS)", 
                y = pred, ylab = "Predicted Z-score", 
                pch = ".", xlim = c(-4, 4), ylim = c(-4, 4))
-abline(0, 1, col = "gray")
+abline(0, 1, col = "grey")
 y_cm <- with(smocc_200, 
              z2y(z = hgt_z, 
                  x = age, 
@@ -593,11 +606,11 @@ yhat_cm <- with(smocc_200,
                     ref = nl4.hgt))
 MASS::eqscplot(x = y_cm, xlab = "Height (cm)",
                y = yhat_cm, ylab = "Predicted (cm)", pch = ".")
-abline(0, 1, col = "gray")
+abline(0, 1, col = "grey")
 par <- par(oldpar)
 ```
 
-Figure \@ref(fig:obspred) is the scatter plot of the observed versus predicted values and provides a visual representation of the accuracy of the prediction of the model in height SDS and cm scales. Both plots suggest an excellent fit between the observed and fitted data. The percentage of explained variance for the height SDS is high: 98.1%. The standard deviation of the residuals is equal to 0.077 SD, a small value in the $Z$-scale. When back-converted to centimeters, the scatter plot of the observed versus predicted values is even a little tighter. The estimate of the proportion of explained variance is close to perfection: 99.9%. The standard deviation of the residuals is 4 mm, about the size of the technical error of measurement (TEM) for duplicate measurements in infants [@ismail2016, Table 2]. The out-of-sample predictive behavior is comparable. If we randomly split the data 100 times into 2/3 training data and 1/3 test data and calculate the proportion in the test data, we obtain even slightly higher out-of-sample values: 98.4% and 99.9% over the 100 replications.
+Figure \@ref(fig:obspred) is the scatterplot of the observed versus predicted values and provides a visual representation of the accuracy of the prediction of the model in height SDS and cm scales. Both plots suggest an excellent fit between the observed and fitted data. The percentage of explained variance for the height SDS is high: 98.1%. The standard deviation of the residuals is equal to 0.077 SD, a small value in the $Z$-scale. When back-converted to centimetres, the scatterplot of the observed versus predicted values is even a little tighter. The estimate of the proportion of explained variance is close to perfection: 99.9%. The standard deviation of the residuals is 4 mm, about the size of the technical error of measurement (TEM) for duplicate measurements in infants [@ismail2016, Table 2]. The out-of-sample predictive behaviour is comparable. If we randomly split the data 100 times into 2/3 training data and 1/3 test data and calculate the proportion in the test data, we obtain even slightly higher out-of-sample values: 98.4% and 99.9% over the 100 replications.
 
 ```{r outofsample, echo = FALSE, eval=FALSE}
 # quick and dirty out-of-sample simulation
@@ -645,7 +658,7 @@ The model is as good as it can get. The uncertainties associated with the transf
 
 Fitting the broken stick model requires a specification of the knots. The choice of the knots influences the quality and usefulness of the solution, so exercise some care in setting appropriate knot locations.
 
-The `brokenstick()` function uses the same set of knots for all subjects. By default, the procedure places five internal knots (through the default argument `k = 5`) and sets the boundary knots equal to the range of the predictor variable. The `k` argument is a quick way to add `k` internal knots at equidense quantiles of the time variable. For example, specifying `k = 1` puts a knot at the 50th centile (median), setting `k = 3` puts knots at the 25th, 50th and 75th centiles, and so on. While convenient and quick, this option can result in sub optimal knot placement that is not adequate for the problem at hand. In general, it is best to specify explicit values for the `knots` argument.
+The `brokenstick()` function uses the same set of knots for all subjects. By default, the procedure places five internal knots (through the default argument `k = 5`) and sets the boundary knots equal to the range of the predictor variable. The `k` argument is a quick way to add `k` internal knots at equidense quantiles of the time variable. For example, specifying `k = 1` puts a knot at the 50th quantile (median), setting `k = 3` puts knots at the 25th, 50th and 75th quantiles, and so on. While convenient and quick, this option can result in suboptimal knot placement that is not adequate for the problem at hand. In general, it is best to specify explicit values for the `knots` argument.
 
 Here are some suggestions for knot placement by the `knots` argument:
 
@@ -653,7 +666,7 @@ Here are some suggestions for knot placement by the `knots` argument:
 2.  If you want to predict at specific times, then specify knots at those time points;
 3.  Setting knots at scheduled visits is a sensible strategy for obtaining predictions at precisely the scheduled times;
 4.  Set equidistant knots if the analysis requires a fixed time interval;
-5.  Keep the number of knots low, for speed and simplicity. Having many ($\geq 10$) knots can improve the fit to the data, but it will also increase calculation time and may result in unstable solutions. For problems that require more than 10 knots, `method = "kr"` (default) is faster than `method = "lmer"`. Use `control_kr()` to improve stability by setting a correlation model. The `brokenstick()` function does not accept more than 50 knots;
+5.  Keep the number of knots low, for speed and simplicity. Having many ($\geq 10$) knots can improve the fit to the data. Still, it will also increase calculation time and may result in unstable solutions. For problems that require more than 10 knots, `method = "kr"` (default) is faster than `method = "lmer"`. Use `control_kr()` to improve stability by setting a correlation model. The `brokenstick()` function does not accept more than 50 knots;
 6.  Do not place knots in sparsely filled areas of the data, e.g., in-between two visits. Doing so may result in erratic joins;
 7.  Optionally, check whether `model.matrix(fit)` produces a design matrix with all elements in the range $[0, 1]$ and all rows summing to $1$. Check `colSums(model.matrix(fit))` to see how the total number of observations distributes over the knots;
 8.  Optionally, and in contrast to 6, add a knot equal to or slightly higher than the maximum time value. Doing so ensures that the model specification does not depend on the range of the training data. See the next point for an alternative;
@@ -671,9 +684,9 @@ table(is.na(p1))
 table(is.na(p2))
 ```
 
-The code trims the time range of the training data to age 2.1 and fits two models. Model 1 is limited to the time range $[0, 2.1]$ years. Therefore it cannot predict above 2.1 years, so its predictions will contain 34 `NA`'s. One might say that this is the correct result because the fitted model is not informative beyond the age of 2.1 years, and hence the `NA`'s are useful and plausible. For comparison, model 2 uses the same training and test data, but sets the wider time interval $[0, 3]$. As a consequence, model 2 produces predictions for all test data. These predictions might be useful in some cases. For example, simulation studies often resample or regenerate data, so the time range may vary between replications. Setting the boundary to include the largest range possible avoids problems caused by `NA` predictions. In general, to make the model specification independent of the training data, add an extra knot equal to or slightly higher than the maximum time value in the train and test data.
+The code trims the time range of the training data to age 2.1 and fits two models. Model 1 is limited to the time range $[0, 2.1]$ years. Therefore it cannot predict above 2.1 years, so its predictions will contain 34 `NA`'s. One might say that this is the correct result because the fitted model is not informative beyond the age of 2.1 years, and hence the `NA`'s are useful and plausible. For comparison, model 2 uses the same training and test data, but sets the wider time interval $[0, 3]$. As a consequence, model 2 produces predictions for all test data. These predictions might be useful in some cases. For example, simulation studies often resample or regenerate data, so the time range may vary between replications. Setting then the boundary to include to the largest range possible evades problems caused by `NA` predictions. In general, to make the model specification independent of the training data, add an extra knot equal to or slightly higher than the maximum time value in the train and test data.
 
-Due to sparse data, broken stick estimates at the boundaries can be widely erratic and have no useful interpretation. It is best to exclude those estimates from plots and calculations. Depending on the data, erratic estimates can occur at both the left and right boundaries. The code block below reverses age, so now the sparse data are at the left boundary. As a consequence, we need to supply the `hide = "left"` (instead of the default `hide = "right"`) argument to the `brokenstick()` function. If desired, one may add the `hide` argument also to `plot()` to overwrite `fit2_mirror$hide`.
+Due to sparse data, broken stick estimates at the boundaries can be widely erratic and have no a useful interpretation. It is best to exclude those estimates from plots and calculations. Depending on the data, erratic estimates can occur at both the left of right boundaries. The code block below reverses age, so now the sparse data are at the left boundary. As a consequence, we need to supply the `hide = "left"` (instead of the default `hide = "right"`) argument to the `brokenstick()` function. If desired, one may add the `hide` argument also to `plot()` to overwrite `fit2_mirror$hide`.
 
 ```{r reverse, echo=TRUE, eval = FALSE}
 data <- smocc_200
@@ -687,15 +700,15 @@ plot(fit2_mirror, groups = c(10001, 10005, 10022))
 
 ## Critical periods
 
-The following question motivated the development of the broken stick model: *At what ages do children become overweight?* Knowing the answer to this question provides handles for preventive interventions to counter obesity. @dietz1994 suggested the existence of three critical periods for obesity at adult age: The prenatal period, the period of adiposity rebound (roughly around the age of 5-6 years), and adolescence. Obesity formed in these periods is likely to increase the obesity risk at adult age and its complications.
+The following question motivated the development of the broken stick model: *At what ages do children become overweight?* Knowing the answer to this question provides handles for preventive interventions to counter obesity. @dietz1994 suggested the existence of three critical periods for obesity at adult age: the prenatal period, the period of adiposity rebound (roughly around the age of 5-6 years), and adolescence. Obesity formed in these periods is likely to increase the obesity risk at adult age and its complications.
 
-A growth period, bounded by ages $T_1$ and $T_2$, is critical for adult overweight if the following criteria hold [@dekroon2010]:
+A growth period, bounded by ages $T_1$ and $T_2$, is critical for adult overweight if the following criteria hold: [@dekroon2010]
 
-a.  There is a significant difference in mean gain score $Z_2-Z_1$ between subjects with and without adult overweight;
-b.  The gain score $Z_2-Z_1$ has an independent contribution over $Z_2$ to the prediction of $Z_{\rm adult}$. It not only matters where you were at $T_2$ but also how you got there;
+a.  there is a significant difference in mean gain score $Z_2-Z_1$ between subjects with and without adult overweight;
+b.  the gain score $Z_2-Z_1$ has an independent contribution over $Z_2$ to the prediction of $Z_{\rm adult}$. It not only matters where you were at $T_2$ but also how you got there;
 c.  $Z_2$ correlates highly with $Z_{\rm adult}$, so it is easier (i.e., with higher sensitivity and specificity) to identify children at risk for adult overweight.
 
-@dekroon2010 found that the age interval 2-6 years met all criteria for a critical period. Our re-analysis tests the requirements for the following age intervals: Birth-4 months, 4 months-1 year, 1-2 years, 2-4 years, 4-6 years, 6-10 years and 10-14 years. Hence, we define the following break ages:
+@dekroon2010 found that the age interval 2-6 years met all criteria for a critical period. Our re-analysis tests the requirements for the following age intervals: birth-4 months, 4 months-1 year, 1-2 years, 2-4 years, 4-6 years, 6-10 years and 10-14 years. Hence, we define the following break ages:
 
 ```{r}
 knots <- round(c(0, 1/3, 1, 2, 4, 6, 10, 14, 24, 29), 3)
@@ -703,7 +716,7 @@ labels <- c("birth", "4m", "1y", "2y", "4y", "6y", "10y", "14y", "24y",
             "")
 ```
 
-```{r tbc1, echo=FALSE, fig.height=4, fig.cap = "Scatter plot of BMI SDS and log(age + 0.2) for the Terneuzen cohort data. The plot shows differential amounts of clustering of measurements around the specified break ages. Clustering is tighter at some ages (birth, 1y, 14y) than at others (4m, 2y, 24y).", set.theme = TRUE, warning=FALSE}
+```{r tbc1, echo=FALSE, fig.height=4, fig.cap = "Scatterplot of BMI SDS and log(age + 0.2) for the Terneuzen cohort data. The plot shows differential amounts of clustering of measurements around the specified break ages. Clustering is tighter at some ages (birth, 1y, 14y) than at others (4m, 2y, 24y).", set.theme = TRUE, warning=FALSE}
 ggplot(mice::tbc, aes(age + 0.2, bmi.z)) +
   theme_light() +
   scale_x_log10(name = "log(age + 0.2)", breaks = knots + 0.2, 
@@ -713,7 +726,7 @@ ggplot(mice::tbc, aes(age + 0.2, bmi.z)) +
   geom_point(size = 0.5, col = colors[1], shape = 20, na.rm = TRUE)
 ```
 
-The Terneuzen Birth Cohort [@dekroon2008] comprises of 2604 children born around the year 1980 in Terneuzen, The Netherlands. Figure \@ref(fig:tbc1) shows the body mass index (BMI) standard deviation scores (SDS) against age in a random subset of 306 children. While we may easily recognize scheduled visits at birth, 1y and 14y, the figure shows that observations at other periods are less structured. Compared to the analysis in @dekroon2010, we removed the knots at 8 days and 18 years (because these appear in sparse data areas) and added knots at 4, 14 and 24 years. For aesthetic reasons, we set the right boundary knot to 29y, slightly higher than the maximum age in the data.
+The Terneuzen Birth Cohort [@dekroon2008] comprises of 2604 children born around the year 1980 in Terneuzen, The Netherlands. Figure \@ref(fig:tbc1) shows the body mass index (BMI) standard deviation scores (SDS) against age in a random subset of 306 children. While we may easily recognise scheduled visits at birth, 1y and 14y, the figure shows that observations at other periods are less structured. Compared to the analysis in @dekroon2010, we removed the knots at 8 days and 18 years (because these appear in sparse data areas) and added knots at 4, 14 and 24 years. For aesthetic reasons, we set the right boundary knot to 29y, slightly higher than the maximum age in the data.
 
 ```{r tbc_lmer, cache=TRUE}
 ctl <- lme4::lmerControl(
@@ -724,7 +737,7 @@ fit_lmer <- brokenstick(bmi.z ~ age | id, data = mice::tbc,
                         method = "lmer", control = ctl)
 ```
 
-The control specification prevents warnings and messages that result from the over-parametrized nature of the model. One may stabilize the model by restricting the variance-covariance matrix, for example by the Argyle correlation model. As a result, the fitted trajectories will be stabler in regions with sparse data. The following snippet applies the Argyle model.
+The control specification prevents warnings and messages that result from the over-parametrised nature of the model. One may stabilise the model by restricting the variance-covariance matrix, for example by the Argyle correlation model. As a result, the fitted trajectories will be stabler in regions with sparse data. The following snippet applies the Argyle model.
 
 ```{r tbc_kr, cache=TRUE}
 fit_kr <- brokenstick(bmi.z ~ age | id, data = mice::tbc,
@@ -752,7 +765,7 @@ g <- g +
 print(g)
 ```
 
-Figure \@ref(fig:tbc-trajectories) shows the observed and fitted BMI SDS trajectories for both models. The per cent explained variance of BMI SDS is similar in both: 84 per cent. For the lmer model, the fitted trajectory for subject 8 reveals a pretty rough estimate at the age of 24y. Persons 1259 and 7460 have very low (-2.5 SD) and high (+2.5 SD) BMI SDS at adult age, respectively. Note that the model pulls the adult BMI SDS estimates (in red) towards the global mean, due to the well-known bias-variance trade off [@gelman2007, pp. 394]. Pulling is more vigorous at the extremes. The effect is negligible for more average trajectories, such as for subject 2447. In the Argyle model, the trajectories are slightly smoother and more stable at adult ages with limited data. The rough estimate for subject 8 has gone. There is still some gravity towards the global mean at knot 24y for persons 1259 and 7460, but it is of lesser magnitude. All fitted trajectories are well behaved. We, therefore, select the `kr` solution for further analysis.
+Figure \@ref(fig:tbc-trajectories) shows the observed and fitted BMI SDS trajectories for both models. The per cent explained variance of BMI SDS is similar in both: 84 per cent. For the lmer model, the fitted trajectory for subject 8 reveals a pretty rough estimate at the age of 24y. Persons 1259 and 7460 have very low (-2.5 SD) and high (+2.5 SD) BMI SDS at adult age, respectively. Note that the model pulls the adult BMI SDS estimates (in red) towards the global mean, due to the well-known bias-variance tradeoff [@gelman2007, pp. 394]. Pulling is more vigorous at the extremes. The effect is negligible for more average trajectories, such as for subject 2447. In the Argyle model, the trajectories are slightly smoother and more stable at adult ages with limited data. The rough estimate for subject 8 has gone. There is still some gravity towards the global mean at knot 24y for persons 1259 and 7460, but it is of lesser magnitude. All fitted trajectories are well behaved. We, therefore, select the `kr` solution for further analysis.
 
 To identify critical periods, we need to predict adult overweight. In Figure \@ref(fig:tbc-trajectories), only three out of six subjects had a BMI measurement at adult age. Since we do not want the results to overly depend on fitted extrapolations, we restrict the analysis sample to persons with an adult measurement. The following lines extract the repeated measures for 92 (out of 306) individuals for whom we observed adult BMI.
 
@@ -770,7 +783,7 @@ data <- bind_cols(prd,
 head(data, 3)
 ```
 
-```{r tbc-trajectories-all, echo=FALSE, fig.height=3.5, fig.cap = "Fitted BMI SDS trajectories for 92 subjects, of which 18 persons have adult overweight (red = observed BMI at adult age > 1.3 SDS), while 74 individuals (gray) do not have adult overweight. The figure shows that the BMI distribution before the age of 2y is similar in both groups, whereas BMI at ages 10y and 14y is highly predictive of adult overweight.", set.theme = TRUE, warning=FALSE}
+```{r tbc-trajectories-all, echo=FALSE, fig.height=3.5, fig.cap = "Fitted BMI SDS trajectories for 92 subjects, of which 18 persons have adult overweight (red = observed BMI at adult age > 1.3 SDS), while 74 individuals (grey) do not have adult overweight. The figure shows that the BMI distribution before the age of 2y is similar in both groups, whereas BMI at ages 10y and 14y is highly predictive of adult overweight.", set.theme = TRUE, warning=FALSE}
 pd <- data %>% 
   select(id, ao, `0`:`24`) %>% 
   tidyr::pivot_longer(`0`:`24`, names_to = "age", values_to = "bmi") %>% 
@@ -779,17 +792,17 @@ pd <- data %>%
 ggplot(pd, aes(x = age + 0.2, y = bmi, group = id, colour = factor(ao))) +
   theme_light() +
   theme(legend.position = "none") +
-  geom_hline(yintercept = 1.3, colour = "black", lwd = 1, lty = 2) +
+  geom_hline(yintercept = 1.3, colour = "grey", lwd = 1, lty = 2) +
   geom_line(data = subset(pd, ao == 0)) +
   geom_line(data = subset(pd, ao == 1)) +
   scale_x_log10(name = "Age (log10(year + 0.2))", breaks = knots + 0.2, 
                 labels = labels, minor_breaks = NULL) +
   scale_y_continuous(name = "BMI SDS", breaks = -4:4, 
                      limits = c(-4, 3)) +
-  scale_colour_manual(values = c("gray", colors[5]))
+  scale_colour_manual(values = c("grey", colors[5]))
 ```
 
-Figure \@ref(fig:tbc-trajectories-all) shows the 92 fitted trajectories colored by adult overweight status (observed BMI SDS \> 1.3). It is evident that BMI SDS at ages of 14y or 10y is highly predictive of adult overweight, but does that also hold in early childhood? Also, does a change in specific periods predict later overweight? To answer such questions, we fit simple linear models to predict observed (not fitted!) BMI SDS at adult age from the fitted BMI SDS trajectories. The following code block fits two models for the period 4y-6y.
+Figure \@ref(fig:tbc-trajectories-all) shows the 92 fitted trajectories coloured by adult overweight status (observed BMI SDS \> 1.3). It is evident that BMI SDS at ages of 14y or 10y is highly predictive of adult overweight, but does that also hold in early childhood? Also, does a change in specific periods predict later overweight? To answer such questions, we fit simple linear models to predict observed (not fitted!) BMI SDS at adult age from the fitted BMI SDS trajectories. The following code block fits two models for the period 4y-6y.
 
 ```{r}
 m1 <- lm(bmi.z.jv ~ `6`, data)
@@ -797,7 +810,7 @@ m2 <- lm(bmi.z.jv ~ `6` + I(`6`-`4`), data)
 anova(m1, m2)
 ```
 
-Model `m1` predicts adult BMI SDS from BMI SDS 6y, and explains 45.3 per cent of the variance. Model `m2` extends the model with the pre-gain between 4y and 6y. If the pre-gain improves the prediction, then it matters how much you gained between 4y and 6y. In that case, we would call the interval 4y-6y a critical period. Here we found that model 2 explain 53.6 per cent variance, thus 8.3 per cent more. The `anova` statement performs the formal test. In this case, the pre-gain is significant over the last predictor at 6y. Thus, interval 4y-6y classifies as a critical period. We can repeat these analyzes for other age intervals, similar to Table 3 in @kenward1987.
+Model `m1` predicts adult BMI SDS from BMI SDS 6y, and explains 45.3 per cent of the variance. Model `m2` extends the model with the pre-gain between 4y and 6y. If the pre-gain improves the prediction, then it matters how much you gained between 4y and 6y. In that case, we would call the interval 4y-6y a critical period. Here we found that model 2 explain 53.6 per cent variance, thus 8.3 per cent more. The `anova` statement performs the formal test. In this case, the pre-gain is significant over the last predictor at 6y. Thus, interval 4y-6y classifies as a critical period. We can repeat these analyses for other age intervals, similar to Table 3 in @kenward1987.
 
 ## Time-to-time correlations
 
@@ -829,28 +842,29 @@ t2t <- omega + diag(fit$sigma2, ncol(omega))
 dim(t2t)
 ```
 
-The above code fits a model with 21 equidistant breakpoints, which is likely large enough for most purposes. It works because it restricts the covariance-matrix by the Argyle correlation model, which summarizes the information by just two parameters. We may extract or re-estimate these parameters and create a one-liner for calculating $r$.
+The above code fits a model with 21 equidistant breakpoints, which is likely large enough for most purposes. It works because it restricts the covariance-matrix by the Argyle correlation model, which summarises the information by just two parameters. We may extract or re-estimate these parameters and create a one-liner for calculating $r$.
 
 We cannot indefinitely add breakpoints. Suppose we double the number of knots by setting `knots = seq(0, 2, 0.05)`. Then even `kr` is not able to cope and will abort with `Error: Sigma is symmetric but not positive`. Thus, as always, be sensible in what you ask the software to do for you.
 
 ## Profile analysis
 
-Profile analysis [@morrison1976; @johnson1988] refers linear multivariate linear methods to test for differences in population means or treatment effects, typically by regression analysis or multivariate analysis of variance (MANOVA). These methods assume independence of subjects, organize the data at the subject level, and express parameters of interest by linear combinations of outcomes, like change scores, means or other derived quantities.
+Profile analysis [@morrison1976; @johnson1988] refers linear multivariate linear methods to test for differences in population means or treatment effects, typically by regression analysis or multivariate analysis of variance (MANOVA). These methods assume independence of subjects, organise the data at the subject level, and express parameters of interest by linear combinations of outcomes, like change scores, means or other derived quantities.
 
-@krone2020 report a statistical analysis using the linear mixed model with time-varying individual subject data. This section re-analyzes the data from their Figure 4 using the broken stick model. The data are available as the `brokenstick::weightloss` object.
+@krone2020 report a statistical analyses using the linear mixed model with time-varying individual subject data. This section re-analyses the data from their Figure 4 using the broken stick model. The data are available as the `brokenstick::weightloss` object.
 
 ```{r weightloss-data, fig.cap="Daily body weight (KG) for 12 subjects followed for 63 days under one of three conditions. The graph illustrates the irregular nature of the data. Some trajectories are almost complete and regular, whereas others miss many daily measurements or display surprising jumps around their average weight level.", fig.height=4, warning=FALSE, set.theme=TRUE}
 data <- brokenstick::weightloss
-ggplot(data, aes(day, body_weight, group = subject, color = condition)) +
+ggplot(data, aes(day, body_weight, group = subject, 
+                 colour = condition)) +
   scale_x_continuous(name = "Day", breaks = c(0, 21, 42, 63), 
-  minor_breaks = c(7, 14, 28, 35, 49, 56)) +
+                     minor_breaks = c(7, 14, 28, 35, 49, 56)) +
   ylab("Body weight (KG)") +
   geom_line() + geom_point(size = 0.7) +
   theme_light() +
   theme(legend.position = "bottom")
 ```
 
-Figure \@ref(fig:weightloss-data) charts daily body weight measurements of twelve individuals who were followed for nine weeks. The investigators subdivided the total duration into three periods of three weeks. Period one (week 1-3) acted as a control period. During period 2 (week 4-6), the investigators stimulated participants to restrict food intake, and during period 3 (week 7-9) the experimenters promoted physical activity. Subjects 4 and 12 received the interventions in the reverse order. See @krone2020 for more detail.
+Figure \@ref(fig:weightloss-data) charts daily body weight measurements of twelve individuals who were followed for nine weeks. The investigators subdivided the total duration into three periods of three weeks. Period one (week 1-3) acted as a control period. During period 2 (week 4-6), the investigators stimulated participants to restrict food intake, and during period 3 (week 7-9) the experimenters promoted physical activity. Subjects 4 and 12 received the interventions in the opposite order. See @krone2020 for more detail.
 
 Most of these subjects adhere quite well to the data collection design. Some trajectories show gaps due to missed measurements. The most extreme example is the trajectory that hovers around the value of 95 kilograms (KG). Other curves display stretches of lines, suggesting that missed measurements were linearly interpolated. One of the series shows some surprising spikes, likely to be measurement errors. All in all, these data perfectly illustrate the inescapable imperfections of real data.
 
@@ -865,19 +879,19 @@ ggplot(data, aes(factor(week), body_weight)) +
 
 ### Constant model
 
-```{r weightloss-constant, fig.height=4.5, fig.cap = "Constant model. Observed and fitted trajectories for a model that summarizes each experimental period by a constant. The estimated level is approximately the mean of the measurements made during the period. The model produces sudden jumps at ages when the condition changes and thus fails to describe the data well.", set.theme = TRUE, warning=FALSE}
+```{r weightloss-constant, fig.height=4.5, fig.cap = "Constant model. Observed and fitted trajectories for a model that summarises each experimental period by a constant. The estimated level is approximately the mean of the measurements made during the period. The model produces sudden jumps at ages when the condition changes and thus fails to describe the data well.", set.theme = TRUE, warning=FALSE}
 data <- brokenstick::weightloss
 fit0 <- brokenstick(body_weight ~ day | subject, data, 
                     knots = c(0, 21, 42, 63), degree = 0,
                     method = "lmer", hide = "none")
-plot(fit0, size_y = 0, color_y = rep("gray", 2), 
+plot(fit0, size_y = 0, color_y = rep("grey", 2), 
      scales = "free_y", xlab = "Day", ylab = "Body weight (KG)", 
      n_plot = 12, ncol = 4)
 ```
 
-The model underlying Figure \@ref(fig:weightloss-constant) summarizes the trajectory within a period by a constant, the mean. We obtain an estimate of these means by setting the `degree = 0` argument. This model gives a fair representation of the trajectory of subjects 9 (a persistent downward trend), 1 and 5 (no trend). On the other hand, the model fails to capture patterns for subjects 2, 4 and 8 (rebound in period 3) or 11 (inverse rebound).
+The model underlying Figure \@ref(fig:weightloss-constant) summarises the trajectory within a period by a constant, the mean. We obtain an estimate of these means by setting the `degree = 0` argument. This model gives a fair representation of the trajectory of subjects 9 (a persistent downward trend), 1 and 5 (no trend). On the other hand, the model fails to capture patterns for subjects 2, 4 and 8 (rebound in period 3) or 11 (inverse rebound).
 
-It is straightforward to quantify the effects of `Diet` and `Activity` relative to `Control`. The next code snippet calculates these effects per person, accounting for the intervention order reversal for subjects 4 and 12.
+It is straightforward quantify the effects of `Diet` and `Activity` relative to `Control`. The next code snippet calculates these effects per person, accounting for the intervention order reversal for subjects 4 and 12.
 
 ```{r}
 prd <- data.frame(predict(fit0, data, x = "knots", shape = "wide"))
@@ -894,17 +908,17 @@ round(effects)
 round(colMeans(effects))
 ```
 
-The average weight under caloric restriction is 564 grams lower than control. We find a 848 grams lower body weight when we stimulate physical activity. We could be tempted to believe that exercise reduces weight more than a diet. However, except for subjects 4 and 12, the investigators administered the activity treatment after the diet treatment, so the difference relative to control represents the *combined effect* of diet and activity on body weight. It might be more relevant to study the difference between training and diet (third column). The average difference of -284 grams suggests that diet is more effective than physical activity. Realize that also this estimate is not entirely satisfactory. First, subjects 4 and 12 had a reversed administration, so the difference does not make sense for them. Second, as anyone who has tried to lose weight can attest, "quick wins" are more likely in period 2 than in period 3. Although it is possible to account for these sequence effects, there is a more intuitive analysis of the data.
+The average weight under caloric restriction is 564 grams lower than control. We find a 848 grams lower body weight when we stimulate physical activity. We could be tempted to believe that exercise reduces weight more than a diet. However, except for subjects 4 and 12, the investigators administered the activity treatment after the diet treatment, so the difference relative to control represents the *combined effect* of diet and activity on body weight. It might be more relevant to study the difference between training and diet (third column). The average difference of -284 grams suggests that diet is more effective than physical activity. Realise that also this estimate is not entirely satisfactory. First, subjects 4 and 12 had a reversed administration, so the difference does not make sense for them. Second, as anyone who has tried to lose weight can attest, "quick wins" are more likely in period 2 than in period 3. Although it is possible to account for these sequence effects, there is a more intuitive analysis of the data.
 
 ### Broken stick model
 
-```{r weightloss-slope, fig.height=4.5, fig.cap = "Broken stick model. Observed and fitted trajectories for a model that summarizes each experimental period by a line. The slope indicates the change during the period. The model connects lines from adjacent periods and provides an informative description of the data.", set.theme = TRUE, warning=FALSE}
+```{r weightloss-slope, fig.height=4.5, fig.cap = "Broken stick model. Observed and fitted trajectories for a model that summarises each experimental period by a line. The slope indicates the change during the period. The model connects lines from adjacent periods and provides an informative description of the data.", set.theme = TRUE, warning=FALSE}
 ctl_lmer <- lme4::lmerControl(
   check.conv.grad = lme4::.makeCC("warning", tol = 0.01))
 fit1 <- brokenstick(body_weight ~ day | subject, data, 
                     knots = c(0, 21, 42, 63), method = "lmer",
                     control = ctl_lmer, hide = "none")
-plot(fit1, size_y = 0, color_y = rep("gray", 2),
+plot(fit1, size_y = 0, color_y = rep("grey", 2),
      size_yhat = 1.5, scales = "free_y", , 
      xlab = "Day", ylab = "Body weight (KG)",
      n_plot = 12, ncol = 4)
@@ -929,7 +943,7 @@ round(effects)
 round(colMeans(effects))
 ```
 
-The average effects are -201 grams (control), -683 grams (diet) and -301 grams (activity). Although not statistically significant, the slight decrease of 201 grams during the control period suggests that weight monitoring by itself may motivate the participant to lose weight. The effect estimates for diet and activity are of similar magnitude as before. Still, they can be sizeble discrepancies at the individual level, e.g., for subjects 2 or 11.
+The average effects are -201 grams (control), -683 grams (diet) and -301 grams (activity). Although not statistically significant, the slight decrease of 201 grams during the control period suggests that weight monitoring by itself may motivate the participant to lose weight. The effect estimates for diet and activity are of similar magnitude as before. Still, they can be sizeable discrepancies at the individual level, e.g., for subjects 2 or 11.
 
 We may obtain a simple estimate of the sequence effect by linear regression as
 
@@ -950,7 +964,7 @@ This application demonstrates that the broken stick model can effectively captur
 
 ### Problem
 
-A growth chart visualizes the individual trajectory relative to a set of centile lines. We may store a centile line as a set of coordinates with a relatively dense age grid. If we connect the adjacent vertices by a straight line, the centile will appear as smooth in time. However, this plotting method runs into trouble when ages are wide apart. This section shows how we can create a realistic interpolation with sparse time data.
+A growth chart visualises the individual trajectory relative to a set of centile lines. We may store a centile line as a set of coordinates with a relatively dense age grid. If we connect the adjacent vertices by a straight line, the centile will appear as smooth in time. However, this plotting method runs into trouble when ages are wide apart. This section shows how we can create a realistic interpolation with sparse time data.
 
 ### Interpolation in measurement scale
 
@@ -980,7 +994,7 @@ lwd <- 2
 
 # raw scale plot
 matplot(x = age, y = w, type = "l", lty = 1, 
-        col = "gray", lwd = c(1, 1, 2, 1, 1),
+        col = "grey", lwd = c(1, 1, 2, 1, 1),
         xlab = "Age (months)", ylab = "Length (cm)")
 abline(v = 0.95*12, col = mycolors[2], lty = 3)
 abline(v = 7.5, col = mycolors[3], lty = 3)
@@ -1010,7 +1024,7 @@ v <- matrix(c(c(1, 14), rep(-2:2, each = 2)),
             ncol = 6, byrow = FALSE)
 matplot(x = v[,1], y = v[,2:6], 
         type = "l", lty = 1,
-        col = "gray", lwd = c(1, 1, 1.5, 1, 1),
+        col = "grey", lwd = c(1, 1, 1.5, 1, 1),
         ylim = c(-2.5, 2.5),
         xlab = "Age (months)", ylab = "Length (SDS)")
 abline(v = 0.95*12, col = mycolors[2], lty = 3)
@@ -1062,21 +1076,21 @@ zout <- predict(fit_200, x = age/12, y = z, shape = "vector")
 yout <- AGD::z2y(x = age/12, z = zout, ref = ref)
 ```
 
-The green curve in Figure \@ref(fig:interpolationplots) shows the results of the broken stick model. The curve in the measurement scale represents the most likely course according to the broken stick model. Note that now the child realizes the larger share of the change during the first few months. As a result, the cross-over point where the predicted value intersects the 0 SD line is now around 4.5 months, considerably earlier than obtained by the two other interpolation methods. The right hand side plot confirms the steeper slope in the first part. Note that this method treats rising and declining curves alike. For example, if the boy's length were 57 cm at month 1 (+1.0 SD) and 76 cm at month 14 (-1.0 SD), the cross-over point would also be around 4.5 months (not shown).
+The green curve in Figure \@ref(fig:interpolationplots) shows the results of the broken stick model. The curve in the measurement scale represents the most likely course according to the broken stick model. Note that now the child realises the larger share of the change during the first few months. As a result, the cross-over point where the predicted value intersects the 0 SD line is now around 4.5 months, considerably earlier than obtained by the two other interpolation methods. The right hand side plot confirms the steeper slope in the first part. Note that this method treats rising and declining curves alike. For example, if the boy's length would be 57 cm at month 1 (+1.0 SD) and 76 cm at month 14 (-1.0 SD), the cross-over point would also be around 4.5 months (not shown).
 
 Observe that this method leaves the world of pure interpolation and moves towards an approximation of the data by a model. The observed and predicted lengths are not exactly equal. The difference is so small that we may hardly notice the discrepancy when plotted in the measurement scale, but it is more conspicuous when plotted as SDS. Thanks to the added knowledge of the child growth process, the broken stick model provides the most realistic expected trajectory at the intermediate ages.
 
-Note that the green curve is not entirely smooth, which is due to the linearity assumption of the model. We could create a smoother curve by using a finer grid of break points. Alternatively, we could use a correlation model for predicting the correlation at intermediate ages. The latter option is more convenient, but is currently not possible in `predict()`. Adding support for correlation models is an area for further development.
+Note that green curve is not entirely smooth, which is due to the linearity assumption of the model. We could create a smoother curve by using a finer grid of break points. Alternatively, we could use a correlation model for predicting the correlation at intermediate ages. The latter option is more convenient, but is currently not possible in `predict()`. Adding support for correlation models is an area for further development.
 
 ## Multiple imputation
 
-Remember from Section \@ref(prediction) that the broken stick estimates are conditional means. We may be tempted to analyze these estimates as if they were "just data", but they do not have the same variability as the real data. For example, suppose we calculate the correlation matrix of the broken stick estimates. We know that the values in this matrix will exceed those from the underlying observed data. Not accounting for this fact leads to overconfident predictions and results that are too good to be true.
+Remember from Section \@ref(prediction) that the broken stick estimates are conditional means. We may be tempted to analyse these estimates as if they were "just data", but they do not have the same variability as the real data. For example, suppose we calculate the correlation matrix of the broken stick estimates. We know that the values in this matrix will exceed those from the underlying observed data. Not accounting for this fact leads to overconfident predictions and results that are too good to be true.
 
 Multiple imputation [@rubin1987; @vanbuuren2018] restores variability by adding noise. We may fit standard complete-data software to the imputed data, and obtain valid regression weights, confidence intervals and $p$ values under a wide range of conditions.
 
 By default, method `kr` executes 200 iterations of the Kasim-Raudenbush sampler. The `nimp` argument to the `control_kr()` function specifies the number of multiple imputations. The following call to the `brokenstick()` function creates and plots 20 imputations for each missing outcome (`hgt_z` here).
 
-```{r mi-code, cache=TRUE, fig.height=3, fig.cap = "Observed data (blue) and 20 imputed trajectories (gray) for three subjects from the SMOCC data. Imputed trajectories are possible realizations of the observed data in the hypothetical case that the observations are made at the specified break ages. Note that the pattern of child 10001 is more certain than of child 10022.", set.theme = TRUE, warning=FALSE}
+```{r mi-code, cache=TRUE, fig.height=3, fig.cap = "Observed data (blue) and 20 imputed trajectories (grey) for three subjects from the SMOCC data. Imputed trajectories are possible realizations of the observed data in the hypothetical case that the observations are made at the specified break ages. Note that the pattern of child 10001 is more certain than of child 10022.", set.theme = TRUE, warning=FALSE}
 knots <- round(c(0, 1, 2, 3, 6, 9, 12, 15, 18, 24)/12, 4)
 data <- bind_rows(smocc_200[!is.na(smocc_200$hgt_z), ],
                   expand.grid(id = unique(smocc_200$id), age = knots))
@@ -1088,7 +1102,7 @@ plot(fit_kr, show = c(TRUE, FALSE, TRUE),
      xlab = "Age (years)", ylab = "Length (SDS)")
 ```
 
-Figure \@ref(fig:mi-code) displays the observed data from three persons plotted on top of 20 imputed trajectories. The within-person within-time average over the gray trajectories approximates to the broken stick estimate (not shown here). The observed curve in each panel occasionally strays towards the boundaries of the gray bundle. This behavior is as expected and indicates that the blue curve performs like a gray curve.
+Figure \@ref(fig:mi-code) displays the observed data from three persons plotted on top of 20 imputed trajectories. The within-person within-time average over the grey trajectories approximates to the broken stick estimate (not shown here). The observed curve in each panel occasionally strays towards the boundaries of the grey bundle. This behaviour is as expected and indicates that the blue curve performs like a grey curve.
 
 Section \@ref(time-to-time-correlations) showed how we can estimate the time-to-time correlation matrix. An alternative way is to calculate it from the imputed data, as follows:
 
@@ -1098,17 +1112,17 @@ dimnames(cormat) <- list(knots, knots)
 round(cormat, 2)
 ```
 
-Another important application of the multiply-imputed curves is to obtain correct confidence intervals and $p$ values for estimates of scientific interest. The most convenient way to do this is to convert the `brokenstick` object into an object of class `"mids"`, as defined by the **mice** package. The **brokenstick** package currently has no features that perform the conversion.
+Another important application of the multiply-imputed curves is to obtain correct confidence intervals and $p$ values for estimates of scientific interest. The most convenient way to do this is to convert the `brokenstick` object into an object of class `mids`, as defined by the **mice** package. The **brokenstick** package currently has no features that perform the conversion.
 
 ## Curve matching
 
-Curve matching [@vanbuuren2014d] is a tool to assist in the interpretation and prediction of individual growth curves. The idea is as follows. Suppose we measure the growth of the target child up to half a year and plot the measurements onto his or her growth chart. Curve matching is a nearest-neighbor technique that relies on historical growth data. It finds, say, ten other children who are similar to the target child, and adds the curves of those matches to the child's chart. If the matching is done right, then the bundle of historic growth curves suggests how the target child will develop in the future.
+Curve matching [@vanbuuren2014d] is a tool to assist in the interpretation and prediction of individual growth curves. The idea is as follows. Suppose we measure the growth of the target child up to half a year and plot the measurements onto his or her growth chart. Curve matching is a nearest-neighbour technique that relies on historical growth data. It finds, say, ten other children who are similar to the target child, and adds the curves of those matches to the child's chart. If the matching is done right, then the bundle of historic growth curves suggests how the target child will develop in the future.
 
-```{r james, echo=FALSE, fig.height=4, fig.cap = "Curve matching. Predict infant length at 14 months given the length data up to 6 months using 10 matches. The red curve is the observed data for the target child. The bundle of gray curves are observed length curves from other children that match the trajectory of the target child up to month 6. The blue line represents the most likely future trajectory for the target child towards month 14. The variation between the gray curves represents the amount of uncertainty of the trajectory prediction.", set.theme = TRUE, warning=FALSE}
-knitr::include_graphics("Figures/JAMES_tryout.png")
+```{r james, echo=FALSE, fig.height=4, fig.cap = "Curve matching. Predict infant length at 14 months given the length data up to 6 months using 10 matches. The red curve is the observed data for the target child. The bundle of grey curves are observed length curves from other children that match the trajectory of the target child up to month 6. The blue line represents the most likely future trajectory for the target child towards month 14. The variation between the grey curves represents the amount of uncertainty of the trajectory prediction.", set.theme = TRUE, warning=FALSE}
+knitr::include_graphics("JAMES_tryout.png")
 ```
 
-Figure \@ref(fig:james) is a screen shot of a demo Shiny app of the [Joint Automatic Measurement and Evaluation System (JAMES)](https://tnochildhealthstatistics.shinyapps.io/james_tryout/). The red curve corresponds to five measurements of the target child made during the first six months. The ten gray curves are historic growth curves from the ten matched children. We may define similarity in many ways. Here we use a linear model to predict length at the age of 14m from previous length data. The distance between the target child and another child is equal to the difference between their predicted values. The procedure lifts the data of the matches from the database, and plots the observed growth curves onto the chart as gray curves. This method for finding nearest neighbors is known as *predictive mean matching* and has grown into a powerful technique for missing data [@vanbuuren2018]. The bundle of gray curves indicates possible future trajectories of the target child. The wider the bundle, the more uncertain future growth will be [@toet2019]. The mean of the bundle is the most likely path. Graphically it is the dotted blue curve between the last measurement and the age of the outcome.
+Figure \@ref(fig:james) is a screen shot of a demo Shiny app of the [Joint Automatic Measurement and Evaluation System (JAMES)](https://tnochildhealthstatistics.shinyapps.io/james_tryout/). The red curve corresponds to five measurements of the target child made during the first six months. The ten grey curves are historic growth curves from the ten matched children. We may define similarity in many ways. Here we use a linear model to predict length at the age of 14m from previous length data. The distance between the target child and another child is equal to the difference between their predicted values. The procedure lifts the data of the matches from the database, and plots the observed growth curves onto the chart as grey curves. This method for finding nearest neighbours is known as *predictive mean matching* and has grown into a powerful technique for missing data [@vanbuuren2018]. The bundle of grey curves indicates possible future trajectories of the target child. The wider the bundle, the more uncertain future growth will be [@toet2019]. The mean of the bundle is the most likely path. Graphically it is the dotted blue curve between the last measurement and the age of the outcome.
 
 Let's look at a numerical example. We split the data into one target child and 199 donor children, and fit a broken stick model to the donor set.
 
@@ -1123,7 +1137,7 @@ fit <- brokenstick(hgt_z ~ age | id, data = donor_data,
                    knots = knots, seed = 15244)
 ```
 
-All time points from the donor data enter the broken stick model. Note that the `target_data` contains only observations from the first five visits.
+All timepoints from the donor data enter the broken stick model. Note that the `target_data` contains only observations from the first five visits.
 
 We now fit the prediction model on the child-level donor data. The prediction model contains the broken stick estimates for length SDS up to 6 months, as well as sex, gestational age and birth weight as covariates.
 
@@ -1163,9 +1177,9 @@ plot(fit, group = ids,
      ncol = 5)
 ```
 
-The ten trajectories are all close to the prediction (0.101 SD) for the target child at the age of 1.25 years. Note that this does not guarantee that the histories are identical. Most matches have relatively flat curves, but a few (10051, 11023, 11086) show striking rising patterns. Nevertheless, these candidates are the best in terms of the model prediction.
+The ten trajectories are all are close to the prediction (0.101 SD) for the target child at the age of 1.25 years. Note that this does not guarantee that the histories are identical. Most matches have relatively flat curves, but a few (10051, 11023, 11086) show striking rising patterns. Nevertheless, these candidates are the best in terms of the model prediction.
 
-If we wish the curves of the matches during the first six months to be closer to the target case, we could consider alternative metrics. A simple measure is the sum of squares differences of the broken stick estimates. Such a selection may be visually more pleasing, at the expense of prediction accuracy. On the other hand, we are less tied to setting one particular future time point, so other measures may work better when "future" is more vaguely defined as a time interval. It is still an open research question where we strike a balance. Whatever the objectives or preferences from the user might be, the curve matching methodology, as illustrated here, has tremendous flexibility and is easy to adapt.
+If we wish the curves of the matches during the first six months to be closer to the target case, we could consider alternative metrics. A simple measure is the sum of squares differences of the broken stick estimates. Such a selection may be visually more pleasing, at the expense of prediction accuracy. On the other hand, we are less tied to setting one particular future time point, so other measures may work better when "future" is more vaguely defined as a time interval. It is still an open research question where we strike a balance. Whatever the objectives of preferences from the user might be, the curve matching methodology, as illustrated here, has tremendous flexibility and is easy to adapt.
 
 # Conclusion
 
@@ -1175,23 +1189,23 @@ This paper introduces a new approach to solve the problem of irregular longitudi
 
 ## Distinctive features
 
-The assumptions of the model cover many cases of practical interest: A straight line between breakpoints, a multivariate normal distribution for the random effects, and the MAR assumption including future data. Despite the relatively low number of model parameters, it is possible to obtain a close fit to the data, sometimes almost up to perfect reconstruction (c.f., Figure \@ref(fig:obspred)). There is no need to specify equidistant breakpoints. Applications in human growth and development are often more natural using non-uniformly spaced knots, which is very easy to model. Many people find it easier to understand the raw data values than the summaries. The broken stick model invites visualization of the actual data points against time and makes it is easy to portray uncertainty as a bundle of curves. Such direct vizualisation options contribute to the explainable and responsible personalized analyzes that appeal to a broad user group.
+The assumptions of the model cover many cases of practical interest: a straight line between breakpoints, a multivariate normal distribution for the random effects, and the MAR assumption including future data. Despite the relatively low number of model parameters, it is possible to obtain a close fit to the data, sometimes almost up to perfect reconstruction (c.f., Figure \@ref(fig:obspred)). There is no need to specify equidistant breakpoints. Applications in human growth and development are often more natural using non-uniformly spaced knots, which is very easy to model. Many people find it easier to understand the raw data values than the summaries. The broken stick model invites visualisation of the actual data points against time and makes it is easy to portray uncertainty as a bundle of curves. Such direct visualisation options contribute to the explainable and responsible personalised analyses that appeal to a broad user group.
 
 ## Current limitations
 
 The broken stick model, as presented here, uses just three variables: time, measurement and group. This design choice simplifies interpretation and estimation. The lack of covariates in the model implies that the transformation from irregular data to repeated measures is identical for every subject. As long as the residual error is small, the relations with not-in-the-model variables thus remain intact. The possibility to include covariates in a second-round enhances modular modern analytic pipelines. Yet, some will prefer the direct estimation of all effects in one more extensive analysis. The current package does not support covariates.
 
-The broken stick method is intended for aligning observations, where every individual has the same number and location of breakpoints. The technique assumes that subjects share the same time axis. In our applications, synchronization at the start was most natural (e.g., birth, start of experiment), which is easy to do. In some cases, one might prefer an anchor in the middle, e.g., at menarche, which occurs at different ages for different individuals [@naumova2001], and the scientific interest is on what happens before and after the anchor. It could also make sense to fasten the end, e.g., at graduation or death. The choice of the anchor may matter less for cyclic processes. For example, in weekly data it may be more important to anchor on day of the week than on the actual date or age. Irrespective of the actual timings of the observed data, the number and location of breakpoints is identical for all subjects. The method is less suited for applications where there is no sensible common time axis, or when the breakpoints should vary between individuals.
+The broken stick method is intended for aligning observations, where every individual has the same number and location of breakpoints. The technique assumes that subjects share the same time axis. In our applications, synchronisation at the start was most natural (e.g., birth, start of experiment), which is easy to do. In some cases, one might wish an anchor in the middle, e.g., at menarche, which occurs at different ages for different individuals [@naumova2001], and the scientific interest is on what happens before and after the anchor. It could also make sense to fasten the end, e.g., at graduation or death. The choice of the anchor may matter less for cyclic processes. For example, in weekly data it may be more important to anchor on day of the week than on the actual date or age. Irrespective of the actual timings of the observed data, the number and location of breakpoints is identical for all subjects. The method is less suited for applications where there is no sensible common time axis, or when the breakpoints should vary between individuals.
 
 ## Software
 
-The Kasim-Raudenbush sampler [@kasim1998] is both fast and flexible. It produces estimates of the residual error variance per subject, can accommodate for correlation models and supports multiple imputation out-of-the-box. More research is needed to establish its statistical properties especially compared to `lmer()` and other established methods. It would also be interesting to study the suitability of the correlation models implemented in the **lme4qtl** package [@ziyatdinov2018]. As no training data are stored, instances of the light `"brokenstick"` class objects are tiny, often 15--20 Kb.
+The Kasim-Raudenbush sampler [@kasim1998] is both fast and flexible. It produces estimates of the residual error variance per subject, can accommodate for correlation models and supports multiple imputation out-of-the-box. More research needed to establish its statistical properties especially compared to `lmer()` and other established methods. It would also be interesting to study the suitability of the correlation models implemented in the **lme4qtl** package [@ziyatdinov2018]. As no training data are stored, instances of the light `brokenstick` class objects are tiny, often 15--20 Kb.
 
-Features not implemented, but that could be useful in future versions include a separate `impute()` function that inputs class `"brokenstick"` and returns class `"mids"`, a Trelliscope [@hafen2020] viewer to quickly peruse hundreds of individual model fits, an extension to multivariate time-varying and child-level data, and a generalization to `degree > 1` to support quadratic and cubic splines.
+Features not implemented, but that could be useful in future versions include a separate `impute()` function that inputs class `brokenstick` and returns class `mids`, a Trelliscope [@hafen2020] viewer to quickly peruse hundreds of individuals model fits, an extension to multivariate time-varying and child-level data, and a generalisation to `degree > 1` to support quadratic and cubic splines.
 
 ## Methodological advances
 
-The primary modelling task for the user is to set the proper knot locations. One might envision scenarios where we want to search for the "best" locations. It is not yet clear how we should do this, and how far we could automate knot placement strategies.
+The primary modelling task for the user is to set the proper knot locations. One might envision scenarios where we want to search for the "best" places. It is not yet clear how we should do this, and how far we could automate knot placement strategies.
 
 We need more insight into the statistical properties of procedures that execute the analysis as a sequence of steps. The relative pro's and con's of choices between multiple imputation versus random effects are not yet fully understood.
 
@@ -1199,14 +1213,13 @@ The current procedure assumes that the within-person error is constant across al
 
 ## Conclusion
 
-This paper has highlighted various applications of the broken stick model: Critical periods, time-to-time correlation, profile analysis, curve interpolation, multiple imputation and personalized prediction. These applications certainly do not exhaust the potential of the model. My hope is that the availability of the software will stimulate creative uses, ideas and experiments.
+This paper highlighted various applications of the broken stick model: critical periods, time-to-time correlation, profile analysis, curve interpolation, multiple imputation and personalised prediction. These applications certainly do not exhaust the potential of the model. My hope is that the availability of the software will stimulate creative uses, ideas and experiments.
 
 # Computational setup {-}
 
-I am running a Mac Studio, MacOS Venture, V 13.1, 32GB RAM with **R** version 4.2.2 (2022-10-31) and **brokenstick** version 2.4.0 (2022-10-30).
+I am running a Mac Studio, MacOs Monterey, V 12.6, 32Gb RAM with **R** version 4.2.1 (2022-06-23) and **brokenstick** version 2.4.0.
 
-# Acknowledgment {-}
-
-I thank the editor and reviewers for their suggestions that helped me to improve the manuscript and software. This work was supported by the Bill & Melinda Gates Foundation. The contents are the sole responsibility of the author and may not necessarily represent the official views of the Bill & Melinda Gates Foundation or other agencies that may have supported the primary data studies used in the present study.
 
 # Literature
+
+  
