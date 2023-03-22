@@ -38,10 +38,10 @@ Three unique features of the broken stick model are:
 
 ## What is in the package?
 
-The `brokenstick` package contains functions to fit, predict and plot data. See the [reference page](https://growthcharts.org/brokenstick/reference) for an overview.
+The `brokenstick` package contains functions to fit, predict and plot data. See the [reference page](https://growthcharts.org/brokenstick/reference/) for an overview.
 
-## Acknowledgement
+### Acknowledgment
 
-Development of the `brokenstick` package was kindly supported by the *Healthy Birth Growth and Development knowledge integration* (HBGDki) program of the Bill & Melinda Gates Foundation.
+This work was supported by the Bill & Melinda Gates Foundation. The contents are the sole responsibility of the authors and may not necessarily represent the official views of the Bill & Melinda Gates Foundation or other agencies that may have supported the primary data studies used in the present study. 
 
 

@@ -8,7 +8,7 @@
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
-[![](https://img.shields.io/badge/github%20version-2.4.1-orange.svg)](https://growthcharts.org/brokenstick)
+[![](https://img.shields.io/badge/github%20version-2.5.0-orange.svg)](https://growthcharts.org/brokenstick/)
 
 <!-- badges: end -->
 
@@ -111,7 +111,7 @@ The `brokenstick` package contains functions for
 
 ### Instructive materials
 
-- [Companion site](https://growthcharts.org/brokenstick) contains
+- [Companion site](https://growthcharts.org/brokenstick/) contains
   vignettes and articles that explain the model and the use of the
   software;
 - Publication: [Broken Stick Model for Irregular Longitudinal
@@ -134,6 +134,7 @@ studies used in the present study.
 Anderson, C., R. Hafen, O. Sofrygin, L. Ryan, and HBGDki Community.
 2019. “Comparing Predictive Abilities of Longitudinal Child Growth
 Models.” *Statistics in Medicine* 38 (19): 3555–70.
+<https://doi.org/10.1002/sim.7693>.
 
 </div>
 
@@ -141,22 +142,22 @@ Models.” *Statistics in Medicine* 38 (19): 3555–70.
 
 de Kroon, M. L. A., C. M. Renders, J. P. van Wouwe, S. van Buuren, and
 R. A. Hirasing. 2010. “The Terneuzen Birth Cohort: BMI Changes Between 2
-and 6 Years Correlate Strongest with Adult Overweight.” *PloS ONE* 5
-(2): e9155.
+and 6 Years Correlate Strongest with Adult Overweight.” *PLOS One* 5
+(2): e9155. <https://doi.org/10.1371/journal.pone.0009155>.
 
 </div>
 
 <div id="ref-ruppert2003" class="csl-entry">
 
 Ruppert, D., M. P. Wand, and R. J. Carroll. 2003. *Semiparametric
-Regression*. Cambridge, UK: Cambridge University Press.
+Regression*. Cambridge: Cambridge University Press.
 
 </div>
 
 <div id="ref-vanbuuren2018" class="csl-entry">
 
-van Buuren, S. 2018. *Flexible Imputation of Missing Data. 2nd Edition*.
-Boca Raton, FL: CRC Press.
+van Buuren, S. 2018. *Flexible Imputation of Missing Data*. 2nd ed. Boca
+Raton, FL: CRC Press.
 
 </div>
 

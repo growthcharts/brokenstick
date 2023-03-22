@@ -1,6 +1,6 @@
 destination: docs
 title: brokenstick
-url: https://growthcharts.org/brokenstick
+url: https://growthcharts.org/brokenstick/
 template:
   bootstrap: 5
   params:

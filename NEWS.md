@@ -1,3 +1,9 @@
+# brokenstick 2.5.0
+
+- Updates the manual vignette to conform to the accepted JSS manuscript (March 2023)
+- Updates the documentation for CRAN release
+- Adds the <doi:10.18637/jss.v106.i07> for the forthcoming JSS paper to DESCRIPTION and documentation
+
 # brokenstick 2.4.0
 
 ## Major changes:
@@ -35,7 +41,7 @@ entry in the `brokenstick` object. This replaces the `whatknots` argument.
 1. Changes the default number of knots in `brokenstick()` to 5. The former default produced a solution without internal knots. The new default produces a generally more informative starting model when the user does not specify knots (using `knots = c(..., ...)`) or the number of knots (using `k = ...`).
 2. Replaces the `strip_data` argument in `predict()` by the a more intuitive `include_data` argument. By default, observed data are now included into the predictions, similar to `predict.lm()`.
 3. Turns error `Argument 'newdata' is required for a light brokenstick object.` of `brokenstick()` into a warning and returns `NULL`.
-4. Updates the vignette [Broken Stick Model for Irregular Longitudinal Data](../articles/manual/manual.html) to sync with revision for JSS.
+4. Updates the vignette [Broken Stick Model for Irregular Longitudinal Data](https://growthcharts.org/brokenstick/articles/manual/manual.html) to sync with revision for JSS.
 
 ## Minor changes:
 
