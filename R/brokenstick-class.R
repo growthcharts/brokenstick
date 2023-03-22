@@ -50,7 +50,7 @@
 #'
 #' @name brokenstick-class
 #' @rdname brokenstick-class
-#' @author Stef van Buuren, 2023
+#' @author Stef van Buuren 2023
 #' @references <doi:10.18637/jss.v106.i07>
 NULL
 

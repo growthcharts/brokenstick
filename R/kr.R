@@ -83,7 +83,7 @@ kr <- function(y,
 }
 
 
-## author: Stef van Buuren, 2020
+## author: Stef van Buuren 2023
 
 kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
                       control) {

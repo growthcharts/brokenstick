@@ -18,7 +18,7 @@
 #' returned (\code{BS = TRUE}) or the random effects (\code{BS = FALSE}).
 #' The default is \code{TRUE}.
 #' @return A vector of length q containing the random effect or broken stick  estimates for unit j.
-#' @author Stef van Buuren, 2015/2020
+#' @author Stef van Buuren 2023
 #' @references
 #' Skrondal, A., Rabe-Hesketh, S. (2009).
 #' Prediction in multilevel generalized linear models.

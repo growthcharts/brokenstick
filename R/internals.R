@@ -200,7 +200,7 @@ smooth_covariance <- function(grid, cov, method = c("none", "argyle", "cole")) {
 #' @param f formula object
 #' @return A `list` with elements `x`, `y` and `g`.
 #' Each element has length 1.
-#' @author Stef van Buuren, 2020
+#' @author Stef van Buuren 2023
 parse_formula <- function(f) {
   stopifnot(inherits(f, "formula"))
   if (length(f[[3L]]) != 3L) {
@@ -243,7 +243,7 @@ parse_formula <- function(f) {
 #' should be given.
 #' @return A matrix with \code{length(x)} rows and \code{length(breaks)}
 #' columns, with some extra attributes described by \code{bs()}.
-#' @author Stef van Buuren, 2020
+#' @author Stef van Buuren 2023
 #' @note Before version 0.54, it was standard practice that the \code{knots}
 #' array always included \code{boundary[1L]}.
 make_basis <- function(x,

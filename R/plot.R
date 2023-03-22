@@ -12,7 +12,7 @@
 #' and [plot_trajectory()].
 #' @inheritParams predict.brokenstick
 #' @return An object of class [ggplot2::ggplot].
-#' @author Stef van Buuren 2021
+#' @author Stef van Buuren 2023
 #' @method plot brokenstick
 #' @seealso [predict.brokenstick], [plot_trajectory].
 #' @examples
