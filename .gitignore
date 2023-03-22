@@ -30,3 +30,4 @@ vignettes/*.R
 .Rproj.user
 /doc/
 /Meta/
+/scripts/
