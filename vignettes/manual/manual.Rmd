@@ -24,7 +24,7 @@ require("ggplot2")
 require("lattice")
 
 old <- options(digits = 3, width = 72)
-knitr::opts_chunk$set(echo = TRUE, cache = FALSE, fig.height = 7, fig.width = 7, out.width = "100%", fig.path = "Figures/")
+knitr::opts_chunk$set(echo = TRUE, cache = FALSE, fig.height = 7, fig.width = 7, out.width = "100%")
 colors <- c("#006CC2B3", "#B61A51B3", "gray50", "#006CC2CC", "#B61A51CC", "gray50")
 ```
 
