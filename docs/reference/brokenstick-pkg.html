@@ -79,9 +79,10 @@ stick curves for new data, and for plotting the results.</p>
     </div>
     <div class="section level2">
     <h2 id="note">Note<a class="anchor" aria-label="anchor" href="#note"></a></h2>
-    <p>Development of this package was kindly supported under the Healthy
-Birth, Growth and Development knowledge integration (HBGDki)
-program of the Bill &amp; Melinda Gates Foundation.</p>
+    <p>This work was supported by the Bill &amp; Melinda Gates Foundation. The contents
+are the sole responsibility of the authors and may not necessarily represent
+the official views of the Bill &amp; Melinda Gates Foundation or other agencies
+that may have supported the primary data studies used in the present study.</p>
     </div>
     <div class="section level2">
     <h2 id="brokenstick-functions">brokenstick functions<a class="anchor" aria-label="anchor" href="#brokenstick-functions"></a></h2>
@@ -90,7 +91,11 @@ program of the Bill &amp; Melinda Gates Foundation.</p>
 <p>The main functions are:</p><table class="table table"><tr><td><code><a href="brokenstick.html">brokenstick()</a></code></td><td>Fit a broken stick model to irregular data</td></tr><tr><td><code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code></td><td>Plot observed and fitted trajectories by group</td></tr><tr><td><code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code></td><td>Obtain predictions on new data</td></tr><tr><td><code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code></td><td>Extract object summaries</td></tr></table><p>The following functions are user-oriented helpers:</p><table class="table table"><tr><td><code><a href="https://rdrr.io/r/stats/coef.html" class="external-link">coef()</a></code></td><td>Extract estimated parameters</td></tr><tr><td><code><a href="https://rdrr.io/r/stats/fitted.values.html" class="external-link">fitted()</a></code></td><td>Calculate fitted values</td></tr><tr><td><code><a href="get_knots.html">get_knots()</a></code></td><td>Obtain the knots from a broken stick model</td></tr><tr><td><code><a href="get_omega.html">get_omega()</a></code></td><td>Extract variance-covariance of random effects</td></tr><tr><td><code><a href="get_r2.html">get_r2()</a></code></td><td>Obtain proportion of explained variance</td></tr><tr><td><code><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">model.frame()</a></code></td><td>Extract model frame</td></tr><tr><td><code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code></td><td>Extract design matrix</td></tr><tr><td><code><a href="https://rdrr.io/r/stats/residuals.html" class="external-link">residuals()</a></code></td><td>Extract residuals from broken stick model</td></tr></table><p>The following functions perform calculations:</p><table class="table table"><tr><td><code><a href="set_control.html">set_control()</a></code></td><td>Set controls to steer calculations</td></tr><tr><td><code><a href="control_kr.html">control_kr()</a></code></td><td>Set controls for the <code>kr</code> method</td></tr></table></div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
-    <p>van Buuren, S. (2018). <em>Flexible Imputation of Missing Data. Second Edition</em>. Chapman &amp; Hall/CRC. Chapter 11.
+    <p>van Buuren, S. (2023). Broken Stick Model for Irregular Longitudinal Data.
+<em>Journal of Statistical Software</em>, 106(7), 1--51.
+<a href="doi:10.18637/jss.v106.i07">doi:10.18637/jss.v106.i07</a></p>
+<p>van Buuren, S. (2018). <em>Flexible Imputation of Missing Data. Second Edition</em>.
+Chapman &amp; Hall/CRC. Chapter 11.
 <a href="https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick" class="external-link">https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick</a></p>
     </div>
     <div class="section level2">
