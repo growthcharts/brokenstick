@@ -111,11 +111,12 @@ The `brokenstick` package contains functions for
 
 ### Instructive materials
 
+- Publication: S. van Buuren (2023), Broken Stick Model for Irregular
+  Longitudinal Data. *Journal of Statistical Software*, 106(7), 1–51.
+  [doi:10.18637/jss.v106.i07](https://doi.org/10.18637/jss.v106.i07)[html](https://growthcharts.org/brokenstick/articles/manual/manual.html);
 - [Companion site](https://growthcharts.org/brokenstick/) contains
   vignettes and articles that explain the model and the use of the
-  software;
-- Publication: [Broken Stick Model for Irregular Longitudinal
-  Data](doi:10.18637/jss.v106.i07) <doi:10.18637/jss.v106.i07>.
+  software.
 
 ### Acknowledgment
 
@@ -157,7 +158,7 @@ Regression*. Cambridge: Cambridge University Press.
 <div id="ref-vanbuuren2018" class="csl-entry">
 
 van Buuren, S. 2018. *Flexible Imputation of Missing Data*. 2nd ed. Boca
-Raton, FL: CRC Press.
+Raton, FL: CRC Press. <https://stefvanbuuren.name/fimd>.
 
 </div>
 

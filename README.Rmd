@@ -88,8 +88,8 @@ The `brokenstick` package contains functions for
 
 ### Instructive materials
 
-- [Companion site](https://growthcharts.org/brokenstick/) contains vignettes and articles that explain the model and the use of the software;
-- Publication: [Broken Stick Model for Irregular Longitudinal Data](doi:10.18637/jss.v106.i07) <doi:10.18637/jss.v106.i07>.
+- Publication: S. van Buuren (2023), Broken Stick Model for Irregular Longitudinal Data. *Journal of Statistical Software*, 106(7), 1--51. [doi:10.18637/jss.v106.i07](https://doi.org/10.18637/jss.v106.i07)[html](https://growthcharts.org/brokenstick/articles/manual/manual.html);
+- [Companion site](https://growthcharts.org/brokenstick/) contains vignettes and articles that explain the model and the use of the software.
 
 ### Acknowledgment
 

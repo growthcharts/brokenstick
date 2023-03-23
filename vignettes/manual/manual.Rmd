@@ -29,7 +29,7 @@ knitr::opts_chunk$set(echo = TRUE, cache = FALSE, fig.height = 7, fig.width = 7,
 colors <- c("#006CC2B3", "#B61A51B3", "gray50", "#006CC2CC", "#B61A51CC", "gray50")
 ```
 
-Published as: Stef van Buuren (2023), Broken Stick Model for Irregular Longitudinal Data. *Journal of Statistical Software*, 106(7), 1--51. <doi:10.18637/jss.v106.i07>
+Published as: Stef van Buuren (2023), Broken Stick Model for Irregular Longitudinal Data. *Journal of Statistical Software*, 106(7), 1--51. [doi:10.18637/jss.v106.i07](https://doi.org/10.18637/jss.v106.i07)
 
 # Abstract {-}
 
