@@ -1,7 +1,7 @@
 Package: brokenstick
 Type: Package
 Title: Broken Stick Model for Irregular Longitudinal Data
-Version: 2.5.1
+Version: 2.6.0
 Authors@R: person("Stef", "van Buuren", email = "stef.vanbuuren@tno.nl", role = c("aut","cre"))
 Description: Data on multiple individuals through time are often sampled at 
     times that differ between persons. Irregular observation times can severely 
