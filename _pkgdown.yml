@@ -40,13 +40,14 @@ reference:
       - kr
       - make_basis
       - plot_trajectory
+      - robust_chol2inv
       - set_control
   - title: "Class documentation"
     desc: >
       Package-level documentation.
     contents:
       - brokenstick-class
-      - brokenstick-pkg
+      - brokenstick-package
   - title: "Data objects"
     desc: >
      Documentation for built-in data objects

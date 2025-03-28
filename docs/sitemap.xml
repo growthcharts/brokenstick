@@ -1,117 +1,43 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://growthcharts.org/brokenstick/404.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/articles/brokenstick.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/articles/mainfunctions.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/articles/manual/manual.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/articles/oldfriends.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/articles/perfectmodel.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/index.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/EB.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/brokenstick-class.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/brokenstick-pkg.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/brokenstick.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/coef.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/control_brokenstick.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/control_kr.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/fit_200.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/fit_200_light.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/fitted.brokenstick.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/get_knots.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/get_omega.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/get_r2.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/kr.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/make_basis.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/parse_formula.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/plot.brokenstick.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/plot_trajectory.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/predict.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/print.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/residuals.brokenstick.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/set_control.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/smocc_200.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/summary.html</loc>
-  </url>
-  <url>
-    <loc>https://growthcharts.org/brokenstick/reference/weightloss.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://growthcharts.org/brokenstick/404.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/LICENSE-text.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/LICENSE.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/articles/brokenstick.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/articles/index.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/articles/mainfunctions.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/articles/manual/manual.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/articles/oldfriends.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/articles/perfectmodel.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/authors.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/index.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/news/index.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/EB.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/brokenstick-class.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/brokenstick-package.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/brokenstick-pkg.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/brokenstick.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/coef.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/control_brokenstick.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/control_kr.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/fit_200.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/fit_200_light.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/fitted.brokenstick.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/get_knots.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/get_omega.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/get_r2.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/index.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/kr.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/make_basis.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/parse_formula.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/plot.brokenstick.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/plot_trajectory.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/predict.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/print.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/residuals.brokenstick.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/robust_chol2inv.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/set_control.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/smocc_200.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/summary.html</loc></url>
+<url><loc>https://growthcharts.org/brokenstick/reference/weightloss.html</loc></url>
 </urlset>
+
