@@ -161,7 +161,7 @@ Regression*. Cambridge: Cambridge University Press.
 <div id="ref-vanbuuren2018" class="csl-entry">
 
 van Buuren, S. 2018. *Flexible Imputation of Missing Data*. 2nd ed. Boca
-Raton, FL: CRC Press. <https://stefvanbuuren.name/fimd>.
+Raton, FL: CRC Press. <https://stefvanbuuren.name/fimd/>.
 
 </div>
 

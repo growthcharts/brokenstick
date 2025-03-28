@@ -87,13 +87,6 @@ kr <- function(y,
 
 kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
                       control) {
-  symridge <- function(x, ridge = 0.0001, ...) {
-    x <- (x + t(x)) / 2
-    if (nrow(x) == 1L) {
-      return(x)
-    }
-    x + diag(diag(x) * ridge)
-  }
 
   ## hack to get knots, assumes that g is last
   xnames <- colnames(x)[-ncol(x)]
@@ -183,7 +176,7 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     nu <- max(n.class - n.rc - 1L, 1L) # prevent negative df
     inv.psi <- matrixsampling::rwishart(
       n = 1L, nu = nu,
-      Sigma = chol2inv(chol.default(symridge(psi_smoothed)))
+      Sigma <- robust_chol2inv(psi_smoothed)
     )[, , 1L]
 
     ## Draw sigma2

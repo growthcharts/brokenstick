@@ -1,6 +1,8 @@
 # brokenstick 2.5.1
 
-- Update the package documentation structure to conform to royxgen2 7.3.2
+- Updated the package documentation structure to conform to `royxgen2 7.3.2`
+- Fixed URL to FIMD book to prevent redirection
+- Added `robust_chol2inv()` to evade edge case on MKL Fedora 40
 
 # brokenstick 2.5.0
 

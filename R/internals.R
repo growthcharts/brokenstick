@@ -303,3 +303,42 @@ make_basis <- function(x,
 
   return(X)
 }
+
+symridge <- function(x, ridge = 0.0001, ...) {
+  x <- (x + t(x)) / 2
+  if (nrow(x) == 1L) {
+    return(x)
+  }
+  x + diag(diag(x) * ridge)
+}
+
+#' Robust inversion of symmetric matrices
+#'
+#' Attempts to compute the inverse of a symmetric matrix using Cholesky
+#' decomposition. If the matrix is not positive definite, a small ridge
+#' value is added. If it still fails, a diagonal fallback is returned.
+#'
+#' @param Sigma A symmetric matrix to invert.
+#' @param eps Ridge value added to the diagonal to regularize the matrix.
+#' @param fallback_diag Logical. If `TRUE`, return a diagonal matrix
+#'   as a fallback when Cholesky fails.
+#'
+#' @return A matrix of the same dimension as `Sigma`, representing its
+#'   regularized inverse.
+#' @export
+robust_chol2inv <- function(Sigma, eps = 1e-8, fallback_diag = TRUE) {
+  Sigma_reg <- symridge(Sigma, eps)
+
+  out <- tryCatch(
+    chol2inv(chol.default(Sigma_reg)),
+    error = function(e) {
+      warning("Matrix not positive definite; using diagonal fallback.", call. = FALSE)
+      if (fallback_diag) {
+        diag(ncol(Sigma)) * eps
+      } else {
+        stop("Matrix not positive definite after regularization.")
+      }
+    }
+  )
+  out
+}
