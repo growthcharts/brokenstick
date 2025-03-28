@@ -36,8 +36,6 @@
 #'    \code{control_kr()}\tab Set controls for the \code{kr} method\cr
 #' }
 #'
-#' @docType package
-#' @name brokenstick-pkg
 #' @seealso \code{\link{brokenstick}},
 #' \code{\link{EB}}, \code{\link{predict.brokenstick}}
 #' @note
@@ -53,4 +51,5 @@
 #' van Buuren, S. (2018). \emph{Flexible Imputation of Missing Data. Second Edition}.
 #' Chapman & Hall/CRC. Chapter 11.
 #' \url{https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick}
-NULL
+#' #' @keywords internal
+"_PACKAGE"
