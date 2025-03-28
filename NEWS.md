@@ -1,3 +1,7 @@
+# brokenstick 2.5.1
+
+- Update the package documentation structure to conform to royxgen2 7.3.2
+
 # brokenstick 2.5.0
 
 - Updates the manual vignette to conform to the accepted JSS manuscript (March 2023)

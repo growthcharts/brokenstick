@@ -8,7 +8,7 @@
 [![Lifecycle:
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/brokenstick)](https://cran.r-project.org/package=brokenstick)
-[![](https://img.shields.io/badge/github%20version-2.5.0-orange.svg)](https://growthcharts.org/brokenstick/)
+[![](https://img.shields.io/badge/github%20version-2.5.1-orange.svg)](https://growthcharts.org/brokenstick/)
 
 <!-- badges: end -->
 
@@ -130,7 +130,8 @@ studies used in the present study.
 
 ### References
 
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent"
+entry-spacing="0">
 
 <div id="ref-anderson2019" class="csl-entry">
 
