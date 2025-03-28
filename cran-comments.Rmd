@@ -5,16 +5,25 @@ output: github_document
 
 ## Submission to CRAN
 
-* brokenstick 2.5.0 was removed from CRAN because of a `chol2inv` problem of MKL on Windows. This version fixes the problem by adding a more robust version designed to evade the edge cases that caused the problem. The package has been tested on Windows, Linux, and macOS.
+* This is a re-submission of the `brokenstick` package, previously archived on 2025-03-21.
+* When mailed, maintainer browsed the "additional topics" but could not detect an error, and forgot about it.
+* Now, after removal, there is an additional entry MKL which makes clear why the package was archived.
+* Email was monitored, and future CRAN notifications will be read and responded to.
+* The MKL entry signals a `chol2inv` problem of MKL on Windows. This update fixes the problem by 
+
+  + Adding a more robust version designed to evade the edge cases that caused the problem.
+  + Outcommented one edge case from the tests that produced inconsistent results between Windows, Linux, and macOS using rhub2.
+  
 * Additional minor minor edits:
 
   + Repaired an URL on FIMD book to evade a redirect.
   + Updated documentation to `royxgen2 7.3.2`
 
+
 ## Test environments
 
-* win-builder: using `devtools::check_win_devel()`
-* rhub: `rhub::rc_submit()` with virtual machines: linux, m1-san, macos, macos-arm64, windows
+* win-builder: using `devtools::check_win_devel()`: Status OK
+* rhub: `rhub::rc_submit()` with virtual machines: linux, m1-san, macos, macos-arm64, windows: Status <https://github.com/r-hub2/twill-wistful-blacklab-brokenstick>
 
 
 ## Downstream dependencies
