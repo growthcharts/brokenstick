@@ -1,3 +1,7 @@
+# brokenstick 2.7.0
+
+- Changes relative URL to absolute URL in `manual.html` to pass CRAN checks
+
 # brokenstick 2.6.0
 
 - Updated the package documentation structure to conform to `royxgen2 7.3.2`
