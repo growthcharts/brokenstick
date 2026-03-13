@@ -5,22 +5,23 @@ cran-comments
 
 - This is a patch release of `brokenstick` 2.7.0.
 
+- This submission replaces
+
+Version: 2.7.0 Date: 2026-03-13 08:57:20 UTC SHA:
+87c22a5ec9174c768365e417553f1039d2039a7b
+
 - Fixes a NOTE from CRAN checks on `r-devel-linux-x86_64-debian-clang`
   and `r-devel-linux-x86_64-debian-gcc`:
-
   - Replaced relative URL `../articles/manual/manual.html` in
     `mainfunctions.Rmd` with absolute URL
     `https://growthcharts.org/brokenstick/articles/manual/manual.html`.
-
 - Repaired a broken link in `README`.
-
 - Applied AIR formatting to all `.R` files.
-
 - Updated documentation to `roxygen2 7.3.3`.
 
 ## Test environments
 
-RHUB via GH Actions
+RHUB via GH Actions: windows, linux, macos-arm64
 
 ## Downstream dependencies
 
