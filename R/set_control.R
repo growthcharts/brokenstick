@@ -15,10 +15,12 @@
 #' control <- set_control()
 #' control
 #' @export
-set_control <- function(method = c("kr", "lmer"),
-                        kr = control_kr(...),
-                        lmer = lmerControl(check.nobs.vs.nRE = "warning"),
-                        ...) {
+set_control <- function(
+  method = c("kr", "lmer"),
+  kr = control_kr(...),
+  lmer = lmerControl(check.nobs.vs.nRE = "warning"),
+  ...
+) {
   method <- match.arg(method)
   if (method == "kr") {
     return(kr)
@@ -43,18 +45,26 @@ set_control <- function(method = c("kr", "lmer"),
 #' `end` (the iteration number of the last iteration) and `thin_imp`
 #' (thinning factor for multiple imputations) from the other inputs.
 #' @export
-control_kr <- function(niter = 200L,
-                       nimp = 0L,
-                       start = 101L,
-                       thin = 1L,
-                       seed = NA_integer_,
-                       cormodel = c("none", "argyle", "cole"),
-                       ...) {
+control_kr <- function(
+  niter = 200L,
+  nimp = 0L,
+  start = 101L,
+  thin = 1L,
+  seed = NA_integer_,
+  cormodel = c("none", "argyle", "cole"),
+  ...
+) {
   cormodel <- match.arg(cormodel)
 
   end <- start + niter * thin
   if (nimp > niter) {
-    stop("Number of imputations (nimp = ", nimp, ") exceeds number of parameter draws (niter = ", niter, ").")
+    stop(
+      "Number of imputations (nimp = ",
+      nimp,
+      ") exceeds number of parameter draws (niter = ",
+      niter,
+      ")."
+    )
   }
   thin_imp <- ifelse(nimp, as.integer((end - start) / nimp), Inf)
 

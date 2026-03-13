@@ -48,11 +48,10 @@
 #' variance components models with heterogeneous within-group variance. Journal
 #' of Educational and Behavioral Statistics, 23(2), 93--116.
 #' @export
-kr <- function(y,
-               x,
-               g,
-               control = control_kr()) {
-  if (!is.na(control$seed)) set.seed(control$seed)
+kr <- function(y, x, g, control = control_kr()) {
+  if (!is.na(control$seed)) {
+    set.seed(control$seed)
+  }
 
   ry <- !is.na(y)
   g <- as.integer(factor(g)) # convert character into integer
@@ -72,7 +71,10 @@ kr <- function(y,
     sigma2j = res$sigma2j,
     sigma2 = res$sigma2,
     sample = c(
-      length(res$y), sum(res$ry), sum(!res$ry), res$nclass,
+      length(res$y),
+      sum(res$ry),
+      sum(!res$ry),
+      res$nclass,
       ncol(res$imputes)
     ),
     imp = res$imputes,
@@ -85,9 +87,7 @@ kr <- function(y,
 
 ## author: Stef van Buuren 2023
 
-kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
-                      control) {
-
+kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE, control) {
   ## hack to get knots, assumes that g is last
   xnames <- colnames(x)[-ncol(x)]
   kn <- as.numeric(sub(".*[_]", "", xnames))
@@ -103,9 +103,13 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   }
 
   ## Initialize
-  if (is.null(wy)) wy <- !ry
+  if (is.null(wy)) {
+    wy <- !ry
+  }
   n.class <- length(unique(x[, type == -2]))
-  if (n.class == 0) stop("No class variable")
+  if (n.class == 0) {
+    stop("No class variable")
+  }
   gf.full <- factor(x[, type == -2], labels = seq_len(n.class))
   gf <- gf.full[ry]
   XG <- split.data.frame(as.matrix(x[ry, type == 2]), gf)
@@ -145,7 +149,9 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
   store_sigma2 <- matrix(NA, nrow = control$niter, ncol = 1L)
 
   store_imputes <- matrix(NA, nrow = control$nimp, ncol = sum(wy))
-  if (control$nimp) row.names(store_imputes) <- as.character(1:control$nimp)
+  if (control$nimp) {
+    row.names(store_imputes) <- as.character(1:control$nimp)
+  }
 
   count_par <- count_imp <- 0L
 
@@ -155,13 +161,21 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     for (class in seq_len(n.class)) {
       vv <- inv.sigma2[class] * X.SS[[class]] + inv.psi
       bees.var <- chol2inv(chol.default(symridge(vv)))
-      bees[class, ] <- drop(bees.var %*% (crossprod(inv.sigma2[class] * XG[[class]], yg[[class]]) + inv.psi %*% mu)) +
+      bees[class, ] <- drop(
+        bees.var %*%
+          (crossprod(inv.sigma2[class] * XG[[class]], yg[[class]]) +
+            inv.psi %*% mu)
+      ) +
         drop(rnorm(n = n.rc) %*% chol.default(bees.var))
       ss[class] <- crossprod(yg[[class]] - XG[[class]] %*% bees[class, ])
     }
 
     # Draw mu
-    mu <- colMeans(bees) + drop(rnorm(n = n.rc) %*% chol.default(chol2inv(chol.default(symridge(inv.psi))) / n.class))
+    mu <- colMeans(bees) +
+      drop(
+        rnorm(n = n.rc) %*%
+          chol.default(chol2inv(chol.default(symridge(inv.psi))) / n.class)
+      )
 
     # Enforce simple structure on psi
     psi <- crossprod(t(t(bees) - mu))
@@ -175,22 +189,32 @@ kr_vector <- function(y, ry, x, type, wy = NULL, intercept = TRUE,
     # )[, , 1L]
     nu <- max(n.class - n.rc - 1L, 1L) # prevent negative df
     inv.psi <- matrixsampling::rwishart(
-      n = 1L, nu = nu,
+      n = 1L,
+      nu = nu,
       Sigma <- robust_chol2inv(psi_smoothed)
-    )[, , 1L]
+    )[,, 1L]
 
     ## Draw sigma2
     shape <- n.g / 2 + 1 / (2 * theta)
-    inv.sigma2 <- rgamma(n.class, shape = shape, scale = 2 * theta / (ss * theta + sigma2.0))
+    inv.sigma2 <- rgamma(
+      n.class,
+      shape = shape,
+      scale = 2 * theta / (ss * theta + sigma2.0)
+    )
 
     ## Draw sigma2.0
     H <- 1 / mean(inv.sigma2) # Harmonic mean
-    sigma2.0 <- rgamma(1, n.class / (2 * theta) + 1, scale = 2 * theta * H / n.class)
+    sigma2.0 <- rgamma(
+      1,
+      n.class / (2 * theta) + 1,
+      scale = 2 * theta * H / n.class
+    )
 
     ## Draw theta
     G <- exp(mean(log(1 / inv.sigma2))) # Geometric mean
     shape <- max(n.class / 2 - 1, 0.01) # Prevent negative shape
-    rg <- rgamma(1,
+    rg <- rgamma(
+      1,
       shape = shape,
       scale = 2 / (n.class * (sigma2.0 / H - log(sigma2.0) + log(G) - 1))
     )

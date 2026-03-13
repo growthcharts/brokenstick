@@ -54,27 +54,29 @@
 #' @references <doi:10.18637/jss.v106.i07>
 NULL
 
-new_brokenstick <- function(call = match.call(),
-                            names = list(
-                              x = character(),
-                              y = character(),
-                              g = character()
-                            ),
-                            internal = numeric(0),
-                            boundary = numeric(0),
-                            degree = 1L,
-                            method = NA_character_,
-                            control = list(),
-                            beta = numeric(0),
-                            omega = numeric(0),
-                            sigma2j = numeric(0),
-                            sigma2 = numeric(0),
-                            light = FALSE,
-                            hide = NA_character_,
-                            sample = numeric(0),
-                            data = numeric(0),
-                            imp = numeric(0),
-                            mod = list()) {
+new_brokenstick <- function(
+  call = match.call(),
+  names = list(
+    x = character(),
+    y = character(),
+    g = character()
+  ),
+  internal = numeric(0),
+  boundary = numeric(0),
+  degree = 1L,
+  method = NA_character_,
+  control = list(),
+  beta = numeric(0),
+  omega = numeric(0),
+  sigma2j = numeric(0),
+  sigma2 = numeric(0),
+  light = FALSE,
+  hide = NA_character_,
+  sample = numeric(0),
+  data = numeric(0),
+  imp = numeric(0),
+  mod = list()
+) {
   result <- list(
     call = call,
     names = names,

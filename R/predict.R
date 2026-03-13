@@ -237,31 +237,42 @@
 #' }
 #' @rdname predict
 #' @export
-predict.brokenstick <- function(object, newdata = NULL,
-                                ...,
-                                x = NULL, y = NULL, group = NULL,
-                                hide = c("right", "left", "boundary", "internal", "none"),
-                                shape = c("long", "wide", "vector"),
-                                include_data = TRUE,
-                                strip_data = TRUE,
-                                whatknots = "all") {
+predict.brokenstick <- function(
+  object,
+  newdata = NULL,
+  ...,
+  x = NULL,
+  y = NULL,
+  group = NULL,
+  hide = c("right", "left", "boundary", "internal", "none"),
+  shape = c("long", "wide", "vector"),
+  include_data = TRUE,
+  strip_data = TRUE,
+  whatknots = "all"
+) {
   shape <- match.arg(shape)
   if (!missing(strip_data)) {
-    warning("Argument 'strip_data' is deprecated; please use 'include_data' instead.",
-            call. = FALSE)
+    warning(
+      "Argument 'strip_data' is deprecated; please use 'include_data' instead.",
+      call. = FALSE
+    )
     include_data <- !strip_data
   }
   rm(strip_data)
 
   if (!missing(whatknots)) {
-    warning("argument 'whatknots' is deprecated; please use 'hide' instead.",
-            call. = FALSE)
-    object$hide <- switch(whatknots,
-                          droplast = "right",
-                          dropfirst = "left",
-                          internal = "boundary",
-                          all = "none",
-                          "none")
+    warning(
+      "argument 'whatknots' is deprecated; please use 'hide' instead.",
+      call. = FALSE
+    )
+    object$hide <- switch(
+      whatknots,
+      droplast = "right",
+      dropfirst = "left",
+      internal = "boundary",
+      all = "none",
+      "none"
+    )
   }
   if (!missing(hide)) {
     hide <- match.arg(hide)
@@ -279,11 +290,17 @@ predict.brokenstick <- function(object, newdata = NULL,
   }
 
   # check for light object
-  if (is.null(x) && is.null(y) ||
+  if (
+    is.null(x) &&
+      is.null(y) ||
       is.null(x) && !is.null(y) ||
-      !is.null(x) && is.null(y)) {
+      !is.null(x) && is.null(y)
+  ) {
     if (is.null(newdata) && object$light) {
-      warning("Argument 'newdata' is required for a light brokenstick object.", call. = FALSE)
+      warning(
+        "Argument 'newdata' is required for a light brokenstick object.",
+        call. = FALSE
+      )
       return(NULL)
     }
   }
@@ -293,7 +310,9 @@ predict.brokenstick <- function(object, newdata = NULL,
   # 1. the user did not specify y, x and group
   # 2. or, the user specified y but not x
   # Note: Sets NULL newdata to training data in object for non-light object
-  if ((is.null(x) && is.null(y) && is.null(group)) || is.null(x) && !is.null(y)) {
+  if (
+    (is.null(x) && is.null(y) && is.null(group)) || is.null(x) && !is.null(y)
+  ) {
     if (is.null(newdata) && !object$light) {
       # use training data
       newdata <- object$data
@@ -312,7 +331,13 @@ predict.brokenstick <- function(object, newdata = NULL,
         newdata <- object$data
       }
     }
-    newdata <- append_data(newdata, object[["names"]], x = x, y = y, group = group)
+    newdata <- append_data(
+      newdata,
+      object[["names"]],
+      x = x,
+      y = y,
+      group = group
+    )
     reset <- TRUE
   }
 
@@ -334,12 +359,14 @@ predict.brokenstick <- function(object, newdata = NULL,
       return(pull(p))
     }
     if (shape == "wide") {
-      return(bind_cols(newdata, p) %>%
-               pivot_wider(
-                 id_cols = object$names$g,
-                 names_from = object$names$x,
-                 values_from = ".pred"
-               ))
+      return(
+        bind_cols(newdata, p) %>%
+          pivot_wider(
+            id_cols = object$names$g,
+            names_from = object$names$x,
+            values_from = ".pred"
+          )
+      )
     }
   }
 
@@ -355,10 +382,11 @@ predict.brokenstick <- function(object, newdata = NULL,
     return(pull(ret, ".pred"))
   }
   if (shape == "wide") {
-    return(pivot_wider(ret,
-                       id_cols = object$names$g,
-                       names_from = object$names$x,
-                       values_from = ".pred"
+    return(pivot_wider(
+      ret,
+      id_cols = object$names$g,
+      names_from = object$names$x,
+      values_from = ".pred"
     ))
   }
   stop("Internal error")
@@ -375,7 +403,10 @@ predict_brokenstick_bridge <- function(model, x, y, g) {
   yhat <- predict_brokenstick_numeric(model, x, y, g)
 
   if (nrow(x) != nrow(yhat)) {
-    warning("Number of rows differs between between data and prediction.", .call = FALSE)
+    warning(
+      "Number of rows differs between between data and prediction.",
+      .call = FALSE
+    )
   }
 
   return(yhat)
@@ -385,7 +416,9 @@ predict_brokenstick_bridge <- function(model, x, y, g) {
 # Implementation
 
 predict_brokenstick_numeric <- function(object, x, y, g) {
-  if (object$degree > 1L) stop("Cannot predict for degree > 1")
+  if (object$degree > 1L) {
+    stop("Cannot predict for degree > 1")
+  }
 
   X <- make_basis(
     x = x,
@@ -399,18 +432,21 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
   X_s <- lapply(X_s, as.matrix)
   y_s <- split(y, f = g)
 
-  blup <- mapply(EB,
-                 y = y_s,
-                 X = X_s,
-                 MoreArgs = list(model = object),
-                 SIMPLIFY = TRUE
+  blup <- mapply(
+    EB,
+    y = y_s,
+    X = X_s,
+    MoreArgs = list(model = object),
+    SIMPLIFY = TRUE
   )
   if (!length(blup)) {
     return(data.frame(.pred = rep(NA_real_, length(x))))
   }
 
   xv <- get_knots(object, hide = "none")
-  if (object$degree == 0L) xv <- xv[-length(xv)]
+  if (object$degree == 0L) {
+    xv <- xv[-length(xv)]
+  }
   long1 <- data.frame(
     group = rep(colnames(blup), each = nrow(blup)),
     x = xv,
@@ -430,12 +466,14 @@ predict_brokenstick_numeric <- function(object, x, y, g) {
   approx_method <- ifelse(object$degree, "linear", "constant")
   pred <- long %>%
     group_by(.data$group) %>%
-    mutate(yhat = approx(
-      x = .data$x,
-      y = .data$yhat,
-      xout = .data$x,
-      method = approx_method
-    )$y) %>%
+    mutate(
+      yhat = approx(
+        x = .data$x,
+        y = .data$yhat,
+        xout = .data$x,
+        method = approx_method
+      )$y
+    ) %>%
     ungroup() %>%
     filter(!.data$knot) %>%
     pull("yhat")

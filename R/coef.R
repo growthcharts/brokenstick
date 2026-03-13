@@ -8,9 +8,12 @@
 #' If not specified, it is read from `object$hide`.
 #' @inheritParams stats::coef
 #' @export
-coef.brokenstick <- function(object, complete = TRUE, ...,
-                             hide = c("right", "left", "boundary", "internal", "none"))
-{
+coef.brokenstick <- function(
+  object,
+  complete = TRUE,
+  ...,
+  hide = c("right", "left", "boundary", "internal", "none")
+) {
   if (!missing(hide)) {
     hide <- match.arg(hide)
   } else {
@@ -18,12 +21,14 @@ coef.brokenstick <- function(object, complete = TRUE, ...,
   }
 
   beta <- object$beta
-  beta <- switch(hide,
-                 right = beta[-length(beta)],
-                 left = beta[-1L],
-                 boundary = beta[-c(1L, length(beta))],
-                 internal = beta[c(1L, length(beta))],
-                 none = beta)
+  beta <- switch(
+    hide,
+    right = beta[-length(beta)],
+    left = beta[-1L],
+    boundary = beta[-c(1L, length(beta))],
+    internal = beta[c(1L, length(beta))],
+    none = beta
+  )
 
   if (complete) {
     return(beta)

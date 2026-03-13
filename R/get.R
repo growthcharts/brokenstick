@@ -12,24 +12,29 @@
 #' @examples
 #' get_knots(fit_200, hide = "bo")
 #' @export
-get_knots <- function(object,
-                      hide = c("right", "left", "boundary", "internal", "none"),
-                      whatknots = "all",
-                      what = "all") {
-
+get_knots <- function(
+  object,
+  hide = c("right", "left", "boundary", "internal", "none"),
+  whatknots = "all",
+  what = "all"
+) {
   stopifnot(inherits(object, c("brokenstick")))
 
   if (!missing(what) || !missing(whatknots)) {
-    warning("arguments 'what' and 'whatknots' in 'get_knots()' are deprecated; please use 'hide' instead.",
-            call. = FALSE)
+    warning(
+      "arguments 'what' and 'whatknots' in 'get_knots()' are deprecated; please use 'hide' instead.",
+      call. = FALSE
+    )
     whatknots <- what
-    object$hide <- switch(whatknots,
-                          all = "none",
-                          internal = "boundary",
-                          boundary = "internal",
-                          dropfirst = "left",
-                          droplast = "right",
-                          "right")
+    object$hide <- switch(
+      whatknots,
+      all = "none",
+      internal = "boundary",
+      boundary = "internal",
+      dropfirst = "left",
+      droplast = "right",
+      "right"
+    )
   }
 
   if (!missing(hide)) {
@@ -40,16 +45,20 @@ get_knots <- function(object,
 
   internal <- object$internal
   # legacy for objects created before v2.0
-  if (is.null(internal)) internal <- object$knots
+  if (is.null(internal)) {
+    internal <- object$knots
+  }
   boundary <- object$boundary
   internal <- internal[internal > boundary[1L] & internal < boundary[2L]]
 
-  result <- switch(hide,
-                   none = c(boundary[1L], internal, boundary[2L]),
-                   internal = boundary,
-                   boundary = internal,
-                   left = c(internal, boundary[2L]),
-                   right = c(boundary[1L], internal))
+  result <- switch(
+    hide,
+    none = c(boundary[1L], internal, boundary[2L]),
+    internal = boundary,
+    boundary = internal,
+    left = c(internal, boundary[2L]),
+    right = c(boundary[1L], internal)
+  )
   return(result)
 }
 
@@ -69,32 +78,40 @@ get_knots <- function(object,
 #' f1 <- brokenstick(hgt_z ~ age | id, smocc_200[1:1000, ], knots = 0:2, seed = 1)
 #' get_omega(f1, cor = TRUE, hide = "boundary")
 #' @export
-get_omega <- function(x,
-                      hide = c("right", "left", "boundary", "internal", "none"),
-                      cor = FALSE,
-                      whatknots = "all",
-                      what = "cov") {
+get_omega <- function(
+  x,
+  hide = c("right", "left", "boundary", "internal", "none"),
+  cor = FALSE,
+  whatknots = "all",
+  what = "cov"
+) {
   stopifnot(inherits(x, "brokenstick"))
 
   if (!missing(what)) {
-    warning("argument 'what' in 'get_omega()' is deprecated; please use 'cor' instead.",
-            call. = FALSE)
+    warning(
+      "argument 'what' in 'get_omega()' is deprecated; please use 'cor' instead.",
+      call. = FALSE
+    )
     if (missing(cor)) {
       cor <- ifelse(what == "cor", TRUE, FALSE)
     }
   }
 
   if (!missing(whatknots)) {
-    warning("argument 'whatknots' in 'get_omega()' is deprecated; please use 'hide' instead.",
-            call. = FALSE)
+    warning(
+      "argument 'whatknots' in 'get_omega()' is deprecated; please use 'hide' instead.",
+      call. = FALSE
+    )
     whatknots <- what
-    x$hide <- switch(whatknots,
-                     all = "none",
-                     internal = "boundary",
-                     boundary = "internal",
-                     dropfirst = "left",
-                     droplast = "right",
-                     "right")
+    x$hide <- switch(
+      whatknots,
+      all = "none",
+      internal = "boundary",
+      boundary = "internal",
+      dropfirst = "left",
+      droplast = "right",
+      "right"
+    )
   }
 
   if (!missing(hide)) {
@@ -105,12 +122,14 @@ get_omega <- function(x,
 
   omega <- x$omega
   v <- colnames(omega)
-  nameset <- switch(hide,
-                    none = v,
-                    boundary = v[c(-1L, -length(v))],
-                    internal = v[c(1L, length(v))],
-                    left = v[-1L],
-                    right = v[-length(v)])
+  nameset <- switch(
+    hide,
+    none = v,
+    boundary = v[c(-1L, -length(v))],
+    internal = v[c(1L, length(v))],
+    left = v[-1L],
+    right = v[-length(v)]
+  )
   if (length(nameset)) {
     omega <- omega[nameset, nameset, drop = FALSE]
   } else {
@@ -153,7 +172,10 @@ get_newdata <- function(x, newdata) {
   # sets the newdata argument
   stopifnot(inherits(x, "brokenstick"))
   if (is.null(newdata) && x$light) {
-    stop("Argument 'newdata' is required for a light brokenstick object.", call. = FALSE)
+    stop(
+      "Argument 'newdata' is required for a light brokenstick object.",
+      call. = FALSE
+    )
   }
   if (is.null(newdata) && !x$light) {
     newdata <- x$data

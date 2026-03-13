@@ -15,7 +15,10 @@ test_that("returns proper number of rows", {
 })
 
 test_that("returns proper number of rows with at = 'knots'", {
-  expect_equal(nrow(predict(obj, dat, x = "knots", include_data = FALSE)), m * k)
+  expect_equal(
+    nrow(predict(obj, dat, x = "knots", include_data = FALSE)),
+    m * k
+  )
   expect_equal(nrow(predict(obj, dat, x = NA, include_data = FALSE)), m)
   expect_equal(nrow(predict(obj, x = NA, y = 10)), 1L)
 })
@@ -23,7 +26,16 @@ test_that("returns proper number of rows with at = 'knots'", {
 test_that("returns proper number of rows with both data & knots", {
   expect_equal(nrow(predict(obj, dat, x = "knots")), n + k * m)
   expect_equal(nrow(predict(obj, dat, x = NA, y = 10, group = 10001)), 11)
-  expect_equal(nrow(predict(obj, dat, x = c(NA, NA), y = c(-1, 10), group = rep(10001, 2))), 12)
+  expect_equal(
+    nrow(predict(
+      obj,
+      dat,
+      x = c(NA, NA),
+      y = c(-1, 10),
+      group = rep(10001, 2)
+    )),
+    12
+  )
 })
 
 test_that("output = 'vector' and output = 'long' are consistent", {
@@ -57,14 +69,29 @@ exp <- fit_200
 dat <- smocc_200
 test_that("returns proper number of rows", {
   expect_equal(nrow(predict(exp, dat, x = NA, include_data = FALSE)), 200L)
-  expect_equal(nrow(predict(exp, dat, x = c(NA, NA), include_data = FALSE)), 400L)
+  expect_equal(
+    nrow(predict(exp, dat, x = c(NA, NA), include_data = FALSE)),
+    400L
+  )
   expect_equal(nrow(predict(exp, dat, x = NA, y = 1)), 1L)
   expect_equal(nrow(predict(exp, dat, x = c(NA, NA), y = c(-1, 10))), 2L)
-  expect_equal(nrow(predict(exp, dat, x = "knots", include_data = FALSE, hide = "none")), 2200L)
+  expect_equal(
+    nrow(predict(exp, dat, x = "knots", include_data = FALSE, hide = "none")),
+    2200L
+  )
   expect_equal(nrow(predict(exp, dat, x = "knots", y = rep(1, 10))), 10L)
-  expect_equal(nrow(predict(exp, dat, x = "knots", y = rep(1, 11), hide = "none")), 11L)
-  expect_equal(nrow(predict(exp, dat, x = "knots", y = rep(1, 2), hide = "internal")), 2L)
-  expect_equal(nrow(predict(exp, dat, x = "knots", y = rep(1, 9), hide = "boundary")), 9L)
+  expect_equal(
+    nrow(predict(exp, dat, x = "knots", y = rep(1, 11), hide = "none")),
+    11L
+  )
+  expect_equal(
+    nrow(predict(exp, dat, x = "knots", y = rep(1, 2), hide = "internal")),
+    2L
+  )
+  expect_equal(
+    nrow(predict(exp, dat, x = "knots", y = rep(1, 9), hide = "boundary")),
+    9L
+  )
 })
 
 test_that("accepts intermediate NA in x", {

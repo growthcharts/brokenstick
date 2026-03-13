@@ -4,7 +4,9 @@ model.frame.brokenstick <- function(formula, data = NULL, ...) {
     return(NULL)
   }
   names <- unlist(formula$names)
-  if (is.null(data)) data <- formula$data
+  if (is.null(data)) {
+    data <- formula$data
+  }
   ff <- paste(names[["y"]], "~", names[["x"]], "+", names[["g"]])
   form <- as.formula(ff)
   return(model.frame.default(formula = form, data = data, ...))

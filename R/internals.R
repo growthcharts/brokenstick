@@ -1,5 +1,7 @@
 append_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
-  if (is.null(data)) stop("`data` not found.")
+  if (is.null(data)) {
+    stop("`data` not found.")
+  }
   if (is.null(x) && is.null(y) && is.null(group)) {
     return(data)
   }
@@ -34,7 +36,10 @@ append_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
   # Case 3: subset groups from data
   if (is.null(x) && is.null(y) && !is.null(group)) {
     if (!length(data)) {
-      stop("A light brokenstick object expects a `newdata` argument.", call. = FALSE)
+      stop(
+        "A light brokenstick object expects a `newdata` argument.",
+        call. = FALSE
+      )
     }
     reset <- data[data[[names$g]] %in% group, , drop = FALSE]
     reset <- bind_cols(.source = "data", reset)
@@ -53,7 +58,8 @@ append_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
     colnames(reset) <- c(".source", names$x, names$y, names$g)
     reset <- bind_rows(
       data = data[data[[names$g]] %in% groups, , drop = FALSE],
-      added = reset, .id = ".source"
+      added = reset,
+      .id = ".source"
     ) %>%
       relocate(".source")
     # message("Reset newdata: predict at `x` in subset of groups.")
@@ -76,7 +82,8 @@ append_data <- function(data, names, x = NULL, y = NULL, group = NULL) {
     colnames(reset) <- c(names$x, names$y, names$g)
     reset <- bind_rows(
       data = data[data[[names$g]] %in% groups, , drop = FALSE],
-      added = reset, .id = ".source"
+      added = reset,
+      .id = ".source"
     ) %>%
       relocate(".source")
     # message("Reset newdata: predict from vectors `x`, `y` and `group`.")
@@ -109,10 +116,13 @@ calculate_knots <- function(x, k, internal, boundary) {
     k <- length(knots)
   } else {
     # no user knots, set knots from
-    if (is.null(k_orig)) k_orig <- 0L
+    if (is.null(k_orig)) {
+      k_orig <- 0L
+    }
     if (k_orig >= 0L && k_orig <= 50L) {
       k <- k_orig
-      knots <- quantile(x,
+      knots <- quantile(
+        x,
         probs = seq(0, 1, length.out = k + 2L),
         na.rm = TRUE
       )[-c(1L, k + 2L)]
@@ -131,7 +141,9 @@ install.on.demand <- function(pkg, quiet = FALSE, ...) {
     return()
   }
   answer <- askYesNo(paste("Package", pkg, "needed. Install from CRAN?"))
-  if (answer) install.packages(pkg, repos = "https://cloud.r-project.org/", quiet = quiet)
+  if (answer) {
+    install.packages(pkg, repos = "https://cloud.r-project.org/", quiet = quiet)
+  }
   return()
 }
 
@@ -181,7 +193,12 @@ smooth_covariance <- function(grid, cov, method = c("none", "argyle", "cole")) {
   # Cole correlation model
   if (method == "cole") {
     grid$y <- log((1 + grid$r) / (1 - grid$r)) / 2
-    fit <- lm(y ~ I(log((t1 + t2) / 2)) + I(log(t2 - t1)) + I(1 / (t2 - t1)) + I(log((t1 + t2) / 2) * log(t2 - t1)) + I(log((t1 + t2) / 2)^2),
+    fit <- lm(
+      y ~ I(log((t1 + t2) / 2)) +
+        I(log(t2 - t1)) +
+        I(1 / (t2 - t1)) +
+        I(log((t1 + t2) / 2) * log(t2 - t1)) +
+        I(log((t1 + t2) / 2)^2),
       data = grid
     )
     yhat <- predict(fit)
@@ -246,27 +263,34 @@ parse_formula <- function(f) {
 #' @author Stef van Buuren 2023
 #' @note Before version 0.54, it was standard practice that the \code{knots}
 #' array always included \code{boundary[1L]}.
-make_basis <- function(x,
-                       xname = "x",
-                       internal = NULL,
-                       boundary = range(x),
-                       degree = 1L,
-                       warn = TRUE) {
-
+make_basis <- function(
+  x,
+  xname = "x",
+  internal = NULL,
+  boundary = range(x),
+  degree = 1L,
+  warn = TRUE
+) {
   # safety check: remove lower boundary knot from knots to be compatiable
   # with models fitted prior to version 0.53
   internal <- internal[internal > boundary[1L] & internal < boundary[2L]]
 
   # trick to evade error from bs() if x is fully NA
   padx <- all(is.na(x))
-  if (padx) x <- c(0, x)
+  if (padx) {
+    x <- c(0, x)
+  }
 
   # dummy coding if degree is zero
   if (degree == 0L) {
-    df <- data.frame(x = cut(x,
-      breaks = c(boundary[1L], internal, boundary[2L]),
-      right = FALSE, include.lowest = TRUE
-    ))
+    df <- data.frame(
+      x = cut(
+        x,
+        breaks = c(boundary[1L], internal, boundary[2L]),
+        right = FALSE,
+        include.lowest = TRUE
+      )
+    )
     X <- model.matrix(
       as.formula("~ 0 + x"),
       model.frame(~., df, na.action = na.pass)
@@ -295,11 +319,15 @@ make_basis <- function(x,
   }
 
   knots <- sort(unique(c(boundary, internal)))
-  if (degree == 0L) knots <- knots[-length(knots)]
+  if (degree == 0L) {
+    knots <- knots[-length(knots)]
+  }
   colnames(X) <- paste(xname, as.character(knots), sep = "_")
 
   # restore original if padded
-  if (padx) X <- X[-1L, , drop = FALSE]
+  if (padx) {
+    X <- X[-1L, , drop = FALSE]
+  }
 
   return(X)
 }
@@ -332,7 +360,10 @@ robust_chol2inv <- function(Sigma, eps = 1e-8, fallback_diag = TRUE) {
   out <- tryCatch(
     chol2inv(chol.default(Sigma_reg)),
     error = function(e) {
-      warning("Matrix not positive definite; using diagonal fallback.", call. = FALSE)
+      warning(
+        "Matrix not positive definite; using diagonal fallback.",
+        call. = FALSE
+      )
       if (fallback_diag) {
         diag(ncol(Sigma)) * eps
       } else {

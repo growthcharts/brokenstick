@@ -155,18 +155,20 @@
 #' plot(f4, data, n_plot = 9)
 #' }
 #' @export
-brokenstick <- function(formula,
-                        data,
-                        knots = NULL,
-                        boundary = NULL,
-                        k = 5L,
-                        degree = 1L,
-                        method = c("kr", "lmer"),
-                        control = set_control(method = method, ...),
-                        na.action = na.exclude,
-                        light = FALSE,
-                        hide = c("right", "left", "boundary", "internal", "none"),
-                        ...) {
+brokenstick <- function(
+  formula,
+  data,
+  knots = NULL,
+  boundary = NULL,
+  k = 5L,
+  degree = 1L,
+  method = c("kr", "lmer"),
+  control = set_control(method = method, ...),
+  na.action = na.exclude,
+  light = FALSE,
+  hide = c("right", "left", "boundary", "internal", "none"),
+  ...
+) {
   call <- match.call()
   stopifnot(
     inherits(formula, "formula"),
@@ -177,8 +179,18 @@ brokenstick <- function(formula,
   method <- match.arg(method)
   hide <- match.arg(hide)
   obj <- brokenstick_bridge(
-    formula, data, knots, boundary, k, degree,
-    method, control, na.action, light, hide, call,
+    formula,
+    data,
+    knots,
+    boundary,
+    k,
+    degree,
+    method,
+    control,
+    na.action,
+    light,
+    hide,
+    call,
     ...
   )
   return(obj)
@@ -187,13 +199,27 @@ brokenstick <- function(formula,
 # ------------------------------------------------------------------------------
 # Bridge
 
-brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
-                               method, control, na.action, light, hide, call,
-                               warn_splines = FALSE, ...) {
+brokenstick_bridge <- function(
+  formula,
+  data,
+  knots,
+  boundary,
+  k,
+  degree,
+  method,
+  control,
+  na.action,
+  light,
+  hide,
+  call,
+  warn_splines = FALSE,
+  ...
+) {
   names <- parse_formula(formula)
   nms <- unname(unlist(names))
   if (!all(nms %in% colnames(data))) {
-    stop("Variable(s) not found: ",
+    stop(
+      "Variable(s) not found: ",
       paste(nms[!nms %in% colnames(data)], collapse = ", "),
       call. = FALSE
     )
@@ -210,7 +236,8 @@ brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
   )
 
   l <- calculate_knots(x, k, knots, boundary)
-  X <- make_basis(x,
+  X <- make_basis(
+    x,
     xname = names$x,
     internal = l$internal,
     boundary = l$boundary,
@@ -265,7 +292,6 @@ brokenstick_bridge <- function(formula, data, knots, boundary, k, degree,
 # Implementation
 
 brokenstick_impl_lmer <- function(data, formula, control, na.action) {
-
   # Bates et al, linear mixed-effects model
   mod <- lmer(
     formula = formula,
@@ -285,7 +311,10 @@ brokenstick_impl_lmer <- function(data, formula, control, na.action) {
     sigma2j = numeric(),
     sigma2 = df[df$grp == "Residual", "vcov"],
     sample = c(
-      length(y), sum(!is.na(y)), sum(is.na(y)), as.integer(ngrps(mod)),
+      length(y),
+      sum(!is.na(y)),
+      sum(is.na(y)),
+      as.integer(ngrps(mod)),
       0L
     )
   )

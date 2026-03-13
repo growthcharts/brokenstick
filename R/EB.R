@@ -53,7 +53,9 @@ EB <- function(model, y, X, Z = X, BS = TRUE) {
   re <- model$omega %*% t(Z) %*% R
 
   # calculate broken stick estimate by summing fixed and random parts
-  if (BS) re <- model$beta + re
+  if (BS) {
+    re <- model$beta + re
+  }
 
   return(as.vector(re))
 }

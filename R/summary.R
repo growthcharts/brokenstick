@@ -11,11 +11,13 @@
 #' @inheritParams base::summary
 #' @inheritParams get_omega
 #' @export
-summary.brokenstick <- function(object,
-                                ...,
-                                cor = FALSE,
-                                lower = TRUE,
-                                hide = c("right", "left", "boundary", "internal", "none")) {
+summary.brokenstick <- function(
+  object,
+  ...,
+  cor = FALSE,
+  lower = TRUE,
+  hide = c("right", "left", "boundary", "internal", "none")
+) {
   stopifnot(inherits(object, "brokenstick"))
   if (!missing(hide)) {
     hide <- match.arg(hide)
@@ -31,7 +33,9 @@ summary.brokenstick <- function(object,
   ans$method <- object$method
   ans$beta <- coef(object, hide = hide)
   omega <- get_omega(object, cor = cor, hide = hide)
-  if (lower) omega[upper.tri(omega)] <- NA_real_
+  if (lower) {
+    omega[upper.tri(omega)] <- NA_real_
+  }
   ans$omega <- omega
   if (length(object$sigma2j)) {
     ans$sigma2j <- summary(object$sigma2j)[c(1:3, 5, 6)]

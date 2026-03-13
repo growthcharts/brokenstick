@@ -35,16 +35,15 @@
 #'     color_yhat = rep("grey20", 2), shape_yhat = NA)
 #' }
 #' @export
-plot.brokenstick <- function(x,
-                             newdata = NULL,
-                             ...) {
+plot.brokenstick <- function(x, newdata = NULL, ...) {
   install.on.demand("ggplot2", ...)
   newdata <- get_newdata(x, newdata)
   nms <- unname(unlist(x$names))
   if (!all(nms %in% colnames(newdata))) {
-    stop("Variable(s) not found: ",
-         paste(nms[!nms %in% colnames(newdata)], collapse = ", "),
-         call. = FALSE
+    stop(
+      "Variable(s) not found: ",
+      paste(nms[!nms %in% colnames(newdata)], collapse = ", "),
+      call. = FALSE
     )
   }
 
@@ -92,51 +91,57 @@ plot.brokenstick <- function(x,
 #' @rdname plot_trajectory
 #' @seealso [plot.brokenstick]
 #' @export
-plot_trajectory <- function(x,
-                            newdata = NULL,
-                            hide = c("right", "left", "boundary", "internal", "none"),
-                            .x = NULL,
-                            group = NULL,
-                            color_y = c(
-                              grDevices::hcl(240, 100, 40, 0.7),
-                              grDevices::hcl(240, 100, 40, 0.8)
-                            ),
-                            size_y = 2,
-                            linetype_y = 1,
-                            shape_y = 19,
-                            color_yhat = c(
-                              grDevices::hcl(0, 100, 40, 0.7),
-                              grDevices::hcl(0, 100, 40, 0.8)
-                            ),
-                            size_yhat = 2,
-                            linetype_yhat = 1,
-                            shape_yhat = 19,
-                            color_imp = c("grey80", "grey80"),
-                            size_imp = 2,
-                            ncol = 3L,
-                            xlab = NULL,
-                            ylab = NULL,
-                            xlim = NULL,
-                            ylim = NULL,
-                            show = c(TRUE, TRUE, FALSE),
-                            n_plot = 3L,
-                            scales = "fixed",
-                            theme = ggplot2::theme_light(),
-                            whatknots = "droplast",
-                            ...) {
+plot_trajectory <- function(
+  x,
+  newdata = NULL,
+  hide = c("right", "left", "boundary", "internal", "none"),
+  .x = NULL,
+  group = NULL,
+  color_y = c(
+    grDevices::hcl(240, 100, 40, 0.7),
+    grDevices::hcl(240, 100, 40, 0.8)
+  ),
+  size_y = 2,
+  linetype_y = 1,
+  shape_y = 19,
+  color_yhat = c(
+    grDevices::hcl(0, 100, 40, 0.7),
+    grDevices::hcl(0, 100, 40, 0.8)
+  ),
+  size_yhat = 2,
+  linetype_yhat = 1,
+  shape_yhat = 19,
+  color_imp = c("grey80", "grey80"),
+  size_imp = 2,
+  ncol = 3L,
+  xlab = NULL,
+  ylab = NULL,
+  xlim = NULL,
+  ylim = NULL,
+  show = c(TRUE, TRUE, FALSE),
+  n_plot = 3L,
+  scales = "fixed",
+  theme = ggplot2::theme_light(),
+  whatknots = "droplast",
+  ...
+) {
   stopifnot(
     inherits(x, "brokenstick"),
     any(show)
   )
   if (!missing(whatknots)) {
-    warning("argument 'whatknots' is deprecated; please use 'hide' instead.",
-            call. = FALSE)
-    x$hide <- switch(whatknots,
-                     droplast = "right",
-                     dropfirst = "left",
-                     internal = "boundary",
-                     all = "none",
-                     "none")
+    warning(
+      "argument 'whatknots' is deprecated; please use 'hide' instead.",
+      call. = FALSE
+    )
+    x$hide <- switch(
+      whatknots,
+      droplast = "right",
+      dropfirst = "left",
+      internal = "boundary",
+      all = "none",
+      "none"
+    )
   }
   if (!missing(hide)) {
     hide <- match.arg(hide)
@@ -146,12 +151,20 @@ plot_trajectory <- function(x,
 
   newdata <- get_newdata(x, newdata)
   # calculate brokenstick predictions, long format
-  if (show[2L] && missing(.x)) .x <- "knots"
+  if (show[2L] && missing(.x)) {
+    .x <- "knots"
+  }
   data <- predict(
-    object = x, newdata = newdata, hide = hide, ...,
-    x = .x, group = group
+    object = x,
+    newdata = newdata,
+    hide = hide,
+    ...,
+    x = .x,
+    group = group
   )
-  if (ncol(data) == 1L) data <- bind_cols(.source = "data", newdata, data)
+  if (ncol(data) == 1L) {
+    data <- bind_cols(.source = "data", newdata, data)
+  }
 
   # add imputations
   if (show[3L]) {
@@ -162,8 +175,11 @@ plot_trajectory <- function(x,
     newdata_isna <- is.na(newdata[, x$names$y, drop = TRUE])
     if (sum(newdata_isna) != nrow(x$imp)) {
       stop(
-        "Missing data count mismatch: ", sum(newdata_isna),
-        " (newdata) versus ", nrow(x$imp), " (x$imp)."
+        "Missing data count mismatch: ",
+        sum(newdata_isna),
+        " (newdata) versus ",
+        nrow(x$imp),
+        " (x$imp)."
       )
     }
 
@@ -195,14 +211,14 @@ plot_trajectory <- function(x,
   if (!is.null(ylim)) {
     idx <- idx &
       ((data[[".source"]] == "data" &
+        data[[x$names$y]] >= ylim[1L] &
+        data[[x$names$y]] <= ylim[2L]) |
+        (data[[".source"]] == "added" &
+          data[[".pred"]] >= ylim[1L] &
+          data[[".pred"]] <= ylim[2L]) |
+        (data[[".source"]] == "imputed" &
           data[[x$names$y]] >= ylim[1L] &
-          data[[x$names$y]] <= ylim[2L]) |
-         (data[[".source"]] == "added" &
-            data[[".pred"]] >= ylim[1L] &
-            data[[".pred"]] <= ylim[2L]) |
-         (data[[".source"]] == "imputed" &
-            data[[x$names$y]] >= ylim[1L] &
-            data[[x$names$y]] <= ylim[2L]))
+          data[[x$names$y]] <= ylim[2L]))
   }
 
   # safety measure, restrict to first n_plot cases if no groups are specified
@@ -213,32 +229,53 @@ plot_trajectory <- function(x,
   idx <- idx & (data[[x$names$g]] %in% group)
 
   # process show vector
-  if (!show[1L]) idx <- idx & data[[".source"]] != "data"
-  if (!show[2L]) idx <- idx & data[[".source"]] != "added"
-  if (!show[3L]) idx <- idx & data[[".source"]] != "imputed"
+  if (!show[1L]) {
+    idx <- idx & data[[".source"]] != "data"
+  }
+  if (!show[2L]) {
+    idx <- idx & data[[".source"]] != "added"
+  }
+  if (!show[3L]) {
+    idx <- idx & data[[".source"]] != "imputed"
+  }
 
   data <- data[idx, , drop = FALSE]
   # g <- plot_trajectory(x = x, data = data, xlim = xlim, ylim = ylim, ...)
 
-  if (is.null(xlab)) xlab <- x$names$x
-  if (is.null(ylab)) ylab <- x$names$y
-  g <- ggplot2::ggplot(data, ggplot2::aes_string(x = x$names$x, y = x$names$y)) +
+  if (is.null(xlab)) {
+    xlab <- x$names$x
+  }
+  if (is.null(ylab)) {
+    ylab <- x$names$y
+  }
+  g <- ggplot2::ggplot(
+    data,
+    ggplot2::aes_string(x = x$names$x, y = x$names$y)
+  ) +
     ggplot2::xlab(xlab) +
     ggplot2::ylab(ylab)
 
-  if (!is.null(xlim)) g <- g + ggplot2::xlim(xlim)
-  if (!is.null(ylim)) g <- g + ggplot2::ylim(ylim)
+  if (!is.null(xlim)) {
+    g <- g + ggplot2::xlim(xlim)
+  }
+  if (!is.null(ylim)) {
+    g <- g + ggplot2::ylim(ylim)
+  }
 
   # add imputed data
   k <- data$.source == "imputed"
   if (any(k)) {
     g <- g +
-      ggplot2::geom_line(ggplot2::aes_string(group = ".imp"),
-                         data = data[k, ], color = color_imp[2L]
+      ggplot2::geom_line(
+        ggplot2::aes_string(group = ".imp"),
+        data = data[k, ],
+        color = color_imp[2L]
       ) +
-      ggplot2::geom_point(ggplot2::aes_string(y = x$names$y),
-                          data = data[k, ], color = color_imp[1L],
-                          size = size_imp
+      ggplot2::geom_point(
+        ggplot2::aes_string(y = x$names$y),
+        data = data[k, ],
+        color = color_imp[1L],
+        size = size_imp
       )
   }
 
@@ -246,36 +283,54 @@ plot_trajectory <- function(x,
   k <- data$.source == "data"
   if (any(k)) {
     g <- g +
-      ggplot2::geom_line(data = data[k, ], color = color_y[2L],
-                         linetype = linetype_y) +
-      ggplot2::geom_point(data = data[k, ], color = color_y[1L],
-                          size = size_y, shape = shape_y)
+      ggplot2::geom_line(
+        data = data[k, ],
+        color = color_y[2L],
+        linetype = linetype_y
+      ) +
+      ggplot2::geom_point(
+        data = data[k, ],
+        color = color_y[1L],
+        size = size_y,
+        shape = shape_y
+      )
   }
 
   # add broken stick points and lines
   k <- data$.source == "added"
   if (any(k)) {
     if (x$degree == 0L) {
-      g <- g + ggplot2::geom_step(ggplot2::aes_string(y = ".pred"),
-                                  data = data[k, ], color = color_yhat[2L], linetype = linetype_yhat
-      )
+      g <- g +
+        ggplot2::geom_step(
+          ggplot2::aes_string(y = ".pred"),
+          data = data[k, ],
+          color = color_yhat[2L],
+          linetype = linetype_yhat
+        )
     } else {
       g <- g +
-        ggplot2::geom_line(ggplot2::aes_string(y = ".pred"),
-                           data = data[k, ], color = color_yhat[2L], linetype = linetype_yhat
+        ggplot2::geom_line(
+          ggplot2::aes_string(y = ".pred"),
+          data = data[k, ],
+          color = color_yhat[2L],
+          linetype = linetype_yhat
         ) +
-        ggplot2::geom_point(ggplot2::aes_string(y = ".pred"),
-                            data = data[k, ], color = color_yhat[1L],
-                            size = size_yhat, shape = shape_yhat
+        ggplot2::geom_point(
+          ggplot2::aes_string(y = ".pred"),
+          data = data[k, ],
+          color = color_yhat[1L],
+          size = size_yhat,
+          shape = shape_yhat
         )
     }
   }
 
   # split out according to subjid
   g <- g +
-    ggplot2::facet_wrap(as.formula(paste("~", x$names$g)),
-                        ncol = ncol,
-                        scales = scales
+    ggplot2::facet_wrap(
+      as.formula(paste("~", x$names$g)),
+      ncol = ncol,
+      scales = scales
     ) +
     theme
 

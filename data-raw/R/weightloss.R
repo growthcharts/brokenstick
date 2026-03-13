@@ -10,13 +10,21 @@
 #'   location = {},
 #'   keywords = {}}
 
-weightloss <- read.table("data-raw/data/pone.0232680.s001.csv", header = TRUE, sep = ",", row.names = 1L)
+weightloss <- read.table(
+  "data-raw/data/pone.0232680.s001.csv",
+  header = TRUE,
+  sep = ",",
+  row.names = 1L
+)
 
 # replace by consecutive subject id, as in paper
 weightloss$subject <- as.integer(rep(1:12, each = 63))
 
 # correct error in condition for subjects 4 and 12, as in paper, and make factor
-codes <- as.integer(rep(c(rep(1:3, 3), 1, 3, 2, rep(1:3, 7), 1, 3, 2), each = 21))
+codes <- as.integer(rep(
+  c(rep(1:3, 3), 1, 3, 2, rep(1:3, 7), 1, 3, 2),
+  each = 21
+))
 weightloss$condition <- factor(codes, labels = c("Control", "Diet", "Activity"))
 
 # keep only useful records
