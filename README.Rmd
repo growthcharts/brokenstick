@@ -80,7 +80,7 @@ The `brokenstick` package contains functions for
 ### Background
 
 1. I took the name *broken stick* from @ruppert2003, page 59-61, but it is actually much older.
-2. As far as I know, @dekroon2010 is the first publication that uses the broken stick model without the intercept in a mixed modelling context. See [The Terneuzen birth cohort: BMI changes between 2 and 6 years correlate strongest with adult overweight](https://stefvanbuuren.name/publications/2010%20TBC%20Overweight%20-%20PLoS%20ONE.pdf).
+2. As far as I know, @dekroon2010 is the first publication that uses the broken stick model without the intercept in a mixed modelling context.
 3. The model was formally defined and extended in [Flexible Imputation of Missing Data (second edition)](https://stefvanbuuren.name/fimd/sec-rastering.html#sec:brokenstick). See @vanbuuren2018.
 4. The evaluation by @anderson2019 concluded: 
 
