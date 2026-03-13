@@ -1,0 +1,445 @@
+# Changelog
+
+## brokenstick 2.7.0
+
+- Changes relative URL to absolute URL in `manual.html` to pass CRAN
+  checks
+
+## brokenstick 2.6.0
+
+CRAN release: 2025-03-31
+
+- Updated the package documentation structure to conform to
+  `royxgen2 7.3.2`
+- Fixed URL to FIMD book to prevent redirection
+- Added
+  [`robust_chol2inv()`](https://growthcharts.org/brokenstick/reference/robust_chol2inv.md)
+  to evade edge case on MKL Fedora 40
+- Outcommented two tests that gave inconsistent results across platforms
+
+## brokenstick 2.5.0
+
+CRAN release: 2023-03-22
+
+- Updates the manual vignette to conform to the accepted JSS manuscript
+  (March 2023)
+- Updates the documentation for CRAN release
+- Adds the <doi:10.18637/jss.v106.i07> for the forthcoming JSS paper to
+  DESCRIPTION and documentation
+
+## brokenstick 2.4.0
+
+CRAN release: 2022-10-30
+
+### Major changes:
+
+- Update for the JSS manuscript version dated 30-10-2022
+- Hiding knots is now more convenient and automatic by setting the
+  `hide` entry in the `brokenstick` object. This replaces the
+  `whatknots` argument.
+
+### Minor changes:
+
+- Adds `hide` field to `brokenstick` object
+- Adds `hide` arguments to
+  [`coef.brokenstick()`](https://growthcharts.org/brokenstick/reference/coef.md),
+  [`summary.brokenstick()`](https://growthcharts.org/brokenstick/reference/summary.md),
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html),
+  [`get_knots()`](https://growthcharts.org/brokenstick/reference/get_knots.md)
+  and `get_omega`
+- Adds `cor` and `lower` arguments to
+  [`summary.brokenstick()`](https://growthcharts.org/brokenstick/reference/summary.md)
+- Replaces `what` argument of
+  [`get_omega()`](https://growthcharts.org/brokenstick/reference/get_omega.md)
+  by `cor`
+- Deprecates `whatknots` argument in
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html),
+  [`get_knots()`](https://growthcharts.org/brokenstick/reference/get_knots.md)
+  and
+  [`get_omega()`](https://growthcharts.org/brokenstick/reference/get_omega.md)
+- Separates [`summary()`](https://rdrr.io/r/base/summary.html) and
+  [`print()`](https://rdrr.io/r/base/print.html) functionality
+- Updates `smocc_200` and `fit_200` objects
+- Updates to `roxygen 7.2.1`
+- Replace hard-coded variable name `hgt_z` by a dynamic name
+  ([\#8](https://github.com/growthcharts/brokenstick/issues/8))
+
+## brokenstick 2.3.0
+
+CRAN release: 2022-09-07
+
+- Replaces `what` argument in
+  [`get_knots()`](https://growthcharts.org/brokenstick/reference/get_knots.md)
+  to `whatknots`
+- Adds support for `whatknots` in
+  [`get_omega()`](https://growthcharts.org/brokenstick/reference/get_omega.md)
+- Extends capabilities of
+  [`plot_trajectory()`](https://growthcharts.org/brokenstick/reference/plot_trajectory.md)
+  with `shape` and `linetype` options
+- Adds an example to
+  [`plot.brokenstick()`](https://growthcharts.org/brokenstick/reference/plot.brokenstick.md)
+  on how to create a decent black and white figure of trajectories
+- Replaces `knots = 0:3` by `knots = 0:2` in examples
+- Updates the perfectmodel vignette
+
+## brokenstick 2.2.0
+
+### Major changes:
+
+1.  Changes the default number of knots in
+    [`brokenstick()`](https://growthcharts.org/brokenstick/reference/brokenstick.md)
+    to 5. The former default produced a solution without internal knots.
+    The new default produces a generally more informative starting model
+    when the user does not specify knots (using `knots = c(..., ...)`)
+    or the number of knots (using `k = ...`).
+2.  Replaces the `strip_data` argument in
+    [`predict()`](https://rdrr.io/r/stats/predict.html) by the a more
+    intuitive `include_data` argument. By default, observed data are now
+    included into the predictions, similar to
+    [`predict.lm()`](https://rdrr.io/r/stats/predict.lm.html).
+3.  Turns error
+    `Argument 'newdata' is required for a light brokenstick object.` of
+    [`brokenstick()`](https://growthcharts.org/brokenstick/reference/brokenstick.md)
+    into a warning and returns `NULL`.
+4.  Updates the vignette [Broken Stick Model for Irregular Longitudinal
+    Data](https://growthcharts.org/brokenstick/articles/manual/manual.html)
+    to sync with revision for JSS.
+
+### Minor changes:
+
+- Expression `predict(fit_200_light, x = "knots")` now produces warning
+  message instead of crashing
+- Updates objects `fit_200` and `fit_200_light` to use automatic
+  boundary (2.68y) instead of 3 yrs
+- Automatically sorts any user-specified values for knots in increasing
+  order to evade problems with
+  [`predict()`](https://rdrr.io/r/stats/predict.html)
+
+## brokenstick 2.1.0
+
+CRAN release: 2022-03-30
+
+### Incorporate changes and updates required by JSS
+
+- Reorganises the vignettes
+- Renames `brokenstick-article.Rmd` to `manual/manual.Rmd`, include
+  high-res version on the site and take out of the package to save space
+- Updates `vignettes/bibliography.bib` to title case
+- Removes superfluous navigation from vigettes
+- Defines an `model.frame.brokenstick()` function that adheres to
+  conventions
+- Changes return values by
+  [`fitted()`](https://rdrr.io/r/stats/fitted.values.html) and
+  [`residuals()`](https://rdrr.io/r/stats/residuals.html) to vectors
+- Defines a less verbose
+  [`print.brokenstick()`](https://growthcharts.org/brokenstick/reference/print.md)
+  helper
+- Make all calls to [`library()`](https://rdrr.io/r/base/library.html)
+  to character argument
+- Removes [`library(lme4)`](https://github.com/lme4/lme4/) from code to
+  evade changing the search path
+
+## brokenstick 2.0.2
+
+- Shrinks the size of brokenstick object by removing the `formula` list
+  element
+
+## brokenstick 2.0.1
+
+- Shrinks the size of light objects by removing the `sigma2j` vector
+  from the light `brokenstick` class
+
+## brokenstick 2.0.0
+
+CRAN release: 2021-11-11
+
+### Main changes
+
+1.  Function
+    [`brokenstick()`](https://growthcharts.org/brokenstick/reference/brokenstick.md)
+    in version `2.0.0` sets the Kasim-Raudenbush sampler as the default
+    method. The former method
+    [`lme4::lmer()`](https://rdrr.io/pkg/lme4/man/lmer.html) remains
+    available by setting `method = "lmer"` argument.
+
+2.  Version `2.0.0` adopts the variable names of the `coda` package
+    (e.g., `start`, `end`, `thin`, `niter`, and so on) and stores the
+    results of the Kasim-Raudenbush sampler as objects of class `mcmc`.
+
+3.  For `method = "kr"` one may now inspect the solution of the sampler
+    by standard functions from the `coda` package. For `method = "lmer"`
+    we can apply functions from the `lme4` package for `merMod` objects.
+
+4.  Version `2.0.0` redefines the `brokenstick` class. New entries
+    include `call`, `formula`, `internal`, `sample`, `light`, `data`,
+    `imp` and `mod`. Removed entries are `knots` (renamed to `internal`)
+    and `draws` (renamed to `imp`). We may omit the `newdata` argument
+    for the training data. Setting `light = TRUE` creates a small
+    version of the `brokenstick` object. Objects of class `brokenstick`
+    are not backwards compatible, so one should regenerate objects of
+    class `brokenstick` in order use newer features in `2.0.0`.
+
+5.  Version `2.0.0` conforms to classic model fitting interface in `R`.
+    Renames the `new_data` argument to `newdata` to conform to
+    [`predict.lm()`](https://rdrr.io/r/stats/predict.lm.html). Methods
+    [`plot()`](https://rdrr.io/r/graphics/plot.default.html) and
+    [`predict()`](https://rdrr.io/r/stats/predict.html) no longer
+    require a `newdata` argument. All special cases of
+    [`predict()`](https://rdrr.io/r/stats/predict.html) updated and
+    explained in documentation and examples.
+
+6.  Version `2.0.0` adds methods
+    [`coef()`](https://rdrr.io/r/stats/coef.html),
+    [`fitted()`](https://rdrr.io/r/stats/fitted.values.html),
+    [`model.frame()`](https://rdrr.io/r/stats/model.frame.html),
+    [`model.matrix()`](https://rdrr.io/r/stats/model.matrix.html),
+    [`print()`](https://rdrr.io/r/base/print.html) and `summary` for the
+    `brokenstick` object.
+
+7.  Simplifies algorithmic control. Renames `control_brokenstick()` to
+    [`set_control()`](https://growthcharts.org/brokenstick/reference/set_control.md)
+    and removes a layer in the control list.
+
+### Minor changes
+
+- Stabilises the [`rgamma()`](https://rdrr.io/r/stats/GammaDist.html)
+  calls in KR-algorithm for edge cases.
+- `predict_brokenstick()` can now work with the both (internal) training
+  and (external) test data.
+- Removes the superfluous `type` argument from
+  [`predict.brokenstick()`](https://growthcharts.org/brokenstick/reference/predict.md)
+- Adds a function
+  [`get_omega()`](https://growthcharts.org/brokenstick/reference/get_omega.md)
+  to extract the variance-covariance matrix of the broken stick
+  estimates
+- Adds choice `"dropfirst"` to
+  [`get_knots()`](https://growthcharts.org/brokenstick/reference/get_knots.md)
+- Improves error messages of edge cases in `test-brokenstick_edge.R`
+- Perform stricter tests on arguments of
+  [`brokenstick()`](https://growthcharts.org/brokenstick/reference/brokenstick.md)
+- Introduces argument `warn_splines` in
+  [`make_basis()`](https://growthcharts.org/brokenstick/reference/make_basis.md)
+  to suppress uninteresting warns from
+  [`splines::bs()`](https://rdrr.io/r/splines/bs.html)
+- Removes superfluous `knotnames` argument in
+  [`make_basis()`](https://growthcharts.org/brokenstick/reference/make_basis.md)
+- Argument `x` in
+  [`make_basis()`](https://growthcharts.org/brokenstick/reference/make_basis.md)
+  is now a vector instead of a column vector
+- Introduces new `xname` argument in
+  [`make_basis()`](https://growthcharts.org/brokenstick/reference/make_basis.md)
+  to set the xname
+
+## brokenstick 1.1.1
+
+- Handles an edge case that crashed
+  [`predict()`](https://rdrr.io/r/stats/predict.html)
+
+## brokenstick 1.1.0
+
+CRAN release: 2020-11-02
+
+This version adds a couple of minor alterations.
+
+- Updates cran-comments
+- Adds a link to the JSS manuscript in the `description` field
+- Removes unnecessary `\dontrun{}` directives
+- Exports
+  [`parse_formula()`](https://growthcharts.org/brokenstick/reference/parse_formula.md)
+  to remove `:::` from examples
+- Sanitises chunk names by removing `:` and `_` characters
+- Corrects some “first-order” mindo’s to “second-order”
+- Repairs plotting glitch in `oldfriends.Rmd`
+- Limits number of printed rows in
+  [`predict.brokenstick()`](https://growthcharts.org/brokenstick/reference/predict.md)
+  example
+
+## brokenstick 1.0.0
+
+- Ready for CRAN –\> Move up to version 1.0.0
+- The package is now hosted on
+  `https://github.com/growthcharts/brokenstick/`
+
+## brokenstick 0.78.0
+
+- Prepare package for first CRAN submission
+
+## brokenstick 0.77.0
+
+- Add documentation for the brokenstick class object
+- Add JSS manuscript as a vignette
+- Remove the prediction vignette and its dependencies
+- Extend
+  [`plot.brokenstick()`](https://growthcharts.org/brokenstick/reference/plot.brokenstick.md)
+  with the ability to plot imputed trajectories
+- Add the `weightloss` data
+- Fail early when user specifies `degree > 1`
+
+## brokenstick 0.76.0
+
+- Adds argument `what` to
+  [`plot.brokenstick()`](https://growthcharts.org/brokenstick/reference/plot.brokenstick.md)
+- Solves a bug that always yielded zero rows for case 3 prediction
+- Solves a data combination problem in
+  [`predict()`](https://rdrr.io/r/stats/predict.html) when the group
+  variable is a factor
+- Add a better explanation of the `boundary` parameter
+- Evades that
+  [`model.matrix()`](https://rdrr.io/r/stats/model.matrix.html) removes
+  rows with `NA` if `degree = 0`
+
+## brokenstick 0.75.0
+
+- This version trims down the package in various ways
+- Removes dependencies of `hardhat` and `recipes`
+- Makes the `brokenstick` object smaller since no blueprints are stored
+- Removes the `recipe` interface to the
+  [`brokenstick()`](https://growthcharts.org/brokenstick/reference/brokenstick.md)
+  function
+- Moves `ggplot2` to `suggests`
+- Copies over the `install.on.demand()` function from `mice`
+
+## brokenstick 0.72.1
+
+- Imports
+  [`recipes::recipe()`](https://recipes.tidymodels.org/reference/recipe.html)
+  to inform R package installation process
+
+## brokenstick 0.72.0
+
+- Adds badges, resources and references to README
+- Updates license
+- Updates CITATION
+
+## brokenstick 0.71.0
+
+- Removes the dependency on `growthstandards`
+- Updates and corrects `plot` examples
+- Tries to evade `ggplot2` out-of-range/missing messages through better
+  filtering
+
+## brokenstick 0.70.1
+
+- Adds support for brokenstick model with `degree = 0`
+
+## brokenstick 0.70.0
+
+- This version jump illustrates big and breaking changes:
+
+1.  `brokenstick` adopted the `tidymodels` philosophy, and now includes
+    a dependency on `hardhat`. It is now possible to fit a model using
+    five different interfaces. There is no need anymore the hardcode
+    variable names in the source data.
+
+2.  This version introduces a new estimation method, the
+    Kasim-Raudenbush sampler. The new method is more flexible and faster
+    than [`lme4::lmer()`](https://rdrr.io/pkg/lme4/man/lmer.html) when
+    the number of knots is large.
+
+3.  This version introduces two simple correlation models that may be
+    used to smooth out the variance-covariance matrix of the random
+    effects.
+
+4.  The definition of the `brokenstick` class has changed. Objects of
+    class `brokenstick` do no longer store the training data.
+
+5.  The `brokenstick_export` class is retired.
+
+6.  The [`predict()`](https://rdrr.io/r/stats/predict.html) function is
+    fully rewritten as has now a new interface. Since the `brokenstick`
+    class does not store the training data anymore, the
+    [`predict()`](https://rdrr.io/r/stats/predict.html) function now
+    obtains a `new_data` argument. Syntax that worked for `brokenstick`
+    package before `0.70.0` does not work anymore and should be updated.
+    The `shape` argument replaces the `output` argument.
+
+7.  The [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+    function is rewritten, and now requires a `new_data` specification.
+
+8.  Retired functions:
+    [`brokenstick()`](https://growthcharts.org/brokenstick/reference/brokenstick.md)
+    replaces `fit_brokenstick()`,
+    [`predict.brokenstick()`](https://growthcharts.org/brokenstick/reference/predict.md)
+    replaces `predict.brokenstick_export()`,
+    [`get_r2()`](https://growthcharts.org/brokenstick/reference/get_r2.md)
+    replaces `get_pev()`
+
+9.  Removed functions: `get_data()`, `get_X()`, `export()`
+
+## brokenstick 0.62.0
+
+- This version simplifies the plotting functions
+- Renders `ggplot` objects sharper in vignettes by `svglite`
+- Drops the `pkg` argument in
+  [`plot.brokenstick()`](https://growthcharts.org/brokenstick/reference/plot.brokenstick.md)
+- Lessens the dependency on `rbokeh`
+- Replaces `hbgd` (which is no longer developed) by `growthstandards`
+  package
+- Replaces `smocc_50`/`fit_50` by `smocc_200`/`fit_200`
+- Added a `NEWS.md` file to track changes to the package
+
+## brokenstick 0.61.0
+
+- Added `smocc_50` and `fit_50` demo data
+- Removed `smocc.hgtwgt`, `smocc_hgtwgt` and `fit_206 datasets`
+- Adapt code and vignettes to reflect replacement of demo data
+
+## brokenstick 0.60.0
+
+- Adapted source to R 4.0.0.
+
+## brokenstick 0.55
+
+- Added new utility function `get_pev()` for proportion explained
+  variance
+- [`get_knots()`](https://growthcharts.org/brokenstick/reference/get_knots.md)
+  gets a `what` argument
+- Now using smarter defaults for
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+- Simplified arguments to
+  [`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+- Simplified vignette “Overview of main functions”
+
+## brokenstick 0.54
+
+- Added Support for `ggplot2`
+- Made `ggplot2` plot default
+- Changed default `show_references` flag to FALSE
+
+## brokenstick 0.53
+
+- This is the version announced during my invited lecture at the 7th
+  Channel Network Conference, Hasselt, Belgium.
+
+Here is the abstract of the lecture:
+
+Broken stick model for individual growth curves
+
+Stef van Buuren
+
+1.  Netherlands Organization for Applied Scientific Research TNO
+2.  Utrecht University
+
+The broken stick model describes a set of individual curves by a linear
+mixed model using second-order linear B-splines. The model can be used
+
+- to smooth growth curves by a series of connected straight lines;
+- to align irregularly observed curves to a common age grid;
+- to create synthetic curves at a user-specified set of break ages;
+- to estimate the time-to-time correlation matrix;
+- to predict future observations.
+
+The user specifies a set of break ages at which the straight lines
+connect. Each individual obtains an estimate at each break age, so the
+set of estimates of the individual form a smoothed version of the
+observed trajectory.
+
+The main assumptions of the broken stick model are that the development
+between the break ages follows a straight line, and that the broken
+stick estimates follow a common multivariate normal distribution. In
+order to conform to the assumption of multivariate normality, the user
+may fit the broken stick model on suitably transformed data that yield
+the standard normal (Z-score) scale.
+
+This lecture outlines the model and introduces the brokenstick R
+package.

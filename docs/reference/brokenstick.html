@@ -17,7 +17,7 @@ observations are expressed by a random effect per knot."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">brokenstick</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.6.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">2.7.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -230,6 +230,12 @@ to other  data sets. Fixing the model requires specifying both <code>knots</code
 <span class="r-in"><span><span class="co"># using kr method, default</span></span></span>
 <span class="r-in"><span><span class="va">f1</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">2</span>, seed <span class="op">=</span> <span class="fl">123</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">f1</span>, <span class="va">data</span>, n_plot <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`aes_string()` was deprecated in ggplot2 3.0.0.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Please use tidy evaluation idioms with `aes()`.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> See also `vignette("ggplot2-in-packages")` for more information.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> The deprecated feature was likely used in the <span style="color: #0000BB;">brokenstick</span> package.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   Please report the issue at</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   <span style="color: #0000BB; font-style: italic;">&lt;</span><a href="https://github.com/growthcharts/brokenstick/issues" class="external-link"><span style="color: #0000BB; font-style: italic;">https://github.com/growthcharts/brokenstick/issues</span></a><span style="color: #0000BB; font-style: italic;">&gt;</span>.</span>
 <span class="r-plt img"><img src="brokenstick-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># study sampling behaviour of the sigma2 parameter with coda</span></span></span>
@@ -241,6 +247,8 @@ to other  data sets. Fixing the model requires specifying both <code>knots</code
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># using lmer method</span></span></span>
 <span class="r-in"><span><span class="va">f2</span> <span class="op">&lt;-</span> <span class="fu">brokenstick</span><span class="op">(</span><span class="va">hgt_z</span> <span class="op">~</span> <span class="va">age</span> <span class="op">|</span> <span class="va">id</span>, <span class="va">data</span>, knots <span class="op">=</span> <span class="fl">0</span><span class="op">:</span><span class="fl">2</span>, method <span class="op">=</span> <span class="st">"lmer"</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>unable to evaluate scaled gradient</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>Model failed to converge: degenerate  Hessian with 1 negative eigenvalues</span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">f2</span>, <span class="va">data</span>, n_plot <span class="op">=</span> <span class="fl">9</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="brokenstick-4.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -256,29 +264,33 @@ to other  data sets. Fixing the model requires specifying both <code>knots</code
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Scaled residuals: </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     Min      1Q  Median      3Q     Max </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> -3.8278 -0.5282  0.0026  0.5651  3.4227 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> -3.8274 -0.5268  0.0065  0.5742  3.4220 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Random effects:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>  Groups   Name       Variance Std.Dev. Corr          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  id       age_0      1.2928   1.1370                 </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           age_1      0.6760   0.8222   0.47          </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2      0.7082   0.8415   0.45 0.93     </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2.6776 3.5696   1.8894   0.45 0.58 0.63</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>  Residual            0.1783   0.4222                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  id       age_0      1.2930   1.1371                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           age_1      0.6759   0.8222   0.47          </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2      0.7059   0.8402   0.46 0.94     </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           age_2.6776 2.7541   1.6595   0.46 0.64 0.80</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  Residual            0.1783   0.4223                 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of obs: 1185, groups:  id, 124</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Fixed effects:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            Estimate Std. Error t value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_0      -0.02596    0.10451  -0.248</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_1       0.03550    0.07838   0.453</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_2       0.05764    0.08690   0.663</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_2.6776  0.56344    0.75767   0.744</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_0      -0.02580    0.10452  -0.247</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_1       0.03487    0.07837   0.445</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2       0.06064    0.08658   0.700</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2.6776  0.42093    0.71561   0.588</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Correlation of Fixed Effects:</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>            age_0  age_1  age_2 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> age_1       0.407              </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_2       0.394  0.719       </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> age_2.6776  0.089  0.167 -0.114</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2       0.398  0.724       </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> age_2.6776  0.086  0.168 -0.086</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> optimizer (nloptwrap) convergence code: 0 (OK)</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> unable to evaluate scaled gradient</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Model failed to converge: degenerate  Hessian with 1 negative eigenvalues</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">f2</span><span class="op">$</span><span class="va">mod</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="brokenstick-5.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span></span></span>
@@ -308,7 +320,7 @@ to other  data sets. Fixing the model requires specifying both <code>knots</code
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>
