@@ -2,11 +2,16 @@
 
 ## brokenstick 2.7.0
 
+- Maintenance release
 - Changes relative URL to absolute URL in `manual.html` to pass CRAN
   checks
 - Repairs a broken link in `README`
 - Applies AIR formatting to all `.R` files
 - Adds GH workflows to check package via `rhub`
+- Solves the
+  [`aes_string()`](https://ggplot2.tidyverse.org/reference/aes_.html)
+  deprecation warning
+  ([\#11](https://github.com/growthcharts/brokenstick/issues/11))
 
 ## brokenstick 2.6.0
 

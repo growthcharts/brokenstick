@@ -227,16 +227,6 @@ fit9 <- brokenstick(hgt_z ~ age | id, smocc_200, seed = 1,
 knots = round(c(0:3, 6, 9, 12, 15, 18, 24)/12, 4))
 ```
 
-    ## Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
-    ## ℹ Please use tidy evaluation idioms with `aes()`.
-    ## ℹ See also `vignette("ggplot2-in-packages")` for more information.
-    ## ℹ The deprecated feature was likely used in the brokenstick package.
-    ##   Please report the issue at
-    ##   <https://github.com/growthcharts/brokenstick/issues>.
-    ## This warning is displayed once every 8 hours.
-    ## Call `lifecycle::last_lifecycle_warnings()` to see where this warning
-    ## was generated.
-
 ![Data and fitted curves for three children (blue = observed data, red =
 fitted curves). The broken stick model with two lines (top) gives a
 crude approximation of the data. The model with nine lines (bottom)

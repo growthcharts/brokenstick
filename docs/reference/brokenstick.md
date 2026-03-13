@@ -194,12 +194,6 @@ data <- smocc_200[1:1198, ]
 # using kr method, default
 f1 <- brokenstick(hgt_z ~ age | id, data, knots = 0:2, seed = 123)
 plot(f1, data, n_plot = 9)
-#> Warning: `aes_string()` was deprecated in ggplot2 3.0.0.
-#> ℹ Please use tidy evaluation idioms with `aes()`.
-#> ℹ See also `vignette("ggplot2-in-packages")` for more information.
-#> ℹ The deprecated feature was likely used in the brokenstick package.
-#>   Please report the issue at
-#>   <https://github.com/growthcharts/brokenstick/issues>.
 
 
 # study sampling behaviour of the sigma2 parameter with coda
