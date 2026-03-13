@@ -17,3 +17,4 @@ _files
 ^Meta$
 ^vignettes/manual$
 ^CRAN-SUBMISSION$
+^.github

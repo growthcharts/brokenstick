@@ -4,6 +4,9 @@
 
 - Changes relative URL to absolute URL in `manual.html` to pass CRAN
   checks
+- Repairs a broken link in `README`
+- Applies AIR formatting to all `.R` files
+- Adds GH workflows to check package via `rhub`
 
 ## brokenstick 2.6.0
 
