@@ -250,7 +250,7 @@ plot_trajectory <- function(
   }
   g <- ggplot2::ggplot(
     data,
-    ggplot2::aes_string(x = x$names$x, y = x$names$y)
+    ggplot2::aes(x = !!sym(x$names$x), y = !!sym(x$names$y))
   ) +
     ggplot2::xlab(xlab) +
     ggplot2::ylab(ylab)
@@ -267,12 +267,12 @@ plot_trajectory <- function(
   if (any(k)) {
     g <- g +
       ggplot2::geom_line(
-        ggplot2::aes_string(group = ".imp"),
+        ggplot2::aes(group = .data$.imp),
         data = data[k, ],
         color = color_imp[2L]
       ) +
       ggplot2::geom_point(
-        ggplot2::aes_string(y = x$names$y),
+        ggplot2::aes(y = !!sym(x$names$y)),
         data = data[k, ],
         color = color_imp[1L],
         size = size_imp
@@ -302,7 +302,7 @@ plot_trajectory <- function(
     if (x$degree == 0L) {
       g <- g +
         ggplot2::geom_step(
-          ggplot2::aes_string(y = ".pred"),
+          ggplot2::aes(y = .data$.pred),
           data = data[k, ],
           color = color_yhat[2L],
           linetype = linetype_yhat
@@ -310,13 +310,13 @@ plot_trajectory <- function(
     } else {
       g <- g +
         ggplot2::geom_line(
-          ggplot2::aes_string(y = ".pred"),
+          ggplot2::aes(y = .data$.pred),
           data = data[k, ],
           color = color_yhat[2L],
           linetype = linetype_yhat
         ) +
         ggplot2::geom_point(
-          ggplot2::aes_string(y = ".pred"),
+          ggplot2::aes(y = .data$.pred),
           data = data[k, ],
           color = color_yhat[1L],
           size = size_yhat,

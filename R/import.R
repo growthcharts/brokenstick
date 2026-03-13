@@ -5,7 +5,7 @@
 #' @importFrom lme4            fixef lmer lmerControl ngrps VarCorr
 #' @importFrom methods         slot
 #' @importFrom matrixsampling  rwishart
-#' @importFrom rlang           .data arg_match
+#' @importFrom rlang           .data arg_match sym
 #' @importFrom splines         bs
 #' @importFrom stats           approx as.formula coef cor cov2cor
 #'                             fitted model.frame lm model.frame.default
